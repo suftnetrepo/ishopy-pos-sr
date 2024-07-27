@@ -1,0 +1,52 @@
+[
+    {
+        "id": 1,
+        "question": "What is iShopy SA?",
+        "answer": "iShopy SA is a Point of Sale (POS) app designed for small and medium-sized businesses. It helps manage sales, inventory, and customer information with a range of features."
+    },
+    {
+        "id": 2,
+        "question": "Are there any recurring fees for using iShopy SA?",
+        "answer": "No, iShopy SA requires only a one-time payment. There are no monthly or annual fees."
+    },
+    {
+        "id": 3,
+        "question": "What features does iShopy SA offer?",
+        "answer": "The app includes receipt printing, discounts and taxes management, sales reporting, customer and inventory management, backup and restore options, and user management."
+    },
+    {
+        "id": 4,
+        "question": "Which printer is compatible with iShopy SA?",
+        "answer": "We recommend the MUNBYN Android Bluetooth Thermal Receipt Printer POS Printer with USB Ethernet Serial Port for Android, available on Amazon."
+    },
+    {
+        "id": 5,
+        "question": "Is iShopy SA available in languages other than English?",
+        "answer": "Currently, iShopy SA is available only in English. However, more languages will be added in the future."
+    },
+    {
+        "id": 6,
+        "question": "Can I provide feedback on iShopy SA?",
+        "answer": "Yes, if you love our app, we encourage you to leave a positive rating. If you have any questions or suggestions, feel free to contact us directly."
+    },
+    {
+        "id": 7,
+        "question": "Does iShopy SA support receipt printing?",
+        "answer": "Yes, iShopy SA includes receipt printing as one of its features."
+    },
+    {
+        "id": 8,
+        "question": "How does iShopy SA handle discounts and taxes?",
+        "answer": "The app has built-in features for managing discounts and taxes, making it easier to handle pricing and financial details."
+    },
+    {
+        "id": 9,
+        "question": "Can I back up and restore data with iShopy SA?",
+        "answer": "Yes, iShopy SA includes backup and restore options to help protect your data."
+    },
+    {
+        "id": 10,
+        "question": "What types of businesses can use iShopy SA?",
+        "answer": "iShopy SA is suitable for various types of businesses, including those selling groceries, clothing, and other products."
+    }
+]
