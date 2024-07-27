@@ -2,24 +2,25 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prettier/prettier */
 import { useEffect, useState } from "react";
-import { queryAllCategories, queryCategoriesByStatus, queryCategoryById, deleteCategory, insertCategory, updateCategory } from "../model/category";
-import { Category } from "../model/types";
+import { queryAllTables, queryTablesByStatus, insertTable, updateTable, deleteTable } from "../model/table";
+import { Table } from "../model/types";
+
 interface Initialize {
-	data: Category[] | null | Category | [] | boolean;
+	data: Table[] | null | Table | [] | boolean;
 	error: Error | null;
 	loading: boolean;
 }
 
-const useCategories = () => {
+const useTables = () => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
 		loading: true,
 	});
 
-	async function loadCategories() {
+	async function loadTables() {
 		try {
-			const result = await queryAllCategories();
+			const result = await queryAllTables();
 			setData(prev => ({
 				...prev,
 				data: result,
@@ -34,8 +35,8 @@ const useCategories = () => {
 		}
 	}
 
-	useEffect(() => {		
-		loadCategories();
+	useEffect(() => {
+		loadTables();
 	}, []);
 
 	const resetHandler = () => {
@@ -46,25 +47,24 @@ const useCategories = () => {
 		});
 	}
 
-	
+
 
 	return {
-		...data,		
-		loadCategories,
+		...data,
+		loadTables,
 		resetHandler
 	};
 };
-
-const useQueryCategoriesByStatus = () => {
+const useQueryTablesByStatus = () => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
 		loading: true,
 	});
 
-	async function loadCategoriesByStatus(status: number) {
+	async function loadTablesByStatus(status: number) {
 		try {
-			const result = await queryCategoriesByStatus(status);
+			const result = await queryTablesByStatus(status);
 			setData({
 				data: result,
 				error: null,
@@ -79,59 +79,9 @@ const useQueryCategoriesByStatus = () => {
 			});
 		}
 	}
-
-	useEffect(() => {		
-		loadCategoriesByStatus(1);
-	}, []);
-
-	const resetHandler = () => {
-		setData({
-			data: null,
-			error: null,
-			loading: false,
-		});
-	}
-	const allCategory: Category = {
-		color_code: '',
-		category_id: "-1",
-		name: 'All',
-		status: 1
-	}
-
-	const newData = Array.isArray(data.data) ? [allCategory, ...data.data,] : [allCategory];
-		
-	return {
-		...data,
-		data: newData,		
-		resetHandler
-	};
-};
-
-const useQueryCategoryById = async (category_id: number) => {
-	const [data, setData] = useState<Initialize>({
-		data: [],
-		error: null,
-		loading: true,
-	});
 
 	useEffect(() => {
-		async function load() {
-			try {
-				const results = await queryCategoryById(category_id);
-				setData({
-					data: results,
-					error: null,
-					loading: false,
-				});
-			} catch (error) {
-				setData({
-					data: null,
-					error: error as Error,
-					loading: false,
-				});
-			}
-		}
-		load();
+		loadTablesByStatus(1);
 	}, []);
 
 	const resetHandler = () => {
@@ -142,74 +92,77 @@ const useQueryCategoryById = async (category_id: number) => {
 		});
 	}
 
+
 	return {
 		...data,
 		resetHandler
 	};
 };
-const useInsertCategory = () => {
+const useInsertTable = () => {
 	const [data, setData] = useState<Initialize>({
 		data: null,
 		error: null,
 		loading: false,
 	});
 
-	const insertCategoryHandler = async (
-		name: string,
-		status: number = 0,
-		color_code : string
-	) => {
-		setData((prev) => ({ ...prev, loading: true }));
-
-		try {
-			const result = await insertCategory(name, status, color_code);
-			setData({
-				data: result,
-				error: null,
-				loading: false,
-			});
-
-			return true
-		} catch (error) {
-			setData({
-				data: null,
-				error: error as Error,
-				loading: false,
-			});
-		}
-	};
-
-	const resetHandler = () => {
-		setData({
-			data: null,
-			error: null,
-			loading: false,
-		});
-	}
-
-	return {
-		...data,
-		insertCategory: insertCategoryHandler,
-		resetHandler
-	};
-};
-const useUpdateCategory = () => {
-	const [data, setData] = useState<Initialize>({
-		data: null,
-		error: null,
-		loading: false,
-	});
-
-	const updateCategoryHandler = async (
-		category_id: number,
-		name: string,
+	const insertTableHandler = async (		
+		tableName: string,
 		status: number,
-		color_code : string
+		isOccupied: number,
+		size: number
 	) => {
 		setData((prev) => ({ ...prev, loading: true }));
-		
+
 		try {
-			const result = await updateCategory(category_id, name, status, color_code);
+			const result = await insertTable(tableName, status, isOccupied, size);
+			setData({
+				data: result,
+				error: null,
+				loading: false,
+			});
+
+			return true
+		} catch (error) {
+			setData({
+				data: null,
+				error: error as Error,
+				loading: false,
+			});
+		}
+	};
+
+	const resetHandler = () => {
+		setData({
+			data: null,
+			error: null,
+			loading: false,
+		});
+	}
+
+	return {
+		...data,
+		insertTable: insertTableHandler,
+		resetHandler
+	};
+};
+const useUpdateTable = () => {
+	const [data, setData] = useState<Initialize>({
+		data: null,
+		error: null,
+		loading: false,
+	});
+
+	const updateTableHandler = async (
+		table_id: number,
+		tableName: string,
+		status: number,
+		isOccupied: number,
+		size: number
+	) => {
+		setData((prev) => ({ ...prev, loading: true }));
+
+		try {
+			const result = await updateTable(table_id, tableName, status, isOccupied, size);
 			setData({
 				data: result,
 				error: null,
@@ -235,11 +188,11 @@ const useUpdateCategory = () => {
 
 	return {
 		...data,
-		updateCategory: updateCategoryHandler,
+		updateTable: updateTableHandler,
 		resetHandler
 	};
 };
-const useDeleteCategory = () => {
+const useDeleteTable = () => {
 	const [data, setData] = useState<{
 		data: boolean;
 		error: Error | null;
@@ -250,10 +203,10 @@ const useDeleteCategory = () => {
 		loading: false,
 	});
 
-	const deleteCategoryHandler = async (category_id: number) => {
+	const deleteTableHandler = async (table_id: number) => {
 		setData((prev) => ({ ...prev, loading: true }));
 		try {
-			const result = await deleteCategory(category_id);
+			const result = await deleteTable(table_id);
 			setData({
 				data: result,
 				error: null,
@@ -280,9 +233,9 @@ const useDeleteCategory = () => {
 
 	return {
 		...data,
-		deleteCategory: deleteCategoryHandler,
+		deleteTable: deleteTableHandler,
 		resetHandler
 	};
 };
 
-export { useInsertCategory, useUpdateCategory, useQueryCategoriesByStatus, useQueryCategoryById, useDeleteCategory, updateCategory, useCategories };
+export { useTables, useUpdateTable, useDeleteTable, useQueryTablesByStatus, useInsertTable };

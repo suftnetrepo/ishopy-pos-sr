@@ -10,8 +10,8 @@ import {
 	updateProduct,
 	deleteProduct,
 	queryProductByName
-} from "../model/product";
-import { Product } from "../model/product";
+} from "../model/menu";
+import { Product } from "../model/menu";
 
 interface Initialize {
 	data: Product[] | null | Product | [] | boolean;

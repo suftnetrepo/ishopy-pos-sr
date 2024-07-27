@@ -4,7 +4,7 @@
 import {getRealmInstance} from './store';
 
 import { Order } from './orders';
-import { Product } from './product';
+import { Product } from './menu';
 import { OrderItem } from './orderItems';
 
 export interface ProductSalesData {

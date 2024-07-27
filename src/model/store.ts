@@ -5,6 +5,18 @@ import { migration, SCHEMA_VERSION } from './migration';
 
 let realmInstance: Realm | null = null;
 
+export const TableSchema: ObjectSchema = {
+  name: 'Table',
+  primaryKey: 'table_id',
+  properties: {
+    table_id: 'string',
+    tableName: 'string',
+    isOccupied: 'int?',
+    status: 'int',
+    size: 'int?',
+  },
+};
+
 export const AddOnSchema: ObjectSchema = {
   name: 'AddOn',
   primaryKey: 'addOn_id',
@@ -12,14 +24,15 @@ export const AddOnSchema: ObjectSchema = {
     addOn_id: 'string',
     addOnName: 'string',
     price: 'double',
+    menu_id: 'string',
   },
 };
 
-export const ProductSchema: ObjectSchema = {
-  name: 'Product',
-  primaryKey: 'product_id',
+export const MenuSchema: ObjectSchema = {
+  name: 'Menu',
+  primaryKey: 'menu_id',
   properties: {
-    product_id: 'string',
+    menu_id: 'string',
     name: 'string',
     bar_code: 'string?',
     color_code: 'string?',
@@ -30,7 +43,7 @@ export const ProductSchema: ObjectSchema = {
     category_id: 'string?',
     status: {type: 'int', default: 0},
     description: 'string?',
-    addOn_id: 'string',
+    addOn_id: 'string?',
   },
 };
 
@@ -39,7 +52,7 @@ export const StockSchema: ObjectSchema = {
   primaryKey: 'stock_id',
   properties: {
     stock_id: 'string',
-    product_id: 'string',
+    menu_id: 'string',
     stock: {type: 'int', default: 0},
     date: 'string',
   },
@@ -84,6 +97,7 @@ export const OrderSchema: ObjectSchema = {
   properties: {
     order_id: 'string',
     user_id: 'string?',
+    tableId: 'string',
     total: 'double?',
     tax: 'double?',
     discount: 'double?',
@@ -99,8 +113,8 @@ export const OrderItemSchema: ObjectSchema = {
   properties: {
     detail_id: 'string',
     order_id: 'string',
-    product_id: 'string',
-    product_name: 'string',
+    menu_id: 'string',
+    menu_name: 'string',
     quantity: 'int',
     price: 'double',
     date: 'date',
@@ -163,7 +177,7 @@ export const PaymentSchema: ObjectSchema = {
 const {useRealm, useQuery, RealmProvider} = createRealmContext({
   schema: [
     PaymentSchema,
-    ProductSchema,
+    MenuSchema,
     CategorySchema,
     CustomerSchema,
     StockSchema,
@@ -173,13 +187,14 @@ const {useRealm, useQuery, RealmProvider} = createRealmContext({
     ShopSchema,
     DiscountSchema,
     TaxSchema,
+    AddOnSchema,
   ],
   deleteRealmIfMigrationNeeded: true,
 });
 
 const schema = [
   PaymentSchema,
-  ProductSchema,
+  MenuSchema,
   CategorySchema,
   CustomerSchema,
   StockSchema,
@@ -189,11 +204,12 @@ const schema = [
   ShopSchema,
   DiscountSchema,
   TaxSchema,
+  TableSchema,
 ];
 
 const RealmOptions = () => {
   return {
-    path: 'k_____pos______k.realm',
+    path: '__pos_sr.realm',
     schema: schema,
     schemaVersion: SCHEMA_VERSION,
     migration 

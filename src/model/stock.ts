@@ -4,13 +4,13 @@ import {getRealmInstance} from './store';
 
 export interface Stock {
   stock_id: string;
-  product_id: string;
+  menu_id: string;
   stock: number | undefined;
   date: string;
 }
 
 const insertStock = async (
-  product_id: string,
+  menu_id: string,
   stock: number = 0
 ): Promise<Stock> => {
   const realm = await getRealmInstance();
@@ -19,7 +19,7 @@ const insertStock = async (
       realm.write(() => {
         const newStock: Stock = {
           stock_id: guid(),
-          product_id,
+          menu_id,
           stock,
           date: new Date().toISOString(),
         };
@@ -41,7 +41,7 @@ const queryStockById = async (stock_id: string): Promise<Stock | null> => {
         stock
           ? {
               stock_id: stock.stock_id,
-              product_id: stock.product_id,
+              menu_id: stock.menu_id,
               stock: stock.stock,
               date: stock.date,
             }
@@ -53,16 +53,16 @@ const queryStockById = async (stock_id: string): Promise<Stock | null> => {
   });
 };
 
-const queryStockByProductId = async (product_id: string): Promise<Stock[]> => {
+const queryStockByProductId = async (menu_id: string): Promise<Stock[]> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
       const stocks = realm
         .objects<Stock>('Stock')
-        .filtered('product_id == $0', product_id)
+        .filtered('menu_id == $0', menu_id)
         .map(stock => ({
           stock_id: stock.stock_id,
-          product_id: stock.product_id,
+          menu_id: stock.menu_id,
           stock: stock.stock,
           date: stock.date,
         }));
@@ -75,7 +75,7 @@ const queryStockByProductId = async (product_id: string): Promise<Stock[]> => {
 
 const updateStock = async (
   stock_id: string,
-  product_id: string,
+  menu_id: string,
   stock: number
 ): Promise<Stock> => {
   const realm = await getRealmInstance();
@@ -87,7 +87,7 @@ const updateStock = async (
           stock_id
         );
         if (existingStock) {
-          existingStock.product_id = product_id;
+          existingStock.menu_id = menu_id;
           existingStock.stock = stock;
           resolve(existingStock);
         } else {

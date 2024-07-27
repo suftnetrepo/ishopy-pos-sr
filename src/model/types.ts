@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Product } from './product';
+import { Menu } from './menu';
 import {User} from './user';
 import { Category } from './category';
 import {Customer} from './customer';
@@ -10,6 +10,8 @@ import {Payment} from './payments';
 import {Shop} from './shop';
 import {Discount} from './discount';
 import {Tax} from './tax';
+import {Table} from './table';
+import {AddOn} from './addOn';
 interface CartItem {
   id: string;
   name: string;
@@ -18,7 +20,7 @@ interface CartItem {
 }
 
 export type {
-  Product,
+  Menu,
   Category,
   Customer,
   Order,
@@ -30,4 +32,6 @@ export type {
   Discount,
   Shop,
   CartItem,
+  Table,
+  AddOn,
 };

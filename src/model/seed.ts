@@ -1,18 +1,18 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable prefer-const */
+/* eslint-disable prettier/prettier */
 import { guid } from '../utils/help';
 import { getRealmInstance } from './store';
-import {
-  Order,
-  OrderItem,
-  Product,
-  Customer,
-  Category,
-  User,
-  Payment,
+import { 
+  Customer, 
   Stock,
   Tax,
   Discount,
-  Shop,
+  Shop, 
+  Payment
 } from './types';
 
 const colorPalettes = {
@@ -41,10 +41,210 @@ const colorPalettes = {
   blueGray: ['#475569', '#334155'],
 };
 
-const getRandomColorCode = () => {
+
+// Helper functions
+const randomItem = (items: string | any[]) => items[Math.floor(Math.random() * items.length)];
+const randomPrice = () => parseFloat((Math.random() * (20 - 5) + 5).toFixed(2));
+const randomInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
+const randomDate = () => new Date(+(new Date()) - Math.floor(Math.random() * 10000000000));
+const randomColor = () => {
   const colors = Object.values(colorPalettes);
   const randomPalette = colors[Math.floor(Math.random() * colors.length)];
   return randomPalette[Math.floor(Math.random() * randomPalette.length)];
+};
+
+// Sample data pools
+const userNames = ["Alice", "Bob", "Charlie", "Diana"];
+const tableNames = ["Table 1", "Table 2", "Table 3", "Table 4"];
+const paymentMethods = ["Cash", "Credit Card", "PayPal"];
+const categoryNames = ['Main Course', 'Dessert', 'Drinks', 'Appetizers'];
+const cuisines = [
+  'Italian',
+  'Mexican',
+  'American',
+  'Japanese',
+  'Chinese',
+  'Indian',
+  'French',
+  'Mediterranean',
+  'Thai',
+  'Greek',
+];
+
+// List of dish types
+const dishTypes = [
+  'Pizza',
+  'Taco',
+  'Burger',
+  'Sushi',
+  'Noodles',
+  'Curry',
+  'Salad',
+  'Soup',
+  'Steak',
+  'Sandwich',
+];
+
+const addOnTypes = [
+  'Extra Cheese',
+  'Extra Sauce',
+  'Side Salad',
+  'Drink',
+  'Dessert',
+];
+
+const generateAddOns = (menus: any[]) => {
+  let addOns: { addOn_id: string; addOnName: string; price: number; menu_id: any; }[] = [];
+  menus.forEach((menu: { name: any; menu_id: any; }) => {
+    const numberOfAddOns = Math.floor(Math.random() * 3) + 1; // Each menu can have 1 to 3 add-ons
+    for (let i = 0; i < numberOfAddOns; i++) {
+      addOns.push({
+        addOn_id: guid(),
+        addOnName: `${randomItem(addOnTypes)} for ${menu.name}`,
+        price: parseFloat((Math.random() * 5).toFixed(2)),
+        menu_id: menu.menu_id,
+      });
+    }
+  });
+  return addOns;
+};
+
+function generateMenuItemNames() {
+  let menuNames: string[] = [];
+  let attempts = 0;
+
+  while (menuNames.length < 50 && attempts < 500) {
+    let cuisine = randomItem(cuisines);
+    let dishType = randomItem(dishTypes);
+    let menuItemName = `${cuisine} ${dishType}`;
+
+    // Ensure uniqueness
+    if (!menuNames.includes(menuItemName)) {
+      menuNames.push(menuItemName);
+    }
+    attempts++;
+  }
+
+  return menuNames;
+}
+
+// Generate Categories
+const generateCategories = () => {
+  return categoryNames.map((name, _) => ({
+    category_id: guid(),
+    name: name,
+    color_code: randomColor(),
+    status: Math.random() < 0.5 ? 1 : 0,
+  }));
+};
+
+// Generate Menu Items
+const generateMenuItems = (categories: { category_id: string; name: string; color_code: string; status: number; }[]) => {
+  let menus = [];
+  let menuNames = generateMenuItemNames(); 
+  for (let i = 0; i < 50; i++) {
+    menus.push({
+      menu_id: guid(),
+      name: menuNames[i],
+      bar_code: Math.random() < 0.5 ? guid() : null,
+      color_code: randomColor(),
+      price: randomPrice(),
+      price_offer: randomPrice(),
+      cost: randomPrice(),
+      stock: Math.floor(Math.random() * 100),
+      category_id: randomItem(categories).category_id,
+      status: Math.random() < 0.5 ? 1 : 0,
+      description: `Description for menu item ${i + 1}`
+    });
+  }
+  return menus;
+};
+
+// Generate sample users
+const generateUsers = () => {
+  return userNames.map(name => ({
+    user_id: guid(),
+    username: `${name.toLowerCase()}`,
+    password: 'password123',
+    first_name: name,
+    last_name: 'Smith',
+    pass_code: randomInt(1000, 9999),
+    status: 1,
+    role: 'Customer',
+  }));
+};
+
+// Generate sample tables
+const generateTables = () => {
+  return tableNames.map(name => ({
+    table_id: guid(),
+    tableName: name,
+    isOccupied: randomInt(0, 1),
+    status: randomInt(0, 1),
+    size: randomInt(2, 8),
+  }));
+};
+
+// Generate Orders
+const generateOrders = (users: { user_id: string; username: string; password: string; first_name: string; last_name: string; pass_code: any; status: number; role: string; }[], tables: { table_id: string; tableName: string; isOccupied: any; status: any; size: any; }[]) => {
+  let orders = [];
+  for (let i = 0; i < 20; i++) {
+    const user = randomItem(users);
+    const table = randomItem(tables);
+    const total_price = randomPrice() + randomPrice();
+    orders.push({
+      order_id: guid(),
+      user_id: user.user_id,
+      tableId: table.table_id,
+      total_price: total_price,
+      tax: total_price * 0.1,
+      discount: total_price * 0.05,
+      status: randomItem(['Pending', 'Completed', 'Cancelled']),
+      date: randomDate(),
+    });
+  }
+  return orders;
+};
+
+// Generate OrderItems
+const generateOrderItems = (orders: any[], menus: string | any[], addOns: any[] | undefined) => {
+  let orderItems: { detail_id: string; order_id: any; menu_id: any; menu_name: any; quantity: number; price: any; date: any; addOns: any; }[] = [];
+  orders.forEach((order: { order_id: any; date: any; }) => {
+    const numberOfItems = randomInt(1, 5); // Each order can have between 1 and 5 items
+    for (let i = 0; i < numberOfItems; i++) {
+      const menu = randomItem(menus);
+      const applicableAddOns = addOns?.filter(
+        (        addOn: { menu_id: string }) => addOn.menu_id === menu.menu_id
+      );
+      const selectedAddOns = applicableAddOns?.slice(
+        0,
+        Math.floor(Math.random() * applicableAddOns.length)
+      );
+
+      orderItems.push({
+        detail_id: guid(),
+        order_id: order.order_id,
+        menu_id: menu.menu_id,
+        menu_name: menu.name,
+        quantity: randomInt(1, 3),
+        price: menu.price,
+        date: order.date,
+        addOns: selectedAddOns, // Attach selected add-ons to the order item
+      });
+    }
+  });
+  return orderItems;
+};
+
+// Generate Payments
+const generatePayments = (orders: any[]) => {
+  return orders.map((order: { order_id: any; total_price: number; discount: number; tax: number; date: any; }) => ({
+    id: guid(),
+    order_id: order.order_id,
+    amount: order.total_price - order.discount + order.tax,
+    payment_method: randomItem(paymentMethods),
+    date: order.date,
+  }));
 };
 
 const clearSeedData = async () => {
@@ -61,7 +261,10 @@ const prepareSeedData = async () => {
      realm.delete(realm.objects('Category'));
      realm.delete(realm.objects('Tax'));
      realm.delete(realm.objects('Discount'));
-     realm.delete(realm.objects('Product'));
+     realm.delete(realm.objects('Menu'));
+     realm.delete(realm.objects('Stock'));
+     realm.delete(realm.objects('Table'));
+     realm.delete(realm.objects('AddOn'));
      realm.delete(realm.objects('Customer'));
      realm.delete(realm.objects('Order'));
      realm.delete(realm.objects('OrderItem'));
@@ -75,77 +278,19 @@ const prepareSeedData = async () => {
 };
 const seedData = async () => {
   const realm = await getRealmInstance();
+
+  const users = generateUsers();
+  const tables = generateTables();
+  const categories = generateCategories();
+  const menus = generateMenuItems(categories);
+  const addOns = generateAddOns(menus);
+  const orders = generateOrders(users, tables);
+  const orderItems = generateOrderItems(orders, menus, addOns);
+  const payments = generatePayments(orders);
+
   try {
     realm.write(() => {
-      realm.deleteAll();
-
-      // Seed Users
-      const users: User[] = [
-        {
-          user_id: guid(),
-          first_name: 'james',
-          last_name: 'micheal',
-          username: 'admin',
-          password: 'admin123',
-          role: 'admin',
-          pass_code: 1234,
-        },
-        {
-          user_id: guid(),
-          first_name: 'ema',
-          last_name: 'dam',
-          username: 'user',
-          password: 'user123',
-          role: 'user',
-          pass_code: 1234,
-        },
-      ];
-      users.forEach(user => realm.create('User', user));
-
-      // // Seed Categories
-      const categories: Category[] = [
-        {
-          category_id: guid(),
-          name: 'Electronics',
-          status: 1,
-          color_code: '#e11d48',
-        },
-        { category_id: guid(), name: 'Books', status: 1, color_code: '#be123c' },
-        {
-          category_id: guid(),
-          name: 'Clothing',
-          status: 1,
-          color_code: '#db2777',
-        },
-        {
-          category_id: guid(),
-          name: 'Furniture',
-          status: 1,
-          color_code: '#c026d3',
-        },
-        { category_id: guid(), name: 'Toys', status: 1, color_code: '#7e22ce' },
-        {
-          category_id: guid(),
-          name: 'Groceries',
-          status: 1,
-          color_code: '#9333ea',
-        },
-        {
-          category_id: guid(),
-          name: 'Jewelry',
-          status: 1,
-          color_code: '#6d28d9',
-        },
-        { category_id: guid(), name: 'Sports', status: 1, color_code: '#4338ca' },
-        { category_id: guid(), name: 'Beauty', status: 1, color_code: '#005db4' },
-        {
-          category_id: guid(),
-          name: 'Automotive',
-          status: 1,
-          color_code: '#0f766e',
-        },
-      ];
-      categories.forEach(category => realm.create('Category', category));
+      realm.deleteAll();  
 
       // Seed Taxes
       const taxes: Tax[] = [
@@ -175,21 +320,6 @@ const seedData = async () => {
       ];
       shops.forEach(shop => realm.create('Shop', shop));
 
-      // Seed Products
-      const products: Product[] = Array.from({ length: 50 }, (_, i) => ({
-        product_id: guid(),
-        name: `Product ${i + 1}`,
-        bar_code: `${1000000000 + i}`,
-        color_code: getRandomColorCode(),
-        price: parseFloat((Math.random() * 900 + 100).toFixed(2)),
-        price_offer: parseFloat((Math.random() * 800 + 100).toFixed(2)),
-        cost: parseFloat((Math.random() * 700 + 100).toFixed(2)),
-        stock: Math.floor(Math.random() * 200 + 1),
-        category_id: categories[i % 10].category_id,
-        status: 1,
-      }));
-      products.forEach(product => realm.create('Product', product));
-
       // Seed Customers
       const customers: Customer[] = [
         {
@@ -206,80 +336,22 @@ const seedData = async () => {
         },
       ];
       customers.forEach(customer => realm.create('Customer', customer));
-
-      // Seed Orders
-      const orders: Order[] = [];
-      const now = new Date();
-
-      for (let i = 1; i <= 20; i++) {
-        const orderDate = new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          now.getDate() - Math.floor(Math.random() * 7),
-          Math.floor(Math.random() * 24),
-          Math.floor(Math.random() * 60),
-          Math.floor(Math.random() * 60)
-        );
-
-        orders.push({
-          order_id: guid(),
-          user_id: users[i % 2].user_id,
-          total_price: Math.floor(Math.random() * 1000) + 100,
-          total: Math.floor(Math.random() * 200) + 100,
-          status: i % 2 === 0 ? 'completed' : 'pending',
-          tax: 10,
-          discount: 20,
-          date: orderDate,
-        });
-      }
-
-      orders.forEach(order => realm.create('Order', order));
-
-      // Seed OrderItems
-      const orderItems: OrderItem[] = [];
-      for (let i = 1; i <= 20; i++) {
-        const orderItemDate = new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          now.getDate() - Math.floor(Math.random() * 7),
-          Math.floor(Math.random() * 24),
-          Math.floor(Math.random() * 60),
-          Math.floor(Math.random() * 60)
-        );
-
-        orderItems.push({
-          detail_id: guid(),
-          order_id: orders[Math.floor((i - 1) / 2)].order_id,
-          product_id: products[i % 50].product_id,
-          product_name: products[i % 50].name,
-          quantity: Math.floor(Math.random() * 5) + 1,
-          price: Math.floor(Math.random() * 500) + 50,
-          date: orderItemDate,
-        });
-      }
-
-      orderItems.forEach(orderItem => realm.create('OrderItem', orderItem));
-
-      const stock: Stock[] = products.map(product => ({
+    
+      const stock: Stock[] = menus.map(menu => ({
         stock_id: guid(),
-        product_id: product.product_id,
-        stock: product.stock, // Ensure stock is a number
+        menu_id: menu.menu_id,
+        stock: menu.stock, 
         date: new Date().toISOString(),
       }));
       stock.forEach(stockItem => realm.create('Stock', stockItem));
 
-      // Seed Payments
-      const payments: Payment[] = [];
-      for (let i = 1; i <= 20; i++) {
-        payments.push({
-          id: guid(),
-          order_id: orders[i - 1].order_id,
-          amount: Math.floor(Math.random() * 1000) + 100,
-          payment_method: i % 2 === 0 ? 'credit_card' : 'paypal',
-          date: new Date(),
-        });
-      }
-      payments.forEach(payment => realm.create('Payment', payment));
+      users.forEach(user => realm.create('User', user));
+      tables.forEach(table => realm.create('Table', table));
+      categories.forEach(category => realm.create('Category', category));
+      menus.forEach(menu => realm.create('Menu', menu));
+      orders.forEach(order => realm.create('Order', order));
+      orderItems.forEach(item => realm.create('OrderItem', item));
+      payments.forEach((payment:Payment) => realm.create('Payment', payment));
 
       console.log('Database seeded successfully');
     });
