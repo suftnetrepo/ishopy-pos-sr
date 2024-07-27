@@ -5,6 +5,16 @@ import { migration, SCHEMA_VERSION } from './migration';
 
 let realmInstance: Realm | null = null;
 
+export const AddOnSchema: ObjectSchema = {
+  name: 'AddOn',
+  primaryKey: 'addOn_id',
+  properties: {
+    addOn_id: 'string',
+    addOnName: 'string',
+    price: 'double',
+  },
+};
+
 export const ProductSchema: ObjectSchema = {
   name: 'Product',
   primaryKey: 'product_id',
@@ -20,6 +30,7 @@ export const ProductSchema: ObjectSchema = {
     category_id: 'string?',
     status: {type: 'int', default: 0},
     description: 'string?',
+    addOn_id: 'string',
   },
 };
 
@@ -93,6 +104,7 @@ export const OrderItemSchema: ObjectSchema = {
     quantity: 'int',
     price: 'double',
     date: 'date',
+    addOns: 'AddOn[]',
   },
 };
 
