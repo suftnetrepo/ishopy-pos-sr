@@ -4,11 +4,12 @@ import {getRealmInstance} from './store';
 export interface OrderItem {
   detail_id: string;
   order_id: string;
-  product_id: string;
-  product_name: string;
+  menu_id: string;
+  menu_name: string;
   quantity: number;
   price: number;
   date: Date;
+  addOns: string;
 }
 
 const insertOrderItem = async(
@@ -41,11 +42,12 @@ const queryOrderItemByOrderId = async(order_id: string): Promise<OrderItem[]> =>
         .map(orderItem => ({
           detail_id: orderItem.detail_id,
           order_id: orderItem.order_id,
-          product_id: orderItem.product_id,
-          product_name: orderItem.product_name,
+          menu_id: orderItem.menu_id,
+          menu_name: orderItem.menu_name,
           quantity: orderItem.quantity,
           price: orderItem.price,
           date: orderItem.date,
+          addOns :orderItem.addOns
         }));     
 
       resolve(orderItems);
@@ -68,11 +70,12 @@ const queryOrderItemById = async(detail_id: string): Promise<OrderItem | null> =
           ? {
               detail_id: orderItem.detail_id,
               order_id: orderItem.order_id,
-              product_id: orderItem.product_id,
-              product_name: orderItem.product_name,
+              menu_id: orderItem.menu_id,
+              menu_name: orderItem.menu_name,
               quantity: orderItem.quantity,
               price: orderItem.price,
               date: orderItem.date,
+              addOns: orderItem.addOns,
             }
           : null
       );

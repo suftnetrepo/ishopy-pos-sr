@@ -11,16 +11,16 @@ const reset = {
   status: 0,
   category_id: ''
 }
-const productRules = {
+const menuRules = {
   rules: {
     name: [
       {
         pattern: /^.+$/,
-        message: 'product name is required'
+        message: 'menu name is required'
       },
       {
         pattern: /^.{0,50}$/,
-        message: 'product name must be no more than 50 characters'
+        message: 'menu name must be no more than 50 characters'
       }
     ],
     price: [
@@ -42,4 +42,4 @@ const productRules = {
   }
 }
 
-export { productRules }
+export { menuRules }

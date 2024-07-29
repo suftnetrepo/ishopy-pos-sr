@@ -89,7 +89,7 @@ const useInAppPurchase = () => {
 
     useEffect(() => {       
         async function load() {           
-            const purchases = purchaseHistory?.filter((product) => product.productId === "ishopy_sa_premium_upgrade")            
+            const purchases = purchaseHistory?.filter((product) => product.productId === "irit_premium_upgrade")            
             if (purchases.length > 0 ) {
                 await store(PURCHASED_STATUS, 1)  
                 setPurchaseStatus(true)               
@@ -109,9 +109,9 @@ const useInAppPurchase = () => {
         }
 
         try {
-            await getProducts({ skus: ['ishopy_sa_premium_upgrade'] })
+            await getProducts({ skus: ['irit_premium_upgrade'] })
             if (products?.length > 0) {
-                await requestPurchase({ skus: ['ishopy_sa_premium_upgrade'] });
+                await requestPurchase({ skus: ['irit_premium_upgrade'] });
             }
         } catch (error) {
             setData({

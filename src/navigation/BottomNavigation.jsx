@@ -6,13 +6,12 @@ import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { XStack, StyledSpacer, StyledText, StyledButton } from 'fluent-styles';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { theme } from '../configs/theme';
+import { fontStyles, theme } from '../configs/theme';
 import Home from '../screens/home';
 import Sales from '../screens/sales';
 import Account from '../screens/account';
 import Order from '../screens/order';
 import Payment from '../screens/payment';
-
 
 const Tab = createBottomTabNavigator();
 
@@ -35,14 +34,14 @@ const Tabs = ({ state, descriptors, navigation }) => {
           };
 
             return (
-              <StyledButton key={index} onPress={() =>handlePress()} >
-                <XStack justifyContent='space-between' borderRadius={32} backgroundColor={focused ? theme.colors.blueGray[800] : theme.colors.gray[1]} alignItems='center' paddingHorizontal={12} paddingVertical={8}>
+              <StyledButton key={index} onPress={() => handlePress()} >
+                <XStack justifyContent='space-between' borderRadius={32} backgroundColor={focused ? theme.colors.blueGray[800] : theme.colors.gray[1]} alignItems='center' paddingHorizontal={12} paddingVertical={4}>
                   <BarIcon focused={focused} size={24} color={focused ? theme.colors.gray[1] : theme.colors.gray[800]} />
                   {
                     focused && (
                       <>
-                        <StyledSpacer marginHorizontal={4} />
-                        <StyledText fontWeight={theme.fontWeight.bold} color={focused ? theme.colors.gray[1] : theme.colors.gray[800]}>{route.name}</StyledText>
+                        <StyledSpacer marginHorizontal={2} />
+                        <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.medium} fontWeight={theme.fontWeight.bold} color={focused ? theme.colors.gray[1] : theme.colors.gray[800]}>{route.name}</StyledText>
                       </>
                     )
                   }

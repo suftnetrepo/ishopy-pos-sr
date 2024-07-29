@@ -8,7 +8,7 @@ import {
 	queryOrderById,
 	insertOrder,
 	deleteOrder,
-	queryOrdersByDateRange
+	queryOrdersByDateRange,
 } from "../model/orders";
 import { Order, OrderItem, Payment } from "../model/types";
 import { insertOrderItem } from "../model/orderItems";
@@ -27,7 +27,7 @@ const order: Order = {
 	order_id: "",
 	user_id: "",
 	total_price: 0,
-	total : 0,
+	total: 0,
 	status: "pending",
 	tax: 0,
 	discount: 0,
@@ -42,7 +42,7 @@ const payment: Payment = {
 	date: new Date(),
 };
 
-const useOrders = (load : boolean) => {
+const useOrders = (load: boolean) => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
@@ -66,7 +66,7 @@ const useOrders = (load : boolean) => {
 		}
 	}
 
-	useEffect(() => {		
+	useEffect(() => {
 		loadOrders();
 	}, [load]);
 
@@ -98,7 +98,7 @@ const useOrders = (load : boolean) => {
 	return {
 		...data,
 		resetHandler,
-		loadOrdersByDateRange		
+		loadOrdersByDateRange,
 	};
 };
 
@@ -189,10 +189,12 @@ const useInsertOrder = () => {
 						detail_id: guid(),
 						order_id: orderResult.order_id,
 						price: item.price,
-						product_id: item.id,
-						product_name: item.name,
+						menu_id: item.id,
+						menu_name: item.name,
 						quantity: 1,
 						date: new Date(),
+						addOns:
+							(item.addOns || []).length > 0 ? JSON.stringify(item.addOns) : "",
 					};
 
 					await insertOrderItem(orderItem);
@@ -268,6 +270,11 @@ const useInsertOrder = () => {
 				quantity: item.quantity,
 				name: item.name,
 				total: item.price,
+				addOn: item.addOns?.map((item) => ({
+					quantity: item.quantity,
+					name: item.addOnName,
+					total: item.price,
+				})),
 			})),
 			subtotal: getTotal(),
 			tax: getTotalTax(),
@@ -321,7 +328,7 @@ const useInsertOrder = () => {
 			} else if (result.action === Share.dismissedAction) {
 				// Dismissed
 			}
-		} catch (error) {			
+		} catch (error) {
 			setData({
 				data: null,
 				error: error as Error,

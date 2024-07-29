@@ -94,7 +94,12 @@ const addOnTypes = [
 ];
 
 const generateAddOns = (menus: any[]) => {
-  let addOns: { addOn_id: string; addOnName: string; price: number; menu_id: any; }[] = [];
+  let addOns: {
+    quantity: number, addOn_id: string;
+    addOnName: string;
+    price: number;
+    menu_id: any;
+  }[] = [];
   menus.forEach((menu: { name: any; menu_id: any; }) => {
     const numberOfAddOns = Math.floor(Math.random() * 3) + 1; // Each menu can have 1 to 3 add-ons
     for (let i = 0; i < numberOfAddOns; i++) {
@@ -103,6 +108,7 @@ const generateAddOns = (menus: any[]) => {
         addOnName: `${randomItem(addOnTypes)} for ${menu.name}`,
         price: parseFloat((Math.random() * 5).toFixed(2)),
         menu_id: menu.menu_id,
+        quantity : 1
       });
     }
   });
@@ -164,13 +170,13 @@ const generateMenuItems = (categories: { category_id: string; name: string; colo
 const generateUsers = () => {
   return userNames.map(name => ({
     user_id: guid(),
-    username: `${name.toLowerCase()}`,
-    password: 'password123',
+    username: "user",
+    password: "user123",
     first_name: name,
     last_name: 'Smith',
-    pass_code: randomInt(1000, 9999),
+    pass_code: 1234,
     status: 1,
-    role: 'Customer',
+    role: 'user',
   }));
 };
 
@@ -207,20 +213,40 @@ const generateOrders = (users: { user_id: string; username: string; password: st
 };
 
 // Generate OrderItems
-const generateOrderItems = (orders: any[], menus: string | any[], addOns: any[] | undefined) => {
-  let orderItems: { detail_id: string; order_id: any; menu_id: any; menu_name: any; quantity: number; price: any; date: any; addOns: any; }[] = [];
-  orders.forEach((order: { order_id: any; date: any; }) => {
+const generateOrderItems = (orders: any[], menus: any[], addOns: any[]) => {
+  let orderItems: {
+    detail_id: string;
+    order_id: string;
+    menu_id: string;
+    menu_name: string;
+    quantity: number;
+    price: number;
+    date: Date;
+    addOns: string;
+  }[] = [];
+
+  orders.forEach((order: {order_id: any; date: any}) => {
     const numberOfItems = randomInt(1, 5); // Each order can have between 1 and 5 items
     for (let i = 0; i < numberOfItems; i++) {
       const menu = randomItem(menus);
       const applicableAddOns = addOns?.filter(
-        (        addOn: { menu_id: string }) => addOn.menu_id === menu.menu_id
-      );
-      const selectedAddOns = applicableAddOns?.slice(
-        0,
-        Math.floor(Math.random() * applicableAddOns.length)
+        (addOn: {menu_id: string}) => addOn.menu_id === menu.menu_id
       );
 
+      // Ensure exactly 2 add-ons are selected
+      let selectedAddOns = [];
+      if (applicableAddOns && applicableAddOns.length >= 2) {
+        while (selectedAddOns.length < 2) {
+          const randomAddOn = randomItem(applicableAddOns);
+          if (!selectedAddOns.includes(randomAddOn)) {
+            selectedAddOns.push(randomAddOn);
+          }
+        }
+      } else {
+        // Handle cases where there are less than 2 applicable add-ons
+        selectedAddOns = applicableAddOns;
+      }
+  
       orderItems.push({
         detail_id: guid(),
         order_id: order.order_id,
@@ -229,10 +255,11 @@ const generateOrderItems = (orders: any[], menus: string | any[], addOns: any[] 
         quantity: randomInt(1, 3),
         price: menu.price,
         date: order.date,
-        addOns: selectedAddOns, // Attach selected add-ons to the order item
+        addOns: selectedAddOns.length ? JSON.stringify(selectedAddOns) : '',
       });
     }
   });
+
   return orderItems;
 };
 
@@ -349,6 +376,7 @@ const seedData = async () => {
       tables.forEach(table => realm.create('Table', table));
       categories.forEach(category => realm.create('Category', category));
       menus.forEach(menu => realm.create('Menu', menu));
+      addOns.forEach(addOn => realm.create('AddOn', addOn));
       orders.forEach(order => realm.create('Order', order));
       orderItems.forEach(item => realm.create('OrderItem', item));
       payments.forEach((payment:Payment) => realm.create('Payment', payment));

@@ -5,26 +5,29 @@
 /* eslint-disable prettier/prettier */
 import React, { useEffect } from "react";
 import { YStack, StyledText, StyledButton, StyledSpinner } from 'fluent-styles';
-import { useQueryProductByStatus } from "../../hooks/useProduct";
+import { useQueryMenuByStatus } from "../../hooks/useMenu"
 import { FlatList } from "react-native";
 import { fontStyles, theme } from "../../configs/theme";
 import { useAppContext } from "../../hooks/appContext";
 import { formatCurrency } from "../../utils/help";
 
-const ProductScrollView = ({ searchString, category_id }) => {
+const MenuScrollView = ({ onChange, searchString, category_id }) => {
     const { shop, addItem } = useAppContext()
-    const { data, loading, loadProductByCategory, loadProductByName } = useQueryProductByStatus(1);
- 
+    const { data, loading, loadMenuByCategory, loadMenuByName } = useQueryMenuByStatus(1);
+
     useEffect(() => {
         category_id && (
-            loadProductByCategory(category_id))
+            loadMenuByCategory(category_id))
         searchString && (
-            loadProductByName(searchString)
+            loadMenuByName(searchString)
         )
     }, [category_id, searchString])
 
     const handleAddItem = async (item) => {
-      await addItem(item.product_id, item.name, item.price, 1);
+        if(item?.addOns) {
+            onChange(item)
+        }      
+        addItem(item.menu_id, item.name, item.price, 1).then(() => {});
     };
 
     const RenderCard = React.memo(({ item }) => {
@@ -44,6 +47,7 @@ const ProductScrollView = ({ searchString, category_id }) => {
                             fontFamily={fontStyles.Roboto_Regular}
                             fontSize={theme.fontSize.small}
                             color={theme.colors.gray[50]}
+                            textAlign='center'
                         >
                             {item.name}
                         </StyledText>
@@ -65,7 +69,7 @@ const ProductScrollView = ({ searchString, category_id }) => {
         <YStack flex={1} paddingHorizontal={4} backgroundColor={theme.colors.gray[800]}>
             <FlatList
                 data={data}
-                keyExtractor={(item) => item.product_id}
+                keyExtractor={(item) => item.menu_id}
                 initialNumToRender={100}
                 renderItem={({ item, index }) => <RenderCard key={index} item={item} />}
                 showsVerticalScrollIndicator={false}
@@ -81,4 +85,4 @@ const ProductScrollView = ({ searchString, category_id }) => {
     )
 }
 
-export default ProductScrollView 
+export default MenuScrollView 

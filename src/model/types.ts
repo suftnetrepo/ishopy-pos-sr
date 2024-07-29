@@ -17,6 +17,7 @@ interface CartItem {
   name: string;
   price: number;
   quantity: number;
+  addOns?: AddOn[] 
 }
 
 export type {

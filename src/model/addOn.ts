@@ -7,6 +7,7 @@ export interface AddOn {
   addOnName: string;
   price: number;
   addOn_id: string;
+  quantity?: number;
 }
 
 const insertAddon = async (
@@ -27,26 +28,6 @@ const insertAddon = async (
         realm.create('AddOn', addOn);
         resolve(addOn);
       });
-    } catch (error) {
-      reject(error);
-    }
-  });
-};
-
-const queryAllAddons = async (): Promise<AddOn[]> => {
-  const realm = await getRealmInstance();
-  return new Promise((resolve, reject) => {
-    try {
-      const addOns = realm
-        .objects<AddOn>('AddOn')
-        .sorted('addOnName')
-        .map(addOn => ({
-          addOn_id: addOn.addOn_id,
-          addOnName: addOn.addOnName,
-          menu_id: addOn.menu_id,
-          price: addOn.price,
-        }));
-      resolve(addOns);
     } catch (error) {
       reject(error);
     }
@@ -123,6 +104,5 @@ export {
   insertAddon,
   updateAddOn,
   queryAddonByMenuId,
-  queryAllAddons,
   deleteAddOn 
 };

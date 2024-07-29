@@ -21,26 +21,60 @@ import CheckOutCompleted from './checkOutCompleted';
 
 const CheckOut = () => {
     const navigator = useNavigation()
-    const { getItems, getTotalPrice, shop, deleteItem, setDiscount, setTax, getTotal, getTotalDiscount, getTotalTax } = useAppContext()
+    const { getItems, getTotalPrice, shop, deleteItem, deleteAddOn, setDiscount, setTax, getTotal, getTotalDiscount, getTotalTax } = useAppContext()
     const { orderHandler, data, error, loading, resetHandler, printHandler, shareReceipt } = useInsertOrder()
     const [modalVisible, setModalVisible] = useState(false)
     const { data: taxes } = useQueryTaxByStatus(1)
     const { data: discounts } = useQueryDiscountByStatus(1)
     const [selectValue, setSelectValue ] = useState()   
-    const items = getItems()      
-
-    const RenderItem = ({ item }) => {
+    const items = getItems()     
+  
+    const RenderAddOn = ({ menu_id, addOn }) => {
         return (
             <>
-                <XStack justifyContent='space-between' paddingVertical={8} paddingHorizontal={16} alignItems='center'>
-                    <YStack flex={1} backgroundColor={theme.colors.gray[1]}>
+                <XStack justifyContent='space-between' paddingVertical={8} paddingHorizontal={16} alignItems='center' backgroundColor={theme.colors.gray[1]}>
+                    <YStack flex={1} >
+                        <StyledText color={theme.colors.gray[800]} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.normal}>
+                            {addOn.addOnName}
+                        </StyledText>
+                    </YStack>
+                    <StyledBadge
+                        color={theme.colors.gray[800]}
+                        backgroundColor={theme.colors.gray[1]}
+                        fontWeight={theme.fontWeight.normal}
+                        fontSize={theme.fontSize.normal}
+                        paddingHorizontal={10}
+                        paddingVertical={1}
+                    >
+                        {addOn.quantity}
+                    </StyledBadge>
+                    <StyledSpacer marginHorizontal={16} />
+                    <StyledText color={theme.colors.gray[800]}
+                        fontWeight={theme.fontWeight.normal}
+                        fontSize={theme.fontSize.normal}>
+                        {formatCurrency(shop?.currency || "£", (addOn?.price || 0))}
+                    </StyledText>
+                    <StyledSpacer marginHorizontal={4} />
+                    <StyledMIcon size={30} name='cancel' color={theme.colors.gray[400]} onPress={() => deleteAddOn(menu_id, addOn.addOn_id)} />
+                </XStack>
+                <StyledSeparator line lineProps={{
+                    borderColor: theme.colors.gray[200]
+                }} />
+            </>
+        )
+    }
+    const RenderItem = ({ item }) => {        
+        return (
+            <>
+                <XStack backgroundColor={theme.colors.blueGray[100]} borderColor={theme.colors.blueGray[100]} justifyContent='space-between' paddingVertical={8} paddingHorizontal={16} alignItems='center'>
+                    <YStack flex={1} >
                         <StyledText color={theme.colors.gray[800]} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.normal}>
                             {item.name}
                         </StyledText>
                     </YStack>
                     <StyledBadge
                         color={theme.colors.gray[800]}
-                        backgroundColor={theme.colors.gray[1]}
+                        backgroundColor={theme.colors.blueGray[100]}
                         fontWeight={theme.fontWeight.normal}
                         fontSize={theme.fontSize.normal}
                         paddingHorizontal={10}
@@ -60,10 +94,14 @@ const CheckOut = () => {
                 <StyledSeparator line lineProps={{
                     borderColor: theme.colors.gray[200]
                 }} />
+                {
+                    (item?.addOns || []).map((addOn, index)=> (
+                        <RenderAddOn menu_id={item.id} addOn={addOn} key={index} />
+                    ))
+                }
             </>
         )
     }
-
     const RenderDiscountCard = ({ item }) => {       
         return (
             <StyledCard pressable={true} pressableProps={{
@@ -95,7 +133,6 @@ const CheckOut = () => {
             </StyledCard>
         )
     }
-
     const RenderTaxCard = ({ item }) => {
         return (
             <StyledCard pressable={true} pressableProps={{
@@ -154,7 +191,7 @@ const CheckOut = () => {
                 } />
             </StyledHeader>          
            
-            <YStack flex={1} paddingHorizontal={12} paddingVertical={8} backgroundColor={theme.colors.gray[200]}>
+            <YStack flex={1} paddingHorizontal={12} paddingVertical={8} backgroundColor={theme.colors.gray[100]}>
                 <StyledToggleSwitch />                
                 <ScrollView showsVerticalScrollIndicator={false} >
                     {
@@ -196,21 +233,21 @@ const CheckOut = () => {
                         )
                     }
                     <StyledSpacer marginVertical={4} />
-                    <StyledCard shadow='light' borderColor={theme.colors.gray[200]} borderRadius={16} borderWidth={1} backgroundColor={theme.colors.gray[1]} paddingTop={8}>
+                    <StyledCard shadow='light' borderColor={theme.colors.gray[200]}  borderWidth={1} backgroundColor={theme.colors.gray[100]}>
                         {
                             (items || []).map((item, index) =>
                                 <RenderItem item={item} key={index} />
                             )
                         }
-                        <XStack justifyContent='flex-end' paddingVertical={8} paddingHorizontal={16} alignItems='center' backgroundColor={theme.colors.gray[100]}>
+                        <XStack justifyContent='flex-end' paddingVertical={8} paddingHorizontal={16} alignItems='center' backgroundColor={theme.colors.gray[1]}>
                             <YStack >
-                                <StyledText color={theme.colors.gray[800]} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.large}>
+                                <StyledText color={theme.colors.gray[800]} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.large}>
                                     Subtotal
                                 </StyledText>
                             </YStack>
                             <StyledSpacer marginHorizontal={8} />
                             <StyledText color={theme.colors.gray[800]}
-                                fontWeight={theme.fontWeight.normal}
+                                fontWeight={theme.fontWeight.bold}
                                 fontSize={theme.fontSize.normal}>
                                 {formatCurrency(shop.currency || "£", (getTotal() || 0))}
                             </StyledText>
@@ -218,7 +255,7 @@ const CheckOut = () => {
                         <StyledSeparator line lineProps={{
                             borderColor: theme.colors.gray[200]
                         }} />
-                        <XStack justifyContent='flex-end' paddingVertical={8} paddingHorizontal={16} alignItems='center' backgroundColor={theme.colors.gray[100]}>
+                        <XStack justifyContent='flex-end' paddingVertical={8} paddingHorizontal={16} alignItems='center' backgroundColor={theme.colors.gray[1]}>
                             <YStack >
                                 <StyledText color={theme.colors.gray[400]} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.large}>
                                     Discount
@@ -238,7 +275,7 @@ const CheckOut = () => {
                         <StyledSeparator line lineProps={{
                             borderColor: theme.colors.gray[200]
                         }} />
-                        <XStack justifyContent='flex-end' paddingVertical={8} paddingHorizontal={16} alignItems='center' backgroundColor={theme.colors.gray[100]}>
+                        <XStack justifyContent='flex-end' paddingVertical={8} paddingHorizontal={16} alignItems='center' backgroundColor={theme.colors.gray[1]}>
                             <YStack >
                                 <StyledText color={theme.colors.gray[400]} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.large}>
                                     Tax
@@ -258,7 +295,7 @@ const CheckOut = () => {
                         <StyledSeparator line lineProps={{
                             borderColor: theme.colors.gray[200]
                         }} />
-                        <XStack justifyContent='flex-end' paddingVertical={8} paddingHorizontal={16} alignItems='center' backgroundColor={theme.colors.gray[100]}>
+                        <XStack justifyContent='flex-end' paddingVertical={8} paddingHorizontal={16} alignItems='center' backgroundColor={theme.colors.gray[1]}>
                             <YStack >
                                 <StyledText color={theme.colors.gray[800]} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.large}>
                                     Total

@@ -9,7 +9,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { stockRules } from "./validatorRules";
 import { useInsertStock } from "../../../hooks/useStock";
 import { ShowToast } from "../../../components/toast";
-import { useUpdateProduct } from "../../../hooks/useProduct";
+import { useUpdateProduct } from "../../../hooks/useMenu";
 
 const AddStock = () => {
   const navigator = useNavigation()

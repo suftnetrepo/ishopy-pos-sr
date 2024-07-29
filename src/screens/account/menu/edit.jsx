@@ -1,68 +1,76 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-undef */
 /* eslint-disable prettier/prettier */
-import React, { useState } from "react";
-import { validate, StyledSpinner, YStack, XStack, StyledOkDialog, StyledInput, StyledHeader, StyledCheckBox, StyledSafeAreaView, StyledSpacer, StyledText, StyledButton } from 'fluent-styles';
+import React, { useState, useEffect } from "react";
+import { validate, StyledSpinner, YStack, XStack, StyledOkDialog, StyledCheckBox, StyledHeader, StyledSafeAreaView, StyledSpacer, StyledText, StyledButton } from 'fluent-styles';
 import { theme } from "../../../configs/theme";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { useInsertProduct } from "../../../hooks/useProduct";
-import { ShowToast } from "../../../components/toast";
-import { productRules } from "./validatorRules";
-// import { StyledInput } from "../../../components/form";
+import { menuRules } from "./validatorRules";
+import { StyledInput } from "../../../components/form";
 import { StyledDropdown } from "../../../components/dropdown";
 import ColorPicker from "../../../components/colorPicker";
 import { useCategories } from "../../../hooks/useCategory";
+import { useUpdateMenu } from "../../../hooks/useMenu";
 
-const AddProduct = () => {
+const EditMenu = () => {
   const navigator = useNavigation()
+  const route = useRoute()
   const [errorMessages, setErrorMessages] = useState({})
-  const [fields, setFields] = useState(productRules.fields)
-  const { insert, error, loading, resetHandler } = useInsertProduct()
+  const [fields, setFields] = useState(menuRules.fields)
+  const { update, error, loading, resetHandler } = useUpdateMenu()
   const { data } = useCategories()
+  const { menu } = route.params
+
+  useEffect(() => {
+    setFields((pre) => {
+      return {
+        ...pre,
+        ...menu
+      }
+    })
+  }, [menu])
 
   const onSubmit = async () => {
     setErrorMessages({})
-    const { hasError, errors } = validate(fields, productRules.rules)
+    const { hasError, errors } = validate(fields, menuRules.rules)
     if (hasError) {
       setErrorMessages(errors)
       return false
     }
 
-    const handleResult = () => {
-      ShowToast("Success", "Product was added successfully", "success")
-      setFields(productRules.reset)
-    }
-
-    await insert({...fields, stock: 0, price : parseFloat(fields.price), cost : parseFloat(fields.cost || 0)}).then(async (result) => {
-      result && handleResult()
+    await update(fields.menu_id, { ...fields, price: parseFloat(fields.price), cost: parseFloat(fields.cost) }).then(async (result) => {
+      result && (
+        navigator.reset({
+          key: 'menus',
+          index: 0,
+          routes: [{ name: 'menus' }],
+        })
+      )
     })
-
   }
 
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
       <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
-        <StyledHeader.Header onPress={() => navigator.reset({
-          key: "products",
-          index: 0,
-          routes: [{ name: 'products' }]
-        })} title='Add Product' icon cycleProps={{
+        <StyledHeader.Header onPress={() => navigator.goBack()} title='Edit Menu' icon cycleProps={{
           borderColor: theme.colors.gray[300],
           marginRight: 8
         }} />
       </StyledHeader>
+
       <YStack
         flex={1}
         backgroundColor={theme.colors.gray[100]}
         paddingHorizontal={16}
       >
+        <StyledSpacer marginVertical={8} />
         <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-          <ColorPicker color={theme.colors.purple[900]} onPress={(color) => setFields({ ...fields, color_code: color })} />
+          <ColorPicker color={ fields.color_code || theme.colors.purple[900]} onPress={(color) => setFields({ ...fields, color_code: color })} />
           <StyledInput
             label={'Name'}
             keyboardType='default'
-            placeholder='Enter your product name'
+            placeholder='Enter your menu name'
             returnKeyType='next'
             maxLength={50}
             fontSize={theme.fontSize.small}
@@ -76,7 +84,7 @@ const AddProduct = () => {
             error={!!errorMessages?.name}
             errorMessage={errorMessages?.name?.message}
           />
-          <StyledInput
+          <StyledInput           
             label={'Price'}
             keyboardType='number-pad'
             placeholder='Enter your price'
@@ -92,9 +100,8 @@ const AddProduct = () => {
             onChangeText={(text) => setFields({ ...fields, price: text })}
             error={!!errorMessages?.price}
             errorMessage={errorMessages?.price?.message}
-          />
-
-          <StyledInput
+          />      
+          <StyledInput           
             label={'Cost'}
             keyboardType='number-pad'
             placeholder='Enter your cost'
@@ -111,7 +118,7 @@ const AddProduct = () => {
             error={!!errorMessages?.cost}
             errorMessage={errorMessages?.cost?.message}
           />
-          
+
           <StyledDropdown
             placeholder={'Select a category'}
             label={'Category'}
@@ -121,7 +128,7 @@ const AddProduct = () => {
             error={!!errorMessages?.category_id}
             errorMessage={errorMessages?.category_id?.message}
             listMode='MODAL'
-          />         
+          />        
           <XStack
             justifyContent='flex-start'
             alignItems='center'
@@ -170,4 +177,4 @@ const AddProduct = () => {
   )
 }
 
-export default AddProduct
+export default EditMenu

@@ -4,11 +4,11 @@
 import {getRealmInstance} from './store';
 
 import { Order } from './orders';
-import { Product } from './menu';
+import { Menu } from './menu';
 import { OrderItem } from './orderItems';
 
 export interface ProductSalesData {
-    product_id: string;
+    menu_id: string;
     name: string;
     total_sold: number;
 }
@@ -27,22 +27,22 @@ const getBestSellingProducts = async (
       const orderItems = realm.objects<OrderItem>('OrderItem');
       const productSales: {
         [key: string]: {
-          product_id: string;
+          menu_id: string;
           name: string;
           total_sold: number;
         };
       } = {};
 
       orderItems.forEach(orderItem => {
-        if (productSales[orderItem.product_id]) {
-          productSales[orderItem.product_id].total_sold += orderItem.quantity;
+        if (productSales[orderItem.menu_id]) {
+          productSales[orderItem.menu_id].total_sold += orderItem.quantity;
         } else {
-          const product = realm.objectForPrimaryKey<Product>(
+          const product = realm.objectForPrimaryKey<Menu>(
             'Product',
-            orderItem.product_id
+            orderItem.menu_id
           );
-          productSales[orderItem.product_id] = {
-            product_id: orderItem.product_id,
+          productSales[orderItem.menu_id] = {
+            menu_id: orderItem.menu_id,
             name: product ? product.name : 'Unknown',
             total_sold: orderItem.quantity,
           };
@@ -106,11 +106,14 @@ const getDailyTransactionPercentageChange = async (): Promise<number> => {
         .filtered('date >= $0 && date <= $1', startOfYesterday, endOfYesterday)
         .sum('total_price');
 
-      const percentageChange =
-        yesterdayTotal === 0
-          ? 0
-          : ((todayTotal - yesterdayTotal) / yesterdayTotal) * 100;
-      resolve(percentageChange);
+      let percentageChange: number;
+      if (yesterdayTotal === 0) {
+        percentageChange = todayTotal === 0 ? 0 : 100;
+      } else {
+        percentageChange =
+          ((todayTotal - yesterdayTotal) / yesterdayTotal) * 100;
+      }
+      resolve(parseFloat(percentageChange.toFixed(2)));
     } catch (error) {
       reject(error);
     }
@@ -149,8 +152,8 @@ const getLowStocks = async (threshold: number = 10): Promise<number> => {
     return new Promise((resolve, reject) => {
         try {
             const result = realm
-                .objects<Product>('Product')
-                .filtered('stock < $0', threshold);
+              .objects<Menu>('Menu')
+              .filtered('stock < $0', threshold);
             resolve(result.length);
         } catch (error) {
             reject(error);

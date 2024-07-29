@@ -9,25 +9,25 @@ import { YStack, XStack, StyledConfirmDialog, StyledCycle, StyledBadge, StyledHe
 import { theme, fontStyles } from '../../../configs/theme';
 import { StyledMIcon } from '../../../components/icon';
 import { useNavigation } from '@react-navigation/native';
-import { useProducts, useDeleteProduct } from '../../../hooks/useProduct';
+import { useMenus, useDeleteMenu } from '../../../hooks/useMenu';
 import { FlatList } from 'react-native';
 import { toWordCase } from '../../../utils/help';
 import { StyledStack } from '../../../components/stack';
 import { useAppContext } from '../../../hooks/appContext';
 import { convertJsonToCsv } from '../../../utils/convertJsonToCsv';
 
-const Products = () => {
+const Menus = () => {
   const navigator = useNavigation()
   const { shop : {currency } } = useAppContext()
   const [isDialogVisible, setIsDialogVisible] = useState(false)
-  const [product, setProduct] = useState()
-  const { data, error, loading, loadProducts, resetHandler } = useProducts()
-  const { deleteProduct, error: deleteError } = useDeleteProduct()
+  const [menu, setMenu] = useState()
+  const { data, error, loading, loadMenus, resetHandler } = useMenus()
+  const { deleteMenu, error: deleteError } = useDeleteMenu()
  
   const onConfirm = () => {
-    deleteProduct(product?.product_id).then(async (result) => {
+    deleteMenu(menu?.menu_id).then(async (result) => {
       result && (
-        loadProducts()
+        loadMenus()
       )
       setIsDialogVisible(false)
     })
@@ -69,22 +69,22 @@ const Products = () => {
         </YStack>
         <XStack flex={1} justifyContent='flex-end' alignItems='center'>
           <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]}>
-            <StyledMIcon size={24} name='edit' color={theme.colors.gray[600]} onPress={() => navigator.navigate("edit-product", {
-              product: item
+            <StyledMIcon size={24} name='edit' color={theme.colors.gray[600]} onPress={() => navigator.navigate("edit-menu", {
+              menu: item
             })} />
           </StyledCycle>
           <StyledSpacer marginHorizontal={4} />
           <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]}>
             <StyledMIcon size={32} name='delete-outline' color={theme.colors.gray[600]} onPress={() => {
               setIsDialogVisible(true)
-              setProduct(item)
+              setMenu(item)
             }
             } />
           </StyledCycle>
           <StyledSpacer marginHorizontal={4} />
           <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]}>
              <StyledMIcon size={24} name='add-task' color={theme.colors.gray[600]} onPress={() => navigator.navigate("stocks", {
-              product: item
+               menu: item
             })} />
           </StyledCycle>
         </XStack>
@@ -95,13 +95,13 @@ const Products = () => {
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
       <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
-        <StyledHeader.Header onPress={() => navigator.navigate("bottom-tabs", { screen: 'Settings' })} title='Products' icon cycleProps={{
+        <StyledHeader.Header onPress={() => navigator.navigate("bottom-tabs", { screen: 'Settings' })} title='Menus' icon cycleProps={{
           borderColor: theme.colors.gray[300],
           marginRight: 8
         }} rightIcon={
           <XStack flex={1} justifyContent='flex-end' alignItems='center' paddingHorizontal={16}>
             <StyledCycle borderWidth={1} borderColor={theme.colors.cyan[400]} backgroundColor={theme.colors.cyan[500]}>
-              <StyledMIcon size={24} name='add' color={theme.colors.gray[1]} onPress={() => navigator.navigate("add-product")} />
+              <StyledMIcon size={24} name='add' color={theme.colors.gray[1]} onPress={() => navigator.navigate("add-menu")} />
             </StyledCycle>
             <StyledSpacer marginHorizontal={2} />
             <StyledCycle borderWidth={1} borderColor={theme.colors.gray[500]} backgroundColor={theme.colors.gray[1]}>
@@ -115,7 +115,7 @@ const Products = () => {
           data={data}
           showsVerticalScrollIndicator={false}
           initialNumToRender={100}
-          keyExtractor={(item) => item.product_id}
+          keyExtractor={(item) => item.menu_id}
           renderItem={({ item, index }) => {
             return (
               <RenderCard item={item} key={index} />
@@ -138,7 +138,7 @@ const Products = () => {
       {isDialogVisible &&
         <StyledConfirmDialog
           visible
-          description='Are you sure you want to delete this product?'
+          description='Are you sure you want to delete this menu?'
           confirm='Yes'
           cancel='No'
           title={'Confirmation'}
@@ -149,4 +149,4 @@ const Products = () => {
   );
 }
 
-export default Products
+export default Menus

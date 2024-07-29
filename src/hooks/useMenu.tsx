@@ -1,34 +1,34 @@
 /* eslint-disable prettier/prettier */
 import { useEffect, useState } from "react";
 import {
-	queryAllProducts,
-	queryProductByBarCode,
-	queryProductByCategory,
-	queryProductById,
-	queryProductByStatus,
-	insertProduct,
-	updateProduct,
-	deleteProduct,
-	queryProductByName
+	queryAllMenus,
+	queryMenuByBarCode,
+	queryMenuByCategory,
+	queryMenuById,
+	queryMenuByName,
+	queryMenuByStatus,
+	insertMenu,
+	updateMenu,
+	deleteMenu
 } from "../model/menu";
-import { Product } from "../model/menu";
+import { Menu } from "../model/menu";
 
 interface Initialize {
-	data: Product[] | null | Product | [] | boolean;
+	data: Menu[] | null | Menu | [] | boolean;
 	error: Error | null;
 	loading: boolean;
 }
 
-const useProducts = () => {
+const useMenus = () => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
 		loading: true,
 	});
 
-	async function loadProducts() {
+	async function loadMenus() {
 		try {
-			const result = await queryAllProducts();
+			const result = await queryAllMenus();
 			setData({
 				data: result,
 				error: null,
@@ -45,7 +45,7 @@ const useProducts = () => {
 	}
 
 	useEffect(() => {
-		loadProducts();
+		loadMenus();
 	}, []);
 
 	const resetHandler = () => {
@@ -59,20 +59,20 @@ const useProducts = () => {
 	return {
 		...data,
 		resetHandler,
-		loadProducts
+		loadMenus
 	};
 };
 
-const useQueryProductByStatus = (status: number) => {
+const useQueryMenuByStatus = (status: number) => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
 		loading: true,
 	});
 
-	async function loadProductByStatus(status: number) {
+	async function loadMenuByStatus(status: number) {
 		try {
-			const results = await queryProductByStatus(status);
+			const results = await queryMenuByStatus(status);
 			setData({
 				data: results,
 				error: null,
@@ -87,10 +87,10 @@ const useQueryProductByStatus = (status: number) => {
 		}
 	}
 
-	async function loadProductByCategory(category_id: number) {
+	async function loadMenuByCategory(category_id: string) {
 		try {
 			setData((prev) => ({ ...prev, loading: true }));
-			const result = category_id === -1 ? await queryProductByStatus(1) : await queryProductByCategory(category_id);
+			const result = category_id === "-1" ? await queryMenuByStatus(1) : await queryMenuByCategory(category_id);
 			setData({
 				data: result,
 				error: null,
@@ -105,10 +105,10 @@ const useQueryProductByStatus = (status: number) => {
 		}
 	}
 
-	async function loadProductByName(term: string) {
+	async function loadMenuByName(term: string) {
 		try {
 			setData((prev) => ({ ...prev, loading: true }));
-			const result = await queryProductByName(term);
+			const result = await queryMenuByName(term);
 			setData({
 				data: result,
 				error: null,
@@ -124,7 +124,7 @@ const useQueryProductByStatus = (status: number) => {
 	}
 
 	useEffect(() => {
-		loadProductByStatus(status);
+		loadMenuByStatus(status);
 	}, [status]);
 
 	const resetHandler = () => {
@@ -138,12 +138,12 @@ const useQueryProductByStatus = (status: number) => {
 	return {
 		...data,
 		resetHandler,
-		loadProductByCategory,
-		loadProductByName
+		loadMenuByCategory,
+		loadMenuByName
 	};
 };
 
-const useQueryProductByCategory = (category_id: number) => {
+const useQueryMenuByCategory = (category_id: string) => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
@@ -153,7 +153,7 @@ const useQueryProductByCategory = (category_id: number) => {
 	useEffect(() => {
 		async function load() {
 			try {
-				const results = await queryProductByCategory(category_id);
+				const results = await queryMenuByCategory(category_id);
 				setData({
 					data: results,
 					error: null,
@@ -184,7 +184,7 @@ const useQueryProductByCategory = (category_id: number) => {
 	};
 };
 
-const useQueryProductById = (product_id: number) => {
+const useQueryMenuById = (product_id: number) => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
@@ -194,7 +194,7 @@ const useQueryProductById = (product_id: number) => {
 	useEffect(() => {
 		async function load() {
 			try {
-				const results = await queryProductById(product_id);
+				const results = await queryMenuById(product_id);
 				setData({
 					data: results,
 					error: null,
@@ -225,7 +225,7 @@ const useQueryProductById = (product_id: number) => {
 	};
 };
 
-const useQueryProductByBarCode = (bar_code: string) => {
+const useQueryMenuByBarCode = (bar_code: string) => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
@@ -235,7 +235,7 @@ const useQueryProductByBarCode = (bar_code: string) => {
 	useEffect(() => {
 		async function load() {
 			try {
-				const results = await queryProductByBarCode(bar_code);
+				const results = await queryMenuByBarCode(bar_code);
 				setData({
 					data: results,
 					error: null,
@@ -266,18 +266,18 @@ const useQueryProductByBarCode = (bar_code: string) => {
 	};
 };
 
-const useInsertProduct = () => {
+const useInsertMenu = () => {
 	const [data, setData] = useState<Initialize>({
 		data: null,
 		error: null,
 		loading: false,
 	});
 
-	const insertHandler = async (product: Omit<Product, "product_id">) => {
+	const insertHandler = async (menu: Omit<Menu, "menu_id">) => {
 		setData((prev) => ({ ...prev, loading: true }));
 
 		try {
-			const result = await insertProduct(product);
+			const result = await insertMenu(menu);
 			setData({
 				data: result,
 				error: null,
@@ -309,20 +309,20 @@ const useInsertProduct = () => {
 	};
 };
 
-const useUpdateProduct = () => {
+const useUpdateMenu = () => {
 	const [data, setData] = useState<Initialize>({
 		data: null,
 		error: null,
 		loading: false,
 	});
 
-	const updateHandler = async (product_id: number, product: Product) => {
+	const updateHandler = async (menu_id: number, menu: Menu) => {
 		setData((prev) => ({ ...prev, loading: true }));
 
 		try {
-			const user = await updateProduct(product_id, product);
+			const result = await updateMenu(menu_id, menu);
 			setData({
-				data: user,
+				data: result,
 				error: null,
 				loading: false,
 			});
@@ -352,7 +352,7 @@ const useUpdateProduct = () => {
 	};
 };
 
-const useDeleteProduct = () => {
+const useDeleteMenu = () => {
 	const [data, setData] = useState<{
 		data: boolean;
 		error: Error | null;
@@ -363,10 +363,10 @@ const useDeleteProduct = () => {
 		loading: true,
 	});
 
-	const deleteHandler = async (product_id: number) => {
+	const deleteHandler = async (menu_id: number) => {
 		setData((prev) => ({ ...prev, loading: true }));
 		try {
-			const result = await deleteProduct(product_id);
+			const result = await deleteMenu(menu_id);
 			setData({
 				data: result,
 				error: null,
@@ -392,18 +392,18 @@ const useDeleteProduct = () => {
 
 	return {
 		...data,
-		deleteProduct: deleteHandler,
+		deleteMenu: deleteHandler,
 		resetHandler
 	};
 };
 
 export {
-	useProducts,
-	useQueryProductByStatus,
-	useDeleteProduct,
-	useInsertProduct,
-	useQueryProductByBarCode,
-	useQueryProductByCategory,
-	useQueryProductById,
-	useUpdateProduct,
+	useDeleteMenu,
+	useInsertMenu,
+	useQueryMenuByBarCode,
+	useQueryMenuByCategory,
+	useQueryMenuById,
+	useQueryMenuByStatus,
+	useUpdateMenu,
+	useMenus,
 };

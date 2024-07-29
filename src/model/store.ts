@@ -118,7 +118,7 @@ export const OrderItemSchema: ObjectSchema = {
     quantity: 'int',
     price: 'double',
     date: 'date',
-    addOns: 'AddOn[]',
+    addOns: 'string?',
   },
 };
 
@@ -205,11 +205,12 @@ const schema = [
   DiscountSchema,
   TaxSchema,
   TableSchema,
+  AddOnSchema
 ];
 
 const RealmOptions = () => {
   return {
-    path: '__pos_sr.realm',
+    path: '__pos___sr.realm',
     schema: schema,
     schemaVersion: SCHEMA_VERSION,
     migration 

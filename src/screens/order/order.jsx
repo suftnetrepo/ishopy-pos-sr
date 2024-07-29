@@ -13,7 +13,7 @@ import { ScrollView } from 'react-native';
 const CompletedOrder = ({ order, setModal }) => {
     const { shop } = useAppContext()
     const { data } = useQueryOrderItemByOrder(order.order_id)
- 
+   
     const close = () => {
         setModal((pre) => {
             return {
@@ -69,16 +69,52 @@ const CompletedOrder = ({ order, setModal }) => {
         )
     }
 
-    const RenderItem = ({ item }) => {
+    const RenderAddOn = ({ addOn }) => {
         return (
             <>
-                <XStack justifyContent='space-between' paddingVertical={8} paddingHorizontal={16} alignItems='center'>
-                    <StyledText color={theme.colors.gray[800]} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.normal}>
-                        {item.product_name}
-                    </StyledText>
+                <XStack justifyContent='space-between' paddingVertical={8} paddingHorizontal={16} alignItems='center' backgroundColor={theme.colors.gray[1]}>
+                    <YStack flex={1} >
+                        <StyledText color={theme.colors.gray[800]} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.normal}>
+                            {addOn.addOnName}
+                        </StyledText>
+                    </YStack>
                     <StyledBadge
                         color={theme.colors.gray[800]}
                         backgroundColor={theme.colors.gray[1]}
+                        fontWeight={theme.fontWeight.normal}
+                        fontSize={theme.fontSize.normal}
+                        paddingHorizontal={10}
+                        paddingVertical={1}
+                    >
+                        {addOn.quantity}
+                    </StyledBadge>
+                    <StyledSpacer marginHorizontal={16} />
+                    <StyledText color={theme.colors.gray[800]}
+                        fontWeight={theme.fontWeight.normal}
+                        fontSize={theme.fontSize.normal}>
+                        {formatCurrency(shop?.currency || "£", (addOn?.price || 0))}
+                    </StyledText>
+                    <StyledSpacer marginHorizontal={4} />                   
+                </XStack>
+                <StyledSeparator line lineProps={{
+                    borderColor: theme.colors.gray[200]
+                }} />
+            </>
+        )
+    }
+
+    const RenderItem = ({ item }) => {
+        return (
+            <>
+                <XStack backgroundColor={theme.colors.blueGray[100]} borderColor={theme.colors.blueGray[100]}  justifyContent='space-between' paddingVertical={8} paddingHorizontal={16} alignItems='center'>
+                    <YStack flex={1} >
+                        <StyledText color={theme.colors.gray[800]} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.normal}>
+                            {item.menu_name}
+                        </StyledText>
+                    </YStack>
+                    <StyledBadge
+                        color={theme.colors.gray[800]}
+                        backgroundColor={theme.colors.blueGray[100]}
                         fontWeight={theme.fontWeight.normal}
                         fontSize={theme.fontSize.normal}
                         paddingHorizontal={10}
@@ -103,10 +139,22 @@ const CompletedOrder = ({ order, setModal }) => {
         return (
             <StyledCard width={'100%'} shadow='light' borderColor={theme.colors.gray[200]} borderRadius={8} borderWidth={1} backgroundColor={theme.colors.gray[1]} paddingTop={8}>
                 {
-                    (data || []).map((item, index) =>
-                        <RenderItem item={item} key={index} />
+                    (data || []).map((item, index) => (
+                        <React.Fragment key={index}>
+                            <RenderItem item={item} />
+                            <StyledSeparator line lineProps={{
+                                borderColor: theme.colors.gray[200]
+                            }} />
+                            {(item?.addOns ? JSON.parse(item.addOns) : []).map((addOn, addOnIndex) => (
+                                <RenderAddOn                                  
+                                    addOn={addOn}
+                                    key={`${index}-${addOnIndex}`}
+                                />
+                            ))}
+                        </React.Fragment>
                     )
-                }                
+                    )
+                }
 
             </StyledCard>
         )
@@ -114,7 +162,7 @@ const CompletedOrder = ({ order, setModal }) => {
 
     return (
         <YStack justifyContent='center' alignItems='center' flex={1} transparent>
-            <YStack  borderRadius={8} justifyContent='flex-start' alignItems='flex-start' width='90%' backgroundColor={theme.colors.gray[1]} paddingHorizontal={16} paddingVertical={8}>
+            <YStack borderRadius={8} justifyContent='flex-start' alignItems='flex-start' width='90%' backgroundColor={theme.colors.gray[1]} paddingHorizontal={16} paddingVertical={8}>
                 <XStack justifyContent='flex-end' alignItems='center' >
                     <StyledSpacer flex={1}></StyledSpacer>
                     <StyledMIcon
@@ -135,7 +183,7 @@ const CompletedOrder = ({ order, setModal }) => {
                 <YStack width={'100%'}>
                     <XStack justifyContent='flex-end' paddingVertical={8} paddingHorizontal={16} alignItems='center' backgroundColor={theme.colors.gray[100]}>
                         <YStack >
-                            <StyledText color={theme.colors.gray[800]} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.normal}>
+                            <StyledText color={theme.colors.gray[800]} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.normal}>
                                 Subtotal
                             </StyledText>
                         </YStack>
@@ -198,7 +246,7 @@ const CompletedOrder = ({ order, setModal }) => {
                             {formatCurrency(shop.currency || "£", (order?.total_price || 0))}
                         </StyledText>
                     </XStack>
-                </YStack>                
+                </YStack>
             </YStack>
         </YStack>
     )

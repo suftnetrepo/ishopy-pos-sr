@@ -1,5 +1,8 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable no-useless-catch */
+/* eslint-disable prettier/prettier */
 import { guid } from '../utils/help';
+import { AddOn, queryAddonByMenuId } from './addOn';
 import { getRealmInstance} from './store';
 import { Category } from './types';
 
@@ -16,6 +19,7 @@ export interface Menu {
   category_name?: string;
   status?: number;
   description?: string;
+  addOns?: AddOn[]
 }
 
 const insertMenu = async (
@@ -85,14 +89,17 @@ const queryAllMenus = async (
 };
 
 const queryMenuByStatus = async (status: number = 1): Promise<Menu[]> => {
-  const realm = await getRealmInstance();
-  return new Promise((resolve, reject) => {
-    try {
-      const menus = realm
-        .objects<Menu>('Menu')
-        .filtered('status == $0', status)
-        .sorted('name')
-        .map(menu => ({
+  try {
+    const realm = await getRealmInstance();
+    const menus = realm
+      .objects<Menu>('Menu')
+      .filtered('status == $0', status)
+      .sorted('name');
+   
+    const menusWithAddOns = await Promise.all(
+      menus.map(async menu => {
+        const addOns = await queryAddonByMenuId(menu.menu_id);           
+        return {
           menu_id: menu.menu_id,
           name: menu.name,
           bar_code: menu.bar_code,
@@ -104,12 +111,15 @@ const queryMenuByStatus = async (status: number = 1): Promise<Menu[]> => {
           category_id: menu.category_id,
           status: menu.status,
           description: menu.description,
-        }));
-      resolve(menus);
-    } catch (error) {
-      reject(error);
-    }
-  });
+          addOns: addOns,
+        };
+      })
+    );
+
+    return menusWithAddOns;
+  } catch (error) {
+     throw error;
+  }
 };
 
 const queryMenuByName = async (name: string): Promise<Menu[]> => {
@@ -143,7 +153,7 @@ const queryMenuByName = async (name: string): Promise<Menu[]> => {
 };
 
 
-const queryMenuByCategory = async (category_id: number): Promise<Menu[]> => {
+const queryMenuByCategory = async (category_id: string): Promise<Menu[]> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {

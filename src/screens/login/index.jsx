@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React, { useState } from "react";
 import { validate, StyledSpinner, YStack, StyledBadge, StyledOkDialog, XStack, StyledHeader, StyledSafeAreaView, StyledSpacer, StyledInput, StyledText, StyledButton } from 'fluent-styles';
-import { theme } from "../../configs/theme";
+import { fontStyles, theme } from "../../configs/theme";
 import { validatorRules } from "./validatorRules";
 import { useLogin } from "../../hooks/useUser";
 import { useNavigation } from "@react-navigation/native";
@@ -10,6 +10,7 @@ import { seedData, clearSeedData } from "../../model/seed";
 import { FEATURE_FLAG } from "../../feature-flags";
 import { state } from "../../store";
 import { useSelector } from "@legendapp/state/react";
+import { StyledMIcon } from "../../components/icon";
 
 const Login = () => {
   const navigator = useNavigation()
@@ -88,6 +89,23 @@ const Login = () => {
     )
   }
 
+  const Notice = () => {
+    return (
+      <YStack marginBottom={32} borderRadius={16} justifyContent='flex-start' paddingVertical={16} paddingHorizontal={16} alignItems='flex-start' backgroundColor={theme.colors.cyan[50]}>
+
+        <XStack justifyContent='flex-start' alignItems='center'>
+          <StyledMIcon size={32} name='info' color={theme.colors.cyan[500]} />
+          <StyledText paddingHorizontal={8} fontFamily={fontStyles.Roboto_Regular} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.large} color={theme.colors.gray[800]}>
+            Welcome to iRit
+          </StyledText>
+        </XStack>
+        <StyledText fontFamily={fontStyles.Roboto_Regular} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.medium} color={theme.colors.gray[800]}>
+          Get started quickly! Tap Mock Store to generate dummy Store to see a sample of what the app can do. Feel free to explore the features!.
+        </StyledText>
+      </YStack>
+    )
+  }
+
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
       <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
@@ -101,20 +119,29 @@ const Login = () => {
         marginHorizontal={16}
 
       >
-        <StyledSpacer marginVertical={32} />
-        <YStack
-          justifyContent='flex-start' alignItems='center'
-        >
-          <StyledSpacer marginVertical={16} />
-          <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.xlarge} color={theme.colors.gray[800]}>
-            Welcome to iShopy
-          </StyledText>
-          <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.medium} color={theme.colors.gray[600]}>
-            Sign in to continue.
-          </StyledText>
-        </YStack>
-
-        <StyledSpacer marginVertical={24} />
+        {
+          !purchase_status && (
+            <Notice />
+          )
+        }
+        {
+          purchase_status && (
+            <>
+              <StyledSpacer marginVertical={32} />
+              <YStack
+                justifyContent='flex-start' alignItems='center' marginVertical={24}
+              >
+                <StyledSpacer marginVertical={16} />
+                <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.xlarge} color={theme.colors.gray[800]}>
+                  Welcome to iRit
+                </StyledText>
+                <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.medium} color={theme.colors.gray[600]}>
+                  Sign in to continue.
+                </StyledText>
+              </YStack>
+            </>
+          )
+        }
         <StyledInput
           label={'Username'}
           keyboardType='default'

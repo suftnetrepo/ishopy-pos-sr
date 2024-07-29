@@ -16,9 +16,9 @@ import AddTax from '../screens/account/tax/add'
 import EditTax from '../screens/account/tax/edit'
 import AddDiscount from '../screens/account/discount/add'
 import EditDiscount from '../screens/account/discount/edit'
-import Product from '../screens/account/product';
-import AddProduct from '../screens/account/product/add';
-import EditProduct from '../screens/account/product/edit';
+import Menu from '../screens/account/menu';
+import AddMenu from '../screens/account/menu/add';
+import EditMenu from '../screens/account/menu/edit';
 import Category from '../screens/account/category';
 import AddCategory from '../screens/account/category/add';
 import EditCategory from '../screens/account/category/edit';
@@ -105,8 +105,8 @@ function Navigator() {
         }}
       />
       <Stack.Screen
-        name="products"
-        component={Product}
+        name="menus"
+        component={Menu}
         options={{
           headerShown: false,
         }}
@@ -119,15 +119,15 @@ function Navigator() {
         }}
       />
       <Stack.Screen
-        name="add-product"
-        component={AddProduct}
+        name="add-menu"
+        component={AddMenu}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name="edit-product"
-        component={EditProduct}
+        name="edit-menu"
+        component={EditMenu}
         options={{
           headerShown: false,
         }}

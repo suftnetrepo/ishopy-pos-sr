@@ -12,7 +12,7 @@ import { toWordCase } from "../../utils/help";
 
 const Account = () => {
   const navigator = useNavigation()
-  const { user, shop } = useAppContext()
+  const { shop } = useAppContext()
 
   const RenderRow = ({ icon = 'account-circle', title, screen }) => {
     return (
@@ -80,7 +80,7 @@ const Account = () => {
           <RenderRow icon="add-circle-outline" title='Tax' screen='tax' />
           <RenderRow icon="remove-circle-outline" title='Discount' screen='discount' />
           <RenderRow icon="shopping-bag" title='Category' screen='categories' />
-          <RenderRow icon="collections" title='Product' screen='products' />
+          <RenderRow icon="collections" title='Menu' screen='menus' />
           <StyledSeparator left={
             <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.large} color={theme.colors.gray[400]}>
               Help

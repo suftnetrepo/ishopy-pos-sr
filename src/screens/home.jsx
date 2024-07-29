@@ -144,7 +144,7 @@ const Home = () => {
             fontFamily={fontStyles.Roboto_Regular}
             fontSize={theme.fontSize.large}
             fontWeight={theme.fontWeight.normal}
-            paddingHorizontal={16}
+            paddingHorizontal={8}
             color={theme.colors.gray[800]}>
             Daily transaction
           </StyledText>
@@ -154,7 +154,7 @@ const Home = () => {
               fontFamily={fontStyles.Roboto_Regular}
               fontSize={theme.fontSize.xxxlarge}
               fontWeight={theme.fontWeight.bold}
-              paddingHorizontal={16}
+              paddingHorizontal={8}
               color={theme.colors.gray[800]}>
               {formatCurrency(shop.currency || '£', dailyTransaction)}
             </StyledText>        

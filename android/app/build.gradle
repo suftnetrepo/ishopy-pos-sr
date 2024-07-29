@@ -98,9 +98,9 @@ android {
         }
 
           release {
-            storeFile file('jerur-release-key.keystore')
+            storeFile file('irit.keystore')
             storePassword "Kcmkcm12345!"
-            keyAlias "jerur-key-alias"
+            keyAlias "key0"
             keyPassword "Kcmkcm12345!"
         }
     }
