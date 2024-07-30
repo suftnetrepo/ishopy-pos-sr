@@ -11,7 +11,7 @@ import { StyledMIcon } from '../../../components/icon';
 import { useNavigation } from '@react-navigation/native';
 import { useMenus, useDeleteMenu } from '../../../hooks/useMenu';
 import { FlatList } from 'react-native';
-import { toWordCase } from '../../../utils/help';
+import { formatCurrency, toWordCase } from '../../../utils/help';
 import { StyledStack } from '../../../components/stack';
 import { useAppContext } from '../../../hooks/appContext';
 import { convertJsonToCsv } from '../../../utils/convertJsonToCsv';
@@ -37,7 +37,7 @@ const Menus = () => {
     return (
       <StyledStack status={item.status === 1 ? '1' : '0'} paddingHorizontal={8} backgroundColor={theme.colors.gray[1]}
         paddingVertical={8} justifyContent='flex-start' marginBottom={8} borderRadius={16} alignItems='center' >
-        <YStack flex={2}>
+        <YStack flex={2} >
           <StyledText paddingHorizontal={8} fontFamily={fontStyles.Roboto_Regular} fontWeight={theme.fontWeight.medium} fontSize={theme.fontSize.normal} color={theme.colors.gray[800]}>
             {toWordCase(item.name)}
           </StyledText>
@@ -50,8 +50,8 @@ const Menus = () => {
               fontSize={theme.fontSize.medium}
               paddingHorizontal={10}
               paddingVertical={1}
-            >
-             {currency}{item.price}
+            >     
+              {formatCurrency(currency || "£", item.price)}
             </StyledBadge>
             <StyledSpacer marginHorizontal={2} />
             <StyledBadge
@@ -65,8 +65,7 @@ const Menus = () => {
               {item.stock}
             </StyledBadge>
           </XStack>
-
-        </YStack>
+        </YStack>       
         <XStack flex={1} justifyContent='flex-end' alignItems='center'>
           <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]}>
             <StyledMIcon size={24} name='edit' color={theme.colors.gray[600]} onPress={() => navigator.navigate("edit-menu", {
@@ -83,7 +82,7 @@ const Menus = () => {
           </StyledCycle>
           <StyledSpacer marginHorizontal={4} />
           <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]}>
-             <StyledMIcon size={24} name='add-task' color={theme.colors.gray[600]} onPress={() => navigator.navigate("stocks", {
+             <StyledMIcon size={24} name='add-task' color={theme.colors.gray[600]} onPress={() => navigator.navigate("addOns", {
                menu: item
             })} />
           </StyledCycle>

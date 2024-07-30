@@ -55,7 +55,6 @@ const randomColor = () => {
 
 // Sample data pools
 const userNames = ["Alice", "Bob", "Charlie", "Diana"];
-const tableNames = ["Table 1", "Table 2", "Table 3", "Table 4"];
 const paymentMethods = ["Cash", "Credit Card", "PayPal"];
 const categoryNames = ['Main Course', 'Dessert', 'Drinks', 'Appetizers'];
 const cuisines = [
@@ -95,10 +94,12 @@ const addOnTypes = [
 
 const generateAddOns = (menus: any[]) => {
   let addOns: {
-    quantity: number, addOn_id: string;
+    quantity: number;
+    addOn_id: string;
     addOnName: string;
     price: number;
     menu_id: any;
+    status: number;
   }[] = [];
   menus.forEach((menu: { name: any; menu_id: any; }) => {
     const numberOfAddOns = Math.floor(Math.random() * 3) + 1; // Each menu can have 1 to 3 add-ons
@@ -108,7 +109,8 @@ const generateAddOns = (menus: any[]) => {
         addOnName: `${randomItem(addOnTypes)} for ${menu.name}`,
         price: parseFloat((Math.random() * 5).toFixed(2)),
         menu_id: menu.menu_id,
-        quantity : 1
+        quantity : 1,
+        status:1,
       });
     }
   });
@@ -140,7 +142,7 @@ const generateCategories = () => {
     category_id: guid(),
     name: name,
     color_code: randomColor(),
-    status: Math.random() < 0.5 ? 1 : 0,
+    status:1,
   }));
 };
 
@@ -182,10 +184,14 @@ const generateUsers = () => {
 
 // Generate sample tables
 const generateTables = () => {
+  const tableNames =[]
+   for (let i = 1; i < 20; i++) {
+      tableNames.push(`Table ${i}`);
+   }
   return tableNames.map(name => ({
     table_id: guid(),
     tableName: name,
-    isOccupied: randomInt(0, 1),
+    isOccupied: 0,
     status: randomInt(0, 1),
     size: randomInt(2, 8),
   }));
@@ -201,7 +207,7 @@ const generateOrders = (users: { user_id: string; username: string; password: st
     orders.push({
       order_id: guid(),
       user_id: user.user_id,
-      tableId: table.table_id,
+      table_id: table.table_id,
       total_price: total_price,
       tax: total_price * 0.1,
       discount: total_price * 0.05,
@@ -234,7 +240,7 @@ const generateOrderItems = (orders: any[], menus: any[], addOns: any[]) => {
       );
 
       // Ensure exactly 2 add-ons are selected
-      let selectedAddOns = [];
+      let selectedAddOns: any[] = [];
       if (applicableAddOns && applicableAddOns.length >= 2) {
         while (selectedAddOns.length < 2) {
           const randomAddOn = randomItem(applicableAddOns);

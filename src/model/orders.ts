@@ -5,6 +5,7 @@ import {getRealmInstance} from './store';
 export interface Order {
   order_id: string;
   user_id?: string;
+  table_id: string;
   total_price: number;
   total: number;
   status: string;
@@ -41,6 +42,7 @@ const queryAllOrders = async(): Promise<Order[]> => {
         .map(order => ({
           order_id: order.order_id,
           user_id: order.user_id,
+          table_id: order.table_id,
           total_price: order.total_price,
           total: order.total,
           status: order.status,
@@ -69,6 +71,7 @@ const queryOrdersByDateRange = async (
         .map(order => ({
           order_id: order.order_id,
           user_id: order.user_id,
+          table_id: order.table_id,
           total_price: order.total_price,
           total: order.total,
           status: order.status,
@@ -93,6 +96,7 @@ const queryOrderById = async(order_id: string): Promise<Order | null> => {
           ? {
               order_id: order.order_id,
               user_id: order.user_id,
+              table_id: order.table_id,
               total_price: order.total_price,
               total: order.total,
               status: order.status,

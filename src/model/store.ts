@@ -25,6 +25,7 @@ export const AddOnSchema: ObjectSchema = {
     addOnName: 'string',
     price: 'double',
     menu_id: 'string',
+    status: {type: 'int', default: 0},
   },
 };
 
@@ -97,7 +98,7 @@ export const OrderSchema: ObjectSchema = {
   properties: {
     order_id: 'string',
     user_id: 'string?',
-    tableId: 'string',
+    table_id: 'string',
     total: 'double?',
     tax: 'double?',
     discount: 'double?',
@@ -210,7 +211,7 @@ const schema = [
 
 const RealmOptions = () => {
   return {
-    path: '__pos___sr.realm',
+    path: '____pos____sr.realm',
     schema: schema,
     schemaVersion: SCHEMA_VERSION,
     migration 

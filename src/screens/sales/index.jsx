@@ -6,7 +6,7 @@
 import React, { useState, useRef } from 'react';
 import { YStack, XStack, StyledSafeAreaView, StyledText, StyledDialog, StyledBadgeIcon, StyledBadge, StyledSpacer, StyledButton, StyledHeader } from 'fluent-styles';
 import { Modalize } from 'react-native-modalize';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, CommonActions } from '@react-navigation/native';
 import { fontStyles, theme, palettes } from '../../configs/theme';
 import { StyledMIcon } from '../../components/icon';
 import CategoryScrollView from '../../components/category';
@@ -14,23 +14,41 @@ import MenuScrollView from '../../components/menu';
 import { formatCurrency } from '../../utils/help';
 import { useAppContext } from '../../hooks/appContext';
 import { StyledSearchBar } from '../../components/searchBar';
+import { printKitchenTicket } from '../../utils/printReceipt';
 
 const Sales = () => {
   const navigator = useNavigation()
-  const { shop, getItemCount, getTotal, clearItem, getItems, addAddOn } = useAppContext()
+  const route = useRoute()
+  const { shop, user, getItemCount, getTotal, clearItem, getItems, addAddOn } = useAppContext()
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [searchString, setSearchString] = useState(null)
   const [showSearch, setShowSearch] = useState(false)
   const [item, setItem] = useState()
+  const { table } = route.params
   const modalizeRef = useRef(null);
-  const items = getItems()
- 
+  const items = getItems(table.table_id)
+
+  const printTicket = async () => {
+    const ticket = {     
+      table_name: table.tableName,
+      date: new Date().toISOString(),
+      cashier: `${user.first_name} ${user.last_name}`,
+      items,
+    }
+
+    try {
+      await printKitchenTicket(ticket)
+    }catch(error) {
+      console.error(error)
+    }
+   
+  }
+
   const showBottomSheet = () => {
     if (modalizeRef.current) {
       modalizeRef.current.open();
     }
   };
-
   const increaseAddOnQuantity = (addOn) => {
     setItem((prev) => ({
       ...prev,
@@ -39,7 +57,6 @@ const Sales = () => {
       ),
     }))
   };
-
   const decreaseAddOnQuantity = (addOn) => {
     if (parseInt(addOn?.quantity || 0) === 0) return
     setItem((prev) => ({
@@ -49,13 +66,11 @@ const Sales = () => {
       ),
     }))
   }
-
   const calculateTotalAddOnsPrice = () => {
     return item.addOns.reduce((total, addOn) => {
       return total + (parseInt(addOn.price || 0) * parseInt(addOn.quantity || 0));
     }, 0);
   };
-
   const RenderCard = ({ item }) => {
     return (
       <XStack flex={1} marginVertical={4} paddingHorizontal={8} paddingVertical={8} justifyContent='space-between' alignItems='center' borderWidth={1} borderColor={theme.colors.gray[400]} borderRadius={16}>
@@ -92,7 +107,6 @@ const Sales = () => {
       </XStack>
     )
   }
-
   const RenderCartItems = () => (
     <Modalize
       ref={modalizeRef}
@@ -106,7 +120,7 @@ const Sales = () => {
 
       <YStack paddingHorizontal={8} marginVertical={8}>
         {
-          getItems().map((item, index) => {
+          getItems(table.table_id).map((item, index) => {
             return (
               <RenderCard key={index} item={item} />
             )
@@ -247,7 +261,7 @@ const Sales = () => {
               borderRadius={30}
               borderColor={theme.colors.cyan[500]}
               backgroundColor={theme.colors.cyan[500]}
-              onPress={() => { addAddOn(item.menu_id, item.addOns), setItem() }}
+              onPress={() => { addAddOn(item.menu_id, item.addOns?.filter((j) => j.quantity > 0), table.table_id), setItem() }}
             >
               <StyledText
                 fontFamily={fontStyles.OpenSansRegular}
@@ -257,7 +271,7 @@ const Sales = () => {
                 paddingHorizontal={16}
                 paddingVertical={8}
               >
-                Add 
+                Add
               </StyledText>
             </StyledButton>
           </XStack>
@@ -272,53 +286,58 @@ const Sales = () => {
       <StyledHeader borderWidth={1} borderRadius={8} backgroundColor={theme.colors.gray[800]} paddingHorizontal={8} statusProps={{ translucent: true, barStyle: 'light-content', backgroundColor: theme.colors.gray[800] }} >
         <StyledHeader.Header color={theme.colors.gray[1]} iconProps={{
           color: theme.colors.gray[1]
-        }} onPress={() => navigator.reset({
-          key: "bottom-tabs",
-          index: 0,
-          routes: [{ name: 'bottom-tabs' }]
-        })} title='Sales' icon cycleProps={{
-          borderColor: theme.colors.gray[300],
-          backgroundColor: theme.colors.gray[700],
-          marginRight: 8
-        }} rightIcon={
-          <>
-            <XStack flex={1} justifyContent='flex-end' alignItems='center' paddingHorizontal={8}>
-              <StyledSpacer marginHorizontal={4} />
-              <StyledMIcon size={48} name={showSearch ? 'cancel' : 'search'} color={theme.colors.gray[1]} onPress={() => {
-                setSelectedCategory("-1")
-                setSearchString(null)
-                setShowSearch(!showSearch)
-              }} />
-              <StyledBadgeIcon
-                char={getItemCount()}
-                right={1}
-                top={-5}
-                textAlign='center'
-                charProps={{
-                  borderRadius: 50,
-                  width: 25,
-                  height: 25,
-                  paddingHorizontal: 1,
-                  paddingVertical: 1,
-                  backgroundColor: theme.colors.pink[700],
-                  fontFamily: fontStyles.OpenSansRegular,
-                  color: theme.colors.gray[1],
-                  fontWeight: theme.fontWeight.bold,
-                  fontSize: theme.fontSize.small,
-                  textAlign: 'center'
-                }}
-                icon={
-                  <StyledMIcon
-                    name={'shopping-cart'}
-                    size={48}
-                    color={theme.colors.gray[300]}
-                    onPress={() => showBottomSheet()}
-                  />
-                }
-              />
-            </XStack>
-          </>
-        } />
+        }} onPress={() => navigator.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [
+              { name: 'bottom-tabs', state: { routes: [{ name: 'Tables' }] } },
+            ],
+          }))} title={table.tableName} icon cycleProps={{
+            borderColor: theme.colors.gray[300],
+            backgroundColor: theme.colors.gray[700],
+            marginRight: 8
+          }} rightIcon={
+            <>
+              <XStack flex={1} justifyContent='flex-end' alignItems='center' paddingHorizontal={8}>
+                <StyledSpacer marginHorizontal={4} />
+                <StyledMIcon size={48} name={showSearch ? 'cancel' : 'search'} color={theme.colors.gray[1]} onPress={() => {
+                  setSelectedCategory("-1")
+                  setSearchString(null)
+                  setShowSearch(!showSearch)
+                }} />
+                <StyledMIcon size={48} name='clear' color={theme.colors.gray[1]} onPress={() => {
+                  clearItem(table.table_id)
+                }} />
+                <StyledBadgeIcon
+                  char={getItemCount(table.table_id)}
+                  right={1}
+                  top={-5}
+                  textAlign='center'
+                  charProps={{
+                    borderRadius: 50,
+                    width: 25,
+                    height: 25,
+                    paddingHorizontal: 1,
+                    paddingVertical: 1,
+                    backgroundColor: theme.colors.pink[700],
+                    fontFamily: fontStyles.OpenSansRegular,
+                    color: theme.colors.gray[1],
+                    fontWeight: theme.fontWeight.bold,
+                    fontSize: theme.fontSize.small,
+                    textAlign: 'center'
+                  }}
+                  icon={
+                    <StyledMIcon
+                      name={'shopping-cart'}
+                      size={48}
+                      color={theme.colors.gray[300]}
+                      onPress={() => showBottomSheet()}
+                    />
+                  }
+                />
+              </XStack>
+            </>
+          } />
       </StyledHeader>
       <XStack justifyContent='flex-start' alignItems='flex-start' paddingHorizontal={16} paddingVertical={8} backgroundColor={theme.colors.gray[800]}>
         {
@@ -330,15 +349,17 @@ const Sales = () => {
         }
       </XStack>
       <YStack flex={1} backgroundColor={theme.colors.gray[100]}>
-        <MenuScrollView onChange={(item) => setItem({ ...item, quantity: 0 })} searchString={searchString} category_id={selectedCategory?.category_id || -1} />
+        <MenuScrollView table={table} onChange={(item) => setItem({ ...item, quantity: 0 })} searchString={searchString} category_id={selectedCategory?.category_id || -1} />
       </YStack>
       <XStack absolute paddingVertical={8} marginBottom={8} paddingHorizontal={8} borderWidth={1} borderRadius={32} borderColor={theme.colors.gray[400]}>
-        <StyledButton flex={1} borderRadius={32} borderColor={theme.colors.coolGray[600]} backgroundColor={theme.colors.coolGray[600]} onPress={() => clearItem()} >
-          <StyledText paddingHorizontal={16} paddingVertical={8} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.bold} color={theme.colors.gray[100]} >Clear</StyledText>
+        <StyledButton flex={1} borderRadius={32} borderColor={theme.colors.coolGray[600]} backgroundColor={theme.colors.coolGray[600]} onPress={() => items?.length > 0 && printTicket()} >
+          <StyledText paddingHorizontal={16} paddingVertical={8} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.bold} color={theme.colors.gray[100]} >Print </StyledText>
         </StyledButton>
         <StyledSpacer marginHorizontal={4} />
-        <StyledButton flex={2} borderRadius={32} borderColor={theme.colors.cyan[600]} backgroundColor={theme.colors.cyan[600]} onPress={() => items.length > 0 && navigator.navigate("checkout")} >
-          <StyledText paddingHorizontal={16} paddingVertical={8} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.bold} color={theme.colors.gray[100]} >Pay {formatCurrency(shop.currency || '£', getTotal())}</StyledText>
+        <StyledButton flex={2} borderRadius={32} borderColor={theme.colors.cyan[600]} backgroundColor={theme.colors.cyan[600]} onPress={() => items.length > 0 && navigator.navigate("checkout", {
+          table: table
+        })} >
+          <StyledText paddingHorizontal={16} paddingVertical={8} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.bold} color={theme.colors.gray[100]} >Pay {formatCurrency(shop.currency || '£', getTotal(table.table_id))}</StyledText>
         </StyledButton>
       </XStack >
       <RenderCartItems />

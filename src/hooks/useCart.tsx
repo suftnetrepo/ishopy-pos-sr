@@ -1,26 +1,33 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prettier/prettier */
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { AddOn, CartItem } from "../model/types";
+
 interface CartState {
 	items: CartItem[];
 	discount: number;
 	tax: number;
-	addOns?: AddOn[];
 }
 
 const initialize = {
 	items: [],
 	discount: 0,
 	tax: 0,
-	addOns: []
 };
-const useCart = () => {
-	const [cart, setCart] = useState<CartState>(initialize);
 
-	const clearItem = () => {
-		setCart(initialize);
+const useCart = () => {
+	const [carts, setCarts] = useState<Record<string, CartState>>({});
+	
+	const getCart = (table_id: string): CartState => {
+		return carts[table_id] || initialize;
+	};
+
+	const clearItem = (table_id: string) => {
+		setCarts((prev) => ({
+			...prev,
+			[table_id]: initialize
+		}));
 	};
 
 	const addItem = async (
@@ -28,79 +35,104 @@ const useCart = () => {
 		name: string,
 		price: number,
 		quantity: number,
-		addOns?: AddOn[],
+		table_id: string,
+		addOns?: AddOn[]
 	) => {
-		setCart({
-			...cart,
-			items: [...cart.items, { id, name, price, quantity, addOns }],
+		setCarts((prev) => {
+			const currentCart = getCart(table_id);
+			const updatedCart = {
+				...currentCart,
+				items: [...currentCart.items, { id, name, price, quantity, addOns }]
+			};
+		
+			return {
+				...prev,
+				[table_id]: updatedCart
+			};
 		});
 	};
 
-	const updateItem = useCallback((updatedItem: CartItem) => {
-		setCart((cart) => {
+	const updateItem = (updatedItem: CartItem, table_id: string) => {
+		setCarts((prev) => {
+			const currentCart = getCart(table_id);
 			return {
-				...cart,
-				items: cart.items.map((item) =>
-					item.id === updatedItem.id ? updatedItem : item,
-				),
+				...prev,
+				[table_id]: {
+					...currentCart,
+					items: currentCart.items.map((item) =>
+						item.id === updatedItem.id ? updatedItem : item
+					)
+				}
 			};
 		});
-	}, []);
+	};
 
-	const deleteItem = useCallback((id: string) => {
-		setCart((cart) => {
+	const deleteItem = (id: string, table_id: string) => {
+		setCarts((prev) => {
+			const currentCart = getCart(table_id);
 			return {
-				...cart,
-				items: cart.items.filter((item) => item.id !== id),
+				...prev,
+				[table_id]: {
+					...currentCart,
+					items: currentCart.items.filter((item) => item.id !== id)
+				}
 			};
 		});
-	}, []);
+	};
 
-	const setDiscount = useCallback((discount: number) => {
-		setCart((cart) => {
+	const setDiscount = (discount: number, table_id: string) => {
+		setCarts((prev) => {
+			const currentCart = getCart(table_id);
 			return {
-				...cart,
-				discount,
+				...prev,
+				[table_id]: {
+					...currentCart,
+					discount
+				}
 			};
 		});
-	}, []);
+	};
 
-	const setTax = useCallback((tax: number) => {
-		setCart((cart) => {
+	const setTax = (tax: number, table_id: string) => {
+		setCarts((prev) => {
+			const currentCart = getCart(table_id);
 			return {
-				...cart,
-				tax,
+				...prev,
+				[table_id]: {
+					...currentCart,
+					tax
+				}
 			};
 		});
-	}, []);
+	};
 
-	const getItemCount = useCallback(() => {
+	const getItemCount = (table_id: string) => {
+		const cart = getCart(table_id);	
 		return cart.items.reduce((count, item) => count + item.quantity, 0);
-	}, [cart.items]);
+	};
 
-	const getTotalItems = useCallback(() => {
+	const getTotalItems = (table_id: string) => {
+		const cart = getCart(table_id);
 		return cart.items.length;
-	}, [cart.items]);
+	};
 
-	const getTotalTax = useCallback(() => {
+	const getTotalTax = (table_id: string) => {
+		const cart = getCart(table_id);
 		const total = cart.items.reduce(
 			(total, item) => total + item.price * item.quantity,
-			0,
+			0
 		);
+		return (total * cart.tax) / 100;
+	};
 
-		const tax = (total * cart.tax) / 100;
-		return tax;
-	}, [cart.items, cart.tax]);
-
-	const getTotalDiscount = useCallback(() => {
+	const getTotalDiscount = (table_id: string) => {
+		const cart = getCart(table_id);
 		const total = cart.items.reduce(
 			(total, item) => total + item.price * item.quantity,
-			0,
+			0
 		);
-
-		const discount = (total * cart.discount) / 100;
-		return discount;
-	}, [cart.items, cart.discount]);
+		return (total * cart.discount) / 100;
+	};
 
 	const calculateTotalAddOnsPrice = (addOns: any[]) => {
 		return addOns.reduce((total, addOn) => {
@@ -110,7 +142,19 @@ const useCart = () => {
 		}, 0);
 	};
 
-	const getTotal = useCallback(() => {
+	const getTotal = (table_id: string) => {
+		const cart = getCart(table_id);
+		return cart.items.reduce((total, item) => {
+			const itemTotal = item.price * item.quantity;
+			const addOnsTotal = item.addOns
+				? calculateTotalAddOnsPrice(item.addOns)
+				: 0;
+			return total + itemTotal + addOnsTotal;
+		}, 0);
+	};
+
+	const getTotalPrice = (table_id: string) => {
+		const cart = getCart(table_id);
 		const total = cart.items.reduce((total, item) => {
 			const itemTotal = item.price * item.quantity;
 			const addOnsTotal = item.addOns
@@ -118,61 +162,57 @@ const useCart = () => {
 				: 0;
 			return total + itemTotal + addOnsTotal;
 		}, 0);
-
-		return total;
-	}, [cart.items]);
-
-	const getTotalPrice = useCallback(() => {
-		const total = cart.items.reduce((total, item) => {
-			const itemTotal = item.price * item.quantity;
-			const addOnsTotal = item.addOns
-				? calculateTotalAddOnsPrice(item.addOns)
-				: 0;
-			return total + itemTotal + addOnsTotal;
-		}, 0);
-
 		const discount = (total * cart.discount) / 100;
 		const tax = (total * cart.tax) / 100;
 		return total - discount + tax;
-	}, [cart.items, cart.discount, cart.tax]);
+	};
 
-	const getItems = useCallback(() => {
+	const getItems = (table_id: string) => {
+		const cart = getCart(table_id);
 		return cart.items.sort((a, b) => a.name.localeCompare(b.name));
-	}, [cart.items]);
+	};
 
-	const addAddOn = useCallback((itemId: string, addOns: AddOn[]) => {
-		setCart((cart) => {
+	const addAddOn = (itemId: string, addOns: AddOn[], table_id: string) => {
+		setCarts((prev) => {
+			const currentCart = getCart(table_id);		
 			return {
-				...cart,
-				items: cart.items.map((item) =>
-					item.id === itemId
-						? { ...item, addOns: [...(item.addOns || []), ...addOns] }
-						: item,
-				),
+				...prev,
+				[table_id]: {
+					...currentCart,
+					items: currentCart.items.map((item) =>
+						item.id === itemId
+							? { ...item, addOns: [...(item.addOns || []), ...addOns] }
+							: item
+					)
+				}
 			};
 		});
-	}, []);
+	};
 
-	const deleteAddOn = useCallback((itemId: string, addOnId: string) => {
-		setCart((cart) => {
+	const deleteAddOn = (itemId: string, addOnId: string, table_id: string) => {
+		setCarts((prev) => {
+			const currentCart = getCart(table_id);
 			return {
-				...cart,
-				items: cart.items.map((item) =>
-					item.id === itemId
-						? {
+				...prev,
+				[table_id]: {
+					...currentCart,
+					items: currentCart.items.map((item) =>
+						item.id === itemId
+							? {
 								...item,
 								addOns: item.addOns?.filter(
-									(addOn) => addOn.addOn_id !== addOnId,
-								),
-						  }
-						: item,
-				),
+									(addOn) => addOn.addOn_id !== addOnId
+								)
+							}
+							: item
+					)
+				}
 			};
 		});
-	}, []);
+	};
 
 	return {
-		cart,
+		carts,
 		addItem,
 		updateItem,
 		deleteItem,

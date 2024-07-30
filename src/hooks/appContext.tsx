@@ -11,21 +11,22 @@ interface CartActions {
 		name: string,
 		price: number,
 		quantity: number,
+		table_id: string,
 	) => Promise<void>;
-	updateItem: (item: CartItem) => void;
-	deleteItem: (id: string) => void;
-	setDiscount: (discount: number) => void;
-	setTax: (tax: number) => void;
-	getItemCount: () => number;
-	getTotalItems: () => number;
-	getTotalPrice: () => number;
-	getTotal: () => number;
-	getTotalDiscount: () => number;
-	getTotalTax: () => number;
-	clearItem: () => void;
-	getItems: () => CartItem[];
-	deleteAddOn: (itemId: string, addOnId: string) => void;
-	addAddOn: (itemId: string, addOns: AddOn[]) => void;
+	updateItem: (item: CartItem, table_id: string) => void;
+	deleteItem: (id: string, table_id: string) => void;
+	setDiscount: (discount: number, table_id: string) => void;
+	setTax: (tax: number, table_id: string) => void;
+	getItemCount: (table_id: string) => number;
+	getTotalItems: (table_id: string) => number;
+	getTotalPrice: (table_id: string) => number;
+	getTotal: (table_id: string) => number;
+	getTotalDiscount: (table_id: string) => number;
+	getTotalTax: (table_id: string) => number;
+	clearItem: (table_id: string) => void;
+	getItems: (table_id: string) => CartItem[];
+	deleteAddOn: (itemId: string, addOnId: string, table_id: string) => void;
+	addAddOn: (itemId: string, addOns: AddOn[], table_id: string) => void;
 }
 
 interface Actions extends CartActions {

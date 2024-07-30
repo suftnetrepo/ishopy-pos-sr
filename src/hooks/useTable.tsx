@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prettier/prettier */
 import { useEffect, useState } from "react";
-import { queryAllTables, queryTablesByStatus, insertTable, updateTable, deleteTable } from "../model/table";
+import { queryAllTables, queryTablesByStatus, insertTable, updateTable, deleteTable, updateOccupancy } from "../model/table";
 import { Table } from "../model/types";
 
 interface Initialize {
@@ -95,7 +95,8 @@ const useQueryTablesByStatus = () => {
 
 	return {
 		...data,
-		resetHandler
+		resetHandler,
+		updateOccupancy
 	};
 };
 const useInsertTable = () => {
@@ -238,4 +239,4 @@ const useDeleteTable = () => {
 	};
 };
 
-export { useTables, useUpdateTable, useDeleteTable, useQueryTablesByStatus, useInsertTable };
+export { useTables, useUpdateTable, useDeleteTable, useQueryTablesByStatus, useInsertTable, updateOccupancy };

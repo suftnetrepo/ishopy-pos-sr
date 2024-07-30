@@ -2,27 +2,33 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, CommonActions } from '@react-navigation/native';
 import { YStack, XStack, StyledSpacer, StyledText, StyledButton } from 'fluent-styles';
 import { StyledMIcon } from '../../components/icon';
 import { fontStyles, theme } from '../../configs/theme';
 import { useAppContext } from '../../hooks/appContext';
 
-const CheckOutCompleted = ({ order, printHandler, shareReceipt }) => {
+const CheckOutCompleted = ({ table_id, table_name, order, printHandler, shareReceipt }) => {
     const { clearItem } = useAppContext()
     const navigator = useNavigation()
 
     const close = () => {
-        clearItem()
-        navigator.navigate("sales")
+        clearItem(table_id)
+        navigator.dispatch(
+            CommonActions.reset({
+                index: 0,
+                routes: [
+                    { name: 'bottom-tabs', state: { routes: [{ name: 'Tables' }] } },
+                ],
+            }))
     }
 
     const print = () => {
-        printHandler(order)
+        printHandler(table_name, order)
     }
 
     const share = () => {
-        shareReceipt(order)
+        shareReceipt(table_name, order)
     }
 
     return (
@@ -51,7 +57,7 @@ const CheckOutCompleted = ({ order, printHandler, shareReceipt }) => {
                     fontSize={theme.fontSize.xxlarge}
                     textAlign="center"
                 >
-                    Thanks you for purchasing from us.
+                    Thank you for dining with us.
                 </StyledText>
                 <StyledSpacer marginVertical={16}></StyledSpacer>
                 <XStack justifyContent='flex-end' alignItems='flex-end'>

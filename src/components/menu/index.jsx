@@ -11,7 +11,7 @@ import { fontStyles, theme } from "../../configs/theme";
 import { useAppContext } from "../../hooks/appContext";
 import { formatCurrency } from "../../utils/help";
 
-const MenuScrollView = ({ onChange, searchString, category_id }) => {
+const MenuScrollView = ({ table, onChange, searchString, category_id }) => {
     const { shop, addItem } = useAppContext()
     const { data, loading, loadMenuByCategory, loadMenuByName } = useQueryMenuByStatus(1);
 
@@ -27,7 +27,7 @@ const MenuScrollView = ({ onChange, searchString, category_id }) => {
         if(item?.addOns) {
             onChange(item)
         }      
-        addItem(item.menu_id, item.name, item.price, 1).then(() => {});
+        addItem(item.menu_id, item.name, item.price, 1, table.table_id).then(() => {});
     };
 
     const RenderCard = React.memo(({ item }) => {

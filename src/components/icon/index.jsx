@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable react/display-name */
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-undef */
@@ -26,9 +27,9 @@ const Icon = styled(MIcon, {
     }
 })
 
-const StyledMIcon = forwardRef(({ size = 48, name = 'home', focused = false, color = theme.colors.green[500], onPress, ...rest }, ref) => {   
+const StyledMIcon = forwardRef(({ size = 48, name = 'home', focused = false, color = theme.colors.green[500], onLongPress, onPress, ...rest }, ref) => {   
     return (
-        <Icon ref={ref} {...rest} size={size} focused={focused} name={name} color={color} onPress={() => onPress && onPress()} />
+        <Icon ref={ref} {...rest} size={size} focused={focused} name={name} color={color} onLongPress={() => onLongPress && onLongPress()} onPress={() => onPress && onPress()} />
     )
 })
 export { StyledMIcon }

@@ -7,7 +7,7 @@
 import React, { useState } from 'react';
 import { YStack, XStack, StyledDialog, StyledCard, StyledCycle, StyledButton, StyledSeparator, StyledBadge, StyledHeader, StyledSafeAreaView, StyledSpinner, StyledOkDialog, StyledSpacer, StyledText } from 'fluent-styles';
 import { fontStyles, theme } from '../../configs/theme';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useAppContext } from '../../hooks/appContext';
 import { ScrollView } from 'react-native';
 import { formatCurrency } from '../../utils/help';
@@ -21,14 +21,16 @@ import CheckOutCompleted from './checkOutCompleted';
 
 const CheckOut = () => {
     const navigator = useNavigation()
+    const route = useRoute()
+    const { table } = route.params
     const { getItems, getTotalPrice, shop, deleteItem, deleteAddOn, setDiscount, setTax, getTotal, getTotalDiscount, getTotalTax } = useAppContext()
-    const { orderHandler, data, error, loading, resetHandler, printHandler, shareReceipt } = useInsertOrder()
+    const { orderHandler, data, error, loading, resetHandler, printHandler, shareReceipt } = useInsertOrder(table.table_id)
     const [modalVisible, setModalVisible] = useState(false)
     const { data: taxes } = useQueryTaxByStatus(1)
     const { data: discounts } = useQueryDiscountByStatus(1)
-    const [selectValue, setSelectValue ] = useState()   
-    const items = getItems()     
-  
+    const [selectValue, setSelectValue] = useState()   
+    const items = getItems(table.table_id)
+
     const RenderAddOn = ({ menu_id, addOn }) => {
         return (
             <>
@@ -55,7 +57,7 @@ const CheckOut = () => {
                         {formatCurrency(shop?.currency || "£", (addOn?.price || 0))}
                     </StyledText>
                     <StyledSpacer marginHorizontal={4} />
-                    <StyledMIcon size={30} name='cancel' color={theme.colors.gray[400]} onPress={() => deleteAddOn(menu_id, addOn.addOn_id)} />
+                    <StyledMIcon size={30} name='cancel' color={theme.colors.gray[400]} onPress={() => deleteAddOn(menu_id, addOn.addOn_id, table.table_id)} />
                 </XStack>
                 <StyledSeparator line lineProps={{
                     borderColor: theme.colors.gray[200]
@@ -63,7 +65,7 @@ const CheckOut = () => {
             </>
         )
     }
-    const RenderItem = ({ item }) => {        
+    const RenderItem = ({ item }) => {
         return (
             <>
                 <XStack backgroundColor={theme.colors.blueGray[100]} borderColor={theme.colors.blueGray[100]} justifyContent='space-between' paddingVertical={8} paddingHorizontal={16} alignItems='center'>
@@ -89,24 +91,24 @@ const CheckOut = () => {
                         {formatCurrency(shop?.currency || "£", (item?.price || 0))}
                     </StyledText>
                     <StyledSpacer marginHorizontal={4} />
-                    <StyledMIcon size={30} name='cancel' color={theme.colors.gray[400]} onPress={() => deleteItem(item.id)} />
+                    <StyledMIcon size={30} name='cancel' color={theme.colors.gray[400]} onPress={() => deleteItem(item.id, table.table_id)} />
                 </XStack>
                 <StyledSeparator line lineProps={{
                     borderColor: theme.colors.gray[200]
                 }} />
                 {
-                    (item?.addOns || []).map((addOn, index)=> (
+                    (item?.addOns || []).map((addOn, index) => (
                         <RenderAddOn menu_id={item.id} addOn={addOn} key={index} />
                     ))
                 }
             </>
         )
     }
-    const RenderDiscountCard = ({ item }) => {       
+    const RenderDiscountCard = ({ item }) => {
         return (
             <StyledCard pressable={true} pressableProps={{
                 onPress: () => {
-                    setDiscount(item.rate)
+                    setDiscount(item.rate, table.table_id)
                     setSelectValue()
                 }
             }} >
@@ -137,7 +139,7 @@ const CheckOut = () => {
         return (
             <StyledCard pressable={true} pressableProps={{
                 onPress: () => {
-                     setTax(item.rate) 
+                    setTax(item.rate, table.table_id)
                     setSelectValue()
                 }
             }} >
@@ -163,12 +165,14 @@ const CheckOut = () => {
                 </XStack>
             </StyledCard>
         )
-    }   
+    }
 
     return (
         <StyledSafeAreaView backgroundColor={theme.colors.gray[200]}>
             <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
-                <StyledHeader.Header backgroundColor={theme.colors.gray[1]} onPress={() => navigator.goBack()} title='Checkout' icon cycleProps={{
+                <StyledHeader.Header backgroundColor={theme.colors.gray[1]} onPress={() => navigator.navigate("sales", {
+                    table: table
+                })} title='Checkout' icon cycleProps={{
                     borderColor: theme.colors.gray[300],
                     marginRight: 8
                 }} rightIcon={
@@ -177,22 +181,22 @@ const CheckOut = () => {
                             <StyledSpacer marginHorizontal={4} />
                             <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]} >
                                 <MIcon size={48} name='remove' color={theme.colors.gray[700]} onPress={() => {
-                                    setSelectValue("discounts")                    
+                                    setSelectValue("discounts")
                                 }} />
                             </StyledCycle>
                             <StyledSpacer marginHorizontal={4} />
                             <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]} >
-                                <MIcon size={48} name='add' color={theme.colors.gray[700]} onPress={() => {                               
-                                    setSelectValue("taxes")                                
+                                <MIcon size={48} name='add' color={theme.colors.gray[700]} onPress={() => {
+                                    setSelectValue("taxes")
                                 }} />
                             </StyledCycle>
                         </XStack>
                     </>
                 } />
-            </StyledHeader>          
-           
+            </StyledHeader>
+
             <YStack flex={1} paddingHorizontal={12} paddingVertical={8} backgroundColor={theme.colors.gray[100]}>
-                <StyledToggleSwitch />                
+                <StyledToggleSwitch />
                 <ScrollView showsVerticalScrollIndicator={false} >
                     {
                         selectValue === "discounts" && (
@@ -233,7 +237,7 @@ const CheckOut = () => {
                         )
                     }
                     <StyledSpacer marginVertical={4} />
-                    <StyledCard shadow='light' borderColor={theme.colors.gray[200]}  borderWidth={1} backgroundColor={theme.colors.gray[100]}>
+                    <StyledCard shadow='light' borderColor={theme.colors.gray[200]} borderWidth={1} backgroundColor={theme.colors.gray[100]}>
                         {
                             (items || []).map((item, index) =>
                                 <RenderItem item={item} key={index} />
@@ -249,7 +253,7 @@ const CheckOut = () => {
                             <StyledText color={theme.colors.gray[800]}
                                 fontWeight={theme.fontWeight.bold}
                                 fontSize={theme.fontSize.normal}>
-                                {formatCurrency(shop.currency || "£", (getTotal() || 0))}
+                                {formatCurrency(shop.currency || "£", (getTotal(table.table_id) || 0))}
                             </StyledText>
                         </XStack>
                         <StyledSeparator line lineProps={{
@@ -266,10 +270,10 @@ const CheckOut = () => {
                                 <StyledText color={theme.colors.gray[800]}
                                     fontWeight={theme.fontWeight.normal}
                                     fontSize={theme.fontSize.normal}>
-                                    {formatCurrency(shop.currency || "£", (getTotalDiscount() || 0))}
+                                    {formatCurrency(shop.currency || "£", (getTotalDiscount(table.table_id, table.table_id) || 0))}
                                 </StyledText>
                                 <StyledSpacer marginHorizontal={4} />
-                                <StyledMIcon size={30} name='cancel' color={theme.colors.gray[400]} onPress={() => setDiscount(0)} />
+                                <StyledMIcon size={30} name='cancel' color={theme.colors.gray[400]} onPress={() => setDiscount(0, table.table_id)} />
                             </XStack>
                         </XStack>
                         <StyledSeparator line lineProps={{
@@ -286,10 +290,10 @@ const CheckOut = () => {
                                 <StyledText color={theme.colors.gray[800]}
                                     fontWeight={theme.fontWeight.normal}
                                     fontSize={theme.fontSize.normal}>
-                                    {formatCurrency(shop.currency || "£", (getTotalTax() || 0))}
+                                    {formatCurrency(shop.currency || "£", (getTotalTax(table.table_id) || 0))}
                                 </StyledText>
                                 <StyledSpacer marginHorizontal={4} />
-                                <StyledMIcon size={30} name='cancel' color={theme.colors.gray[400]} onPress={() => setTax(0)} />
+                                <StyledMIcon size={30} name='cancel' color={theme.colors.gray[400]} onPress={() => setTax(0, table.table_id)} />
                             </XStack>
                         </XStack>
                         <StyledSeparator line lineProps={{
@@ -305,7 +309,7 @@ const CheckOut = () => {
                             <StyledText color={theme.colors.gray[800]}
                                 fontWeight={theme.fontWeight.bold}
                                 fontSize={theme.fontSize.large}>
-                                {formatCurrency(shop.currency || "£", (getTotalPrice() || 0))}
+                                {formatCurrency(shop.currency || "£", (getTotalPrice(table.table_id) || 0))}
                             </StyledText>
                         </XStack>
                     </StyledCard>
@@ -319,11 +323,11 @@ const CheckOut = () => {
                         </StyledButton>
                     </XStack >
                 )
-            }           
+            }
             {
                 modalVisible &&
                 <StyledDialog visible>
-                    <CheckOutCompleted order={data} printHandler={printHandler} shareReceipt={shareReceipt} />
+                        <CheckOutCompleted table_name={table.tableName} table_id={table.table_id} order={data} printHandler={printHandler} shareReceipt={shareReceipt} />
                 </StyledDialog>
             }
             {

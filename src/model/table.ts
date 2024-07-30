@@ -8,7 +8,7 @@ export interface Table {
   status: number;
   isOccupied: number;
   size: number;
-} 
+}
 
 const insertTable = async (
   tableName: string,
@@ -109,19 +109,41 @@ const updateTable = async (
   });
 };
 
+const updateOccupancy = async (
+  table_id: string,
+  isOccupied: number
+): Promise<Table> => {
+  const realm = await getRealmInstance(); 
+  return new Promise((resolve, reject) => {
+    try {
+      realm.write(() => {
+        const table = realm.objectForPrimaryKey<Table>('Table', table_id);
+        if (table) {
+          table.isOccupied = isOccupied;
+          resolve(table);
+        } else {
+          reject(new Error('Table not found'));
+        }
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 const deleteTable = async (table_id: number): Promise<boolean> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
-       realm.write(() => {
-         const table = realm.objectForPrimaryKey<Table>('Table', table_id);
-         if (table) {
-           realm.delete(table);
-           resolve(true);
-         } else {
-           reject(new Error('Table not found'));
-         }
-       });
+      realm.write(() => {
+        const table = realm.objectForPrimaryKey<Table>('Table', table_id);
+        if (table) {
+          realm.delete(table);
+          resolve(true);
+        } else {
+          reject(new Error('Table not found'));
+        }
+      });
     } catch (error) {
       reject(error);
     }
@@ -133,5 +155,6 @@ export {
   updateTable,
   queryTablesByStatus,
   queryAllTables,
-  deleteTable
+  deleteTable,
+  updateOccupancy,
 };

@@ -39,7 +39,7 @@ const Tax = () => {
             {toWordCase(item.name)} 
           </StyledText>
           <StyledText paddingHorizontal={8} fontFamily={fontStyles.FontAwesome5_Regular} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.small} color={theme.colors.gray[600]}>
-            {item.rate}
+            Rate ({item.rate}%)
           </StyledText>
         </YStack>
         <XStack flex={1} justifyContent='flex-end' alignItems='center'>
@@ -79,7 +79,8 @@ const Tax = () => {
         <FlatList
           data={data}
           initialNumToRender={100}
-          keyExtractor={(item) => item.user_id}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item.tax_id}
           renderItem={({ item, index }) => {
             return (
               <RenderCard item={item} key={index} />

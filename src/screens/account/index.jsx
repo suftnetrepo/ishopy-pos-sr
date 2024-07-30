@@ -81,6 +81,7 @@ const Account = () => {
           <RenderRow icon="remove-circle-outline" title='Discount' screen='discount' />
           <RenderRow icon="shopping-bag" title='Category' screen='categories' />
           <RenderRow icon="collections" title='Menu' screen='menus' />
+          <RenderRow icon="table-view" title='Table' screen='table' />
           <StyledSeparator left={
             <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.large} color={theme.colors.gray[400]}>
               Help

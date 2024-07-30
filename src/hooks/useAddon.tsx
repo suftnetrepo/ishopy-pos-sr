@@ -49,13 +49,14 @@ const useInsertAddon = () => {
 
 	const insertHandler = async (
 		addOnName: string,
-		price: number,
-		menu_id: string
+		price: number,	
+		menu_id: string,
+		status :number
 	) => {
 		setData((prev) => ({ ...prev, loading: true }));
 
 		try {
-			const result = await insertAddon(menu_id, addOnName, price,);
+			const result = await insertAddon(menu_id, addOnName, price, status);
 			setData({
 				data: result,
 				error: null,
@@ -96,15 +97,15 @@ const useUpdateAddOn = () => {
 	const updateHandler = async (
 		addOn_id: number,
 		addOnName: string,
-		price: number,
-		menu_id: string
+		price: number,		
+		status: number
 	) => {
 		setData((prev) => ({ ...prev, loading: true }));
 
 		try {
-			const user = await updateAddOn(addOn_id, menu_id, addOnName, price);
+			const result = await updateAddOn(addOn_id, addOnName, price, status);
 			setData({
-				data: user,
+				data: result,
 				error: null,
 				loading: false,
 			});
@@ -144,10 +145,10 @@ const useDeleteAddOn = () => {
 		loading: false,
 	});
 
-	const deleteHandler = async (menu_id: number) => {
+	const deleteHandler = async (addOn_id: string) => {
 		setData((prev) => ({ ...prev, loading: true }));
 		try {
-			const result = await deleteAddOn(menu_id);
+			const result = await deleteAddOn(addOn_id);
 			setData({
 				data: result,
 				error: null,

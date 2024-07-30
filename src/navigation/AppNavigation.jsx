@@ -29,6 +29,12 @@ import CheckOut from '../screens/checkout';
 import Order from '../screens/order';
 import HelpCenter from '../screens/account/helpCenter';
 import FAQ from '../screens/account/faq';
+import Table from '../screens/account/table';
+import EditTable from '../screens/account/table/edit';
+import AddTable from '../screens/account/table/add';
+import AddOn from '../screens/account/addOn';
+import EditAddOn from '../screens/account/addOn/edit';
+import AddAddOn from '../screens/account/addOn/add';
 
 const Stack = createStackNavigator();
 function Navigator() {
@@ -37,6 +43,48 @@ function Navigator() {
       <Stack.Screen
         name="bottom-tabs"
         component={BottomTabs}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="addOns"
+        component={AddOn}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="edit-addOn"
+        component={EditAddOn}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="add-addOn"
+        component={AddAddOn}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="add-table"
+        component={AddTable}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="edit-table"
+        component={EditTable}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="table"
+        component={Table}
         options={{
           headerShown: false,
         }}

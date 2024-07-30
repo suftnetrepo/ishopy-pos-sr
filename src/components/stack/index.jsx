@@ -34,6 +34,29 @@ const StyledStack = styled(View, {
                 borderBottomWidth: 1,
 
             },
+        },
+        occupied: {
+            '0': {
+                borderLeftColor: theme.colors.orange[700],
+                borderLeftWidth: 4,
+                borderTopColor: theme.colors.gray[300],
+                borderRightColor: theme.colors.gray[300],
+                borderBottomColor: theme.colors.gray[300],
+                borderTopWidth: 1,
+                borderRightWidth: 1,
+                borderBottomWidth: 1,
+            },
+            '1': {
+                borderLeftColor: theme.colors.teal[700],
+                borderLeftWidth: 4,
+                borderTopColor: theme.colors.gray[300],
+                borderRightColor: theme.colors.gray[300],
+                borderBottomColor: theme.colors.gray[300],
+                borderTopWidth: 1,
+                borderRightWidth: 1,
+                borderBottomWidth: 1,
+
+            },
         }
     }
 })

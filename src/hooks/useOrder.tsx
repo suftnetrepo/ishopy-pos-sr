@@ -16,6 +16,7 @@ import { useAppContext } from "./appContext";
 import { insertPayment } from "../model/payments";
 import { guid } from "../utils/help";
 import { printReceipt } from "../utils/printReceipt";
+import { updateOccupancy } from "./useTable";
 
 interface Initialize {
 	data: Order[] | null | Order | [] | boolean;
@@ -27,6 +28,7 @@ const order: Order = {
 	order_id: "",
 	user_id: "",
 	total_price: 0,
+	table_id : "",
 	total: 0,
 	status: "pending",
 	tax: 0,
@@ -134,7 +136,7 @@ const useQueryOrderById = (order_id: string) => {
 	};
 };
 
-const useInsertOrder = () => {
+const useInsertOrder = (table_id : string) => {
 	const {
 		user,
 		getItems,
@@ -144,7 +146,7 @@ const useInsertOrder = () => {
 		getTotalDiscount,
 		shop,
 	} = useAppContext();
-	const items = getItems();
+	const items = getItems(table_id);
 	const [data, setData] = useState<Initialize>({
 		data: null,
 		error: null,
@@ -175,11 +177,12 @@ const useInsertOrder = () => {
 		try {
 			order.order_id = guid();
 			order.user_id = user?.user_id;
-			order.discount = getTotalDiscount() || 0;
-			order.tax = getTotalTax() || 0;
-			order.total = getTotal() || 0;
+			order.discount = getTotalDiscount(table_id) || 0;
+			order.tax = getTotalTax(table_id) || 0;
+			order.total = getTotal(table_id) || 0;
+			order.table_id = table_id;
 			order.status = "completed";
-			order.total_price = getTotalPrice() || 0;
+			order.total_price = getTotalPrice(table_id) || 0;
 
 			const orderResult = await insertOrder(order);
 
@@ -207,6 +210,7 @@ const useInsertOrder = () => {
 			payment.payment_method = "Cash";
 
 			await insertPayment(payment);
+			await updateOccupancy(table_id, 0)
 
 			setData({
 				data: orderResult,
@@ -224,7 +228,7 @@ const useInsertOrder = () => {
 		}
 	};
 
-	const printHandler = (order: Order) => {
+	const printHandler = (table_name:string, order: Order) => {
 		try {
 			const receiptData = {
 				name: shop?.name,
@@ -232,19 +236,28 @@ const useInsertOrder = () => {
 				phone: shop?.mobile,
 				email: shop?.email,
 				orderNumber: order.order_id.slice(0, 8),
+				table_name: table_name,
 				date: order.date,
 				cashier: `${user?.first_name} ${user?.last_name}`,
-				items: items.map((item) => ({
-					quantity: item.quantity,
-					name: item.name,
-					total: item.price,
-				})),
-				subtotal: getTotal(),
-				tax: getTotalTax(),
-				discount: getTotalDiscount(),
-				total: getTotalPrice(),
-				footerMessage:
-					"Your satisfaction is our priority. Thank you for shopping with us!",
+				items: items.map((item) => {				
+					const addOnDetails = item.addOns?.map((addOn) => ({
+						quantity: addOn.quantity,
+						name: addOn.addOnName,
+						price: addOn.price * (addOn.quantity || 0),
+					})) || [];
+
+					return {
+						quantity: item.quantity,
+						name: item.name,
+						price: item.price,
+						addOns: addOnDetails,
+					};
+				}),
+				subtotal: getTotal(table_id),
+				tax: getTotalTax(table_id),
+				discount: getTotalDiscount(table_id),
+				total: getTotalPrice(table_id),
+				footerMessage: "Your satisfaction is our priority. Thank you for shopping with us!",
 			};
 
 			printReceipt(receiptData);
@@ -257,29 +270,33 @@ const useInsertOrder = () => {
 		}
 	};
 
-	const shareReceipt = async (order: Order) => {
+	const shareReceipt = async (table_name :string, order: Order) => {
 		const receiptData = {
 			name: shop?.name,
 			address: shop?.address,
 			phone: shop?.mobile,
 			email: shop?.email,
-			orderNumber: order.order_id.slice(0, 8),
+			orderNumber: order.order_id.slice(0, 8),			
 			date: order.date,
 			cashier: `${user?.first_name} ${user?.last_name}`,
-			items: items.map((item) => ({
-				quantity: item.quantity,
-				name: item.name,
-				total: item.price,
-				addOn: item.addOns?.map((item) => ({
+			items: items.map((item) => {
+				const addOnDetails = item.addOns?.map((addOn) => ({
+					quantity: addOn.quantity,
+					name: addOn.addOnName,
+					price: addOn.price * (addOn.quantity || 0),
+				})) || [];
+
+				return {
 					quantity: item.quantity,
-					name: item.addOnName,
-					total: item.price,
-				})),
-			})),
-			subtotal: getTotal(),
-			tax: getTotalTax(),
-			discount: getTotalDiscount(),
-			total: getTotalPrice(),
+					name: item.name,
+					price: item.price,
+					addOns: addOnDetails,
+				};
+			}),
+			subtotal: getTotal(table_id),
+			tax: getTotalTax(table_id),
+			discount: getTotalDiscount(table_id),
+			total: getTotalPrice(table_id),
 			footerMessage:
 				"Your satisfaction is our priority. Thank you for shopping with us!",
 		};
@@ -290,7 +307,7 @@ const useInsertOrder = () => {
 			email,
 			cashier,
 			date,
-			orderNumber,
+			orderNumber,			
 			subtotal,
 			tax,
 			total,
@@ -299,12 +316,17 @@ const useInsertOrder = () => {
 		const receiptText =
 			`Receipt from ${name}\n\n` +
 			`Order Number: ${orderNumber}\n` +
+			`Table Number: ${table_name}\n` +
 			`Date: ${new Date(date).toLocaleString()}\n` +
 			`Cashier: ${cashier}\n\n` +
 			`Items:\n` +
-			items
-				.map((item) => `${item.name} - ${item.quantity} x ${item.price}\n`)
-				.join("") +
+			items.map((item) => {
+				const itemTotal = (item.price * item.quantity).toFixed(2);
+				const addOnsText = item.addOns?.map(addOn =>
+					`${addOn.quantity} ${addOn.addOnName} - ${(addOn.price * (addOn.quantity || 0)).toFixed(2)}\n`
+				).join('') || '';
+				return `${item.quantity} ${item.name} - ${itemTotal}\n${addOnsText}`;
+			}).join("") +
 			`\nSubtotal: ${subtotal.toFixed(2)}\n` +
 			`Tax: ${tax.toFixed(2)}\n` +
 			`Total: ${total.toFixed(2)}\n\n` +

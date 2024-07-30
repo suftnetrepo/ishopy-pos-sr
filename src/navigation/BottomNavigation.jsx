@@ -8,10 +8,10 @@ import { XStack, StyledSpacer, StyledText, StyledButton } from 'fluent-styles';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { fontStyles, theme } from '../configs/theme';
 import Home from '../screens/home';
-import Sales from '../screens/sales';
 import Account from '../screens/account';
 import Order from '../screens/order';
 import Payment from '../screens/payment';
+import DineTable from '../screens/table';
 
 const Tab = createBottomTabNavigator();
 
@@ -69,13 +69,13 @@ export default function BottomTabs() {
         }
       }} />
 
-      <Tab.Screen name='Sales' component={Sales} options={{
+      <Tab.Screen name='Tables' component={DineTable} options={{
         tabBarIcon: ({ size, color }) => {
           return (
-            <Icon color={color} size={size} name='basket-outline' />
+            <Icon color={color} size={size} name='table-chair' />
           )
         }
-      }} />
+      }} />      
 
       <Tab.Screen name='Orders' component={Order} options={{
         tabBarIcon: ({ size, color }) => {

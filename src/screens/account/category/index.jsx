@@ -81,6 +81,7 @@ const Category = () => {
         <FlatList
           data={data}
           initialNumToRender={100}
+          showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item.category_id}
           renderItem={({ item, index }) => {
             return (

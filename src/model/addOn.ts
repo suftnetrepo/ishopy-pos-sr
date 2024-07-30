@@ -8,12 +8,14 @@ export interface AddOn {
   price: number;
   addOn_id: string;
   quantity?: number;
+  status: number;
 }
 
 const insertAddon = async (
   menu_id: string,
   addOnName: string,
-  price: number
+  price: number,
+  status : number
 ): Promise<AddOn> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
@@ -24,6 +26,7 @@ const insertAddon = async (
           addOnName,
           price,
           menu_id,
+          status,
         };
         realm.create('AddOn', addOn);
         resolve(addOn);
@@ -46,6 +49,7 @@ const queryAddonByMenuId = async (menu_id: string): Promise<AddOn[]> => {
           addOnName: addOn.addOnName,
           menu_id: addOn.menu_id,
           price: addOn.price,
+          status :addOn.status
         }));
       resolve(addOns);
     } catch (error) {
@@ -56,20 +60,19 @@ const queryAddonByMenuId = async (menu_id: string): Promise<AddOn[]> => {
 
 const updateAddOn = async (
   addOn_id: number,
-  menu_id: string,
   addOnName: string,
-  price: number
+  price: number,
+  status: number
 ): Promise<AddOn> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
       realm.write(() => {
         const addOn = realm.objectForPrimaryKey<AddOn>('AddOn', addOn_id);
-        if (addOn) {
-          addOn.addOnName = addOnName;
-          addOn.menu_id = menu_id;
+        if (addOn) {        
           addOn.addOnName = addOnName;
           addOn.price = price;
+          addOn.status = status;
           resolve(addOn);
         } else {
           reject(new Error('AddOn not found'));
@@ -81,12 +84,15 @@ const updateAddOn = async (
   });
 };
 
-const deleteAddOn = async (addOn_id: number): Promise<boolean> => {
+const deleteAddOn = async (addOn_id: string): Promise<boolean> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
      realm.write(() => {
-       const addOn = realm.objectForPrimaryKey<AddOn>('AddOn', addOn_id);
+       const addOn = realm.objectForPrimaryKey<AddOn>(
+         'AddOn',
+         addOn_id
+       );
        if (addOn) {
          realm.delete(addOn);
          resolve(true);
