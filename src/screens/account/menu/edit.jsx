@@ -39,7 +39,7 @@ const EditMenu = () => {
       return false
     }
 
-    await update(fields.menu_id, { ...fields, price: parseFloat(fields.price), cost: parseFloat(fields.cost) }).then(async (result) => {
+    await update(fields.menu_id, { ...fields, stock: parseInt(fields.stock), price: parseFloat(fields.price), cost: parseFloat(fields.cost) }).then(async (result) => {
       result && (
         navigator.reset({
           key: 'menus',
@@ -70,7 +70,7 @@ const EditMenu = () => {
           <StyledInput
             label={'Name'}
             keyboardType='default'
-            placeholder='Enter your menu name'
+            placeholder='Enter menu name'
             returnKeyType='next'
             maxLength={50}
             fontSize={theme.fontSize.small}
@@ -87,7 +87,7 @@ const EditMenu = () => {
           <StyledInput           
             label={'Price'}
             keyboardType='number-pad'
-            placeholder='Enter your price'
+            placeholder='Enter price'
             returnKeyType='next'
             maxLength={50}
             fontSize={theme.fontSize.small}
@@ -104,7 +104,7 @@ const EditMenu = () => {
           <StyledInput           
             label={'Cost'}
             keyboardType='number-pad'
-            placeholder='Enter your cost'
+            placeholder='Enter cost'
             returnKeyType='next'
             maxLength={50}
             fontSize={theme.fontSize.small}
@@ -118,7 +118,23 @@ const EditMenu = () => {
             error={!!errorMessages?.cost}
             errorMessage={errorMessages?.cost?.message}
           />
-
+          <StyledInput
+            label={'Quantity'}
+            keyboardType='number-pad'
+            placeholder='Enter quantity'
+            returnKeyType='next'
+            maxLength={50}
+            fontSize={theme.fontSize.small}
+            borderColor={theme.colors.yellow[800]}
+            backgroundColor={theme.colors.gray[1]}
+            borderRadius={32}
+            paddingHorizontal={8}
+            value={fields.stock.toString()}
+            placeholderTextColor={theme.colors.gray[400]}
+            onChangeText={(text) => setFields({ ...fields, stock: text })}
+            error={!!errorMessages?.stock}
+            errorMessage={errorMessages?.stock?.message}
+          />
           <StyledDropdown
             placeholder={'Select a category'}
             label={'Category'}

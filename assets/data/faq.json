@@ -1,52 +1,82 @@
 [
     {
         "id": 1,
-        "question": "What is iShopy SA?",
-        "answer": "iShopy SA is a Point of Sale (POS) app designed for small and medium-sized businesses. It helps manage sales, inventory, and customer information with a range of features."
+        "question": "What is iRit SA?",
+        "answer": "iRit SA is a Point of Sale (POS) app designed for small and medium-sized restaurant businesses. It helps manage customer orders, inventory, sales, and more, all while streamlining your operations."
     },
     {
         "id": 2,
-        "question": "Are there any recurring fees for using iShopy SA?",
-        "answer": "No, iShopy SA requires only a one-time payment. There are no monthly or annual fees."
+        "question": "Are there any recurring fees for using iRit SA?",
+        "answer": "No, iRit SA requires only a one-time payment. There are no monthly or annual fees."
     },
     {
         "id": 3,
-        "question": "What features does iShopy SA offer?",
-        "answer": "The app includes receipt printing, discounts and taxes management, sales reporting, customer and inventory management, backup and restore options, and user management."
+        "question": "What features does iRit SA offer?",
+        "answer": "iRit SA offers features such as receipt printing, discounts and taxes, sales reporting, customer and inventory management, backup and restore, and user management."
     },
     {
         "id": 4,
-        "question": "Which printer is compatible with iShopy SA?",
-        "answer": "We recommend the MUNBYN Android Bluetooth Thermal Receipt Printer POS Printer with USB Ethernet Serial Port for Android, available on Amazon."
+        "question": "What hardware do I need to use iRit SA?",
+        "answer": "For the best experience, we recommend using the MUNBYN Android Bluetooth Thermal Receipt Printer POS Printer with USB Ethernet Serial Port, available on Amazon."
     },
     {
         "id": 5,
-        "question": "Is iShopy SA available in languages other than English?",
-        "answer": "Currently, iShopy SA is available only in English. However, more languages will be added in the future."
+        "question": "Is iRit SA available in languages other than English?",
+        "answer": "Currently, iRit SA is available in English, with plans to add more languages in the future."
     },
     {
         "id": 6,
-        "question": "Can I provide feedback on iShopy SA?",
-        "answer": "Yes, if you love our app, we encourage you to leave a positive rating. If you have any questions or suggestions, feel free to contact us directly."
+        "question": "How can I contact support if I have questions or suggestions?",
+        "answer": "You can contact us directly through the app or via the contact information provided on our website."
     },
     {
         "id": 7,
-        "question": "Does iShopy SA support receipt printing?",
-        "answer": "Yes, iShopy SA includes receipt printing as one of its features."
+        "question": "Can I print receipts with iRit SA?",
+        "answer": "Yes, iRit SA supports receipt printing. We recommend using the MUNBYN Android Bluetooth Thermal Receipt Printer for this purpose."
     },
     {
         "id": 8,
-        "question": "How does iShopy SA handle discounts and taxes?",
-        "answer": "The app has built-in features for managing discounts and taxes, making it easier to handle pricing and financial details."
+        "question": "How do I manage discounts and taxes with iRit SA?",
+        "answer": "iRit SA includes built-in features for managing discounts and taxes, allowing you to set and apply them easily during transactions."
+    },      
+    {
+        "id": 11,
+        "question": "What should I do if I need to back up my data?",
+        "answer": "iRit SA offers backup and restore functionality, allowing you to securely back up your data and restore it if needed."
     },
     {
-        "id": 9,
-        "question": "Can I back up and restore data with iShopy SA?",
-        "answer": "Yes, iShopy SA includes backup and restore options to help protect your data."
+        "id": 12,
+        "question": "How does user management work in iRit SA?",
+        "answer": "iRit SA allows you to manage user accounts, set permissions, and control access levels for different staff members."
     },
     {
-        "id": 10,
-        "question": "What types of businesses can use iShopy SA?",
-        "answer": "iShopy SA is suitable for various types of businesses, including those selling groceries, clothing, and other products."
-    }
+        "id": 13,
+        "question": "Can iRit SA be used on devices other than Android?",
+        "answer": "iRit SA is optimized for Android devices. For best performance, we recommend using it on Android-compatible hardware."
+    },
+    {
+        "id": 14,
+        "question": "How do I get updates for iRit SA?",
+        "answer": "Updates are provided periodically. You can receive them through the app store or directly from our update notifications."
+    },   
+    {
+        "id": 16,
+        "question": "How can I leave a positive rating for iRit SA?",
+        "answer": "You can leave a positive rating by visiting the app store where you purchased iRit SA and providing your feedback there."
+    },
+    {
+        "id": 17,
+        "question": "What types of businesses can benefit from iRit SA?",
+        "answer": "iRit SA is specifically designed for small and medium-sized restaurant businesses, but its features can be useful for other types of retail operations as well."
+    },
+    {
+        "id": 18,
+        "question": "What should I do if I encounter issues while using iRit SA?",
+        "answer": "If you encounter any issues, please contact our support team directly for assistance. We are here to help resolve any problems you may face."
+    },
+    {
+        "id": 19,
+        "question": "Can iRit SA handle multiple locations?",
+        "answer": "iRit SA is designed primarily for single-location operations. For managing multiple locations, please contact our support team to discuss your needs."
+    }    
 ]

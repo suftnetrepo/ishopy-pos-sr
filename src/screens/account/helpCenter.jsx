@@ -66,7 +66,7 @@ const HelpCenter = () => {
                                 fontSize={theme.fontSize.medium}
                                 color={theme.colors.gray[800]}
                             >
-                                +44 07407 022723
+                                +44 7407 022723
                             </StyledText>
                         </YStack>
                         <StyledSpacer marginHorizontal={1} />
