@@ -4,7 +4,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import {    
+import {
     YStack,
     StyledText,
     StyledSpacer,
@@ -14,14 +14,17 @@ import { StyledMIcon } from '../../components/icon';
 import { fontStyles, palettes, theme } from '../../configs/theme';
 import { prepareSeedData } from '../../model/seed';
 import { useNavigation } from '@react-navigation/native';
+import { useUtil } from '../../store';
 
-const PurchaseSuccess = ({ setPaymentStatus }) => {
+const PurchaseSuccess = () => {
+    const { setPaymentStatus } = useUtil()
     const navigator = useNavigation()
 
     const clearHandler = async () => {
         setPaymentStatus(false)
         await prepareSeedData()
-        navigator.navigate("bottom-tabs", { screen: 'Settings' })    }
+        navigator.navigate("bottom-tabs", { screen: 'Settings' })
+    }
 
     return (
         <YStack

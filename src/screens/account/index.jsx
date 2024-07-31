@@ -52,13 +52,10 @@ const Account = () => {
           source={require('../../../assets/img/doctor.png')}
         />
         <YStack flex={1} marginHorizontal={2}>
-          <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.semiBold} fontSize={theme.fontSize.normal} color={theme.colors.gray[800]}>
-            {toWordCase(shop.name)}
-          </StyledText>
-          <XStack justifyContent='flex-start'
+          <XStack justifyContent='space-between'
             alignItems='center'>
-            <StyledText paddingHorizontal={2} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.small} color={theme.colors.gray[800]}>
-              {toWordCase(shop.address)}
+            <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.semiBold} fontSize={theme.fontSize.normal} color={theme.colors.gray[800]}>
+              {toWordCase(shop.name)}
             </StyledText>
             <StyledMIcon
               name="delete"
@@ -67,6 +64,10 @@ const Account = () => {
               onPress={() => setIsDialogVisible(true)}
             />
           </XStack>
+          <StyledText paddingHorizontal={2} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.small} color={theme.colors.gray[800]}>
+            {toWordCase(shop.address)}
+          </StyledText>
+
         </YStack>
       </XStack>
       <StyledScrollView>

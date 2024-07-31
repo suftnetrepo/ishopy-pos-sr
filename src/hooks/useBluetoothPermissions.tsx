@@ -1,73 +1,58 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-undef */
 /* eslint-disable prettier/prettier */
-import { PermissionsAndroid, Platform, Alert, Linking } from 'react-native';
-import { BluetoothManager } from 'tp-react-native-bluetooth-printer';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Platform, PermissionsAndroid } from 'react-native';
 
-const useBluetoothPermissions = () => {
+const useBluetoothPermission = () => {
     const [isEnabled, setIsEnabled] = useState(false);
-    const [error, setError] = useState(null);
 
-    const requestPermissions = async () => {
+    useEffect(() => {
         if (Platform.OS === 'android') {
-            if (Platform.Version >= 29) { // Android 10 and above
-                try {
-                    const permissions = [
-                        PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
-                        PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
-                    ];
-
-                    const granted = await PermissionsAndroid.requestMultiple(permissions);
-
-                    const bluetoothScanGranted = granted[PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN] === PermissionsAndroid.RESULTS.GRANTED;
-                    const bluetoothConnectGranted = granted[PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT] === PermissionsAndroid.RESULTS.GRANTED;
-
-                    if (bluetoothScanGranted && bluetoothConnectGranted) {
-                        checkBluetoothStatus();
-                    } else {
-                        showAlert();
-                    }
-                } catch (err) {
-                    console.error('Failed to request permissions', err);
-                    Alert.alert('Permission Request Failed', 'An error occurred while requesting Bluetooth permissions.');
-                }
-            } else {
-                // Android 9 and below do not require runtime permission requests
-                checkBluetoothStatus();
-            }
+            checkPermissions();
         } else {
-            checkBluetoothStatus();  // Call function if not Android
+            setIsEnabled(false);
+        }
+    }, []);
+
+    const checkPermissions = async () => {
+        try {
+            const granted = await PermissionsAndroid.check(
+                PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN
+            );
+            if (granted) {
+                setIsEnabled(true);
+            }
+        } catch (error) {
+            console.error('Permission check error:', error);
         }
     };
 
-    const checkBluetoothStatus = () => {       
-        Promise.resolve(BluetoothManager.isBluetoothEnabled())
-            .then(enabled => {
-                setIsEnabled(enabled);
-            })
-            .catch(err => setError(err));
-    };
-
-    const showAlert = () => {
-        Alert.alert(
-            'Permission Required',
-            'Bluetooth permissions are required to enable printing. Please grant these permissions.',
-            [
-                { text: 'Cancel', style: 'cancel' },
+    const requestPermissions = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
                 {
-                    text: 'Open Settings',
-                    onPress: () => {
-                        Linking.openSettings().catch(() => {
-                            Alert.alert('Unable to open settings');
-                        });
-                    },
-                },
-            ]
-        );
+                    title: 'Bluetooth Permission',
+                    message: 'This app needs access to your Bluetooth.',
+                    buttonNeutral: 'Ask Me Later',
+                    buttonNegative: 'Cancel',
+                    buttonPositive: 'OK',
+                }
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                setIsEnabled(true);
+            } 
+        } catch (error) {
+            console.error('Permission request error:', error);
+        }
     };
 
-    return { requestPermissions, isEnabled, error };
+    return {
+        isEnabled,
+        checkPermissions,
+        requestPermissions,
+    };
 };
 
-export default useBluetoothPermissions;
+export default useBluetoothPermission;

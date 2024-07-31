@@ -16,9 +16,9 @@ const useBluetoothPrinter = () => {
     const { requestPermissions, isEnabled } = useBluetoothPermissions()
 
     useEffect(() => {
-        requestPermissions();
+        !isEnabled && requestPermissions();
         loadSelectedPrinter();
-    }, []);
+    }, [isEnabled]);
    
     const enableBluetooth = () => {
         BluetoothManager.enableBluetooth().then(devices => {

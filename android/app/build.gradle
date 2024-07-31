@@ -98,7 +98,7 @@ android {
         }
 
           release {
-            storeFile file('irit.keystore')
+            storeFile file('irit.jks')
             storePassword "Kcmkcm12345!"
             keyAlias "key0"
             keyPassword "Kcmkcm12345!"
@@ -111,7 +111,7 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }

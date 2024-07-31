@@ -28,13 +28,13 @@ const useInAppPurchase = () => {
         currentPurchaseError,
         purchaseHistory,
         getPurchaseHistory
-    } = useIAP();
+    } = useIAP();   
 
     useEffect(() => {
         async function init() {
             const status = await getStore(PURCHASED_STATUS)
             const purchase_status = status === 0 || status === null ? false : true
-
+            setPaymentStatus(false)
             if (!purchase_status) {                          
                 await getPurchaseHistory()
             }        
@@ -51,14 +51,17 @@ const useInAppPurchase = () => {
     }, [])
 
     useEffect(() => {
-        const processPurchase = async () => {
+        const processPurchase = async () => {   
+             
             if (currentPurchase?.transactionReceipt) {               
                 try {
-                    await finishTransaction(currentPurchase);
-                    store(PURCHASED_STATUS, 1)
-                 
+                   
                     setPurchaseStatus(true)
                     setPaymentStatus(true)
+                    await store(PURCHASED_STATUS, 1)    
+
+                    await finishTransaction({ purchase: currentPurchase, isConsumable: false, developerPayloadAndroid: currentPurchase?.developerPayloadAndroid });
+                             
                     setData({
                         status: true,
                         error: null,
@@ -76,9 +79,9 @@ const useInAppPurchase = () => {
             }
         };
 
-        processPurchase();
+        processPurchase();       
     }, [currentPurchase])
-
+  
     useEffect(() => {
         setData({
             status: currentPurchaseError?.code === "E_ALREADY_OWNED" ? true : false,
@@ -89,7 +92,7 @@ const useInAppPurchase = () => {
 
     useEffect(() => {       
         async function load() {           
-            const purchases = purchaseHistory?.filter((product) => product.productId === "irit_premium_upgrade")            
+            const purchases = purchaseHistory?.filter((product) => product.productId === "irit_upgrade_draft_test")            
             if (purchases.length > 0 ) {
                 await store(PURCHASED_STATUS, 1)  
                 setPurchaseStatus(true)               
@@ -109,9 +112,9 @@ const useInAppPurchase = () => {
         }
 
         try {
-            await getProducts({ skus: ['irit_premium_upgrade'] })
+            await getProducts({ skus: ['irit_upgrade_draft_test'] })
             if (products?.length > 0) {
-                await requestPurchase({ skus: ['irit_premium_upgrade'] });
+                await requestPurchase({ skus: ['irit_upgrade_draft_test'] });
             }
         } catch (error) {
             setData({
@@ -121,7 +124,7 @@ const useInAppPurchase = () => {
             });
         }
     };
-
+  
     return {
         ...data,
         purchaseHandler,
