@@ -2,17 +2,20 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-undef */
 /* eslint-disable prettier/prettier */
-import React from "react";
+import React, { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
-import { YStack, StyledImage, XStack, StyledHeader, StyledScrollView, StyledSafeAreaView, StyledSeparator, StyledSpacer, StyledText } from 'fluent-styles';
+import { BackHandler } from 'react-native';
+import { YStack, StyledImage, XStack, StyledHeader, StyledConfirmDialog, StyledScrollView, StyledSafeAreaView, StyledSeparator, StyledSpacer, StyledText } from 'fluent-styles';
 import { theme } from "../../configs/theme";
 import { StyledMIcon } from "../../components/icon";
 import { useAppContext } from "../../hooks/appContext";
 import { toWordCase } from "../../utils/help";
+import { clearSeedData } from "../../model/seed";
 
 const Account = () => {
   const navigator = useNavigation()
   const { shop } = useAppContext()
+  const [isDialogVisible, setIsDialogVisible] = useState(false)
 
   const RenderRow = ({ icon = 'account-circle', title, screen }) => {
     return (
@@ -31,7 +34,7 @@ const Account = () => {
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
       <StyledHeader skipAndroid={false} statusProps={{ translucent: true, backgroundColor: "transparent", barStyle: "dark-content" }} >
-      </StyledHeader>    
+      </StyledHeader>
       <XStack
         paddingHorizontal={8}
         paddingVertical={8}
@@ -48,15 +51,24 @@ const Account = () => {
           width={90}
           source={require('../../../assets/img/doctor.png')}
         />
-        <YStack flex={1} marginHorizontal={8}>
+        <YStack flex={1} marginHorizontal={2}>
           <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.semiBold} fontSize={theme.fontSize.normal} color={theme.colors.gray[800]}>
-            {toWordCase(shop.name)} 
+            {toWordCase(shop.name)}
           </StyledText>
-          <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.small} color={theme.colors.gray[800]}>
-            {toWordCase(shop.address)}
-          </StyledText>
+          <XStack justifyContent='flex-start'
+            alignItems='center'>
+            <StyledText paddingHorizontal={2} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.small} color={theme.colors.gray[800]}>
+              {toWordCase(shop.address)}
+            </StyledText>
+            <StyledMIcon
+              name="delete"
+              size={48}
+              color={theme.colors.gray[800]}
+              onPress={() => setIsDialogVisible(true)}
+            />
+          </XStack>
         </YStack>
-      </XStack> 
+      </XStack>
       <StyledScrollView>
         <YStack
           flex={2}
@@ -91,7 +103,21 @@ const Account = () => {
           <RenderRow icon="info-outline" title='Help Center' screen='help-center' />
         </YStack>
       </StyledScrollView>
-
+      {isDialogVisible &&
+        <StyledConfirmDialog
+          visible
+          description='Are you sure you want to delete this app? This action cannot be undone and will remove all data associated with it. Do you want to proceed?'
+          confirm='Yes'
+          cancel='No'
+          title={'Delete this App'}
+          onCancel={() => setIsDialogVisible(false)}
+          onConfirm={() => {
+            clearSeedData().then(() => {
+              navigator.navigate("login")
+              BackHandler.exitApp();
+            })
+          }}
+        />}
     </StyledSafeAreaView>
   )
 }
