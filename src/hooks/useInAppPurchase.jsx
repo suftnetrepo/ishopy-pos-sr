@@ -4,7 +4,7 @@
 
 import { useEffect, useState } from 'react';
 import { requestPurchase, useIAP } from 'react-native-iap';
-import { STORAGE_KEYS, store, getStore } from '../utils/asyncStorage';import { clearSeedData } from '../model/seed';
+import { STORAGE_KEYS, store, getStore } from '../utils/asyncStorage';
 import { useUtil, state } from '../store';
 import { useSelector } from '@legendapp/state/react';
 
@@ -67,8 +67,7 @@ const useInAppPurchase = () => {
                         error: null,
                         loading: false,
                     });
-
-                    await clearSeedData()
+                  
                 } catch (error) {
                     setData({
                         status: false,
