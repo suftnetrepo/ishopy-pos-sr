@@ -168,12 +168,13 @@ const receiptTestData = {
     phone: '03-435435435',
     email: 'tester@test.com',
     orderNumber: '622967',
+    table_name :'Table 7',
     date: '11/01/2020',
     cashier: 'David Smith',
     items: [
-        { quantity: 4, name: 'Chinese Buffet', total: 51.96 },
-        { quantity: 4, name: 'Soda', total: 7.96 },
-        { quantity: 4, name: 'Desserts', total: 15.56 }
+        { quantity: 4, name: 'Chinese Buffet', price: 51.96 },
+        { quantity: 4, name: 'Soda', price: 7.96 },
+        { quantity: 4, name: 'Desserts', price: 15.56 }
     ],
     subtotal: 75.48,
     Tax: 2.90,

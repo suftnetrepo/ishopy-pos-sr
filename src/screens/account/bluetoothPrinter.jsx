@@ -12,7 +12,7 @@ import { useBluetoothPrinterContext } from '../../hooks/bluetoothPrinterProvider
 
 const BluetoothPrinter = () => {
     const { isEnabled, devices, enableBluetooth, selectedPrinter, connectDevice, setError, error, testPrint, loading } = useBluetoothPrinterContext();
-   
+      
     const RenderRow = ({ title, onPress }) => {
         return (
             <XStack borderRadius={8} marginHorizontal={2} marginBottom={8} borderWidth={1} borderColor={theme.colors.gray[300]} backgroundColor={theme.colors.gray[1]} justifyContent='flex-start' alignItems='center' paddingVertical={2} paddingHorizontal={2}>
@@ -28,11 +28,11 @@ const BluetoothPrinter = () => {
     }
 
     return (
-        <YStack width={'100%'} paddingBottom={8} backgroundColor={theme.colors.gray[1]}>       
+        <YStack width={'100%'} backgroundColor={theme.colors.gray[1]}>       
           <YStack
                 justifyContent='center'
                 alignItems='center'
-                paddingVertical={32}
+                paddingVertical={16}
                 paddingHorizontal={16}
                 marginBottom={8}
             >
@@ -44,22 +44,21 @@ const BluetoothPrinter = () => {
                 />
                 <StyledSpacer marginVertical={8} />
                 <StyledText
-                    fontFamily={fontStyles.FontAwesome5_Regular}
+                    fontFamily={fontStyles.Roboto_Regular}
                     fontWeight={theme.fontWeight.normal}
                     color={theme.colors.gray[800]}
                     fontSize={theme.fontSize.medium}
                 >
-                    You are not connected to any printer yet.
-                    Make sure your Bluetooth printer is in pairing mode to connect.
+                    Make sure your Bluetooth printer is in pairing mode. Once it’s ready, use the button below to scan for available Bluetooth devices.
                     `
                 </StyledText>
                 <StyledSpacer marginVertical={4} />
-                <StyledButton backgroundColor={isEnabled ? theme.colors.cyan[500] : theme.colors.pink[600]} onPress={enableBluetooth}>
+                <StyledButton backgroundColor={isEnabled ? theme.colors.green[600] : theme.colors.pink[600]} onPress={enableBluetooth}>
                     <XStack paddingHorizontal={8} justifyContent='flex-start' alignItems='center'>
                         <StyledSpacer marginHorizontal={2} />
                         <StyledMIcon size={32} name='search' color={theme.colors.gray[1]} />
                         <StyledText
-                            fontFamily={fontStyles.FontAwesome5_Regular}
+                            fontFamily={fontStyles.Roboto_Regular}
                             fontWeight={theme.fontWeight.normal}
                             color={theme.colors.gray[1]}
                             fontSize={theme.fontSize.medium}

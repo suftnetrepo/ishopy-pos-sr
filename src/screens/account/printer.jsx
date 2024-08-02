@@ -27,7 +27,7 @@ const Printer = () => {
                     marginRight: 8
                 }} />
             </StyledHeader>
-            <YStack paddingHorizontal={8} flex={1} justifyContent='flex-start' alignItems='flex-start' backgroundColor={theme.colors.gray[100]}>
+            <YStack paddingHorizontal={8} flex={1} backgroundColor={theme.colors.gray[100]}>
                 <StyledSpacer marginVertical={4} />
                 <XStack
                     justifyContent='space-between'

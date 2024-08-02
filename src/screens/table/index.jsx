@@ -71,11 +71,11 @@ const DineTable = () => {
             </StyledBadge>
           </XStack>
         </YStack>
-        <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]}>
+        <StyledCycle borderWidth={1} borderColor={item.isOccupied === 1 ? theme.colors.teal[600] : theme.colors.gray[400]} backgroundColor={item.isOccupied === 1 ? theme.colors.teal[600] : theme.colors.gray[1]} >
           <StyledMIcon
             size={24}
             name={item.isOccupied === 1 ? 'menu-open' : 'restaurant-menu'}
-            color={theme.colors.gray[600]}
+            color= { item.isOccupied === 1 ? theme.colors.gray[1] : theme.colors.gray[400] }
             onLongPress={() => {
                 updateOccupancy(item.table_id, 0).then(() => {
                     forceUpdate(prev => prev + 1);
