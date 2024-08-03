@@ -19,7 +19,7 @@ import {
 import { BarChart } from 'react-native-gifted-charts';
 import { StyledMIcon } from '../components/icon';
 import { fontStyles, theme } from '../configs/theme';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, CommonActions } from '@react-navigation/native';
 import {
   useWeeklyTransactions,
   useTransactionTrend,
@@ -38,7 +38,7 @@ const Home = () => {
   const { user, shop } = useAppContext();   
   const { payment_status, purchase_status} = useSelector(() => state.get());
   const { data } = useWeeklyTransactions();
-  const { trend, dailyTransaction, percentageChange } = useTransactionTrend()
+  const { trend, dailyTransaction } = useTransactionTrend()
   const labels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
  
   const chart = useCallback(() => {
@@ -108,12 +108,14 @@ const Home = () => {
               size={30}
               name="exit-to-app"
               color={theme.colors.gray[800]}
-              onPress={() =>
-                navigate.reset({
-                  index: 0,
-                  routes: [{ name: 'login' }],
-                })
-              }
+              onPress={() => {
+                navigate.dispatch(
+                  CommonActions.reset({
+                    index: 0,
+                    routes: [{ name: 'login' }],
+                  })
+                );
+              }}
             />
           </StyledCycle>
         </XStack>
@@ -160,15 +162,14 @@ const Home = () => {
             <StyledButton backgroundColor={trend === "up" ? theme.colors.green[500] : theme.colors.red[400]} borderColor={trend === "up" ? theme.colors.green[500] : theme.colors.red[400]}>
               <XStack justifyContent="flex-start" paddingHorizontal={8} paddingVertical={1}
                 alignItems="center">
-                <StyledMIcon size={24} name={trend === "up" ? 'arrow-upward' : 'arrow-downward'} color={theme.colors.gray[1]} />
-                <StyledSpacer marginHorizontal={1} />
-                <StyledText
+                <StyledMIcon size={16} name={trend === "up" ? 'arrow-upward' : 'arrow-downward'} color={theme.colors.gray[1]} />          
+                {/* <StyledText
                   fontFamily={fontStyles.Roboto_Regular}
                   fontSize={theme.fontSize.small}
                   fontWeight={theme.fontWeight.bold}
                   color={theme.colors.gray[1]}>
                   {percentageChange}%
-                </StyledText>
+                </StyledText> */}
               </XStack>
             </StyledButton>
           </XStack>

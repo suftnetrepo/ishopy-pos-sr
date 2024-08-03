@@ -3,12 +3,14 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
-import React from 'react';
+import React, { useState} from 'react';
 import {
     YStack,
     StyledText,
     StyledSpacer,
     StyledButton,
+    StyledCheckBox,
+    XStack
 } from 'fluent-styles';
 import { StyledMIcon } from '../../components/icon';
 import { fontStyles, palettes, theme } from '../../configs/theme';
@@ -19,10 +21,11 @@ import { useUtil } from '../../store';
 const PurchaseSuccess = () => {
     const { setPaymentStatus } = useUtil()
     const navigator = useNavigation()
+    const [clearSeed, setClearSeed] = useState(false)
 
     const clearHandler = async () => {
         setPaymentStatus(false)
-        await prepareSeedData()
+        clearSeed && await prepareSeedData()
         navigator.navigate("bottom-tabs", { screen: 'Settings' })
     }
 
@@ -67,9 +70,34 @@ const PurchaseSuccess = () => {
                     fontSize={theme.fontSize.normal}
                     textAlign='center'
                 >
-                    We appreciate your support and are thrilled to have you on board. Please note that all Store test data will be deleted to ensure a clean experience.
-                    We recommend updating your Store and user account details.
+                    We appreciate your support and are thrilled to have you on board. Please note that all sample Restaurant data will be deleted to ensure a clean experience.
+                    We recommend updating your Restaurant and User account details.
                 </StyledText>
+                <StyledSpacer marginVertical={8} />
+                <XStack
+                    justifyContent='space-between'
+                    alignItems='center'
+                    paddingVertical={8}
+                    paddingHorizontal={16}
+                    backgroundColor={theme.colors.gray[1]}
+                >
+                    <StyledCheckBox
+                        height={25}
+                        width={25}
+                        checkedColor={theme.colors.pink[500]}
+                        onPress={() => setClearSeed(!clearSeed)}
+                    />
+                    <StyledSpacer marginHorizontal={8} />
+                    <StyledText
+                        fontFamily={fontStyles.Roboto_Regular}
+                        fontWeight={theme.fontWeight.normal}
+                        color={theme.colors.gray[600]}
+                        fontSize={theme.fontSize.normal}
+                    >
+                        Clear Sample Restaurant data
+                    </StyledText>
+                    
+                </XStack>
                 <StyledSpacer marginVertical={8} />
                 <StyledButton
                     borderRadius={30}
@@ -85,7 +113,7 @@ const PurchaseSuccess = () => {
                         paddingHorizontal={16}
                         paddingVertical={8}
                     >
-                        Get Settings
+                        Go to Settings
                     </StyledText>
                 </StyledButton>
                 <StyledSpacer marginVertical={8} />

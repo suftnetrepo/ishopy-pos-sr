@@ -53,7 +53,7 @@ const Login = () => {
                   paddingHorizontal={10}
                   paddingVertical={5}
                 >
-                  Mock User
+                  Sample User
                 </StyledBadge>
               </StyledButton>
 
@@ -66,7 +66,7 @@ const Login = () => {
                   paddingHorizontal={10}
                   paddingVertical={5}
                 >
-                  Mock Store
+                  Sample Store
                 </StyledBadge>
               </StyledButton>
 
@@ -100,7 +100,7 @@ const Login = () => {
           </StyledText>
         </XStack>
         <StyledText fontFamily={fontStyles.Roboto_Regular} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.medium} color={theme.colors.gray[800]}>
-          Get started quickly! Tap Mock Store to generate dummy Store to see a sample of what the app can do. Feel free to explore the features!.
+          Get started quickly! Tap Sample Restaurant to generate dummy Store to see a sample of what the app can do. Feel free to explore the features!.
         </StyledText>
       </YStack>
     )
