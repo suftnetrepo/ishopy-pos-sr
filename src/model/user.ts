@@ -47,7 +47,7 @@ const insertUser = async (
 const updateUser = async (
   first_name: string,
   last_name: string,
-  user_id: number,
+  user_id: string,
   username: string,
   password: string,
   role: string,
@@ -76,7 +76,7 @@ const updateUser = async (
   });
 };
 
-const deleteUser = async (user_id: number): Promise<boolean> => {
+const deleteUser = async (user_id: string): Promise<boolean> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {

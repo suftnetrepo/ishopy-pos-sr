@@ -109,7 +109,7 @@ const useUpdateUser = () => {
 	});
 
 	const updateUserHandler = async (
-		user_id: number,
+		user_id: string,
 		username: string,
 		password: string,
 		role: string,
@@ -162,7 +162,7 @@ const useDeleteUser = () => {
 		loading: false,
 	});
 
-	const deleteUserHandler = async (user_id: number) => {
+	const deleteUserHandler = async (user_id: string) => {
 		setData((prev) => ({ ...prev, loading: true }));
 		try {
 			const result = await deleteUser(user_id);

@@ -193,7 +193,7 @@ const useDeleteTax = () => {
 		loading: false,
 	});
 
-	const deleteHandler = async (tax_id: number) => {
+	const deleteHandler = async (tax_id: string) => {
 		setData((prev) => ({ ...prev, loading: true }));
 		try {
 			const result = await deleteTax(tax_id);

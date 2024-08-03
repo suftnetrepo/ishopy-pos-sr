@@ -165,7 +165,7 @@ const useDeleteShop = () => {
 		loading: false,
 	});
 
-	const deleteHandler = async (shop_id: number) => {
+	const deleteHandler = async (shop_id: string) => {
 		setData((prev) => ({ ...prev, loading: true }));
 		try {
 			const user = await deleteShop(shop_id);

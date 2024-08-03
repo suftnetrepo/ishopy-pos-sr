@@ -95,7 +95,7 @@ const queryDiscountById = async (discount_id: number): Promise<Discount | null> 
 };
 
 const updateDiscount = async (
-  discount_id: number,
+  discount_id: string,
   name: string,
   status: number,
   rate: number

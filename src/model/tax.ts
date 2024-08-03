@@ -92,7 +92,7 @@ const queryTaxById = async (tax_id: number): Promise<Tax | null> => {
 };
 
 const updateTax = async (
-  tax_id: number,
+  tax_id: string,
   name: string,
   status: number,
   rate: number
@@ -120,7 +120,7 @@ const updateTax = async (
   });
 };
 
-const deleteTax = async (tax_id: number): Promise<boolean> => {
+const deleteTax = async (tax_id: string): Promise<boolean> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
