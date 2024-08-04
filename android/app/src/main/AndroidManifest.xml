@@ -1,9 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.INTERNET" tools:ignore="Unused" />
+    <uses-permission android:name="android.permission.BLUETOOTH" tools:ignore="Unused" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" tools:ignore="Unused" />
     
     <!-- Permissions for Android 12 and above (if needed) -->
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" tools:ignore="Unused" />

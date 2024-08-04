@@ -1,4 +1,6 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable no-empty */
+/* eslint-disable prettier/prettier */
 /* eslint-disable no-undef */
 /* eslint-disable prettier/prettier */
 import { useState, useEffect } from 'react';
@@ -13,7 +15,7 @@ const useBluetoothPermission = () => {
                 const state = await BluetoothManager.getState();               
                 setIsEnabled(state === 'PoweredOn');
             } catch (error) {
-                console.error('Error fetching Bluetooth state:', error);
+              
             }
         };
         checkBluetoothState();
@@ -22,12 +24,15 @@ const useBluetoothPermission = () => {
 
     const requestPermissions = async () => {
         try {
-            const result = await BluetoothManager.requestToEnable();
-            if (result) {
+            const state = await BluetoothManager.getState();  
+            if (state === 'PoweredOff')  {               
+             await BluetoothManager.enable();               
+            } else if (state === 'PoweredOn') {
                 setIsEnabled(true);
-            } 
+            }
+           
         } catch (error) {
-            console.error('Error requesting Bluetooth enable:', error);          
+                   
         }
     };
 
