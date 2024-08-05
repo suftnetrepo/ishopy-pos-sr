@@ -15,6 +15,7 @@ import { StyledMIcon } from '../../components/icon';
 import { useAppContext } from '../../hooks/appContext';
 import CompletedOrder from './order';
 import { convertJsonToCsv } from '../../utils/convertJsonToCsv';
+import EmptyView from '../../components/utils/empty';
 
 const Order = () => {
     const navigator = useNavigation()
@@ -44,6 +45,12 @@ const Order = () => {
 
     const handleFilter=async ()=>{
         setShowFilter(!showFilter)       
+    }
+
+    if (data?.length === 0) {
+        return (
+            <EmptyView title='Empty Order' description='Your Order list is currently empty. Please add Order to see them here.' />
+        )
     }
 
     const RenderCard = ({ item }) => {

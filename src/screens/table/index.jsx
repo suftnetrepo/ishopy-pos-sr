@@ -22,6 +22,7 @@ import {useQueryTablesByStatus} from '../../hooks/useTable';
 import {FlatList} from 'react-native';
 import {StyledMIcon} from '../../components/icon';
 import {StyledStack} from '../../components/stack';
+import EmptyView from '../../components/utils/empty';
 
 const DineTable = () => {
   const navigator = useNavigation();
@@ -92,6 +93,12 @@ const DineTable = () => {
       </StyledStack>
     );
   };
+
+  if(data.length === 0) {
+    return (
+      <EmptyView button='Add Table' screen='table' title='Empty Table' description='Your Table list is currently empty. Please add Table to see them here.' />
+    )
+  }
 
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[100]}>

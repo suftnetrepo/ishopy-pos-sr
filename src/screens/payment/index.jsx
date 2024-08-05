@@ -14,6 +14,7 @@ import { dateConverter, formatCurrency, formatDateTime } from '../../utils/help'
 import { StyledMIcon } from '../../components/icon';
 import { useAppContext } from '../../hooks/appContext';
 import { DownloadPayment } from './downloadPayment';
+import EmptyView from '../../components/utils/empty';
 
 const Payment = () => {
     const navigator = useNavigation()
@@ -39,6 +40,12 @@ const Payment = () => {
 
     const handleFilter=async ()=>{
         setShowFilter(!showFilter)       
+    }
+
+    if (data?.length === 0) {
+        return (
+            <EmptyView title='Empty Payment' description='Your Payment list is currently empty. Please add Order to see the Payments here.' />
+        )
     }
 
     const RenderCard = ({ item }) => {

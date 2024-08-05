@@ -10,6 +10,7 @@ import { FlatList } from "react-native";
 import { fontStyles, theme } from "../../configs/theme";
 import { useAppContext } from "../../hooks/appContext";
 import { formatCurrency } from "../../utils/help";
+import EmptyView from "../utils/empty";
 
 const MenuScrollView = ({ table, onChange, searchString, category_id }) => {
     const { shop, addItem } = useAppContext()
@@ -29,6 +30,12 @@ const MenuScrollView = ({ table, onChange, searchString, category_id }) => {
         }      
         addItem(item.menu_id, item.name, item.price, 1, table.table_id).then(() => {});
     };
+    
+    if (data?.length === 0) {
+        return (
+            <EmptyView button='Add Menu' screen='menus' title='Empty Menu' description='Your Menu list is currently empty. Please add Menu to see them here.' />
+        )
+    }
 
     const RenderCard = React.memo(({ item }) => {
 
