@@ -66,7 +66,7 @@ const Login = () => {
                   paddingHorizontal={10}
                   paddingVertical={5}
                 >
-                  Sample Store
+                  Sample Restaurant
                 </StyledBadge>
               </StyledButton>
 
