@@ -6,12 +6,12 @@
 /* eslint-disable prettier/prettier */
 import { guid } from '../utils/help';
 import { getRealmInstance } from './store';
-import { 
-  Customer, 
+import {
+  Customer,
   Stock,
   Tax,
   Discount,
-  Shop, 
+  Shop,
   Payment
 } from './types';
 
@@ -109,8 +109,8 @@ const generateAddOns = (menus: any[]) => {
         addOnName: `${randomItem(addOnTypes)} for ${menu.name}`,
         price: parseFloat((Math.random() * 5).toFixed(2)),
         menu_id: menu.menu_id,
-        quantity : 1,
-        status:1,
+        quantity: 1,
+        status: 1,
       });
     }
   });
@@ -142,14 +142,14 @@ const generateCategories = () => {
     category_id: guid(),
     name: name,
     color_code: randomColor(),
-    status:1,
+    status: 1,
   }));
 };
 
 // Generate Menu Items
 const generateMenuItems = (categories: { category_id: string; name: string; color_code: string; status: number; }[]) => {
   let menus = [];
-  let menuNames = generateMenuItemNames(); 
+  let menuNames = generateMenuItemNames();
   for (let i = 0; i < 50; i++) {
     menus.push({
       menu_id: guid(),
@@ -182,12 +182,38 @@ const generateUsers = () => {
   }));
 };
 
+export const generateUser = () => {
+  return {
+    user_id: guid(),
+    username: 'user',
+    password: 'user123',
+    first_name: 'James',
+    last_name: 'Smith',
+    pass_code: 1234,
+    status: 1,
+    role: 'user',
+  };
+};
+
+export const generateShop = () => {
+  return {
+    shop_id: guid(),
+    name: 'Shop A',
+    email: 'shop@test.com',
+    mobile: '1234566778',
+    description: 'No thing',
+    address: '12 High Street, Cambridge, CB2 3QZ, United Kingdom',
+    currency: '£',
+  };
+
+}
+
 // Generate sample tables
 const generateTables = () => {
-  const tableNames =[]
-   for (let i = 1; i < 20; i++) {
-      tableNames.push(`Table ${i}`);
-   }
+  const tableNames = []
+  for (let i = 1; i < 20; i++) {
+    tableNames.push(`Table ${i}`);
+  }
   return tableNames.map(name => ({
     table_id: guid(),
     tableName: name,
@@ -231,12 +257,12 @@ const generateOrderItems = (orders: any[], menus: any[], addOns: any[]) => {
     addOns: string;
   }[] = [];
 
-  orders.forEach((order: {order_id: any; date: any}) => {
+  orders.forEach((order: { order_id: any; date: any }) => {
     const numberOfItems = randomInt(1, 5); // Each order can have between 1 and 5 items
     for (let i = 0; i < numberOfItems; i++) {
       const menu = randomItem(menus);
       const applicableAddOns = addOns?.filter(
-        (addOn: {menu_id: string}) => addOn.menu_id === menu.menu_id
+        (addOn: { menu_id: string }) => addOn.menu_id === menu.menu_id
       );
 
       // Ensure exactly 2 add-ons are selected
@@ -252,7 +278,7 @@ const generateOrderItems = (orders: any[], menus: any[], addOns: any[]) => {
         // Handle cases where there are less than 2 applicable add-ons
         selectedAddOns = applicableAddOns;
       }
-  
+
       orderItems.push({
         detail_id: guid(),
         order_id: order.order_id,
@@ -291,17 +317,17 @@ const prepareSeedData = async () => {
   try {
     realm.write(() => {
 
-     realm.delete(realm.objects('Category'));
-     realm.delete(realm.objects('Tax'));
-     realm.delete(realm.objects('Discount'));
-     realm.delete(realm.objects('Menu'));
-     realm.delete(realm.objects('Stock'));
-     realm.delete(realm.objects('Table'));
-     realm.delete(realm.objects('AddOn'));
-     realm.delete(realm.objects('Customer'));
-     realm.delete(realm.objects('Order'));
-     realm.delete(realm.objects('OrderItem'));
-     realm.delete(realm.objects('Payment'));
+      realm.delete(realm.objects('Category'));
+      realm.delete(realm.objects('Tax'));
+      realm.delete(realm.objects('Discount'));
+      realm.delete(realm.objects('Menu'));
+      realm.delete(realm.objects('Stock'));
+      realm.delete(realm.objects('Table'));
+      realm.delete(realm.objects('AddOn'));
+      realm.delete(realm.objects('Customer'));
+      realm.delete(realm.objects('Order'));
+      realm.delete(realm.objects('OrderItem'));
+      realm.delete(realm.objects('Payment'));
 
       console.log('Database seeds deleted successfully');
     });
@@ -323,7 +349,7 @@ const seedData = async () => {
 
   try {
     realm.write(() => {
-      realm.deleteAll();  
+      realm.deleteAll();
 
       // Seed Taxes
       const taxes: Tax[] = [
@@ -369,11 +395,11 @@ const seedData = async () => {
         },
       ];
       customers.forEach(customer => realm.create('Customer', customer));
-    
+
       const stock: Stock[] = menus.map(menu => ({
         stock_id: guid(),
         menu_id: menu.menu_id,
-        stock: menu.stock, 
+        stock: menu.stock,
         date: new Date().toISOString(),
       }));
       stock.forEach(stockItem => realm.create('Stock', stockItem));
@@ -385,7 +411,7 @@ const seedData = async () => {
       addOns.forEach(addOn => realm.create('AddOn', addOn));
       orders.forEach(order => realm.create('Order', order));
       orderItems.forEach(item => realm.create('OrderItem', item));
-      payments.forEach((payment:Payment) => realm.create('Payment', payment));
+      payments.forEach((payment: Payment) => realm.create('Payment', payment));
 
       console.log('Database seeded successfully');
     });

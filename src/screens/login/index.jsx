@@ -19,7 +19,7 @@ const Login = () => {
   const [errorMessages, setErrorMessages] = useState({})
   const [fields, setFields] = useState(validatorRules.fields)
   const { error, loading, loginUser, resetHandler } = useLogin()
-   
+
   const onSubmit = async () => {
     setErrorMessages({})
     const { hasError, errors } = validate(fields, validatorRules.rules)
@@ -39,7 +39,7 @@ const Login = () => {
   const RenderHeader = () => {
 
     return (
-      <XStack flex={1} justifyContent='flex-end' alignItems='center' marginHorizontal={16} paddingVertical={8}>       
+      <XStack flex={1} justifyContent='flex-end' alignItems='center' marginHorizontal={16} paddingVertical={8}>
         {
           (FEATURE_FLAG.MOCK_STORE || !purchase_status) && (
             <>
@@ -100,7 +100,7 @@ const Login = () => {
           </StyledText>
         </XStack>
         <StyledText fontFamily={fontStyles.Roboto_Regular} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.medium} color={theme.colors.gray[800]}>
-          Get started quickly! Tap Sample Restaurant to generate dummy Store to see a sample of what the app can do. Feel free to explore the features!.
+          Get started quickly! Tap Sample Restaurant to generate dummy Data to see a sample of what the app can do. Feel free to explore the features!.
         </StyledText>
       </YStack>
     )
@@ -179,11 +179,29 @@ const Login = () => {
         />
         <StyledSpacer marginVertical={8} />
         <StyledButton width='100%' backgroundColor={theme.colors.cyan[500]} onPress={() => onSubmit()} >
-          <StyledText paddingHorizontal={20} paddingVertical={10} color={theme.colors.gray[1]}>
+          <StyledText fontFamily={fontStyles.Roboto_Regular}
+            fontSize={theme.fontSize.normal}
+            fontWeight={theme.fontWeight.normal} paddingHorizontal={20} paddingVertical={10} color={theme.colors.gray[1]}>
             Sign in
           </StyledText>
         </StyledButton>
-        <StyledSpacer marginVertical={4} />       
+        <StyledSpacer marginVertical={4} />
+        {
+          purchase_status && (
+            <XStack justifyContent='flex-end' alignItems='center'>
+              <StyledButton link backgroundColor={theme.colors.cyan[500]} onPress={() => navigator.navigate("keypad", {
+                recovery_password: true
+              })} >
+                <StyledText paddingHorizontal={20} fontFamily={fontStyles.Roboto_Regular}
+                  fontSize={theme.fontSize.normal}
+                  fontWeight={theme.fontWeight.normal} color={theme.colors.gray[400]}>
+                  Forgot password
+                </StyledText>
+              </StyledButton>
+            </XStack>
+          )
+        }
+
       </YStack>
       {
         (error) && (

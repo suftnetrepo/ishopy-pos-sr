@@ -94,7 +94,7 @@ const Home = () => {
               onPress={() =>
                 navigate.reset({
                   index: 0,
-                  routes: [{ name: 'keypad' }],
+                  routes: [{ name: 'keypad', params: { recovery_password: false } }],
                 })
               }
             />
