@@ -75,7 +75,7 @@ const queryCategoriesByStatus = async (status: number): Promise<Category[]> => {
   });
 };
 
-const queryCategoryById = async (category_id: number): Promise<Category | null> => {
+const queryCategoryById = async (category_id: string): Promise<Category | null> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
@@ -100,7 +100,7 @@ const queryCategoryById = async (category_id: number): Promise<Category | null> 
 };
 
 const updateCategory = async (
-  category_id: number,
+  category_id: string,
   name: string,
   status: number,
   color_code: string
@@ -112,8 +112,8 @@ const updateCategory = async (
         const category = realm.objectForPrimaryKey<Category>(
           'Category',
           category_id
-        );        
-      
+        );
+
         if (category) {
           category.name = name;
           category.status = status;
@@ -129,7 +129,7 @@ const updateCategory = async (
   });
 };
 
-const deleteCategory = async (category_id: number): Promise<boolean> => {
+const deleteCategory = async (category_id: string): Promise<boolean> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
@@ -139,14 +139,14 @@ const deleteCategory = async (category_id: number): Promise<boolean> => {
       if (products.length > 0) {
         reject(
           new Error(
-            'Cannot delete category: Products are associated with this category.',
-          ),
+            'Cannot delete category: Products are associated with this category.'
+          )
         );
       } else {
         realm.write(() => {
           const category = realm.objectForPrimaryKey<Category>(
             'Category',
-            category_id,
+            category_id
           );
           if (category) {
             realm.delete(category);

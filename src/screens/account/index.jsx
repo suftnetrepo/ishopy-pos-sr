@@ -54,9 +54,14 @@ const Account = () => {
         <YStack flex={1} marginHorizontal={2}>
           <XStack justifyContent='space-between'
             alignItems='center'>
-            <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.semiBold} fontSize={theme.fontSize.normal} color={theme.colors.gray[800]}>
-              {toWordCase(shop.name)}
-            </StyledText>
+            <YStack flex={1}>
+              <StyledText paddingHorizontal={2} fontWeight={theme.fontWeight.semiBold} fontSize={theme.fontSize.normal} color={theme.colors.gray[800]}>
+                {toWordCase(shop.name)}
+              </StyledText>
+              <StyledText paddingHorizontal={2} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.small} color={theme.colors.gray[800]}>
+                {toWordCase(shop.address)}
+              </StyledText>
+            </YStack>
             <StyledMIcon
               name="delete"
               size={48}
@@ -64,10 +69,6 @@ const Account = () => {
               onPress={() => setIsDialogVisible(true)}
             />
           </XStack>
-          <StyledText paddingHorizontal={2} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.small} color={theme.colors.gray[800]}>
-            {toWordCase(shop.address)}
-          </StyledText>
-
         </YStack>
       </XStack>
       <StyledScrollView>

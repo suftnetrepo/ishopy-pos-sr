@@ -70,7 +70,7 @@ const queryByStatus = async (status: number): Promise<Discount[]> => {
   });
 };
 
-const queryDiscountById = async (discount_id: number): Promise<Discount | null> => {
+const queryDiscountById = async (discount_id: string): Promise<Discount | null> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
@@ -123,7 +123,7 @@ const updateDiscount = async (
   });
 };
 
-const deleteDiscount = async (discount_id: number): Promise<boolean> => {
+const deleteDiscount = async (discount_id: string): Promise<boolean> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {

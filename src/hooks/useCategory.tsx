@@ -107,7 +107,7 @@ const useQueryCategoriesByStatus = () => {
 	};
 };
 
-const useQueryCategoryById = async (category_id: number) => {
+const useQueryCategoryById = async (category_id: string) => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
@@ -201,7 +201,7 @@ const useUpdateCategory = () => {
 	});
 
 	const updateCategoryHandler = async (
-		category_id: number,
+		category_id: string,
 		name: string,
 		status: number,
 		color_code : string
@@ -250,7 +250,7 @@ const useDeleteCategory = () => {
 		loading: false,
 	});
 
-	const deleteCategoryHandler = async (category_id: number) => {
+	const deleteCategoryHandler = async (category_id: string) => {
 		setData((prev) => ({ ...prev, loading: true }));
 		try {
 			const result = await deleteCategory(category_id);
