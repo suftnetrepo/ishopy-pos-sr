@@ -40,12 +40,12 @@ const useInAppPurchase = () => {
             }        
          
             setData({
-                status: purchase_status,
+                status: false,
                 error: null,
                 loading: false,
             });
 
-            setPurchaseStatus(purchase_status)
+            setPurchaseStatus(false)
         }
         init()
     }, [])

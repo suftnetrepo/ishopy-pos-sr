@@ -94,7 +94,7 @@ const DineTable = () => {
     );
   };
 
-  if(data.length === 0) {
+  if(data.length === 0 && !loading) {
     return (
       <EmptyView button='Add Table' screen='table' title='Empty Table' description='Your Table list is currently empty. Please add Table to see them here.' />
     )

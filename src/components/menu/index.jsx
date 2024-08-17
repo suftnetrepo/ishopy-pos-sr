@@ -31,7 +31,7 @@ const MenuScrollView = ({ table, onChange, searchString, category_id }) => {
         addItem(item.menu_id, item.name, item.price, 1, table.table_id).then(() => {});
     };
     
-    if (data?.length === 0) {
+    if (data?.length === 0 && !loading) {
         return (
             <EmptyView button='Add Menu' screen='menus' title='Empty Menu' description='Your Menu list is currently empty. Please add Menu to see them here.' />
         )

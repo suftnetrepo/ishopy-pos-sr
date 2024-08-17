@@ -47,7 +47,7 @@ const Order = () => {
         setShowFilter(!showFilter)       
     }
 
-    if (data?.length === 0) {
+    if (data?.length === 0 && !loading) {
         return (
             <EmptyView title='Empty Order' description='Your Order list is currently empty. Please add Order to see them here.' />
         )

@@ -42,7 +42,7 @@ const Payment = () => {
         setShowFilter(!showFilter)       
     }
 
-    if (data?.length === 0) {
+    if (data?.length === 0 && !loading) {
         return (
             <EmptyView title='Empty Payment' description='Your Payment list is currently empty. Please add Order to see the Payments here.' />
         )

@@ -39,7 +39,7 @@ import AddAddOn from '../screens/account/addOn/add';
 const Stack = createStackNavigator();
 function Navigator() {
   return (
-    <Stack.Navigator initialRouteName="login">
+    <Stack.Navigator initialRouteName="keypad">
       <Stack.Screen
         name="bottom-tabs"
         component={BottomTabs}
