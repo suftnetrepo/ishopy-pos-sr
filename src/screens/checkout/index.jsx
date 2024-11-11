@@ -318,7 +318,7 @@ const CheckOut = () => {
             {
                 items.length > 0 && (
                     <XStack absolute paddingVertical={8} marginBottom={8} paddingHorizontal={8}>
-                        <StyledButton flex={2} borderRadius={32} borderColor={theme.colors.cyan[500]} backgroundColor={theme.colors.cyan[500]} onPress={() => orderHandler().then((result) => result && setModalVisible(true))} >
+                        <StyledButton flex={2} borderRadius={32} borderColor={theme.colors.orange[500]} backgroundColor={theme.colors.orange[500]} onPress={() => orderHandler().then((result) => result && setModalVisible(true))} >
                             <StyledText paddingHorizontal={16} paddingVertical={16} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.bold} color={theme.colors.gray[100]} >Confirm Payment</StyledText>
                         </StyledButton>
                     </XStack >

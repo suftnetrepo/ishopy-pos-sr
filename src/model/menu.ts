@@ -154,14 +154,17 @@ const queryMenuByName = async (name: string): Promise<Menu[]> => {
 
 
 const queryMenuByCategory = async (category_id: string): Promise<Menu[]> => {
-  const realm = await getRealmInstance();
-  return new Promise((resolve, reject) => {
-    try {
-      const menus = realm
-        .objects<Menu>('Menu')
-        .filtered('category_id == $0', category_id)
-        .sorted('name')
-        .map(menu => ({
+  try {
+    const realm = await getRealmInstance();
+    const menus = realm
+    .objects<Menu>('Menu')
+    .filtered('category_id == $0', category_id)
+    .sorted('name')
+   
+    const menusWithAddOns = await Promise.all(
+      menus.map(async menu => {
+        const addOns = await queryAddonByMenuId(menu.menu_id);           
+        return {
           menu_id: menu.menu_id,
           name: menu.name,
           bar_code: menu.bar_code,
@@ -173,12 +176,15 @@ const queryMenuByCategory = async (category_id: string): Promise<Menu[]> => {
           category_id: menu.category_id,
           status: menu.status,
           description: menu.description,
-        }));
-      resolve(menus);
-    } catch (error) {
-      reject(error);
-    }
-  });
+          addOns: addOns,
+        };
+      })
+    );
+
+    return menusWithAddOns;
+  } catch (error) {
+     throw error;
+  }
 };
 
 const queryMenuById = async (menu_id: number): Promise<Menu | null> => {

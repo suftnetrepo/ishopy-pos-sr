@@ -52,8 +52,8 @@ const Sales = () => {
   const increaseAddOnQuantity = (addOn) => {
     setItem((prev) => ({
       ...prev,
-      addOns: prev.addOns.map(a =>
-        a.addOn_id === addOn.addOn_id ? { ...a, quantity: parseInt(a.quantity || 0) + 1 } : a
+      addOns: prev?.addOns.map(a =>
+        a.addOn_id === addOn?.addOn_id ? { ...a, quantity: parseInt(a.quantity || 0) + 1 } : a
       ),
     }))
   };
@@ -61,14 +61,14 @@ const Sales = () => {
     if (parseInt(addOn?.quantity || 0) === 0) return
     setItem((prev) => ({
       ...prev,
-      addOns: prev.addOns.map(a =>
-        a.addOn_id === addOn.addOn_id ? { ...a, quantity: parseInt(a.quantity || 0) - 1 } : a
+      addOns: prev?.addOns.map(a =>
+        a.addOn_id === addOn?.addOn_id ? { ...a, quantity: parseInt(a.quantity || 0) - 1 } : a
       ),
     }))
   }
   const calculateTotalAddOnsPrice = () => {
     return item.addOns.reduce((total, addOn) => {
-      return total + (parseInt(addOn.price || 0) * parseInt(addOn.quantity || 0));
+      return total + (parseFloat(addOn.price || 0) * parseInt(addOn.quantity || 0));
     }, 0);
   };
   const RenderCard = ({ item }) => {
@@ -349,17 +349,17 @@ const Sales = () => {
         }
       </XStack>
       <YStack flex={1} backgroundColor={theme.colors.gray[100]}>
-        <MenuScrollView table={table} onChange={(item) => setItem({ ...item, quantity: 0 })} searchString={searchString} category_id={selectedCategory?.category_id || -1} />
+        <MenuScrollView table={table} onChange={(item) => setItem({ ...item, quantity: 0 })} searchString={searchString} category_id={selectedCategory?.category_id || "-1"} />
       </YStack>
-      <XStack absolute paddingVertical={8} marginBottom={8} paddingHorizontal={8} borderWidth={1} borderRadius={32} borderColor={theme.colors.gray[400]}>
-        <StyledButton flex={1} borderRadius={32} borderColor={theme.colors.coolGray[600]} backgroundColor={theme.colors.coolGray[600]} onPress={() => items?.length > 0 && printTicket()} >
+      <XStack absolute paddingVertical={8} marginBottom={8} paddingHorizontal={8} borderWidth={0} borderRadius={32} borderColor={theme.colors.gray[400]}>
+        <StyledButton flex={1} borderRadius={32} borderColor={theme.colors.gray[500]} backgroundColor={theme.colors.gray[800]} onPress={() => items?.length > 0 && printTicket()} >
           <StyledText paddingHorizontal={16} paddingVertical={8} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.bold} color={theme.colors.gray[100]} >Print </StyledText>
         </StyledButton>
         <StyledSpacer marginHorizontal={4} />
-        <StyledButton flex={2} borderRadius={32} borderColor={theme.colors.cyan[600]} backgroundColor={theme.colors.cyan[600]} onPress={() => items.length > 0 && navigator.navigate("checkout", {
+        <StyledButton flex={2} borderRadius={32} borderColor={theme.colors.gray[100]} backgroundColor={theme.colors.gray[200]} onPress={() => items.length > 0 && navigator.navigate("checkout", {
           table: table
         })} >
-          <StyledText paddingHorizontal={16} paddingVertical={8} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.bold} color={theme.colors.gray[100]} >Pay {formatCurrency(shop.currency || '£', getTotal(table.table_id))}</StyledText>
+          <StyledText paddingHorizontal={16} paddingVertical={8} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.bold} color={theme.colors.gray[800]} >Pay {formatCurrency(shop.currency || '£', getTotal(table.table_id))}</StyledText>
         </StyledButton>
       </XStack >
       <RenderCartItems />

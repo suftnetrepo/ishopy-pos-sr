@@ -11,6 +11,9 @@
     "format": "prettier --write .",
     "start": "react-native start",
     "test": "jest",
+    "allow-gradlew": "chmod +x ./android/gradlew",
+    "android:bundle:aab": "cd android && ./gradlew bundleRelease",
+    "android:bundle:apk": "cd android && ./gradlew assembleRelease",
     "bundle-android": "react-native bundle --entry-file index.js  --platform android --dev false --bundle-output ./android/app/src/main/assets/index.android.bundle --assets-dest ./android/app/src/main/res"
   },
   "dependencies": {
