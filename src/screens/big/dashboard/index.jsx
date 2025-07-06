@@ -81,7 +81,7 @@ const Dashboard = () => {
             }>
             <Icon
               name="logout-variant"
-              size={24}
+              size={28}
               color={theme.colors.gray[500]}
             />
             <StyledText
