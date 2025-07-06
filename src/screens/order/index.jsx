@@ -157,7 +157,7 @@ const Order = () => {
 
     return (
         <StyledSafeAreaView backgroundColor={theme.colors.gray[100]}>
-            <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
+            <StyledHeader statusProps={{ translucent: true }} >
                 <StyledHeader.Header backgroundColor={theme.colors.gray[1]} onPress={() => navigator.navigate("bottom-tabs", { screen: 'Home' })} title='Orders' icon cycleProps={{
                     borderColor: theme.colors.gray[300],
                     marginRight: 8

@@ -1,9 +1,4 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable prettier/prettier */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable prefer-const */
-/* eslint-disable prettier/prettier */
+
 import { guid } from '../utils/help';
 import { getRealmInstance } from './store';
 import {

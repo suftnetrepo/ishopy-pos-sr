@@ -35,11 +35,22 @@ import AddTable from '../screens/account/table/add';
 import AddOn from '../screens/account/addOn';
 import EditAddOn from '../screens/account/addOn/edit';
 import AddAddOn from '../screens/account/addOn/add';
+import { useDeviceType } from '../hooks/useDeviceType';
+import Dashboard from '../screens/big/dashboard';
 
 const Stack = createStackNavigator();
 function Navigator() {
+  const { isTablet } = useDeviceType();
+
   return (
-    <Stack.Navigator initialRouteName="keypad">
+    <Stack.Navigator initialRouteName={isTablet ? "keypad": "big-dashboard" }>
+       <Stack.Screen
+        name="big-dashboard"
+        component={Dashboard}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="bottom-tabs"
         component={BottomTabs}

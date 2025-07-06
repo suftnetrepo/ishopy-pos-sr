@@ -33,7 +33,7 @@ const Account = () => {
 
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
-      <StyledHeader skipAndroid={false} statusProps={{ translucent: true, backgroundColor: "transparent", barStyle: "dark-content" }} >
+      <StyledHeader statusProps={{ translucent: true, backgroundColor: "transparent", barStyle: "dark-content" }} >
       </StyledHeader>
       <XStack
         paddingHorizontal={8}

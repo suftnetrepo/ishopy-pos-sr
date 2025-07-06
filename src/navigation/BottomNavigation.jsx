@@ -18,7 +18,7 @@ const Tab = createBottomTabNavigator();
 const Tabs = ({ state, descriptors, navigation }) => {
   {
     return (
-      <XStack justifyContent='space-between' borderRadius={32} backgroundColor={theme.colors.gray[1]} alignItems='center' paddingHorizontal={8} paddingVertical={8}>
+      <XStack justifyContent='space-between' marginVertical={16} marginHorizontal={16} borderRadius={32} backgroundColor={theme.colors.gray[1]} alignItems='center' paddingHorizontal={8} paddingVertical={8}>
         {
           state.routes.map((route, index) => {
             const { options } = descriptors[route.key];

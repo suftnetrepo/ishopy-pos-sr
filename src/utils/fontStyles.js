@@ -1,12 +1,31 @@
 /* eslint-disable prettier/prettier */
+import { Platform } from 'react-native';
+
 export const fontStyles = {
-    crimson_text_bold: 'crimson_text_bold',
-    crimson_text_italic: 'crimson_text_italic',
-    crimson_text_regular: 'crimson_text_regular',
-    FontAwesome: 'FontAwesome',
-    FontAwesome5_Regular: 'FontAwesome5_Regular',
-    FontAwesome5_Solid: 'FontAwesome5_Solid',
-    Roboto_Regular: 'Roboto-Regular',
-    Roboto_Italic: 'Roboto-Italic',
-    Roboto_Bold: 'Roboto-Bold',
-}
+  crimson_text_bold: Platform.select({
+    ios: 'CrimsonText-Bold', 
+    android: 'crimson_text_bold', 
+  }),
+  crimson_text_italic: Platform.select({
+    ios: 'CrimsonText-Italic', 
+    android: 'crimson_text_italic', 
+  }),
+  crimson_text_regular: Platform.select({
+    ios: 'CrimsonText-Regular', 
+    android: 'crimson_text_regular', 
+  }),
+  Roboto_Regular: Platform.select({
+    ios: 'Roboto-Regular', 
+    android: 'Roboto-Regular', 
+  }),
+  Roboto_Italic: Platform.select({
+    ios: 'Roboto-Italic', 
+    android: 'Roboto-Italic', 
+  }),
+  Roboto_Bold: Platform.select({
+    ios: 'Roboto-Bold', 
+    android: 'Roboto-Bold', 
+  }),
+};
+
+

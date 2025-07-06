@@ -16,7 +16,7 @@ const useStocks = () => {
 		loading: true,
 	});
 
-	async function loadStocks(product_id: number) {
+	async function loadStocks(product_id: string) {
 		try {
 			const result = await queryStockByProductId(product_id);
 			setData(prev => ({
@@ -39,7 +39,7 @@ const useStocks = () => {
 	};
 };
 
-const useQueryStockById = (stock_id: number) => {
+const useQueryStockById = (stock_id: string) => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
@@ -80,7 +80,7 @@ const useInsertStock = () => {
 	});
 
 	const insertHandler = async (
-		product_id: number, stock: number = 0
+		product_id: string, stock: number = 0
 	) => {
 		setData((prev) => ({ ...prev, loading: true }));
 
@@ -124,8 +124,8 @@ const useUpdateStock = () => {
 	});
 
 	const updateHandler = async (
-		stock_id: number,
-		product_id: number,
+		stock_id: string,
+		product_id: string,
 		stock: number
 	) => {
 		setData((prev) => ({ ...prev, loading: true }));

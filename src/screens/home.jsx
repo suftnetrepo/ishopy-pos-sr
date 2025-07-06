@@ -4,7 +4,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
 
-import React, { useCallback } from 'react';
+import React, {useCallback} from 'react';
 import {
   YStack,
   XStack,
@@ -14,35 +14,35 @@ import {
   StyledHeader,
   StyledSpacer,
   StyledButton,
-  StyledDialog
+  StyledDialog,
 } from 'fluent-styles';
-import { BarChart } from 'react-native-gifted-charts';
-import { StyledMIcon } from '../components/icon';
-import { fontStyles, theme } from '../configs/theme';
-import { useNavigation, CommonActions } from '@react-navigation/native';
+import {BarChart} from 'react-native-gifted-charts';
+import {StyledMIcon} from '../components/icon';
+import {fontStyles, theme} from '../configs/theme';
+import {useNavigation, CommonActions} from '@react-navigation/native';
 import {
   useWeeklyTransactions,
   useTransactionTrend,
 } from '../hooks/useDashboard';
-import { useAppContext } from '../hooks/appContext';
-import { formatCurrency, getGreetings, toWordCase } from '../utils/help';
-import { ScrollView } from 'react-native';
-import { SalesTrend } from './home/salesTrend';
-import { PurchaseButton } from './home/purchaseButton';
-import { state } from '../store';
-import { useSelector } from '@legendapp/state/react';
-import { PurchaseSuccess } from './home/purchaseSuccess';
+import {useAppContext} from '../hooks/appContext';
+import {formatCurrency, getGreetings, toWordCase} from '../utils/help';
+import {ScrollView} from 'react-native';
+import {SalesTrend} from './home/salesTrend';
+import {PurchaseButton} from './home/purchaseButton';
+import {state} from '../store';
+import {useSelector} from '@legendapp/state/react';
+import {PurchaseSuccess} from './home/purchaseSuccess';
 
 const Home = () => {
   const navigate = useNavigation();
-  const { user, shop } = useAppContext();   
-  const { payment_status, purchase_status} = useSelector(() => state.get());
-  const { data } = useWeeklyTransactions();
-  const { trend, dailyTransaction } = useTransactionTrend()
+  const {user, shop} = useAppContext();
+  const {payment_status, purchase_status} = useSelector(() => state.get());
+  const {data} = useWeeklyTransactions();
+  const {trend, dailyTransaction} = useTransactionTrend();
   const labels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
- 
+
   const chart = useCallback(() => {
-    const currentDate = new Date()
+    const currentDate = new Date();
     const chartData = labels.map((label, index) => {
       const dayData = data?.find(day => day.weekday === index);
       return {
@@ -60,11 +60,23 @@ const Home = () => {
       <XStack
         flex={1}
         backgroundColor={theme.colors.gray[100]}
-        justifyContent="space-between"
+        justifyContent="flex-start"
         alignItems="center"
         paddingVertical={8}
         paddingHorizontal={16}>
-        <YStack>
+        <StyledCycle
+          paddingHorizontal={10}
+          borderWidth={1}
+          backgroundColor={theme.colors.gray[900]}
+          borderColor={theme.colors.gray[1]}>
+          <StyledMIcon
+            size={24}
+            name="menu"
+            color={theme.colors.gray[1]}
+            onPress={() => {}}
+          />
+        </StyledCycle>
+        <YStack marginLeft={16}>
           <StyledText
             fontFamily={fontStyles.Roboto_Regular}
             fontSize={theme.fontSize.normal}
@@ -79,24 +91,24 @@ const Home = () => {
             color={theme.colors.gray[800]}>
             {toWordCase(user.first_name)} {toWordCase(user.last_name)}
           </StyledText>
-
         </YStack>
-
-        <XStack>          
-          <StyledSpacer marginHorizontal={4} />
+        <StyledSpacer flex={1} />
+        <XStack marginHorizontal={16}>
           <StyledCycle
             paddingHorizontal={10}
             borderWidth={1}
+            height={48}
+            width={48}
             borderColor={theme.colors.gray[1]}>
             <StyledMIcon
-              size={30}
+              size={24}
               name="exit-to-app"
               color={theme.colors.gray[800]}
               onPress={() => {
                 navigate.dispatch(
                   CommonActions.reset({
                     index: 0,
-                    routes: [{ name: 'keypad' }],
+                    routes: [{name: 'keypad'}],
                   })
                 );
               }}
@@ -109,7 +121,7 @@ const Home = () => {
 
   return (
     <StyledSafeAreaView>
-      <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }}>
+      <StyledHeader marginHorizontal={8} statusProps={{translucent: true}}>
         <StyledHeader.Full>
           <RenderHeader />
         </StyledHeader.Full>
@@ -117,6 +129,7 @@ const Home = () => {
       <ScrollView>
         <YStack
           flex={1}
+          marginVertical={8}
           marginHorizontal={16}
           justifyContent="flex-start"
           alignItems="flex-start"
@@ -133,8 +146,7 @@ const Home = () => {
             color={theme.colors.gray[800]}>
             Daily transaction
           </StyledText>
-          <XStack justifyContent="flex-start"
-            alignItems="center">
+          <XStack justifyContent="flex-start" alignItems="center">
             <StyledText
               fontFamily={fontStyles.Roboto_Regular}
               fontSize={theme.fontSize.xxxlarge}
@@ -142,11 +154,24 @@ const Home = () => {
               paddingHorizontal={8}
               color={theme.colors.gray[800]}>
               {formatCurrency(shop.currency || '£', dailyTransaction)}
-            </StyledText>        
-            <StyledButton backgroundColor={trend === "up" ? theme.colors.green[500] : theme.colors.red[400]} borderColor={trend === "up" ? theme.colors.green[500] : theme.colors.red[400]}>
-              <XStack justifyContent="flex-start" paddingHorizontal={8} paddingVertical={1}
+            </StyledText>
+            <StyledButton
+              backgroundColor={
+                trend === 'up' ? theme.colors.green[500] : theme.colors.red[400]
+              }
+              borderColor={
+                trend === 'up' ? theme.colors.green[500] : theme.colors.red[400]
+              }>
+              <XStack
+                justifyContent="flex-start"
+                paddingHorizontal={8}
+                paddingVertical={1}
                 alignItems="center">
-                <StyledMIcon size={16} name={trend === "up" ? 'arrow-upward' : 'arrow-downward'} color={theme.colors.gray[1]} />          
+                <StyledMIcon
+                  size={16}
+                  name={trend === 'up' ? 'arrow-upward' : 'arrow-downward'}
+                  color={theme.colors.gray[1]}
+                />
                 {/* <StyledText
                   fontFamily={fontStyles.Roboto_Regular}
                   fontSize={theme.fontSize.small}
@@ -168,21 +193,16 @@ const Home = () => {
             xAxisThickness={0}
             key={data}
           />
-
         </YStack>
         <StyledSpacer marginVertical={4} />
-        <SalesTrend />       
+        <SalesTrend />
       </ScrollView>
-      {
-        !purchase_status && (
-          <PurchaseButton />
-        )
-      }
-      {payment_status &&
+      {!purchase_status && <PurchaseButton />}
+      {payment_status && (
         <StyledDialog visible>
           <PurchaseSuccess />
-        </StyledDialog>}
-
+        </StyledDialog>
+      )}
     </StyledSafeAreaView>
   );
 };
