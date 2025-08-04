@@ -13,27 +13,34 @@ import DailyTransactionChart from '../../../components/tablet/chart';
 import Tiles from '../../../components/tablet/tiles';
 import SideBar from '../../../components/tablet/sideBar';
 import Logo from '../../../components/tablet/logo';
-import { useAppContext } from '../../../hooks/appContext';
+import {useAppContext} from '../../../hooks/appContext';
+import RecentOrder from '../../../components/tablet/recentOrder';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const Dashboard = () => {
   const navigate = useNavigation();
-  const { user } = useAppContext()
+  const {user} = useAppContext();
 
-  console.log(".............", user)
+  console.log('.............', user);
 
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
-      <Stack flex={1} horizonal backgroundColor={theme.colors.gray[300]}>
+      <Stack flex={1.5} horizonal backgroundColor={theme.colors.gray[100]}>
         <Stack
-          flex={1}
+          marginTop={16}
+          paddingBottom={16}
+          borderRadius={8}
+          flex={0.6}
           alignItems="flex-start"
           justifyContent="flex-start"
           vertical
-          paddingHorizontal={10}
+          paddingHorizontal={16}
+          shadowOpacity={0.9}
+          shadowColor={theme.colors.gray[200]}
+          shadowRadius={8}
           backgroundColor={theme.colors.gray[1]}>
           <StyledSpacer marginVertical={7} />
           <Logo />
-          <StyledSpacer marginVertical={7} />
           <SideBar />
           <StyledSpacer flex={1} />
           <Stack
@@ -94,16 +101,14 @@ const Dashboard = () => {
           </StyledButton>
         </Stack>
 
-        <Stack flex={2.5} vertical backgroundColor={theme.colors.transparent}>
-          <Tiles />
-          <DailyTransactionChart />
+        <Stack flex={2} vertical backgroundColor={theme.colors.transparent}>
+          <ScrollView vertical showsVerticalScrollIndicator={false}>
+            <Tiles />
+            <DailyTransactionChart />
+            <RecentOrder />
+          </ScrollView>
         </Stack>
-        <Stack
-          flex={1.5}
-          padding={16}
-          gap={16}
-          vertical
-          backgroundColor={theme.colors.gray[300]}>
+        <Stack flex={1} padding={16} gap={16} vertical>
           <StyledButton
             paddingVertical={12}
             paddingHorizontal={20}

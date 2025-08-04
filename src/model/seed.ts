@@ -232,7 +232,7 @@ const generateOrders = (users: { user_id: string; username: string; password: st
       total_price: total_price,
       tax: total_price * 0.1,
       discount: total_price * 0.05,
-      status: randomItem(['Pending', 'Completed', 'Cancelled']),
+      status: randomItem(['Pending', 'Completed', 'Progress', 'Cancelled']),
       date: randomDate(),
     });
   }

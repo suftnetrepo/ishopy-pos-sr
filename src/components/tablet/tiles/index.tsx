@@ -1,15 +1,14 @@
 import React from 'react';
-import {
-  StyledText,
-  StyledSpacer,
-} from 'fluent-styles';
-
+import {StyledText, StyledSpacer} from 'fluent-styles';
 import {Stack} from '../../../components/package/stack';
 import {theme} from '../../../utils/theme';
 import {StyledShape} from '../../../components/package/shape';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {useOrderStatusAggregate} from '../../../hooks/useOrder';
 
 const Tiles = () => {
+  const {data} = useOrderStatusAggregate();
+
   return (
     <Stack
       horizonal
@@ -17,6 +16,9 @@ const Tiles = () => {
       gap={16}
       marginLeft={16}
       marginTop={16}
+      shadowOpacity={0.9}
+      shadowColor={theme.colors.gray[200]}
+      shadowRadius={8}
       alignItems="center">
       <Stack horizonal flex={1}>
         <Stack
@@ -43,15 +45,13 @@ const Tiles = () => {
           <StyledSpacer marginVertical={24} />
           <Stack
             width={'100%'}
-            vertical
-            flexWrap="wrap"
-            justifyContent="flex-start"
-            alignItems="flex-start">
+            horizonal
+            justifyContent="space-between"
+            alignItems="center">
             <StyledText
               color={theme.colors.gray[500]}
               fontSize={16}
-              fontWeight={theme.fontWeight.medium}
-              marginLeft={10}>
+              fontWeight={theme.fontWeight.medium}>
               Pending
             </StyledText>
             <StyledText
@@ -59,7 +59,7 @@ const Tiles = () => {
               fontSize={18}
               fontWeight={theme.fontWeight.medium}
               marginLeft={10}>
-              20
+              {data?.Pending || 0}
             </StyledText>
           </Stack>
         </Stack>
@@ -89,15 +89,14 @@ const Tiles = () => {
           <StyledSpacer marginVertical={24} />
           <Stack
             width={'100%'}
-            vertical
+            horizonal
             flexWrap="wrap"
-            justifyContent="flex-start"
-            alignItems="flex-start">
+            justifyContent="space-between"
+            alignItems="center">
             <StyledText
               color={theme.colors.gray[500]}
               fontSize={16}
-              fontWeight={theme.fontWeight.medium}
-              marginLeft={10}>
+              fontWeight={theme.fontWeight.medium}>
               Progress
             </StyledText>
             <StyledText
@@ -105,7 +104,7 @@ const Tiles = () => {
               fontSize={18}
               fontWeight={theme.fontWeight.medium}
               marginLeft={10}>
-              30
+              {data?.Progress || 0}
             </StyledText>
           </Stack>
         </Stack>
@@ -135,15 +134,14 @@ const Tiles = () => {
           <StyledSpacer marginVertical={24} />
           <Stack
             width={'100%'}
-            vertical
+            horizonal
             flexWrap="wrap"
-            justifyContent="flex-start"
-            alignItems="flex-start">
+            justifyContent="space-between"
+            alignItems="center">
             <StyledText
               color={theme.colors.gray[500]}
               fontSize={16}
-              fontWeight={theme.fontWeight.medium}
-              marginLeft={10}>
+              fontWeight={theme.fontWeight.medium}>
               Completed
             </StyledText>
             <StyledText
@@ -151,7 +149,7 @@ const Tiles = () => {
               fontSize={18}
               fontWeight={theme.fontWeight.medium}
               marginLeft={10}>
-              30
+              {data?.Completed || 0}
             </StyledText>
           </Stack>
         </Stack>

@@ -1,10 +1,11 @@
 /* eslint-disable prettier/prettier */
 import { useEffect, useState } from "react";
-import { queryStockById,queryStockByProductId, insertStock,updateStock,deleteStock } from "../model/stock";
+import { queryStockById,queryStockByProductId, insertStock,updateStock,deleteStock, getLowStockItems } from "../model/stock";
 import { Stock } from "../model/types";
+import {LowStockItem} from "../model/stock";
 
 interface Initialize {
-	data: Stock[] | null | Stock | [] | boolean;
+	data: Stock[] | null | Stock | [] | boolean | LowStockItem[] | null;
 	error: Error | null;
 	loading: boolean;
 }
@@ -69,6 +70,40 @@ const useQueryStockById = (stock_id: string) => {
 	return {
 		data: data.data,
 		error: data.error,
+	};
+};
+
+const useQueryGetLowerStock = () => {
+	const [data, setData] = useState<Initialize>({
+		data: [],
+		error: null,
+		loading: true,
+	});
+
+	useEffect(() => {
+		async function load() {
+			try {
+				const lowStock = await getLowStockItems();
+				setData(prev => ({
+					...prev,
+					data: lowStock,
+					loading: false,
+				}));
+			} catch (error) {
+				setData({
+					data: null,
+					error: error as Error,
+					loading: false,
+				});
+			}
+		}
+		load();
+	}, []);
+
+	return {
+		data: data.data as LowStockItem[] | [],
+		error: data.error,
+		loading: data.loading,
 	};
 };
 
@@ -207,4 +242,4 @@ const useDeleteStock = () => {
 	};
 };
 
-export { useDeleteStock, useUpdateStock, useInsertStock, useQueryStockById, useStocks };
+export { useDeleteStock, useUpdateStock, useInsertStock, useQueryStockById, useStocks, useQueryGetLowerStock };

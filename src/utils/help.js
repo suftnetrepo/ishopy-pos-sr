@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { faker } from '@faker-js/faker';
+import {theme} from './theme';
 
 export const isValidColor = value =>
 	/^#([0-9A-F]{3}|[0-9A-F]{6}|[0-9A-F]{8})$/i.test(value) 
@@ -111,4 +112,38 @@ function generatePaymentId() {
     }).toLowerCase();
   }
 
-export {guid,formatDateTime, getGreetings, generatePaymentId,currencySymbolMapper, generateRandomData, toWordCase, formatCurrency, dateConverter }
+  const backgroundColorHelper = status => {
+  switch (status) {
+    case 'Progress':
+      return theme.colors.amber[100];
+    case 'Completed':
+    case 'Paid':
+      return theme.colors.green[100];
+    case 'Pending':
+    case 'Unpaid':
+      return theme.colors.indigo[100];
+    case 'Cancelled':
+      return theme.colors.red[100];
+    default:
+      return theme.colors.gray[100];
+  }
+};
+
+const textColorHelper = status => {
+  switch (status) {
+    case 'Progress':
+      return theme.colors.amber[800];
+    case 'Completed':
+    case 'Paid':
+      return theme.colors.green[800];
+    case 'Pending':
+    case 'Unpaid':
+      return theme.colors.indigo[800];
+    case 'Cancelled':
+      return theme.colors.red[800];
+    default:
+      return theme.colors.gray[800];
+  }
+};
+
+export {guid,formatDateTime, getGreetings, generatePaymentId,currencySymbolMapper, generateRandomData, toWordCase, formatCurrency, dateConverter, backgroundColorHelper, textColorHelper }

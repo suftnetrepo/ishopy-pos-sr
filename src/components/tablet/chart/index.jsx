@@ -34,6 +34,9 @@ const DailyTransactionChart = () => {
   return (
     <Stack
       vertical
+       shadowOpacity={0.9}
+      shadowColor={theme.colors.gray[200]}
+      shadowRadius={8}
       onLayout={event => {
         const {width} = event.nativeEvent.layout;
         setContainerWidth(width);

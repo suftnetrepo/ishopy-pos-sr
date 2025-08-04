@@ -1,14 +1,14 @@
 import React from 'react';
 import {StyledText, StyledSpacer} from 'fluent-styles';
-
 import {Stack} from '../../../components/package/stack';
 import {theme} from '../../../utils/theme';
 import {StyledImage} from '../../../components/package/image';
 import {ScrollView} from 'react-native';
-import {useQueryGetLowerStock} from '../../../hooks/useStock';
+import {backgroundColorHelper, textColorHelper} from '../../../utils/help';
+import {useQueryRecentOrders} from '../../../hooks/useOrderItems';
 
-const LowStockItems = () => {
-  const {data} = useQueryGetLowerStock();
+const RecentOrder = () => {
+  const {data} = useQueryRecentOrders();
 
   return (
     <Stack
@@ -16,16 +16,13 @@ const LowStockItems = () => {
       shadowOpacity={0.9}
       shadowColor={theme.colors.gray[200]}
       shadowRadius={8}
-      width={'100%'}
       borderRadius={8}
       backgroundColor={theme.colors.gray[1]}
       paddingHorizontal={24}
       paddingVertical={24}
-      justifyContent="flex-start"
-      alignItems="flex-start">
+      marginLeft={16}>
       <Stack
         horizonal
-        width="100%"
         justifyContent="space-between"
         alignItems="center"
         gap={8}>
@@ -33,11 +30,11 @@ const LowStockItems = () => {
           color={theme.colors.gray[800]}
           fontSize={theme.fontSize.large}
           fontWeight={theme.fontWeight.normal}>
-          Low Stock Items
+          Recent Orders
         </StyledText>
         <StyledText
           color={theme.colors.gray[800]}
-          fontSize={16}
+          fontSize={14}
           fontWeight={theme.fontWeight.thin}>
           View All
         </StyledText>
@@ -47,6 +44,7 @@ const LowStockItems = () => {
         {data.map((dish, index) => (
           <Stack
             key={index}
+            flex={1}
             horizonal
             justifyContent="flex-start"
             alignItems="center"
@@ -77,18 +75,31 @@ const LowStockItems = () => {
                   fontSize={14}
                   fontWeight={theme.fontWeight.normal}
                   marginLeft={2}>
-                  Available:
+                  Items:
                 </StyledText>
                 <StyledText
                   color={theme.colors.green[800]}
                   fontSize={14}
                   fontWeight={theme.fontWeight.semiBold}
                   marginLeft={5}>
-                  {dish.current_stock || 0}
+                  {dish.order_count}
                 </StyledText>
               </Stack>
             </Stack>
             <StyledSpacer flex={1} />
+            <Stack
+              borderColor={backgroundColorHelper(dish.status)}
+              backgroundColor={backgroundColorHelper(dish.status)}
+              borderRadius={30}>
+              <StyledText
+                color={textColorHelper(dish.status)}
+                fontSize={12}
+                paddingHorizontal={12}
+                paddingVertical={4}
+                fontWeight={theme.fontWeight.normal}>
+                {dish.status}
+              </StyledText>
+            </Stack>
           </Stack>
         ))}
       </ScrollView>
@@ -96,4 +107,4 @@ const LowStockItems = () => {
   );
 };
 
-export default LowStockItems;
+export default RecentOrder;

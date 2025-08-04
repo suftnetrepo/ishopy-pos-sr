@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { guid } from '../utils/help';
+import {guid} from '../utils/help';
 import {getRealmInstance} from './store';
 
 export interface Order {
@@ -14,16 +14,24 @@ export interface Order {
   discount?: number;
 }
 
+export interface OrderStatusAggregate {
+  Pending: number;
+  Progress: number;
+  Completed: number;
+  Cancelled: number;
+  total: number;
+}
+
 const insertOrder = async (order: Omit<Order, 'order_id'>): Promise<Order> => {
-     const realm = await getRealmInstance();
+  const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
-    try {          
+    try {
       realm.write(() => {
         const newOrder: Order = {
           order_id: guid(),
           ...order,
         };
-        realm.create('Order', newOrder);     
+        realm.create('Order', newOrder);
         resolve(newOrder);
       });
     } catch (error) {
@@ -32,8 +40,33 @@ const insertOrder = async (order: Omit<Order, 'order_id'>): Promise<Order> => {
   });
 };
 
-const queryAllOrders = async(): Promise<Order[]> => {
-       const realm = await getRealmInstance();
+const getOrderStatusAggregate = async (): Promise<OrderStatusAggregate> => {
+  const realm = await getRealmInstance();
+  return new Promise((resolve, reject) => {
+    try {
+      const aggregate: OrderStatusAggregate = {
+        Pending: realm.objects<Order>('Order').filtered('status == "Pending"')
+          .length,
+        Progress: realm.objects<Order>('Order').filtered('status == "Progress"')
+          .length,
+        Completed: realm
+          .objects<Order>('Order')
+          .filtered('status == "Completed"').length,
+        Cancelled: realm
+          .objects<Order>('Order')
+          .filtered('status == "Cancelled"').length,
+        total: realm.objects<Order>('Order').length,
+      };
+
+      resolve(aggregate);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+const queryAllOrders = async (): Promise<Order[]> => {
+  const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
       const orders = realm
@@ -53,7 +86,7 @@ const queryAllOrders = async(): Promise<Order[]> => {
       resolve(orders);
     } catch (error) {
       reject(error);
-    } 
+    }
   });
 };
 
@@ -62,7 +95,7 @@ const queryOrdersByDateRange = async (
   endDate: Date
 ): Promise<Order[]> => {
   const realm = await getRealmInstance();
-   return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     try {
       const orders = realm
         .objects<Order>('Order')
@@ -78,7 +111,7 @@ const queryOrdersByDateRange = async (
           date: order.date,
           tax: order.tax,
           discount: order.discount,
-        }));     
+        }));
       resolve(orders);
     } catch (error) {
       reject(error);
@@ -86,8 +119,8 @@ const queryOrdersByDateRange = async (
   });
 };
 
-const queryOrderById = async(order_id: string): Promise<Order | null> => {
-       const realm = await getRealmInstance();
+const queryOrderById = async (order_id: string): Promise<Order | null> => {
+  const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
       const order = realm.objectForPrimaryKey<Order>('Order', order_id);
@@ -108,7 +141,7 @@ const queryOrderById = async(order_id: string): Promise<Order | null> => {
       );
     } catch (error) {
       reject(error);
-    } 
+    }
   });
 };
 
@@ -148,4 +181,5 @@ export {
   queryAllOrders,
   queryOrderById,
   queryOrdersByDateRange,
+  getOrderStatusAggregate,
 };

@@ -5,14 +5,94 @@ import {
   queryOrderItemByOrderId,
   insertOrderItem,
   deleteOrderItem,
+  getMostPopularMenuByQuantity,
+  queryRecentOrders,
 } from '../model/orderItems';
 import {OrderItem} from '../model/types';
+import {PopularMenuItem, RecentOrderDisplay} from '../model/orderItems';
 
 interface Initialize {
-  data: OrderItem[] | null | OrderItem | [] | boolean;
+  data:
+    | OrderItem[]
+    | null
+    | OrderItem
+    | []
+    | boolean
+    | PopularMenuItem[]
+    | null
+    | RecentOrderDisplay[]
+    | null;
   error: Error | null;
   loading: boolean;
 }
+
+const useQueryRecentOrders = () => {
+  const [data, setData] = useState<Initialize>({
+    data: [],
+    error: null,
+    loading: true,
+  });
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const result = await queryRecentOrders(5);
+        setData(prev => ({
+          ...prev,
+          data: result,
+          loading: false,
+        }));
+      } catch (error) {
+        setData({
+          data: null,
+          error: error as Error,
+          loading: false,
+        });
+      }
+    }
+    load();
+  }, []);
+
+  return {
+    data: data.data as RecentOrderDisplay[] | [],
+    error: data.error,
+    loading: data.loading,
+  };
+};
+
+const useQueryPopularMenuItems = () => {
+  const [data, setData] = useState<Initialize>({
+    data: [],
+    error: null,
+    loading: true,
+  });
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const result = await getMostPopularMenuByQuantity(8);
+        setData(prev => ({
+          ...prev,
+          data: result,
+          loading: false,
+        }));
+      } catch (error) {
+        setData({
+          data: null,
+          error: error as Error,
+          loading: false,
+        });
+      }
+    }
+    load();
+  }, []);
+
+  return {
+    data: data.data as PopularMenuItem[] | [],
+    error: data.error,
+    loading: data.loading,
+  };
+};
 
 const useQueryOrderItemByOrder = (order_id: string) => {
   const [data, setData] = useState<Initialize>({
@@ -42,7 +122,7 @@ const useQueryOrderItemByOrder = (order_id: string) => {
   }, [order_id]);
 
   return {
-    ...data
+    ...data,
   };
 };
 
@@ -74,7 +154,7 @@ const useQueryOrderItemById = (detail_id: string) => {
   }, [detail_id]);
 
   return {
-    ...data
+    ...data,
   };
 };
 
@@ -145,4 +225,11 @@ const useDeleteOrderItem = () => {
   };
 };
 
-export { useDeleteOrderItem, useInsertOrderItem, useQueryOrderItemById, useQueryOrderItemByOrder };
+export {
+  useDeleteOrderItem,
+  useInsertOrderItem,
+  useQueryOrderItemById,
+  useQueryOrderItemByOrder,
+  useQueryPopularMenuItems,
+  useQueryRecentOrders,
+};
