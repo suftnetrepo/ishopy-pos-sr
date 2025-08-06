@@ -34,6 +34,7 @@ interface Actions extends CartActions {
   logout: () => Promise<void>;
   updateCurrentUser: (user: User) => void;
   updateCurrentShop: (shop: Shop) => void;
+  updateCurrentMenu: (id: number) => void;
 }
 
 interface State {
@@ -41,6 +42,7 @@ interface State {
   shop: Shop | null;
   purchase_status: boolean;
   payment_status: boolean;
+  selectedMenu: number;
 }
 
 interface AppProviderProps {
@@ -56,6 +58,7 @@ const initialState: State = {
   shop: null,
   purchase_status: false,
   payment_status: false,
+  selectedMenu: 1,
 };
 
 const AppProvider = ({children}: AppProviderProps) => {
@@ -93,6 +96,12 @@ const AppProvider = ({children}: AppProviderProps) => {
       setState(initialState);
     },
 
+    updateCurrentMenu: (id: number) => {
+      setState(prevState => ({
+        ...prevState,
+        selectedMenu: id,
+      }));
+    },
     updateCurrentUser: updatedUser => {
       setState(prevState => ({
         ...prevState,
@@ -146,6 +155,7 @@ const AppProvider = ({children}: AppProviderProps) => {
         addAddOn,
         payment_status,
         purchase_status,
+        
       }}>
       {children}
     </AppContext.Provider>

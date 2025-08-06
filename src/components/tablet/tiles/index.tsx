@@ -15,7 +15,7 @@ const Tiles = () => {
       justifyContent="flex-start"
       gap={16}
       marginLeft={16}
-      marginTop={16}
+  
       shadowOpacity={0.9}
       shadowColor={theme.colors.gray[200]}
       shadowRadius={8}

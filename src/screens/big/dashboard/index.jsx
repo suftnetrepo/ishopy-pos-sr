@@ -1,12 +1,19 @@
 import React from 'react';
-import {StyledSafeAreaView, StyledText, StyledSpacer} from 'fluent-styles';
+import {
+  StyledSafeAreaView,
+  StyledText,
+  StyledSpacer,
+  StyledHeader,
+  StyledCycle,
+} from 'fluent-styles';
+import {useNavigation, CommonActions} from '@react-navigation/native';
 import {Stack} from '../../../components/package/stack';
-import {theme} from '../../../utils/theme';
+import {fontStyles, theme} from '../../../utils/theme';
 import {StyledImage} from '../../../components/package/image';
 import {StyledButton} from '../../../components/package/button';
 import {StyledIcon} from '../../../components/package/icon';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useNavigation, CommonActions} from '@react-navigation/native';
+
 import PopularDishes from '../../../components/tablet/popularDishes';
 import LowStockItems from '../../../components/tablet/lowStockItems';
 import DailyTransactionChart from '../../../components/tablet/chart';
@@ -16,6 +23,8 @@ import Logo from '../../../components/tablet/logo';
 import {useAppContext} from '../../../hooks/appContext';
 import RecentOrder from '../../../components/tablet/recentOrder';
 import {ScrollView} from 'react-native-gesture-handler';
+import {toWordCase} from '../../../utils/help';
+import SideBarAdapter from '../../../components/tablet/sideBar/sideBarAdapter';
 
 const Dashboard = () => {
   const navigate = useNavigation();
@@ -23,83 +32,101 @@ const Dashboard = () => {
 
   console.log('.............', user);
 
-  return (
-    <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
-      <Stack flex={1.5} horizonal backgroundColor={theme.colors.gray[100]}>
+  const RenderHeader = () => {
+    return (
+      <Stack
+        horizonal
+        flex={1}
+        backgroundColor={theme.colors.gray[1]}
+        justifyContent="flex-start"
+        alignItems="center"
+        paddingVertical={8}
+        marginTop={14}
+        marginBottom={14}
+        marginHorizontal={16}
+        borderRadius={30}
+        shadowOpacity={0.1}
+        shadowColor={theme.colors.gray[600]}
+        shadowRadius={30}
+        paddingHorizontal={8}>
+        <Logo />
+        <Stack vertical marginLeft={16}>
+          <StyledText
+            fontFamily={fontStyles.Roboto_Regular}
+            fontSize={theme.fontSize.normal}
+            fontWeight={theme.fontWeight.normal}
+            color={theme.colors.gray[400]}></StyledText>
+          <StyledText
+            fontFamily={fontStyles.Roboto_Regular}
+            fontSize={theme.fontSize.normal}
+            fontWeight={theme.fontWeight.bold}
+            color={theme.colors.gray[800]}></StyledText>
+        </Stack>
+        <StyledSpacer flex={1} />
         <Stack
-          marginTop={16}
-          paddingBottom={16}
-          borderRadius={8}
-          flex={0.6}
-          alignItems="flex-start"
+          horizonal
+          paddingHorizontal={20}
           justifyContent="flex-start"
-          vertical
-          paddingHorizontal={16}
-          shadowOpacity={0.9}
-          shadowColor={theme.colors.gray[200]}
-          shadowRadius={8}
-          backgroundColor={theme.colors.gray[1]}>
-          <StyledSpacer marginVertical={7} />
-          <Logo />
-          <SideBar />
-          <StyledSpacer flex={1} />
+          alignItems="center">
+          <StyledImage
+            source={require('./../../../../assets/img/doctor_1.png')}
+            size={50}
+            cycle
+            resizeMode="contain"></StyledImage>
           <Stack
-            horizonal
-            paddingHorizontal={20}
+            vertical
+            marginLeft={8}
             justifyContent="flex-start"
-            alignItems="center">
-            <StyledImage
-              source={require('./../../../../assets/img/doctor_1.png')}
-              size={40}
-              cycle
-              resizeMode="contain"></StyledImage>
-            <Stack
-              vertical
-              marginLeft={8}
-              justifyContent="flex-start"
-              alignItems="flex-start">
-              <StyledText
-                color={theme.colors.gray[900]}
-                fontSize={theme.fontSize.small}
-                fontWeight={theme.fontWeight.medium}>
-                Gladina Samantha
-              </StyledText>
-
-              <StyledText
-                color={theme.colors.gray[500]}
-                fontSize={theme.fontSize.small}
-                fontWeight={theme.fontWeight.medium}>
-                Waiter
-              </StyledText>
-            </Stack>
-          </Stack>
-          <StyledButton
-            marginTop={20}
-            paddingVertical={5}
-            paddingHorizontal={20}
-            borderWidth={0}
-            onPress={() =>
-              navigate.dispatch(
-                CommonActions.reset({
-                  index: 0,
-                  routes: [{name: 'keypad'}],
-                })
-              )
-            }>
-            <Icon
-              name="logout-variant"
-              size={28}
-              color={theme.colors.gray[500]}
-            />
+            alignItems="flex-start">
+            <StyledText
+              color={theme.colors.gray[900]}
+              fontSize={theme.fontSize.small}
+              fontWeight={theme.fontWeight.semiBold}>
+              Gladina Samantha
+            </StyledText>
             <StyledText
               color={theme.colors.gray[500]}
-              fontSize={16}
-              fontWeight={theme.fontWeight.medium}
-              marginLeft={10}>
-              Logout
+              fontSize={theme.fontSize.small}
+              fontWeight={theme.fontWeight.medium}>
+              Waiter
             </StyledText>
-          </StyledButton>
+          </Stack>
         </Stack>
+        <Stack horizonal>
+          <StyledCycle
+            paddingHorizontal={10}
+            borderWidth={1}
+            height={48}
+            width={48}
+            borderColor={theme.colors.gray[300]}>
+            <Icon
+              size={24}
+              name="exit-to-app"
+              color={theme.colors.gray[800]}
+              onPress={() => {
+                navigate.dispatch(
+                  CommonActions.reset({
+                    index: 0,
+                    routes: [{name: 'keypad'}],
+                  })
+                );
+              }}
+            />
+          </StyledCycle>
+        </Stack>
+      </Stack>
+    );
+  };
+
+  return (
+    <StyledSafeAreaView backgroundColor={theme.colors.gray[100]}>
+      <StyledHeader borderRadius={30} statusProps={{translucent: true}}>
+        <StyledHeader.Full>
+          <RenderHeader />
+        </StyledHeader.Full>
+      </StyledHeader>
+      <Stack flex={1.5} horizonal backgroundColor={theme.colors.gray[100]}>
+        <SideBarAdapter collapse={false} />
 
         <Stack flex={2} vertical backgroundColor={theme.colors.transparent}>
           <ScrollView vertical showsVerticalScrollIndicator={false}>
@@ -108,7 +135,7 @@ const Dashboard = () => {
             <RecentOrder />
           </ScrollView>
         </Stack>
-        <Stack flex={1} padding={16} gap={16} vertical>
+        <Stack flex={1} paddingHorizontal={16} gap={16} vertical>
           <StyledButton
             paddingVertical={12}
             paddingHorizontal={20}

@@ -1,8 +1,11 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment} from 'react';
 import {SidebarItem} from '../../../components/package/sidebar';
+import {useAppContext} from '../../../hooks/appContext';
 
-const SideBar = () => {
-  const [selectedButton, setSelectedButton] = useState(1);
+const SideBar = ({collapse = false}) => {
+  const {selectedMenu, updateCurrentMenu} = useAppContext();
+
+  console.log('Selected Menu:', selectedMenu);
 
   const items = [
     {
@@ -41,13 +44,15 @@ const SideBar = () => {
     <Fragment>
       {items.map((item, index) => (
         <SidebarItem
+        collapse={collapse}
           key={index}
           label={item.label}
           icon={item.icon}
-          active={item.id === selectedButton}
+          active={selectedMenu === 1 && item.id === 1 ? true : item.id === selectedMenu}
           onPress={() => {
-            setSelectedButton(item.id);
-            console.log(`${item.label} clicked`);
+            updateCurrentMenu(item.id);
+            console.log(`${item.id} clicked`);
+             console.log(`${selectedMenu} clicked`);
           }}
         />
       ))}

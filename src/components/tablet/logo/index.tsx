@@ -5,8 +5,8 @@ const Logo = () => {
   return (
     <StyledImage
       source={require('./../../../../assets/img/logo.png')}
-      height={100}
-      width={200}
+      height={50}
+      width={160}
       resizeMode="contain"></StyledImage>
   );
 };
