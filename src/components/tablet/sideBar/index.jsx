@@ -1,9 +1,11 @@
 import React, {Fragment} from 'react';
-import {SidebarItem} from '../../../components/package/sidebar';
+import {useNavigation, CommonActions} from '@react-navigation/native';
+import {SidebarItem} from '../../package/sidebar';
 import {useAppContext} from '../../../hooks/appContext';
 
 const SideBar = ({collapse = false}) => {
   const {selectedMenu, updateCurrentMenu} = useAppContext();
+  const navigate = useNavigation();
 
   console.log('Selected Menu:', selectedMenu);
 
@@ -13,30 +15,35 @@ const SideBar = ({collapse = false}) => {
       label: 'Dashboard',
       icon: 'view-dashboard-outline',
       active: true,
+      name: 'big-dashboard',
     },
     {
       id: 2,
       label: 'Menu',
       icon: 'book-open-outline',
       active: false,
+      name: 'big-menu',
     },
     {
       id: 3,
       label: 'Orders',
       icon: 'receipt',
       active: false,
+      name: 'big-menu',
     },
     {
       id: 4,
       label: 'Table',
       icon: 'table-chair',
       active: false,
+      name: 'big-menu',
     },
     {
       id: 5,
       label: 'Settings',
       icon: 'cog-outline',
       active: false,
+      name: 'big-menu',
     },
   ];
 
@@ -44,15 +51,18 @@ const SideBar = ({collapse = false}) => {
     <Fragment>
       {items.map((item, index) => (
         <SidebarItem
-        collapse={collapse}
+          collapse={collapse}
           key={index}
           label={item.label}
           icon={item.icon}
-          active={selectedMenu === 1 && item.id === 1 ? true : item.id === selectedMenu}
+          active={
+            selectedMenu === 1 && item.id === 1
+              ? true
+              : item.id === selectedMenu
+          }
           onPress={() => {
             updateCurrentMenu(item.id);
-            console.log(`${item.id} clicked`);
-             console.log(`${selectedMenu} clicked`);
+            navigate.navigate(item.name);
           }}
         />
       ))}

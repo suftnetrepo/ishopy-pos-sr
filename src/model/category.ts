@@ -1,18 +1,27 @@
 /* eslint-disable prettier/prettier */
-import { guid } from '../utils/help';
-import { getRealmInstance } from './store';
+import {guid} from '../utils/help';
+import {getRealmInstance} from './store';
+import { Menu} from './menu'
 
+export interface Icon {
+  name: string;
+  library: string;
+  label: string;
+  type: string;
+}
 export interface Category {
   category_id: string;
   name: string;
   status: number;
   color_code?: string;
+  icon: Icon;
 }
 
 const insertCategory = async (
   name: string,
   status: number = 0,
-  color_code : string
+  color_code: string,
+  icon: Icon
 ): Promise<Category> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
@@ -23,10 +32,41 @@ const insertCategory = async (
           name,
           status,
           color_code,
+          icon,
         };
         realm.create('Category', category);
         resolve(category);
       });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+const queryCategoriesWithMenuCount = async (): Promise<Category[]> => {
+  const realm = await getRealmInstance();
+  return new Promise((resolve, reject) => {
+    try {
+      const categories = realm
+        .objects<Category>('Category')
+        .filtered('status == 1') // Only active categories
+        .sorted('name')
+        .map(category => {
+          const menuCount = realm
+            .objects<Menu>('Menu')
+            .filtered('category_id == $0', category.category_id)
+            .length;
+
+          return {
+            category_id: category.category_id,
+            name: category.name,
+            status: category.status,
+            color_code: category.color_code,
+            icon: category.icon,
+            total_menu: menuCount,
+          };
+        });
+      resolve(categories);
     } catch (error) {
       reject(error);
     }
@@ -44,8 +84,9 @@ const queryAllCategories = async (): Promise<Category[]> => {
           category_id: category.category_id,
           name: category.name,
           status: category.status,
-          color_code: category.color_code
-        }));      
+          color_code: category.color_code,
+          icon: category.icon,
+        }));
       resolve(categories);
     } catch (error) {
       reject(error);
@@ -66,7 +107,8 @@ const queryCategoriesByStatus = async (status: number): Promise<Category[]> => {
           name: category.name,
           status: category.status,
           color_code: category.color_code,
-        }));      
+          icon: category.icon,
+        }));
 
       resolve(categories);
     } catch (error) {
@@ -75,13 +117,15 @@ const queryCategoriesByStatus = async (status: number): Promise<Category[]> => {
   });
 };
 
-const queryCategoryById = async (category_id: string): Promise<Category | null> => {
+const queryCategoryById = async (
+  category_id: string
+): Promise<Category | null> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
       const category = realm.objectForPrimaryKey<Category>(
         'Category',
-        category_id,
+        category_id
       );
       resolve(
         category
@@ -90,6 +134,7 @@ const queryCategoryById = async (category_id: string): Promise<Category | null> 
               name: category.name,
               status: category.status,
               color_code: category.color_code,
+              icon: category.icon,
             }
           : null
       );
@@ -103,7 +148,8 @@ const updateCategory = async (
   category_id: string,
   name: string,
   status: number,
-  color_code: string
+  color_code: string,
+  icon: Icon
 ): Promise<Category> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
@@ -118,6 +164,7 @@ const updateCategory = async (
           category.name = name;
           category.status = status;
           category.color_code = color_code;
+          category.icon = icon;
           resolve(category);
         } else {
           reject(new Error('Category not found'));
@@ -169,4 +216,5 @@ export {
   queryCategoryById,
   deleteCategory,
   queryCategoriesByStatus,
+  queryCategoriesWithMenuCount
 };

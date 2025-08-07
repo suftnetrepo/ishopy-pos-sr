@@ -59,6 +59,17 @@ export const StockSchema: ObjectSchema = {
   },
 };
 
+export const IconSchema: ObjectSchema = {
+  name: 'Icon',
+  embedded: true, 
+  properties: {
+    name: 'string',
+    library: 'string', 
+    label: 'string',
+    type: 'string'
+  }
+};
+
 export const CategorySchema: ObjectSchema = {
   name: 'Category',
   primaryKey: 'category_id',
@@ -66,7 +77,10 @@ export const CategorySchema: ObjectSchema = {
     category_id: 'string',
     name: 'string',
     color_code: 'string?',
-    status: {type: 'int', default: 0},
+    icon: 'mixed',
+    description: 'string?',
+    sort_order: { type: 'int', default: 0 },
+    status: { type: 'int', default: 0 },
   },
 };
 

@@ -183,7 +183,7 @@ const Home = () => {
             </StyledButton>
           </XStack>
           <StyledSpacer marginVertical={8} />
-          <BarChart
+          {/* <BarChart
             barWidth={22}
             noOfSections={3}
             barBorderRadius={4}
@@ -192,10 +192,10 @@ const Home = () => {
             yAxisThickness={0}
             xAxisThickness={0}
             key={data}
-          />
+          /> */}
         </YStack>
         <StyledSpacer marginVertical={4} />
-        <SalesTrend />
+        {/* <SalesTrend /> */}
       </ScrollView>
       {!purchase_status && <PurchaseButton />}
       {payment_status && (

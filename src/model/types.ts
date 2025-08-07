@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Menu } from './menu';
 import {User} from './user';
-import { Category } from './category';
+import { Category, Icon } from './category';
 import {Customer} from './customer';
 import {Order} from './orders';
 import {OrderItem} from './orderItems';
@@ -35,4 +35,5 @@ export type {
   CartItem,
   Table,
   AddOn,
+  Icon
 };

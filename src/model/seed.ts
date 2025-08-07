@@ -9,6 +9,7 @@ import {
   Shop,
   Payment
 } from './types';
+import { generateCategories } from '../utils/categoryIcon'
 
 const colorPalettes = {
   rose: ['#e11d48', '#be123c'],
@@ -51,7 +52,6 @@ const randomColor = () => {
 // Sample data pools
 const userNames = ["Alice", "Bob", "Charlie", "Diana"];
 const paymentMethods = ["Cash", "Credit Card", "PayPal"];
-const categoryNames = ['Main Course', 'Dessert', 'Drinks', 'Appetizers'];
 const cuisines = [
   'Italian',
   'Mexican',
@@ -130,16 +130,6 @@ function generateMenuItemNames() {
 
   return menuNames;
 }
-
-// Generate Categories
-const generateCategories = () => {
-  return categoryNames.map((name, _) => ({
-    category_id: guid(),
-    name: name,
-    color_code: randomColor(),
-    status: 1,
-  }));
-};
 
 // Generate Menu Items
 const generateMenuItems = (categories: { category_id: string; name: string; color_code: string; status: number; }[]) => {

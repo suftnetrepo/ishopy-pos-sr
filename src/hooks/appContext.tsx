@@ -43,6 +43,7 @@ interface State {
   purchase_status: boolean;
   payment_status: boolean;
   selectedMenu: number;
+  previousSelectedMenu: number;
 }
 
 interface AppProviderProps {
@@ -59,6 +60,7 @@ const initialState: State = {
   purchase_status: false,
   payment_status: false,
   selectedMenu: 1,
+  previousSelectedMenu: 1,
 };
 
 const AppProvider = ({children}: AppProviderProps) => {
@@ -99,6 +101,7 @@ const AppProvider = ({children}: AppProviderProps) => {
     updateCurrentMenu: (id: number) => {
       setState(prevState => ({
         ...prevState,
+        previousSelectedMenu: prevState.selectedMenu,
         selectedMenu: id,
       }));
     },
@@ -155,7 +158,6 @@ const AppProvider = ({children}: AppProviderProps) => {
         addAddOn,
         payment_status,
         purchase_status,
-        
       }}>
       {children}
     </AppContext.Provider>
