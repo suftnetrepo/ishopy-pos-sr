@@ -20,6 +20,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import SideBarAdapter from '../../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../../components/tablet/header';
 import { useCategories } from '../../../hooks/useCategory';
+import MenuCategory from '../../../components/tablet/cards';
 
 const BigMenu = () => {
   const navigate = useNavigation();
@@ -39,11 +40,7 @@ const BigMenu = () => {
         <SideBarAdapter collapse={true} />
 
         <Stack flex={2} vertical backgroundColor={theme.colors.transparent}>
-          <ScrollView vertical showsVerticalScrollIndicator={false}>
-            <Tiles />
-            <DailyTransactionChart />
-            <RecentOrder />
-          </ScrollView>
+         <MenuCategory />
         </Stack>
         <Stack flex={1} paddingHorizontal={16} gap={16} vertical>
           <StyledButton

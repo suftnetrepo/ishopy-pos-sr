@@ -9,7 +9,7 @@ import {
 } from '../model/category';
 import {Category, Icon} from '../model/types';
 interface Initialize {
-  data: Category[] | null | Category | [] | boolean;
+  data: Category[] | null | Category 
   error: Error | null;
   loading: boolean;
 }
@@ -52,7 +52,7 @@ const useCategories = () => {
 
   return {
     ...data,
-    loadCategories,
+    data: Array.isArray(data.data) ? data.data : [data.data],
     resetHandler,
   };
 };

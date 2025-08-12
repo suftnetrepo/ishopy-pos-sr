@@ -12,6 +12,7 @@ import {Discount} from './discount';
 import {Tax} from './tax';
 import {Table} from './table';
 import {AddOn} from './addOn';
+
 interface CartItem {
   id: string;
   name: string;

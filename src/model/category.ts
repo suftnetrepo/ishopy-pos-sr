@@ -15,6 +15,7 @@ export interface Category {
   status: number;
   color_code?: string;
   icon: Icon;
+  total_menu?: number; // Optional, used for categories with menu count
 }
 
 const insertCategory = async (
