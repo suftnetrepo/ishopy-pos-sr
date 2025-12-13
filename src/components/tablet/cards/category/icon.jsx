@@ -2,15 +2,11 @@ import React, {FC} from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {theme} from '../../../utils/theme';
-import {Icon} from '../../../model/category';
-import {StyledShape} from '../../../components/package/shape';
+import {theme} from '../../../../utils/theme';
+import {Icon} from '../../../../model/category';
+import {StyledShape} from '../../../package/shape';
 
-type IconCardProps = Icon & {
-  isSelected?: boolean;
-};
-
-const IconCard: FC<IconCardProps> = ({library, name, type, isSelected}) => {
+const IconCard = ({library, name, type, isSelected}) => {
   let Icon;
   switch (library) {
     case 'MaterialIcons':

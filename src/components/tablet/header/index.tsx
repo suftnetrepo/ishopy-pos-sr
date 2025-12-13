@@ -17,6 +17,7 @@ type Props = {
   showBackButton?: boolean;
   showTitle?: boolean;
   title?: string;
+  children?: React.ReactNode;   
 };
 
 const RenderHeader = ({
@@ -24,6 +25,7 @@ const RenderHeader = ({
   showBackButton = false,
   showTitle,
   title,
+  children
 }: Props) => {
   const navigation = useNavigation();
   const {user, previousSelectedMenu, updateCurrentMenu} = useAppContext();
@@ -37,22 +39,22 @@ const RenderHeader = ({
       backgroundColor={theme.colors.gray[1]}
       justifyContent="flex-start"
       alignItems="center"
-      paddingVertical={8}
+      paddingVertical={16}
       marginTop={14}
       marginBottom={14}
       marginHorizontal={16}
-      borderRadius={30}
+      borderRadius={16}
       shadowOpacity={0.1}
       shadowColor={theme.colors.gray[600]}
       shadowRadius={30}
-      paddingHorizontal={8}>
+      paddingHorizontal={16}>
       {showBackButton && (
         <StyledCycle
           paddingHorizontal={10}
           borderWidth={1}
           height={48}
           width={48}
-          borderColor={theme.colors.gray[300]}>
+          borderColor={theme.colors.gray[400]}>
           <Icon
             size={24}
             name="arrow-back"
@@ -76,8 +78,11 @@ const RenderHeader = ({
           {title || 'Dashboard'}
         </StyledText>
       )}
-
-      <StyledSpacer flex={1} />
+      {
+        children  && (
+           <Stack flex={1} horizonal>{children}</Stack>
+        )
+      }
       <Stack
         horizonal
         paddingHorizontal={20}
@@ -100,13 +105,14 @@ const RenderHeader = ({
             Gladina Samantha
           </StyledText>
           <StyledText
-            color={theme.colors.gray[500]}
+            color={theme.colors.gray[400]}
             fontSize={theme.fontSize.small}
             fontWeight={theme.fontWeight.medium}>
             Waiter
           </StyledText>
         </Stack>
       </Stack>
+      
       <Stack horizonal>
         <StyledCycle
           paddingHorizontal={10}
@@ -114,11 +120,11 @@ const RenderHeader = ({
           height={48}
           width={48}
           backgroundColor={theme.colors.gray[1]}
-          borderColor={theme.colors.gray[200]}>
+          borderColor={theme.colors.gray[400]}>
           <Icon
             size={24}
             name="exit-to-app"
-            color={theme.colors.gray[400]}
+            color={theme.colors.gray[800]}
             onPress={() => {
               navigation.dispatch(
                 CommonActions.reset({

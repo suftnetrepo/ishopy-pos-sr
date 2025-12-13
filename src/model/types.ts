@@ -14,6 +14,7 @@ import {Table} from './table';
 import {AddOn} from './addOn';
 
 interface CartItem {
+  index?: number;
   id: string;
   name: string;
   price: number;

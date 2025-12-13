@@ -13,8 +13,8 @@ const SideBarAdapter: React.FC<SideBarAdapterProps> = ({collapse}) => {
   return (
     <Stack
       paddingBottom={16}
-      borderRadius={8}
-      flex={collapse ? 0.2 : 0.6}
+      borderRadius={16}
+      flex={collapse ? 0.3 : 0.6}
       alignItems="center"
       justifyContent="center"
       vertical

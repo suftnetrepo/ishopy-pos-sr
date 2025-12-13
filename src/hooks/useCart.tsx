@@ -1,6 +1,4 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable prettier/prettier */
+
 import { useState } from "react";
 import { AddOn, CartItem } from "../model/types";
 
@@ -31,6 +29,7 @@ const useCart = () => {
 	};
 
 	const addItem = async (
+		index: number,
 		id: string,
 		name: string,
 		price: number,
@@ -42,7 +41,7 @@ const useCart = () => {
 			const currentCart = getCart(table_id);
 			const updatedCart = {
 				...currentCart,
-				items: [...currentCart.items, { id, name, price, quantity, addOns }]
+				items: [...currentCart.items, { index, id, name, price, quantity, addOns }]
 			};
 		
 			return {
@@ -75,6 +74,19 @@ const useCart = () => {
 				[table_id]: {
 					...currentCart,
 					items: currentCart.items.filter((item) => item.id !== id)
+				}
+			};
+		});
+	};
+
+	const removeItem = (id: number, table_id: string) => {
+		setCarts((prev) => {
+			const currentCart = getCart(table_id);
+			return {
+				...prev,
+				[table_id]: {
+					...currentCart,
+					items: currentCart.items.filter((item) => item.index !== id)
 				}
 			};
 		});
@@ -228,6 +240,7 @@ const useCart = () => {
 		getTotalTax,
 		addAddOn,
 		deleteAddOn,
+		removeItem
 	};
 };
 

@@ -168,7 +168,7 @@ const useQueryMenuByCategory = (category_id: string) => {
 			}
 		}
 		load();
-	}, []);
+	}, [category_id]);
 
 	const resetHandler = () => {
 		setData({

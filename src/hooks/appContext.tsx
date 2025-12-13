@@ -7,6 +7,7 @@ import {AddOn} from '../model/types';
 
 interface CartActions {
   addItem: (
+    index: number, 
     id: string,
     name: string,
     price: number,
@@ -15,6 +16,7 @@ interface CartActions {
   ) => Promise<void>;
   updateItem: (item: CartItem, table_id: string) => void;
   deleteItem: (id: string, table_id: string) => void;
+  removeItem: (id: number, table_id: string) => void;
   setDiscount: (discount: number, table_id: string) => void;
   setTax: (tax: number, table_id: string) => void;
   getItemCount: (table_id: string) => number;
@@ -35,6 +37,8 @@ interface Actions extends CartActions {
   updateCurrentUser: (user: User) => void;
   updateCurrentShop: (shop: Shop) => void;
   updateCurrentMenu: (id: number) => void;
+  updateSelectedCategory: (category_id: string) => void;
+  updateSelectedItem: (item: any) => void;
 }
 
 interface State {
@@ -43,7 +47,9 @@ interface State {
   purchase_status: boolean;
   payment_status: boolean;
   selectedMenu: number;
+  category_id: string;
   previousSelectedMenu: number;
+    selectedItem: any;
 }
 
 interface AppProviderProps {
@@ -61,6 +67,8 @@ const initialState: State = {
   payment_status: false,
   selectedMenu: 1,
   previousSelectedMenu: 1,
+  selectedItem: null,
+  category_id : ''
 };
 
 const AppProvider = ({children}: AppProviderProps) => {
@@ -82,6 +90,7 @@ const AppProvider = ({children}: AppProviderProps) => {
     deleteAddOn,
     addAddOn,
     getTotalPrice,
+    removeItem
   } = useCart();
 
   const actions: Actions = {
@@ -119,6 +128,20 @@ const AppProvider = ({children}: AppProviderProps) => {
       }));
     },
 
+    updateSelectedCategory: id => {
+      setState(prevState => ({
+        ...prevState,
+        category_id: id,
+      }));
+    },
+
+     updateSelectedItem: item => {
+      setState(prevState => ({
+        ...prevState,
+        selectedItem: item,
+      }));
+    },
+
     addItem,
     updateItem,
     deleteItem,
@@ -134,6 +157,7 @@ const AppProvider = ({children}: AppProviderProps) => {
     getItems,
     deleteAddOn,
     addAddOn,
+    removeItem
   };
 
   return (
@@ -156,6 +180,7 @@ const AppProvider = ({children}: AppProviderProps) => {
         getTotalTax,
         deleteAddOn,
         addAddOn,
+        removeItem,
         payment_status,
         purchase_status,
       }}>
