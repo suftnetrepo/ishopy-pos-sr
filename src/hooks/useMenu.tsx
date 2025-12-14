@@ -9,7 +9,7 @@ import {
 	queryMenuByStatus,
 	insertMenu,
 	updateMenu,
-	deleteMenu
+	deleteMenu, queryMenuByNamePrefix
 } from "../model/menu";
 import { Menu } from "../model/menu";
 
@@ -150,6 +150,23 @@ const useQueryMenuByCategory = (category_id: string) => {
 		loading: true,
 	});
 
+	const handleQueryMemu = async (prefix: string) => {
+		try {
+			const results = await queryMenuByNamePrefix(prefix);
+			setData({
+				data: results,
+				error: null,
+				loading: false,
+			});
+		} catch (error) {
+			setData({
+				data: null,
+				error: error as Error,
+				loading: false,
+			});
+		}
+	}
+
 	useEffect(() => {
 		async function load() {
 			try {
@@ -180,7 +197,8 @@ const useQueryMenuByCategory = (category_id: string) => {
 
 	return {
 		...data,
-		resetHandler
+		resetHandler,
+		handleQueryMemu
 	};
 };
 

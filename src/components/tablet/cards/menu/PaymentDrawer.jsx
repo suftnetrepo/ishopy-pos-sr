@@ -76,7 +76,7 @@ export default function Payment({ onClose }) {
                 <VStack px={16} py={16} >
                     {
                         amountInput > 0 && (
-                            <StyledText fontFamily={fontStyles.Roboto_Regular} textAlign="center" color={theme.colors.gray[500]} fontSize={theme.fontSize.xxxlarge} fontWeight={theme.fontWeight.medium}>
+                            <StyledText fontFamily={fontStyles.Roboto_Regular} textAlign="center" color={theme.colors.gray[500]} fontSize={theme.fontSize.xxxlarge} fontWeight={theme.fontWeight.thin}>
                                 {amountInput
                                     ? formatCurrency(shop?.currency || "£", amountToPay)
                                     : formatCurrency(shop?.currency || "£", 0)}
@@ -94,7 +94,7 @@ export default function Payment({ onClose }) {
                     </StyledText>
                     <StyledSpacer marginVertical={2} />
                     {amountInput && change > 0 && (
-                        <StyledText textAlign="center" fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.xlarge} color={theme.colors.pink[500]} fontWeight={theme.fontWeight.medium}>
+                        <StyledText textAlign="center" fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.xlarge} color={theme.colors.red[500]} fontWeight={theme.fontWeight.medium}>
                             {formatCurrency(shop?.currency || "£", change)}
                         </StyledText>
                     )}

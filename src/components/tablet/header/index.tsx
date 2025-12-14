@@ -4,33 +4,31 @@ import {
   StyledSpacer,
   StyledCycle,
 } from 'fluent-styles';
-import {useNavigation, CommonActions} from '@react-navigation/native';
-import {Stack} from '../../../components/package/stack';
-import {fontStyles, theme} from '../../../utils/theme';
-import {StyledImage} from '../../../components/package/image';
+import { useNavigation, CommonActions } from '@react-navigation/native';
+import { Stack } from '../../../components/package/stack';
+import { fontStyles, theme } from '../../../utils/theme';
+import { StyledImage } from '../../../components/package/image';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Logo from '../../../components/tablet/logo';
-import {useAppContext} from '../../../hooks/appContext';
+import { useAppContext } from '../../../hooks/appContext';
 
 type Props = {
-  showLog?: boolean;
+  showLogo?: boolean;
   showBackButton?: boolean;
   showTitle?: boolean;
   title?: string;
-  children?: React.ReactNode;   
+  children?: React.ReactNode;
 };
 
 const RenderHeader = ({
-  showLog = true,
+  showLogo = true,
   showBackButton = false,
   showTitle,
   title,
   children
 }: Props) => {
   const navigation = useNavigation();
-  const {user, previousSelectedMenu, updateCurrentMenu} = useAppContext();
-
-  console.log("user", user)
+  const { user, previousSelectedMenu, updateCurrentMenu } = useAppContext();
 
   return (
     <Stack
@@ -66,7 +64,7 @@ const RenderHeader = ({
           />
         </StyledCycle>
       )}
-      {showLog && <Logo />}
+      {showLogo && <Logo />}
 
       {showTitle && (
         <StyledText
@@ -79,13 +77,13 @@ const RenderHeader = ({
         </StyledText>
       )}
       {
-        children  && (
-           <Stack flex={1} horizonal>{children}</Stack>
+        children && (
+          <Stack marginHorizontal={8} flex={1} horizonal>{children}</Stack>
         )
       }
       <Stack
         horizonal
-        paddingHorizontal={20}
+        paddingHorizontal={16}
         justifyContent="flex-start"
         alignItems="center">
         <StyledImage
@@ -112,7 +110,7 @@ const RenderHeader = ({
           </StyledText>
         </Stack>
       </Stack>
-      
+
       <Stack horizonal>
         <StyledCycle
           paddingHorizontal={10}
@@ -129,7 +127,7 @@ const RenderHeader = ({
               navigation.dispatch(
                 CommonActions.reset({
                   index: 0,
-                  routes: [{name: 'keypad'}],
+                  routes: [{ name: 'keypad' }],
                 })
               );
             }}

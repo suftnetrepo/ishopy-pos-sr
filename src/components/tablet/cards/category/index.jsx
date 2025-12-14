@@ -9,8 +9,6 @@ const MenuCategory = () => {
   const { data } = useCategories();
   const { updateSelectedCategory} = useAppContext();
 
-  console.log('Category Data...................xxxxx:', data);  
-
   const renderItem = ({ item }) => {
     const { category_id, name, status, icon, total_menu, color_code } = item;
 

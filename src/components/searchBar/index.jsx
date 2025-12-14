@@ -42,7 +42,7 @@ const SearchBar = styled(View, {
     }
 })
 
-const StyledSearchBar = ({ size = 24, name = 'search', placeholder = 'Search item by name', onPress, ...rest }) => {
+const StyledSearchBar = ({ size = 24, name = 'search', placeholder = 'Search item by name', showSearchIcon = false, onTextChange, onPress, ...rest }) => {
     const [searchQuery, setSearchQuery] = useState('');
 
     const handleSubmit = () => {
@@ -52,15 +52,28 @@ const StyledSearchBar = ({ size = 24, name = 'search', placeholder = 'Search ite
     }
 
     return (
-        <SearchBar flex={1} borderWidth={1} borderColor={theme.colors.gray[400]} {...rest}>
+        <SearchBar flex={1} borderWidth={1} borderColor={theme.colors.gray[200]} {...rest}>
             <InputText marginHorizontal={8} flex={1} placeholder={placeholder} fontSize={theme.fontSize.normal} value={searchQuery}
-                onChangeText={setSearchQuery} returnKeyType='search' noBorder={true} onSubmitEditing={handleSubmit} />
+                onChangeText={(text) => {
+                    setSearchQuery((pre) => {
+                        return {
+                            ...pre,
+                            text
+                        }
+                    })
+                    onTextChange(text)
+                }} returnKeyType='search' noBorder={true} onSubmitEditing={handleSubmit} />
             <StyledSpacer marginHorizontal={2} />
-            <StyledCycle borderWidth={1} borderColor={theme.colors.cyan[400]} backgroundColor={theme.colors.cyan[500]}>
-                {
-                    <StyledMIcon size={size} name={name} color={theme.colors.gray[1]} onPress={() => handleSubmit()} />
-                }
-            </StyledCycle>
+            {
+                showSearchIcon && (
+                    <StyledCycle borderWidth={1} borderColor={theme.colors.cyan[400]} backgroundColor={theme.colors.cyan[500]}>
+                        {
+                            <StyledMIcon size={size} name={name} color={theme.colors.gray[1]} onPress={() => handleSubmit()} />
+                        }
+                    </StyledCycle>
+                )
+            }
+
         </SearchBar>
     )
 }

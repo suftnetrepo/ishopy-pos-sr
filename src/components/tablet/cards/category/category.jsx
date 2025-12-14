@@ -50,7 +50,7 @@ const CategoryCard = ({
         <Stack vertical flex={1} justifyContent="center">
           {
             selected_category_id === category_id && (
-              <StyledIcon position='absolute' right={-10} top={-15} name="check-circle" size={20} color={theme.colors.green[500]} />
+              <StyledIcon position='absolute' right={-9} top={-14} name="check-circle" size={20} color={theme.colors.green[500]} />
             )
           }
           <StyledText

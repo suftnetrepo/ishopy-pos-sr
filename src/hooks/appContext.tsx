@@ -7,7 +7,7 @@ import {AddOn} from '../model/types';
 
 interface CartActions {
   addItem: (
-    index: number, 
+    index: number,
     id: string,
     name: string,
     price: number,
@@ -39,6 +39,7 @@ interface Actions extends CartActions {
   updateCurrentMenu: (id: number) => void;
   updateSelectedCategory: (category_id: string) => void;
   updateSelectedItem: (item: any) => void;
+  updateMenuQuery: (menuQuery: string) => void;
 }
 
 interface State {
@@ -49,7 +50,8 @@ interface State {
   selectedMenu: number;
   category_id: string;
   previousSelectedMenu: number;
-    selectedItem: any;
+  selectedItem: any;
+  menuQuery?: string;
 }
 
 interface AppProviderProps {
@@ -68,7 +70,8 @@ const initialState: State = {
   selectedMenu: 1,
   previousSelectedMenu: 1,
   selectedItem: null,
-  category_id : ''
+  category_id: '',
+  menuQuery: '',
 };
 
 const AppProvider = ({children}: AppProviderProps) => {
@@ -90,7 +93,7 @@ const AppProvider = ({children}: AppProviderProps) => {
     deleteAddOn,
     addAddOn,
     getTotalPrice,
-    removeItem
+    removeItem,
   } = useCart();
 
   const actions: Actions = {
@@ -135,10 +138,17 @@ const AppProvider = ({children}: AppProviderProps) => {
       }));
     },
 
-     updateSelectedItem: item => {
+    updateSelectedItem: item => {
       setState(prevState => ({
         ...prevState,
         selectedItem: item,
+      }));
+    },
+
+    updateMenuQuery: menuQuery => {
+      setState(prevState => ({
+        ...prevState,
+        menuQuery,
       }));
     },
 
@@ -157,7 +167,7 @@ const AppProvider = ({children}: AppProviderProps) => {
     getItems,
     deleteAddOn,
     addAddOn,
-    removeItem
+    removeItem,
   };
 
   return (

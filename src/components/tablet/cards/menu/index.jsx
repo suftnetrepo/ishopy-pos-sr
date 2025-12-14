@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FlatList } from "react-native";
 import { StyledSpacer, StyledText } from 'fluent-styles';
 import {
@@ -12,14 +12,20 @@ import { StyledIcon } from "../../../package/icon";
 import { formatCurrency } from "../../../../utils/help";
 
 export default function ItemCard() {
-  const { category_id, updateSelectedItem, selectedItem, shop, addItem } = useAppContext()
-  const { data } = useQueryMenuByCategory(category_id)
+  const { category_id, updateSelectedItem, selectedItem, shop, addItem, menuQuery } = useAppContext()
+  const { data, handleQueryMemu } = useQueryMenuByCategory(category_id)
+
+  console.log("Menu Query from context:.......", data);
+
+  useEffect(() => {
+    handleQueryMemu(menuQuery)
+  }, [menuQuery]);
 
   const handleAddItem = async (item) => {
     // if (item?.addOns) {
     //   onChange(item)
     // }
-    const index = `${Date.now()}${Math.random().toString(36).slice(2,8)}`;
+    const index = `${Date.now()}${Math.random().toString(36).slice(2, 8)}`;
     addItem(index, item.menu_id, item.name, item.price, 1, "1").then(() => { });
   };
 
