@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { ScrollView } from "react-native";
-import { YStack, XStack, StyledSafeAreaView, StyledText, StyledDialog, StyledBadgeIcon, StyledBadge, StyledSpacer, StyledButton, StyledHeader } from 'fluent-styles';
+import {  StyledSpacer } from 'fluent-styles';
 import {
     Box,
     Text,
@@ -16,7 +16,7 @@ import { useAppContext } from "../../../hooks/appContext";
 import { formatCurrency } from "../../../utils/help";
 import { theme } from "../../../utils/theme";
 import Drawer from "../../../components/package/drawer";
-import Payment from "../cards/menu/PaymentDrawer";
+import Payment from "../payment/cash";
 
 export default function Cart() {
     const { getItems, shop, removeItem, getTotalTax, getTotal, getTotalPrice } = useAppContext()
@@ -37,6 +37,13 @@ export default function Cart() {
         { key: "card", label: "Card", icon: "credit-card" },
     ];
 
+    const calculatePrice = (item) => {
+        const sum = item?.addOns?.reduce((total, addOn) => {
+            return total + (parseFloat(addOn.price || 0) * parseInt(addOn.quantity || 0));
+        }, 0);
+
+        return sum + item?.price || 0;
+    };
 
     return (
         <VStack flex={1} px={16} py={16} space="lg" backgroundColor={theme.colors.gray[700]} borderRadius={16}>
@@ -53,11 +60,11 @@ export default function Cart() {
                             >
                                 <HStack flex={1} justifyContent="space-between" alignItems="center">
                                     <Text flex={1} color={theme.colors.gray[1]} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.normal}>
-                                        {item.name} <Text color={theme.colors.gray[400]}>x{1}</Text>
+                                        {item.name} 
                                     </Text>
                                     <HStack space="md" alignItems="center">
                                         <Text fontSize={theme.fontSize.normal} color={theme.colors.gray[1]} fontWeight={theme.fontWeight.normal}>
-                                            {formatCurrency(shop?.currency || "£", item.price)}
+                                            {formatCurrency(shop?.currency || "£", calculatePrice(item))}
                                         </Text>
                                         <Box
                                             w={32}

@@ -52,6 +52,7 @@ const useCart = () => {
 	};
 
 	const updateItem = (updatedItem: CartItem, table_id: string) => {
+		
 		setCarts((prev) => {
 			const currentCart = getCart(table_id);
 			return {

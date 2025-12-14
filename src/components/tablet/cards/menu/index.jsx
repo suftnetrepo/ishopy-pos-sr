@@ -11,7 +11,7 @@ import { theme, fontStyles } from "../../../../utils/theme";
 import { StyledIcon } from "../../../package/icon";
 import { formatCurrency } from "../../../../utils/help";
 
-export default function ItemCard() {
+export default function ItemCard({ onChangeItem }) {
   const { category_id, updateSelectedItem, selectedItem, shop, addItem, menuQuery } = useAppContext()
   const { data, handleQueryMemu } = useQueryMenuByCategory(category_id)
 
@@ -22,9 +22,10 @@ export default function ItemCard() {
   }, [menuQuery]);
 
   const handleAddItem = async (item) => {
-    // if (item?.addOns) {
-    //   onChange(item)
-    // }
+    if (item?.addOns) {
+      onChangeItem(item)
+      return;
+    }
     const index = `${Date.now()}${Math.random().toString(36).slice(2, 8)}`;
     addItem(index, item.menu_id, item.name, item.price, 1, "1").then(() => { });
   };

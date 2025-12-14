@@ -8,15 +8,14 @@ import {
     Button,
     ButtonText,
 } from "@gluestack-ui/themed";
-import { YStack, XStack, StyledSafeAreaView, StyledText, StyledDialog, StyledBadgeIcon, StyledBadge, StyledSpacer, StyledButton, StyledHeader } from 'fluent-styles';
-
+import { StyledText, StyledSpacer } from 'fluent-styles';
 import { StyledIcon } from "../../../package/icon";
 import { fontStyles, theme } from "../../../../utils/theme";
 import { useAppContext } from "../../../../hooks/appContext";
 import { formatCurrency } from "../../../../utils/help";
 import { Stack } from "../../../../components/package/stack";
 
-export default function Payment({ onClose }) {
+export default function Cash({ onClose }) {
     const { getTotalPrice, shop } = useAppContext();
     const subtotal = getTotalPrice("1");
     const tax = 0;
