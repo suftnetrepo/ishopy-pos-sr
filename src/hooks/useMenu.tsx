@@ -12,6 +12,7 @@ import {
 	deleteMenu, queryMenuByNamePrefix
 } from "../model/menu";
 import { Menu } from "../model/menu";
+import {AddOn} from "../model/addOn";
 
 interface Initialize {
 	data: Menu[] | null | Menu | [] | boolean;
@@ -202,7 +203,7 @@ const useQueryMenuByCategory = (category_id: string) => {
 	};
 };
 
-const useQueryMenuById = (product_id: number) => {
+const useQueryMenuById = (menu_id: string) => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
@@ -212,7 +213,7 @@ const useQueryMenuById = (product_id: number) => {
 	useEffect(() => {
 		async function load() {
 			try {
-				const results = await queryMenuById(product_id);
+				const results = await queryMenuById(menu_id);
 				setData({
 					data: results,
 					error: null,
@@ -414,6 +415,16 @@ const useDeleteMenu = () => {
 		resetHandler
 	};
 };
+
+const useQuery = async (menu_id: string, addOn : AddOn[]) => {
+	
+	const results = await queryMenuById(menu_id);
+
+	return {
+	
+	};
+};
+
 
 export {
 	useDeleteMenu,

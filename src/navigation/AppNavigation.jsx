@@ -38,6 +38,7 @@ import AddAddOn from '../screens/account/addOn/add';
 import { useDeviceType } from '../hooks/useDeviceType';
 import Dashboard from '../screens/big/dashboard';
 import BigMenu from '../screens/big/menu';
+import BigTable from '../screens/big/table';
 
 const Stack = createStackNavigator();
 function Navigator() {
@@ -48,6 +49,13 @@ function Navigator() {
        <Stack.Screen
         name="big-dashboard"
         component={Dashboard}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="big-table"
+        component={BigTable}
         options={{
           headerShown: false,
         }}

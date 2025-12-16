@@ -30,6 +30,7 @@ interface CartActions {
   getItems: (table_id: string) => CartItem[];
   deleteAddOn: (itemId: string, addOnId: string, table_id: string) => void;
   addAddOn: (itemId: string, addOns: AddOn[], table_id: string) => void;
+  getCartItemByIndex: (index: number, table_id: string) => CartItem | undefined;
 }
 
 interface Actions extends CartActions {
@@ -95,6 +96,7 @@ const AppProvider = ({children}: AppProviderProps) => {
     addAddOn,
     getTotalPrice,
     removeItem,
+    getCartItemByIndex
   } = useCart();
 
   const actions: Actions = {
@@ -169,6 +171,7 @@ const AppProvider = ({children}: AppProviderProps) => {
     deleteAddOn,
     addAddOn,
     removeItem,
+    getCartItemByIndex
   };
 
   return (

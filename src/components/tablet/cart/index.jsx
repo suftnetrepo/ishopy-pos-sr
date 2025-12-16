@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { ScrollView } from "react-native";
-import {  StyledSpacer } from 'fluent-styles';
+import { StyledSpacer } from 'fluent-styles';
 import {
     Box,
     Text,
@@ -13,7 +13,7 @@ import {
 } from "@gluestack-ui/themed";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { useAppContext } from "../../../hooks/appContext";
-import { formatCurrency } from "../../../utils/help";
+import { formatCurrency, paymentOptions } from "../../../utils/help";
 import { theme } from "../../../utils/theme";
 import Drawer from "../../../components/package/drawer";
 import Payment from "../payment/cash";
@@ -27,16 +27,6 @@ export default function Cart() {
     console.log("Cart Items:", cartItems);
     console.log("Cart Items Length:", cartItems.length);
 
-
-    const subtotal = cartItems.reduce((sum, item) => sum + item.price, 0);
-    const tax = subtotal * 0.10;
-    const total = subtotal + tax;
-
-    const paymentOptions = [
-        { key: "cash", label: "Cash", icon: "attach-money" },
-        { key: "card", label: "Card", icon: "credit-card" },
-    ];
-
     const calculatePrice = (item) => {
         const sum = item?.addOns?.reduce((total, addOn) => {
             return total + (parseFloat(addOn.price || 0) * parseInt(addOn.quantity || 0));
@@ -47,44 +37,46 @@ export default function Cart() {
 
     return (
         <VStack flex={1} px={16} py={16} space="lg" backgroundColor={theme.colors.gray[700]} borderRadius={16}>
-
             <VStack flex={1} space="md" mb="lg">
                 <ScrollView showsVerticalScrollIndicator={false} >
                     {cartItems.map((item, index) => (
                         <Fragment key={`${item.id}-${index}`}>
-                            <Box
-                                borderRadius={16}
-                                px={8}
-                                py={8}
-                                backgroundColor={theme.colors.gray[800]}
-                            >
-                                <HStack flex={1} justifyContent="space-between" alignItems="center">
-                                    <Text flex={1} color={theme.colors.gray[1]} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.normal}>
-                                        {item.name} 
-                                    </Text>
-                                    <HStack space="md" alignItems="center">
-                                        <Text fontSize={theme.fontSize.normal} color={theme.colors.gray[1]} fontWeight={theme.fontWeight.normal}>
-                                            {formatCurrency(shop?.currency || "£", calculatePrice(item))}
+                            <Pressable onPress={() => {}}>
+                                <Box
+                                    borderRadius={16}
+                                    px={8}
+                                    py={8}
+                                    backgroundColor={theme.colors.gray[800]}
+                                >
+                                    <HStack flex={1} justifyContent="space-between" alignItems="center">
+                                        <Text flex={1} color={theme.colors.gray[1]} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.normal}>
+                                            {item.name}
                                         </Text>
-                                        <Box
-                                            w={32}
-                                            h={32}
-                                            borderRadius={20}
-                                            backgroundColor={theme.colors.gray[1]}
-                                            justifyContent="center"
-                                            alignItems="center"
-                                        >
-                                            <Icon
-                                                as={MaterialIcons}
-                                                name={"cancel"}
-                                                size={24}
-                                                color={theme.colors.gray[800]}
-                                                onPress={() => removeItem(item.index, "1")}
-                                            />
-                                        </Box>
+                                        <HStack space="md" alignItems="center">
+                                            <Text fontSize={theme.fontSize.normal} color={theme.colors.gray[1]} fontWeight={theme.fontWeight.normal}>
+                                                {formatCurrency(shop?.currency || "£", calculatePrice(item))}
+                                            </Text>
+                                            <Box
+                                                w={32}
+                                                h={32}
+                                                borderRadius={20}
+                                                backgroundColor={theme.colors.gray[1]}
+                                                justifyContent="center"
+                                                alignItems="center"
+                                            >
+                                                <Icon
+                                                    as={MaterialIcons}
+                                                    name={"cancel"}
+                                                    size={24}
+                                                    color={theme.colors.gray[800]}
+                                                    onPress={() => removeItem(item.index, "1")}
+                                                />
+                                            </Box>
+                                        </HStack>
                                     </HStack>
-                                </HStack>
-                            </Box>
+                                </Box>
+                            </Pressable>
+
                             <StyledSpacer marginVertical={1} />
                         </Fragment>
                     ))}
@@ -98,7 +90,7 @@ export default function Cart() {
                     </HStack>
 
                     <HStack justifyContent="space-between" mb={8}>
-                        <Text color={theme.colors.gray[400]}>Tax 10%</Text>
+                        <Text color={theme.colors.gray[400]}>Tax%</Text>
                         <Text color={theme.colors.gray[400]}> {formatCurrency(shop?.currency || "£", getTotalTax("1"))}</Text>
                     </HStack>
 
@@ -122,8 +114,9 @@ export default function Cart() {
                     {paymentOptions.map((j) => (
                         <Pressable
                             key={j.key}
-                            onPress={() => { 
-                                setMethod(j.key) }}
+                            onPress={() => {
+                                setMethod(j.key)
+                            }}
                             style={{
                                 flex: 1,
                                 padding: 16,
@@ -155,9 +148,9 @@ export default function Cart() {
                     size="lg"
                     bg={theme.colors.gray[1]}
                     borderRadius={30}
-                    onPress={()=> {
-                      method=== "cash" &&   
-                      setShowPayment(true);
+                    onPress={() => {
+                        method === "cash" &&
+                            setShowPayment(true);
                     }}
                 >
                     <ButtonText color={theme.colors.gray[800]} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.normal}>
@@ -170,7 +163,7 @@ export default function Cart() {
                 isOpen={showPayment}
                 onClose={() => setShowPayment(false)}
             >
-                <Payment onClose={()=> setShowPayment(false)} />
+                <Payment onClose={() => setShowPayment(false)} />
             </Drawer>
         </VStack>
     );

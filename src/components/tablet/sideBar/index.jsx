@@ -36,7 +36,7 @@ const SideBar = ({collapse = false}) => {
       label: 'Table',
       icon: 'table-chair',
       active: false,
-      name: 'big-menu',
+      name: 'big-table',
     },
     {
       id: 5,

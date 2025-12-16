@@ -15,8 +15,6 @@ export default function ItemCard({ onChangeItem }) {
   const { category_id, updateSelectedItem, selectedItem, shop, addItem, menuQuery } = useAppContext()
   const { data, handleQueryMemu } = useQueryMenuByCategory(category_id)
 
-  console.log("Menu Query from context:.......", data);
-
   useEffect(() => {
     handleQueryMemu(menuQuery)
   }, [menuQuery]);

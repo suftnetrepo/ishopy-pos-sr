@@ -52,7 +52,6 @@ const useCart = () => {
 	};
 
 	const updateItem = (updatedItem: CartItem, table_id: string) => {
-		
 		setCarts((prev) => {
 			const currentCart = getCart(table_id);
 			return {
@@ -185,6 +184,11 @@ const useCart = () => {
 		return cart.items.sort((a, b) => a.name.localeCompare(b.name));
 	};
 
+	const getCartItemByIndex = (index: number, table_id: string): CartItem | undefined => {
+		const cart = getCart(table_id);
+		return cart.items.find((item) => item.index === index);
+	};
+
 	const addAddOn = (itemId: string, addOns: AddOn[], table_id: string) => {
 		setCarts((prev) => {
 			const currentCart = getCart(table_id);		
@@ -236,6 +240,7 @@ const useCart = () => {
 		getTotalPrice,
 		clearItem,
 		getItems,
+		getCartItemByIndex,
 		getTotal,
 		getTotalDiscount,
 		getTotalTax,

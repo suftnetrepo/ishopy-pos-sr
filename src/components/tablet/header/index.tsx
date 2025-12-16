@@ -81,6 +81,10 @@ const RenderHeader = ({
           <Stack marginHorizontal={8} flex={1} horizonal>{children}</Stack>
         )
       }
+      {
+        !children && <StyledSpacer flex={1} />
+      }
+
       <Stack
         horizonal
         paddingHorizontal={16}

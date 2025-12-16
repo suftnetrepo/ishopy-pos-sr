@@ -241,32 +241,33 @@ const queryMenuByCategory = async (category_id: string): Promise<Menu[]> => {
   }
 };
 
-const queryMenuById = async (menu_id: number): Promise<Menu | null> => {
-  const realm = await getRealmInstance();
-  return new Promise((resolve, reject) => {
-    try {
-      const menu = realm.objectForPrimaryKey<Menu>('Menu', menu_id);
-      resolve(
-        menu
-          ? {
-            menu_id: menu.menu_id,
-            name: menu.name,
-            bar_code: menu.bar_code,
-            color_code: menu.color_code,
-            price: menu.price,
-            price_offer: menu.price_offer,
-            cost: menu.cost,
-            stock: menu.stock,
-            category_id: menu.category_id,
-            status: menu.status,
-            description: menu.description,
-          }
-          : null
-      );
-    } catch (error) {
-      reject(error);
+const queryMenuById = async (menu_id: string): Promise<Menu | null> => {
+  try {
+    const realm = await getRealmInstance();
+    const menu = realm.objectForPrimaryKey<Menu>('Menu', menu_id);
+
+    if (!menu) {
+      return null;
     }
-  });
+
+    const addOns = await queryAddonByMenuId(menu_id);
+    return {
+      menu_id: menu.menu_id,
+      name: menu.name,
+      bar_code: menu.bar_code,
+      color_code: menu.color_code,
+      price: menu.price,
+      price_offer: menu.price_offer,
+      cost: menu.cost,
+      stock: menu.stock,
+      category_id: menu.category_id,
+      status: menu.status,
+      description: menu.description,
+      addOns: addOns,
+    };
+  } catch (error) {
+    throw error;
+  }
 };
 
 const queryMenuByBarCode = async (bar_code: string): Promise<Menu | null> => {

@@ -15,7 +15,7 @@ import { useAppContext } from "../../../../hooks/appContext";
 import { formatCurrency } from "../../../../utils/help";
 import { Stack } from "../../../../components/package/stack";
 
-export default function Cash({ onClose }) {
+export default function Payment({ onClose }) {
     const { getTotalPrice, shop } = useAppContext();
     const subtotal = getTotalPrice("1");
     const tax = 0;
@@ -130,9 +130,8 @@ export default function Cash({ onClose }) {
                         <Button variant="outline" borderColor={theme.colors.gray[600]} px={20} py={10} borderRadius={25}>
                             <ButtonText fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[1]}>Print Receipt</ButtonText>
                         </Button>
-
-                        <Button  bg={theme.colors.green[500]} px={30} py={10} borderRadius={25}>
-                            <ButtonText fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[1]}>Order</ButtonText>
+                        <Button  bg={theme.colors.gray[1]} px={30} py={10} borderRadius={25}>
+                            <ButtonText fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[800]}>Order</ButtonText>
                         </Button>
                     </HStack>
                 </VStack>

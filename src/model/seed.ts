@@ -205,6 +205,7 @@ const generateTables = () => {
     isOccupied: 0,
     status: randomInt(0, 1),
     size: randomInt(2, 8),
+    location: '',
   }));
 };
 
