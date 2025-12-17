@@ -11,16 +11,20 @@ import SideBarAdapter from '../../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../../components/tablet/header';
 import { StyledSearchBar } from '../../../components/searchBar';
 import { useAppContext } from '../../../hooks/appContext';
-import { useTables } from '../../../hooks/useTable';
+import { useQueryTablesByStatus } from '../../../hooks/useTable';
 import TableCard from '../../../components/tablet/table';
 import KeyCard from '../../../components/tablet/table/keyCard';
 
 const BigTable = () => {
   const { updateMenuQuery } = useAppContext();
     const [table, setTable] = useState(null)
-    const { data, error, loading } = useTables();
+    const { data, error, loading, handleOccupancy } = useQueryTablesByStatus();
 
     console.log('Tables Data', data);
+
+    const onSubmit = (body) => {
+      handleOccupancy(body);
+    }
 
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[100]}>
@@ -34,13 +38,13 @@ const BigTable = () => {
       <Stack flex={1.5} horizonal>
         <SideBarAdapter collapse={true} />
         <Stack flex={2.5} paddingHorizontal={8} vertical >
-         <TableCard onTableSelect={(table)=> setTable(table) } />
+         <TableCard data={data} onTableSelect={(table)=> setTable(table) } />
         </Stack>
        
       </Stack>
       {table &&
         <StyledDialog visible>
-       <KeyCard table_name={table.tableName} onClose={()=> setTable(null)} />
+       <KeyCard table_name={table.tableName} table_id={table.table_id} onSubmit={(table)=> onSubmit(table)} onClose={()=> setTable(null)} />
         </StyledDialog>}
     </StyledSafeAreaView>
   );

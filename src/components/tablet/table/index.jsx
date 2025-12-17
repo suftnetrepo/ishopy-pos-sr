@@ -4,15 +4,13 @@ import { StyledSpacer, StyledText } from 'fluent-styles';
 import {
     ScrollView,
 } from "@gluestack-ui/themed";
-import { useQueryTablesByStatus } from "../../../hooks/useTable";
 import { useAppContext } from "../../../hooks/appContext";
 import { Stack } from "../../package/stack";
 import { theme, fontStyles } from "../../../utils/theme";
 import { StyledIcon } from "../../package/icon";
 
-export default function TableCard({onTableSelect}) {
+export default function TableCard({ data, onTableSelect }) {
     const { shop } = useAppContext()
-    const { data, error, loading } = useQueryTablesByStatus()
 
     const Card = ({ table }) => {
         return (

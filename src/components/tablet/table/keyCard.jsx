@@ -8,22 +8,19 @@ import {
     Button,
     ButtonText,
 } from "@gluestack-ui/themed";
-import { YStack, StyledInput, StyledSpacer } from 'fluent-styles';
+import { YStack, StyledSpacer } from 'fluent-styles';
 import { StyledIcon } from "../../package/icon";
 import { fontStyles, theme } from "../../../utils/theme";
-import { useAppContext } from "../../../hooks/appContext";
 import { Stack } from "../../../components/package/stack";
 
-export default function KeyCard({ onClose, table_name }) {
-    const { shop } = useAppContext();
-    const [pad, setPad] = useState("");
-    const [name, setName] = useState("");
-    const keypad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "x"];
+export default function KeyCard({ onSubmit, onClose, table_name, table_id }) {
+    const [pad, setPad] = useState("1");
+    const keypad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "<"];
 
     const handleKeyPress = (key) => {
         setPad((prev) => {
 
-            if (key === "x") {
+            if (key === "<") {
                 return prev.slice(0, -1);
             }
 
@@ -31,6 +28,19 @@ export default function KeyCard({ onClose, table_name }) {
             return prev + key;
         });
     };
+
+    const handleSubmit = () => {
+
+      const table ={
+        table_id: table_id,
+        guest_count: pad,
+        guest_name: "Guest",
+        isOccupied: 1,
+        start_time: new Date().toTimeString().split(' ')[0],
+      }
+      onSubmit(table);
+           onClose();
+    }
 
     const handleClose = () => {
         setPad("");
@@ -74,24 +84,15 @@ export default function KeyCard({ onClose, table_name }) {
                     </HStack>
 
                     <HStack flex={1}>
-                        <VStack px={16} py={16} >
-                            <StyledInput
-                                label={'Guest Name'}
-                                keyboardType='default'
-                                placeholder='Enter guest name'
-                                returnKeyType='next'
-                                maxLength={50}
-                                fontSize={theme.fontSize.normal}
-                                borderColor={theme.colors.yellow[800]}
-                                backgroundColor={theme.colors.gray[1]}
-                                borderRadius={32}
-                                paddingHorizontal={8}
-                                value={pad}
-                                placeholderTextColor={theme.colors.gray[300]}
-                                onChangeText={(text) => setName({ ...name, text })}
-                            />
+                        <VStack px={16} py={16} justifyContent="center" alignItems="center" >
+                              <Text marginBottom={24} fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[300]} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.thin}>
+                                Enter number of guests
+                            </Text>
+                              <Text fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[1]} fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.medium}>
+                                {pad}
+                            </Text>
                             <StyledSpacer marginVertical={16} />
-                            <HStack flex={1} flexWrap="wrap" justifyContent="center">
+                            <HStack flex={1} paddingHorizontal={8} flexWrap="wrap" justifyContent="center">
                                 {keypad.map((num, i) => (
                                     <Pressable
                                         key={i}
@@ -116,14 +117,15 @@ export default function KeyCard({ onClose, table_name }) {
                                 justifyContent="space-between"
                                 px={16}
                                 py={16}
-                                mt="auto"
+                              
                                 borderTopWidth={1}
                                 borderColor={theme.colors.gray[800]}
                             >
-                                <Button variant="outline" borderColor={theme.colors.gray[600]} px={20} py={10} borderRadius={25}>
+                                <Button variant="outline" borderColor={theme.colors.gray[600]} px={20} py={10} borderRadius={25} onPress={handleClose}>
                                     <ButtonText fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[1]}>Close</ButtonText>
                                 </Button>
-                                <Button bg={theme.colors.gray[1]} px={30} py={10} borderRadius={25}>
+                                  <StyledSpacer marginHorizontal={16} />
+                                <Button bg={(pad.length > 0 && pad !=="0") ? theme.colors.gray[1] : theme.colors.gray[600]} px={30} py={10} borderRadius={25} onPress={()=> (pad.length > 0 && pad !=="0") && handleSubmit()}>
                                     <ButtonText fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[800]}>Submit</ButtonText>
                                 </Button>
                             </HStack>
