@@ -1,6 +1,6 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { FlatList } from "react-native";
-import { StyledSpacer, StyledText } from 'fluent-styles';
+import { StyledSpacer, StyledText, StyledCycle } from 'fluent-styles';
 import {
     ScrollView,
 } from "@gluestack-ui/themed";
@@ -8,16 +8,35 @@ import { useAppContext } from "../../../hooks/appContext";
 import { Stack } from "../../package/stack";
 import { theme, fontStyles } from "../../../utils/theme";
 import { StyledIcon } from "../../package/icon";
+import { useNavigation } from "@react-navigation/native";
 
 export default function TableCard({ data, onTableSelect }) {
-    const { shop } = useAppContext()
+    const { shop, updateCurrentMenu } = useAppContext()
+    const navigation = useNavigation();
+
+    useEffect(() => {
+        updateCurrentMenu(4);
+    }, [shop]);
+
+    const handlePress = (table) => {
+
+        if (table?.isOccupied === 0) {
+            onTableSelect(table);
+            return;
+        }
+
+        navigation.navigate('big-menu', {
+            table_id: table.table_id,
+            table_name: table.tableName,
+        });
+    }
 
     const Card = ({ table }) => {
         return (
             <Stack
                 flex={1}
-                backgroundColor={theme.colors.gray[50]}
-                borderColor={theme.colors.gray[100]}
+                backgroundColor={theme.colors.gray[1]}
+                borderColor={theme.colors.gray[1]}
                 borderRadius={16}
                 padding={16}
                 marginVertical={8}
@@ -27,25 +46,44 @@ export default function TableCard({ data, onTableSelect }) {
                 shadowOpacity={0.1}
                 shadowRadius={2}
                 elevation={3}
-                vertical
-                onTouchStart={() => onTableSelect(table)}
-                justifyContent="center"
+                horizonal
+                justifyContent="space-between"
                 alignItems="center"
+                status={table?.isOccupied === 1 ? theme.colors.green[500] : theme.colors.yellow[500]}
             >
-                <Stack borderRadius={30} justifyContent="center" paddingHorizontal={16} paddingVertical={16} alignItems="center" backgroundColor={theme.colors.gray[1]} borderColor={theme.colors.gray[1]}>
+                <Stack flex={1} vertical alignItems="flex-start" justifyContent="flex-start">
                     <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.medium} fontWeight={theme.fontWeight.medium} color={theme.colors.gray[800]}>
                         {table.tableName}
                     </StyledText>
-                </Stack>
 
-                <StyledSpacer marginVertical={4} />
-                <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.light} color={theme.colors.gray[500]}>
-                   Guests {table.guest_count || 0} 
-                </StyledText>
-                <StyledSpacer marginVertical={16} />
-                   <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.light} color={theme.colors.gray[500]}>
-                    {table.start_time || "--:--"} 
-                </StyledText>
+                    <Stack horizonal marginTop={4} alignItems="center" justifyContent="flex-start">
+                        <StyledIcon name="person" size={24} color={theme.colors.gray[500]} />
+                        <StyledText marginHorizontal={4} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.light} color={theme.colors.gray[500]}>
+                            {table.guest_count || 0}
+                        </StyledText>
+                        <StyledSpacer marginHorizontal={4} />
+                        <StyledIcon name="access-time" size={24} color={theme.colors.gray[500]} />
+                        <StyledText marginHorizontal={4} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.light} color={theme.colors.gray[500]}>
+                            {table.start_time || "--:--"}
+                        </StyledText>
+                    </Stack>
+                </Stack>
+                <Stack horizonal alignItems="center" justifyContent="space-between">
+                    <StyledSpacer marginHorizontal={4} />
+                    <StyledCycle
+                        paddingHorizontal={10}
+                        borderWidth={1}
+                        height={48}
+                        width={48}
+                        onTouchStart={() => handlePress(table)}
+                        borderColor={theme.colors.gray[400]}>
+                        <StyledIcon
+                            size={24}
+                            name={table?.isOccupied === 0 ? "event-seat" : "groups"}
+                            color={theme.colors.gray[800]}
+                        />
+                    </StyledCycle>
+                </Stack>
             </Stack>
         );
     };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyledSafeAreaView,
   StyledHeader,
@@ -14,13 +14,19 @@ import { useAppContext } from '../../../hooks/appContext';
 import { useQueryTablesByStatus } from '../../../hooks/useTable';
 import TableCard from '../../../components/tablet/table';
 import KeyCard from '../../../components/tablet/table/keyCard';
+import { useFocus } from '../../../hooks/useFocus';
 
 const BigTable = () => {
-  const { updateMenuQuery } = useAppContext();
-    const [table, setTable] = useState(null)
-    const { data, error, loading, handleOccupancy } = useQueryTablesByStatus();
+  const focused = useFocus();
+  const { updateMenuQuery, updateCurrentMenu } = useAppContext();
+  const [table, setTable] = useState(null)
+  const { data, error, loading, handleOccupancy } = useQueryTablesByStatus();
 
     console.log('Tables Data', data);
+
+    useEffect(() => {
+        updateCurrentMenu(4);
+    }, [focused]);
 
     const onSubmit = (body) => {
       handleOccupancy(body);
@@ -40,7 +46,6 @@ const BigTable = () => {
         <Stack flex={2.5} paddingHorizontal={8} vertical >
          <TableCard data={data} onTableSelect={(table)=> setTable(table) } />
         </Stack>
-       
       </Stack>
       {table &&
         <StyledDialog visible>

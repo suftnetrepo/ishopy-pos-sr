@@ -18,11 +18,11 @@ import { theme } from "../../../utils/theme";
 import Drawer from "../../../components/package/drawer";
 import Payment from "../payment/cash";
 
-export default function Cart() {
+export default function Cart({table_id}) {
     const { getItems, shop, removeItem, getTotalTax, getTotal, getTotalPrice } = useAppContext()
     const [method, setMethod] = useState("cash");
     const [showPayment, setShowPayment] = useState(false);
-    const cartItems = getItems("1");
+    const cartItems = getItems(table_id);
 
     console.log("Cart Items:", cartItems);
     console.log("Cart Items Length:", cartItems.length);
@@ -69,7 +69,7 @@ export default function Cart() {
                                                     name={"cancel"}
                                                     size={24}
                                                     color={theme.colors.gray[800]}
-                                                    onPress={() => removeItem(item.index, "1")}
+                                                    onPress={() => removeItem(item.index, table_id)}
                                                 />
                                             </Box>
                                         </HStack>
@@ -86,12 +86,12 @@ export default function Cart() {
                 <Box backgroundColor={theme.colors.gray[800]} px={16} py={20} borderRadius={12}>
                     <HStack justifyContent="space-between" mb={8}>
                         <Text color={theme.colors.gray[400]}>Subtotal</Text>
-                        <Text color={theme.colors.gray[400]}> {formatCurrency(shop?.currency || "£", getTotal("1"))}</Text>
+                        <Text color={theme.colors.gray[400]}> {formatCurrency(shop?.currency || "£", getTotal(table_id))}</Text>
                     </HStack>
 
                     <HStack justifyContent="space-between" mb={8}>
                         <Text color={theme.colors.gray[400]}>Tax%</Text>
-                        <Text color={theme.colors.gray[400]}> {formatCurrency(shop?.currency || "£", getTotalTax("1"))}</Text>
+                        <Text color={theme.colors.gray[400]}> {formatCurrency(shop?.currency || "£", getTotalTax(table_id))}</Text>
                     </HStack>
 
                     <Box
@@ -105,7 +105,7 @@ export default function Cart() {
                             Total
                         </Text>
                         <Text color={theme.colors.gray[1]} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.normal}>
-                            {formatCurrency(shop?.currency || "£", getTotalPrice("1"))}
+                            {formatCurrency(shop?.currency || "£", getTotalPrice(table_id))}
                         </Text>
                     </HStack>
                 </Box>
@@ -163,7 +163,7 @@ export default function Cart() {
                 isOpen={showPayment}
                 onClose={() => setShowPayment(false)}
             >
-                <Payment onClose={() => setShowPayment(false)} />
+                <Payment table_id={table_id} onClose={() => setShowPayment(false)} />
             </Drawer>
         </VStack>
     );

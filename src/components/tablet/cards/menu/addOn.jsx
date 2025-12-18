@@ -1,14 +1,13 @@
-import React, { useState } from "react";
-import { YStack, XStack, StyledSafeAreaView, StyledText, StyledDialog, StyledBadgeIcon, StyledBadge, StyledSpacer, StyledButton, StyledHeader } from 'fluent-styles';
-import { StyledIcon } from "../../../package/icon";
+import React from "react";
+import { YStack, XStack, StyledText, StyledSpacer, StyledButton } from 'fluent-styles';
 import { fontStyles, theme } from "../../../../utils/theme";
 import { useAppContext } from "../../../../hooks/appContext";
 import { formatCurrency } from "../../../../utils/help";
 import { Stack } from "../../../../components/package/stack";
 import { Pressable } from "react-native";
 
-export default function AddOn({ onClose, item, setItem }) {
-    const { shop, addAddOn, addItem } = useAppContext();
+export default function AddOn({ table_id, onClose, item, setItem }) {
+    const { shop, addItem } = useAppContext();
 
     console.log("AddOn Item:", item);
 
@@ -39,7 +38,7 @@ export default function AddOn({ onClose, item, setItem }) {
 
     const onSubmit = () => {
         const index = `${Date.now()}${Math.random().toString(36).slice(2, 8)}`;
-        addItem(index, item.menu_id, item.name, item.price, 1, "1", item?.addOns?.filter((j) => j.quantity > 0)).then(() => { });
+        addItem(index, item.menu_id, item.name, item.price, 1, table_id, item?.addOns?.filter((j) => j.quantity > 0)).then(() => { });
         onClose();
     };
 

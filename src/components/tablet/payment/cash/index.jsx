@@ -15,9 +15,9 @@ import { useAppContext } from "../../../../hooks/appContext";
 import { formatCurrency } from "../../../../utils/help";
 import { Stack } from "../../../../components/package/stack";
 
-export default function Payment({ onClose }) {
+export default function Payment({ onClose, table_id }) {
     const { getTotalPrice, shop } = useAppContext();
-    const subtotal = getTotalPrice("1");
+    const subtotal = getTotalPrice(table_id);
     const tax = 0;
     const baseTotal = subtotal + tax;
     const [amountInput, setAmountInput] = useState("");
