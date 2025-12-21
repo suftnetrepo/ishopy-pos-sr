@@ -14,7 +14,7 @@ import { fontStyles, theme } from "../../../utils/theme";
 import { Stack } from "../../../components/package/stack";
 
 export default function KeyCard({ onSubmit, onClose, table_name, table_id }) {
-    const [pad, setPad] = useState("1");
+    const [pad, setPad] = useState("");
     const keypad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "<"];
 
     const handleKeyPress = (key) => {

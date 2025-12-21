@@ -6,17 +6,19 @@ interface CartState {
 	items: CartItem[];
 	discount: number;
 	tax: number;
+	order_id?: string;
 }
 
 const initialize = {
 	items: [],
 	discount: 0,
 	tax: 0,
+	order_id: undefined,
 };
 
 const useCart = () => {
 	const [carts, setCarts] = useState<Record<string, CartState>>({});
-	
+
 	const getCart = (table_id: string): CartState => {
 		return carts[table_id] || initialize;
 	};
@@ -43,7 +45,7 @@ const useCart = () => {
 				...currentCart,
 				items: [...currentCart.items, { index, id, name, price, quantity, addOns }]
 			};
-		
+
 			return {
 				...prev,
 				[table_id]: updatedCart
@@ -119,7 +121,7 @@ const useCart = () => {
 	};
 
 	const getItemCount = (table_id: string) => {
-		const cart = getCart(table_id);	
+		const cart = getCart(table_id);
 		return cart.items.reduce((count, item) => count + item.quantity, 0);
 	};
 
@@ -181,7 +183,7 @@ const useCart = () => {
 
 	const getItems = (table_id: string) => {
 		const cart = getCart(table_id);
-		return cart.items.sort((a, b) => a.name.localeCompare(b.name));
+		return { items: cart.items.sort((a, b) => a.name.localeCompare(b.name)), order_id: cart?.order_id };
 	};
 
 	const getCartItemByIndex = (index: number, table_id: string): CartItem | undefined => {
@@ -191,7 +193,7 @@ const useCart = () => {
 
 	const addAddOn = (itemId: string, addOns: AddOn[], table_id: string) => {
 		setCarts((prev) => {
-			const currentCart = getCart(table_id);		
+			const currentCart = getCart(table_id);
 			return {
 				...prev,
 				[table_id]: {
@@ -228,7 +230,22 @@ const useCart = () => {
 		});
 	};
 
+	const updateOrderId = (order_id: string, table_id: string) => {
+		setCarts((prev) => {
+			const currentCart = getCart(table_id);
+
+			return {
+				...prev,
+				[table_id]: {
+					...currentCart,
+					order_id
+				}
+			};
+		});
+	};
+
 	return {
+		updateOrderId,
 		carts,
 		addItem,
 		updateItem,

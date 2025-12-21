@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   StyledSafeAreaView,
   StyledHeader,
-  StyledSpacer,
   StyledDialog,
 } from 'fluent-styles';
 import { Stack } from '../../../components/package/stack';
@@ -18,15 +17,9 @@ import { useFocus } from '../../../hooks/useFocus';
 
 const BigTable = () => {
   const focused = useFocus();
-  const { updateMenuQuery, updateCurrentMenu } = useAppContext();
+  const { updateMenuQuery } = useAppContext();
   const [table, setTable] = useState(null)
-  const { data, error, loading, handleOccupancy } = useQueryTablesByStatus();
-
-    console.log('Tables Data', data);
-
-    useEffect(() => {
-        updateCurrentMenu(4);
-    }, [focused]);
+  const { data, error, loading, handleOccupancy } = useQueryTablesByStatus(focused);
 
     const onSubmit = (body) => {
       handleOccupancy(body);
@@ -42,7 +35,7 @@ const BigTable = () => {
         </StyledHeader.Full>
       </StyledHeader>
       <Stack flex={1.5} horizonal>
-        <SideBarAdapter collapse={true} />
+        <SideBarAdapter selectedMenu={4} collapse={true} />
         <Stack flex={2.5} paddingHorizontal={8} vertical >
          <TableCard data={data} onTableSelect={(table)=> setTable(table) } />
         </Stack>

@@ -9,14 +9,16 @@ import { Stack } from "../../package/stack";
 import { theme, fontStyles } from "../../../utils/theme";
 import { StyledIcon } from "../../package/icon";
 import { useNavigation } from "@react-navigation/native";
+import { useFocus } from "../../../hooks/useFocus";
 
 export default function TableCard({ data, onTableSelect }) {
+    const focused = useFocus();
     const { shop, updateCurrentMenu } = useAppContext()
     const navigation = useNavigation();
 
     useEffect(() => {
         updateCurrentMenu(4);
-    }, [shop]);
+    }, [focused]);
 
     const handlePress = (table) => {
 
@@ -49,7 +51,7 @@ export default function TableCard({ data, onTableSelect }) {
                 horizonal
                 justifyContent="space-between"
                 alignItems="center"
-                status={table?.isOccupied === 1 ? theme.colors.green[500] : theme.colors.yellow[500]}
+                status={table?.isOccupied === 1 ? theme.colors.green[500] : theme.colors.purple[700]}
             >
                 <Stack flex={1} vertical alignItems="flex-start" justifyContent="flex-start">
                     <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.medium} fontWeight={theme.fontWeight.medium} color={theme.colors.gray[800]}>

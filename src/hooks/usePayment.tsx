@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+
 import { useEffect, useState } from "react";
 import {
 	queryAllPayments,	
@@ -13,6 +13,7 @@ interface Initialize {
 	data: Payment[] | null | Payment | [] | boolean;
 	error: Error | null;
 	loading: boolean;
+	success :boolean
 }
 
 const usePayments = (load: boolean) => {
@@ -20,6 +21,7 @@ const usePayments = (load: boolean) => {
 		data: [],
 		error: null,
 		loading: true,
+		success : false
 	});
 
 	async function loadPayment() {
@@ -35,6 +37,7 @@ const usePayments = (load: boolean) => {
 				data: null,
 				error: error as Error,
 				loading: false,
+				success : false
 			});
 		}
 	}
@@ -56,6 +59,7 @@ const usePayments = (load: boolean) => {
 				data: null,
 				error: error as Error,
 				loading: false,
+				success : false
 			});
 		}
 	}
@@ -65,6 +69,7 @@ const usePayments = (load: boolean) => {
 			data: null,
 			error: null,
 			loading: false,
+			success : false
 		});
 	};
 
@@ -80,6 +85,7 @@ const usePaymentsByOrderId = (order_id: number) => {
 		data: [],
 		error: null,
 		loading: true,
+		success : false
 	});
 
 	useEffect(() => {
@@ -90,12 +96,14 @@ const usePaymentsByOrderId = (order_id: number) => {
 					...prev,
 					data: result,
 					loading: false,
+					success : true
 				}));
 			} catch (error) {
 				setData({
 					data: null,
 					error: error as Error,
 					loading: false,
+					success : false
 				});
 			}
 		}
@@ -112,7 +120,8 @@ const useInsertPayment = () => {
 	const [data, setData] = useState<Initialize>({
 		data: null,
 		error: null,
-		loading: true,
+		loading: false,
+		success : false
 	});
 
 	const insertHandler = async (payment: Omit<Payment, "id">) => {
@@ -124,12 +133,14 @@ const useInsertPayment = () => {
 				data: result,
 				error: null,
 				loading: false,
+				success : true
 			});
 		} catch (error) {
 			setData({
 				data: null,
 				error: error as Error,
 				loading: false,
+				success : false
 			});
 		}
 	};

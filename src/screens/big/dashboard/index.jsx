@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {
   StyledSafeAreaView,
   StyledText,
@@ -23,13 +23,9 @@ import { useFocus } from '../../../hooks/useFocus';
 const Dashboard = () => {
   const focused = useFocus();
   const navigate = useNavigation();
-  const {user, updateCurrentMenu} = useAppContext();
+  const {user} = useAppContext();
 
-  useEffect(() => {
-    updateCurrentMenu(1);
-  }, [focused]);
-
-  console.log('.............xxxxxx', focused);
+  console.log('.............Dashboard', focused);
 
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[100]}>
@@ -39,7 +35,7 @@ const Dashboard = () => {
         </StyledHeader.Full>
       </StyledHeader>
       <Stack flex={1.5} horizonal backgroundColor={theme.colors.gray[100]}>
-        <SideBarAdapter key={focused} collapse={false} />
+        <SideBarAdapter selectedMenu={1} key={focused} collapse={false} />
         <Stack flex={2} vertical backgroundColor={theme.colors.transparent}>
           <ScrollView vertical showsVerticalScrollIndicator={false}>
             <Tiles />

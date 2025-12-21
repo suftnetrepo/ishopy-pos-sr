@@ -1,8 +1,4 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable no-undef */
-/* eslint-disable prettier/prettier */
-/* eslint-disable react/prop-types */
-/* eslint-disable prettier/prettier */
+
 import React, { useState, useRef } from 'react';
 import { YStack, XStack, StyledSafeAreaView, StyledText, StyledDialog, StyledBadgeIcon, StyledBadge, StyledSpacer, StyledButton, StyledHeader } from 'fluent-styles';
 import { Modalize } from 'react-native-modalize';
@@ -49,6 +45,7 @@ const Sales = () => {
       modalizeRef.current.open();
     }
   };
+
   const increaseAddOnQuantity = (addOn) => {
     setItem((prev) => ({
       ...prev,

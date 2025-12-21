@@ -27,10 +27,11 @@ interface CartActions {
   getTotalDiscount: (table_id: string) => number;
   getTotalTax: (table_id: string) => number;
   clearItem: (table_id: string) => void;
-  getItems: (table_id: string) => CartItem[];
+  getItems: (table_id: string) => any;
   deleteAddOn: (itemId: string, addOnId: string, table_id: string) => void;
   addAddOn: (itemId: string, addOns: AddOn[], table_id: string) => void;
   getCartItemByIndex: (index: number, table_id: string) => CartItem | undefined;
+  updateOrderId:(order_id: string, table_id: string) => void
 }
 
 interface Actions extends CartActions {
@@ -96,7 +97,8 @@ const AppProvider = ({children}: AppProviderProps) => {
     addAddOn,
     getTotalPrice,
     removeItem,
-    getCartItemByIndex
+    getCartItemByIndex,
+    updateOrderId
   } = useCart();
 
   const actions: Actions = {
@@ -171,7 +173,8 @@ const AppProvider = ({children}: AppProviderProps) => {
     deleteAddOn,
     addAddOn,
     removeItem,
-    getCartItemByIndex
+    getCartItemByIndex,
+    updateOrderId
   };
 
   return (

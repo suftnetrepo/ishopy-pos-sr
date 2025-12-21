@@ -1,8 +1,6 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable prettier/prettier */
-import {useEffect, useState} from 'react';
-import {Share} from 'react-native';
+
+import { useEffect, useState } from 'react';
+import { Share } from 'react-native';
 import {
   queryAllOrders,
   queryOrderById,
@@ -11,19 +9,19 @@ import {
   queryOrdersByDateRange,
   getOrderStatusAggregate,
 } from '../model/orders';
-import {Order, OrderItem, Payment} from '../model/types';
-import {insertOrderItem} from '../model/orderItems';
-import {useAppContext} from './appContext';
-import {insertPayment} from '../model/payments';
-import {guid} from '../utils/help';
-import {printReceipt} from '../utils/printReceipt';
-import {updateOccupancy} from './useTable';
-import {OrderStatusAggregate} from '../model/orders';
+import { Order, OrderItem, CartItem } from '../model/types';
+import { insertOrderItem } from '../model/orderItems';
+import { AddOn } from '../model/addOn';
+import { useAppContext } from './appContext';
+import { guid } from '../utils/help';
+import { printReceipt } from '../utils/printReceipt';
+import { OrderStatusAggregate } from '../model/orders';
 
 interface Initialize {
   data: Order[] | null | Order | [] | boolean | OrderStatusAggregate | null;
   error: Error | null;
   loading: boolean;
+  success: boolean
 }
 
 const order: Order = {
@@ -38,19 +36,12 @@ const order: Order = {
   date: new Date(),
 };
 
-const payment: Payment = {
-  id: '',
-  payment_method: '',
-  order_id: '',
-  amount: 0,
-  date: new Date(),
-};
-
 const useOrderStatusAggregate = () => {
   const [data, setData] = useState<Initialize>({
     data: null,
     error: null,
     loading: true,
+    success: false
   });
 
   async function load() {
@@ -66,6 +57,7 @@ const useOrderStatusAggregate = () => {
         data: null,
         error: error as Error,
         loading: false,
+        success: false
       });
     }
   }
@@ -86,6 +78,7 @@ const useOrders = (load: boolean) => {
     data: [],
     error: null,
     loading: true,
+    success: false
   });
 
   async function loadOrders() {
@@ -101,6 +94,7 @@ const useOrders = (load: boolean) => {
         data: null,
         error: error as Error,
         loading: false,
+        success: false
       });
     }
   }
@@ -122,6 +116,7 @@ const useOrders = (load: boolean) => {
         data: null,
         error: error as Error,
         loading: false,
+        success: false
       });
     }
   }
@@ -131,6 +126,7 @@ const useOrders = (load: boolean) => {
       data: null,
       error: null,
       loading: false,
+      success: false
     });
   };
 
@@ -146,6 +142,7 @@ const useQueryOrderById = (order_id: string) => {
     data: [],
     error: null,
     loading: false,
+    success: false
   });
 
   useEffect(() => {
@@ -162,6 +159,7 @@ const useQueryOrderById = (order_id: string) => {
           data: null,
           error: error as Error,
           loading: false,
+          success: false
         });
       }
     }
@@ -188,10 +186,11 @@ const useInsertOrder = (table_id: string) => {
     data: null,
     error: null,
     loading: false,
+    success: false
   });
 
   const insertHandler = async (order: Order) => {
-    setData(prev => ({...prev, loading: true}));
+    setData(prev => ({ ...prev, loading: true }));
 
     try {
       const result = await insertOrder(order);
@@ -199,18 +198,20 @@ const useInsertOrder = (table_id: string) => {
         data: result,
         error: null,
         loading: false,
+        success: true
       });
     } catch (error) {
       setData({
         data: null,
         error: error as Error,
         loading: false,
+        success: false
       });
     }
   };
 
   const orderHandler = async () => {
-    setData(prev => ({...prev, loading: true}));
+    setData(prev => ({ ...prev, loading: true }));
     try {
       order.order_id = guid();
       order.user_id = user?.user_id;
@@ -218,13 +219,13 @@ const useInsertOrder = (table_id: string) => {
       order.tax = getTotalTax(table_id) || 0;
       order.total = getTotal(table_id) || 0;
       order.table_id = table_id;
-      order.status = 'completed';
+      order.status = 'progress';
       order.total_price = getTotalPrice(table_id) || 0;
 
       const orderResult = await insertOrder(order);
 
       if (orderResult) {
-        for (const item of items) {
+        for (const item of items?.items || []) {
           const orderItem: OrderItem = {
             detail_id: guid(),
             order_id: orderResult.order_id,
@@ -241,29 +242,64 @@ const useInsertOrder = (table_id: string) => {
         }
       }
 
-      payment.id = guid();
-      payment.amount = order.total_price;
-      payment.order_id = orderResult.order_id;
-      payment.payment_method = 'Cash';
-
-      await insertPayment(payment);
-      await updateOccupancy(table_id, 0);
-
       setData({
         data: orderResult,
         error: null,
         loading: false,
+        success: true
       });
 
-      return true;
+      return orderResult.order_id;
     } catch (error) {
       setData({
         data: null,
         error: error as Error,
         loading: false,
+        success: false
       });
     }
   };
+
+  const deleteHandler = async (order_id: string) => {
+    setData(prev => ({ ...prev, loading: true }));
+    try {
+      const result = await deleteOrder(order_id);
+      setData({
+        data: result,
+        error: null,
+        loading: false,
+         success: true
+      });
+      return true
+    } catch (error) {
+      setData({
+        data: false,
+        error: error as Error,
+        loading: false,
+         success: false
+      });
+      return false
+    }
+  };
+
+  async function queryOrderByIdhandler(order_id :string) {
+      try {
+        const result = await queryOrderById(order_id);
+        setData(prev => ({
+          ...prev,
+          data: result,
+          loading: false,
+              success: true
+        }));
+      } catch (error) {
+        setData({
+          data: null,
+          error: error as Error,
+          loading: false,
+          success: false
+        });
+      }
+    }
 
   const printHandler = (table_name: string, order: Order) => {
     try {
@@ -276,9 +312,9 @@ const useInsertOrder = (table_id: string) => {
         table_name: table_name,
         date: order.date,
         cashier: `${user?.first_name} ${user?.last_name}`,
-        items: items.map(item => {
+        items: items?.items?.map((item: CartItem) => {
           const addOnDetails =
-            item.addOns?.map(addOn => ({
+            item.addOns?.map((addOn: AddOn) => ({
               quantity: addOn.quantity,
               name: addOn.addOnName,
               price: addOn.price * (addOn.quantity || 0),
@@ -296,7 +332,7 @@ const useInsertOrder = (table_id: string) => {
         discount: getTotalDiscount(table_id),
         total: getTotalPrice(table_id),
         footerMessage:
-          'Your satisfaction is our priority. Thank you for shopping with us!',
+          'Your satisfaction is our priority. Thank you for Dining with us!',
       };
 
       printReceipt(receiptData);
@@ -305,6 +341,7 @@ const useInsertOrder = (table_id: string) => {
         data: null,
         error: error as Error,
         loading: false,
+        success:false
       });
     }
   };
@@ -318,9 +355,9 @@ const useInsertOrder = (table_id: string) => {
       orderNumber: order.order_id.slice(0, 8),
       date: order.date,
       cashier: `${user?.first_name} ${user?.last_name}`,
-      items: items.map(item => {
+      items: items?.items?.map((item: CartItem) => {
         const addOnDetails =
-          item.addOns?.map(addOn => ({
+          item.addOns?.map((addOn: AddOn) => ({
             quantity: addOn.quantity,
             name: addOn.addOnName,
             price: addOn.price * (addOn.quantity || 0),
@@ -360,20 +397,19 @@ const useInsertOrder = (table_id: string) => {
       `Date: ${new Date(date).toLocaleString()}\n` +
       `Cashier: ${cashier}\n\n` +
       `Items:\n` +
-      items
-        .map(item => {
-          const itemTotal = (item.price * item.quantity).toFixed(2);
-          const addOnsText =
-            item.addOns
-              ?.map(
-                addOn =>
-                  `${addOn.quantity} ${addOn.addOnName} - ${(
-                    addOn.price * (addOn.quantity || 0)
-                  ).toFixed(2)}\n`
-              )
-              .join('') || '';
-          return `${item.quantity} ${item.name} - ${itemTotal}\n${addOnsText}`;
-        })
+      items?.items?.map((item: CartItem) => {
+        const itemTotal = (item.price * item.quantity).toFixed(2);
+        const addOnsText =
+          item.addOns
+            ?.map(
+              (addOn: AddOn) =>
+                `${addOn.quantity} ${addOn.addOnName} - ${(
+                  addOn.price * (addOn.quantity || 0)
+                ).toFixed(2)}\n`
+            )
+            .join('') || '';
+        return `${item.quantity} ${item.name} - ${itemTotal}\n${addOnsText}`;
+      })
         .join('') +
       `\nSubtotal: ${subtotal.toFixed(2)}\n` +
       `Tax: ${tax.toFixed(2)}\n` +
@@ -403,6 +439,7 @@ const useInsertOrder = (table_id: string) => {
         data: null,
         error: error as Error,
         loading: false,
+        success :false
       });
     }
   };
@@ -412,6 +449,7 @@ const useInsertOrder = (table_id: string) => {
       data: null,
       error: null,
       loading: false,
+      success:false
     });
   };
 
@@ -422,6 +460,8 @@ const useInsertOrder = (table_id: string) => {
     resetHandler,
     printHandler,
     shareReceipt,
+    deleteHandler,
+    queryOrderByIdhandler
   };
 };
 
@@ -437,7 +477,7 @@ const useDeleteOrder = () => {
   });
 
   const deleteHandler = async (order_id: string) => {
-    setData(prev => ({...prev, loading: true}));
+    setData(prev => ({ ...prev, loading: true }));
     try {
       const result = await deleteOrder(order_id);
       setData({

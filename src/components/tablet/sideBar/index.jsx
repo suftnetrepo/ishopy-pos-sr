@@ -1,10 +1,9 @@
-import React, {Fragment} from 'react';
-import {useNavigation, CommonActions} from '@react-navigation/native';
-import {SidebarItem} from '../../package/sidebar';
-import {useAppContext} from '../../../hooks/appContext';
+import React, { Fragment } from 'react';
+import { useNavigation, CommonActions } from '@react-navigation/native';
+import { SidebarItem } from '../../package/sidebar';
+import { useAppContext } from '../../../hooks/appContext';
 
-const SideBar = ({collapse = false}) => {
-  const {selectedMenu, updateCurrentMenu} = useAppContext();
+const SideBar = ({ collapse = false, selectedMenu = 1, showMenu = false }) => {
   const navigate = useNavigation();
 
   console.log('Selected Menu:', selectedMenu);
@@ -16,6 +15,7 @@ const SideBar = ({collapse = false}) => {
       icon: 'view-dashboard-outline',
       active: true,
       name: 'big-dashboard',
+      show: true,
     },
     {
       id: 2,
@@ -23,13 +23,15 @@ const SideBar = ({collapse = false}) => {
       icon: 'book-open-outline',
       active: false,
       name: 'big-menu',
+      show: false,
     },
     {
       id: 3,
       label: 'Orders',
       icon: 'receipt',
       active: false,
-      name: 'big-menu',
+      name: 'big-orders',
+      show: true,
     },
     {
       id: 4,
@@ -37,6 +39,7 @@ const SideBar = ({collapse = false}) => {
       icon: 'table-chair',
       active: false,
       name: 'big-table',
+      show: true,
     },
     {
       id: 5,
@@ -44,30 +47,22 @@ const SideBar = ({collapse = false}) => {
       icon: 'cog-outline',
       active: false,
       name: 'big-menu',
+      show: true,
     },
   ];
 
-  return (
-    <Fragment>
-      {items.map((item, index) => (
-        <SidebarItem
-          collapse={collapse}
-          key={index}
-          label={item.label}
-          icon={item.icon}
-          active={
-            selectedMenu === 1 && item.id === 1
-              ? true
-              : item.id === selectedMenu
-          }
-          onPress={() => {
-            updateCurrentMenu(item.id);
-            navigate.navigate(item.name);
-          }}
-        />
-      ))}
-    </Fragment>
-  );
+ return items
+  .filter(item => showMenu || item.show)
+  .map((item, index) => (
+    <SidebarItem
+      collapse={collapse}
+      key={item.id || index}
+      label={item.label}
+      icon={item.icon}
+      active={item.id === selectedMenu}
+      onPress={() => navigate.navigate(item.name)}
+    />
+  ));
 };
 
 export default SideBar;

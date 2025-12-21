@@ -27,13 +27,13 @@ const BigMenu = () => {
     <StyledSafeAreaView backgroundColor={theme.colors.gray[100]}>
       <StyledHeader borderRadius={30} statusProps={{ translucent: true }}>
         <StyledHeader.Full>
-          <RenderHeader showBackButton={true} showLogo={false} showTitle={true} title={`Table - ${table_name}`} >
+          <RenderHeader showBackButton={true} showLogo={false} showTitle={true} title={`${table_name}`} >
             <StyledSearchBar placeholder="Search menu items..." flex={1} onTextChange={(query) => updateMenuQuery(query)} />
           </RenderHeader>
         </StyledHeader.Full>
       </StyledHeader>
       <Stack flex={1.5} horizonal>
-        <SideBarAdapter collapse={true} />
+        <SideBarAdapter selectedMenu={2} showMenu={true} collapse={true} />
         <Stack flex={2.5} paddingHorizontal={8} vertical >
           <MenuCategory />
           <StyledSpacer marginVertical={4} />

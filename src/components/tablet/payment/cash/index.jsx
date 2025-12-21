@@ -8,28 +8,57 @@ import {
     Button,
     ButtonText,
 } from "@gluestack-ui/themed";
-import { StyledText, StyledSpacer } from 'fluent-styles';
+import {
+    StyledText,
+    StyledSpacer,
+    StyledSpinner,
+    StyledOkDialog,
+    StyledDialog
+} from 'fluent-styles';
 import { StyledIcon } from "../../../package/icon";
 import { fontStyles, theme } from "../../../../utils/theme";
 import { useAppContext } from "../../../../hooks/appContext";
 import { formatCurrency } from "../../../../utils/help";
 import { Stack } from "../../../../components/package/stack";
+import CheckOut from "../../../../components/tablet/checkout";
+import { useInsertPayment } from "../../../../hooks/usePayment";
 
-export default function Payment({ onClose, table_id }) {
+export default function Payment({ 
+    payment_method, 
+    onClose, 
+    table_name, 
+    table_id, 
+    order_id, 
+    printHandler, 
+    shareReceipt 
+}) {
     const { getTotalPrice, shop } = useAppContext();
-    const subtotal = getTotalPrice(table_id);
+    const { insert, data, error, loading, success } = useInsertPayment();
+    
+    const subtotal = getTotalPrice(table_id) || 0;
     const tax = 0;
     const baseTotal = subtotal + tax;
+    
     const [amountInput, setAmountInput] = useState("");
-    const amountToPay = amountInput.includes(".")
-        ? parseFloat(amountInput || "0") || 0
-        : ((parseInt(amountInput || "0", 10) || 0) / 100);
-    const change = amountToPay - baseTotal;
     const keypad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "0", "x"];
+    
+    // Calculate amount to pay
+    const calculateAmountToPay = (input) => {
+        if (!input) return 0;
+        
+        if (input.includes(".")) {
+            return parseFloat(input) || 0;
+        }
+        
+        return (parseInt(input, 10) || 0) / 100;
+    };
+    
+    const amountToPay = calculateAmountToPay(amountInput);
+    const change = amountToPay - baseTotal;
+    const canPay = amountToPay >= baseTotal && amountInput !== "";
 
     const handleKeyPress = (key) => {
         setAmountInput((prev) => {
-
             if (key === "x") {
                 return prev.slice(0, -1);
             }
@@ -48,21 +77,163 @@ export default function Payment({ onClose, table_id }) {
     const handleClose = () => {
         setAmountInput("");
         onClose();
-    }
+    };
+
+    const handleSubmit = async () => {
+        if (!canPay || !order_id) return;
+        
+        const body = {
+            order_id: order_id,
+            amount: parseFloat(baseTotal),
+            payment_method: payment_method,
+            date: new Date().toISOString()
+        };
+        
+        await insert(body);
+    };
+
+    const renderAmountDisplay = () => {
+        if (amountInput && amountInput.length > 0) {
+            return (
+                <StyledText 
+                    fontFamily={fontStyles.Roboto_Regular} 
+                    textAlign="center" 
+                    color={theme.colors.gray[500]} 
+                    fontSize={theme.fontSize.xxxlarge} 
+                    fontWeight={theme.fontWeight.thin}
+                >
+                    {formatCurrency(shop?.currency || "£", amountToPay)}
+                </StyledText>
+            );
+        }
+        return null;
+    };
+
+    const renderChangeDisplay = () => {
+        if (amountInput && change > 0) {
+            return (
+                <>
+                    <StyledSpacer marginVertical={2} />
+                    <StyledText 
+                        textAlign="center" 
+                        fontFamily={fontStyles.Roboto_Regular} 
+                        fontSize={theme.fontSize.xlarge} 
+                        color={theme.colors.red[500]} 
+                        fontWeight={theme.fontWeight.medium}
+                    >
+                     {formatCurrency(shop?.currency || "£", change)}
+                    </StyledText>
+                </>
+            );
+        }
+        return null;
+    };
+
+    const renderKeypad = () => (
+        <HStack flex={1} flexWrap="wrap" justifyContent="center">
+            {keypad.map((num, index) => (
+                <Pressable
+                    key={`key-${index}`}
+                    onPress={() => handleKeyPress(num)}
+                    style={{
+                        width: "30%",
+                        margin: "1.5%",
+                        height: 70,
+                        borderRadius: 10,
+                        backgroundColor: theme.colors.gray[800],
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
+                >
+                    <Text 
+                        color={theme.colors.gray[1]} 
+                        fontFamily={fontStyles.Roboto_Regular} 
+                        fontSize={theme.fontSize.large} 
+                        fontWeight={theme.fontWeight.medium}
+                    >
+                        {num}
+                    </Text>
+                </Pressable>
+            ))}
+        </HStack>
+    );
+
+    const renderPaymentButton = () => {
+        if (canPay) {
+            return (
+                <Button 
+                    flex={1} 
+                    bg={theme.colors.green[600]} 
+                    px={30} 
+                    py={10} 
+                    borderRadius={12} 
+                    onPress={handleSubmit}
+                    disabled={loading}
+                >
+                    <ButtonText 
+                        fontFamily={fontStyles.Roboto_Regular} 
+                        color={theme.colors.gray[1]}
+                    >
+                        Pay
+                    </ButtonText>
+                </Button>
+            );
+        }
+        return null;
+    };
+
+    const renderStatusIndicators = () => {
+        if (loading) {
+            return <StyledSpinner />;
+        }
+
+        if (error) {
+            return (
+                <StyledOkDialog 
+                    title={error?.message || "Payment Error"} 
+                    description="Please try again" 
+                    visible={true} 
+                    onOk={() => { /* Add reset handler if available */ }}
+                />
+            );
+        }
+
+        if (success && data) {
+            return (
+                <StyledDialog visible>
+                    <CheckOut 
+                        table_name={table_name} 
+                        table_id={table_id} 
+                        order={data} 
+                        printHandler={printHandler} 
+                        shareReceipt={shareReceipt} 
+                    />
+                </StyledDialog>
+            );
+        }
+
+        return null;
+    };
 
     return (
         <Box borderRadius={30} flex={1} backgroundColor={theme.colors.gray[900]}>
-            <HStack justifyContent="space-between" alignItems="center" px={24} py={16}>
-                <Stack horizonal flex={1} justifyContent="flex-start" alignItems="center">
+            {/* Header */}
+            <HStack  justifyContent="space-between" alignItems="center" px={24} py={16}>
+                <HStack flex={1} horizontal justifyContent="flex-start" alignItems="flex-start">
                     <StyledIcon
                         name="attach-money"
                         size={24}
                         color={theme.colors.gray[1]}
                     />
-                    <Text fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[1]} fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.medium}>
-                        Cash
+                    <Text 
+                        fontFamily={fontStyles.Roboto_Regular} 
+                        color={theme.colors.gray[1]} 
+                        fontSize={theme.fontSize.large} 
+                        fontWeight={theme.fontWeight.medium}
+                    >
+                        Cash 
                     </Text>
-                </Stack>
+                </HStack>
                 <StyledIcon
                     name="cancel"
                     size={48}
@@ -71,71 +242,45 @@ export default function Payment({ onClose, table_id }) {
                 />
             </HStack>
 
-            <HStack flex={1}>
-                <VStack px={16} py={16} >
-                    {
-                        amountInput > 0 && (
-                            <StyledText fontFamily={fontStyles.Roboto_Regular} textAlign="center" color={theme.colors.gray[500]} fontSize={theme.fontSize.xxxlarge} fontWeight={theme.fontWeight.thin}>
-                                {amountInput
-                                    ? formatCurrency(shop?.currency || "£", amountToPay)
-                                    : formatCurrency(shop?.currency || "£", 0)}
-                            </StyledText>
-                        )
-                    }
-                    <StyledText
-                        textAlign="center"
-                        color={theme.colors.gray[1]}
-                        fontSize={theme.fontSize.xxxlarge}
-                        fontWeight={theme.fontWeight.bold}
-                        fontFamily={fontStyles.Roboto_Regular}
-                    >
-                        {formatCurrency(shop?.currency || "£", baseTotal)}
-                    </StyledText>
-                    <StyledSpacer marginVertical={2} />
-                    {amountInput && change > 0 && (
-                        <StyledText textAlign="center" fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.xlarge} color={theme.colors.red[500]} fontWeight={theme.fontWeight.medium}>
-                            {formatCurrency(shop?.currency || "£", change)}
-                        </StyledText>
-                    )}
-                    <StyledSpacer marginVertical={16} />
-                    <HStack flex={1} flexWrap="wrap" justifyContent="center">
-                        {keypad.map((num, i) => (
-                            <Pressable
-                                key={i}
-                                onPress={() => handleKeyPress(num)}
-                                style={{
-                                    width: "30%",
-                                    margin: "1.5%",
-                                    height: 70,
-                                    borderRadius: 10,
-                                    backgroundColor: "#2E2E2E",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                }}
-                            >
-                                <Text color={theme.colors.gray[1]} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.medium}>
-                                    {num}
-                                </Text>
-                            </Pressable>
-                        ))}
-                    </HStack>
-                    <HStack
-                        justifyContent="space-between"
-                        px={16}
-                        py={16}
-                        mt="auto"
-                        borderTopWidth={1}
-                        borderColor={theme.colors.gray[800]}
-                    >
-                        <Button variant="outline" borderColor={theme.colors.gray[600]} px={20} py={10} borderRadius={25}>
-                            <ButtonText fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[1]}>Print Receipt</ButtonText>
-                        </Button>
-                        <Button  bg={theme.colors.gray[1]} px={30} py={10} borderRadius={25}>
-                            <ButtonText fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[800]}>Order</ButtonText>
-                        </Button>
-                    </HStack>
-                </VStack>
-            </HStack>
+            {/* Main Content */}
+            <VStack px={16} py={16} flex={1}>
+                {/* Amount Display */}
+                {renderAmountDisplay()}
+                
+                {/* Total Amount */}
+                <StyledText
+                    textAlign="center"
+                    color={theme.colors.gray[1]}
+                    fontSize={theme.fontSize.xxxlarge}
+                    fontWeight={theme.fontWeight.bold}
+                    fontFamily={fontStyles.Roboto_Regular}
+                >
+                    {formatCurrency(shop?.currency || "£", baseTotal)}
+                </StyledText>
+                
+                {/* Change Display */}
+                {renderChangeDisplay()}
+                
+                <StyledSpacer marginVertical={16} />
+                
+                {/* Keypad */}
+                {renderKeypad()}
+                
+                {/* Payment Button */}
+                <HStack
+                    justifyContent="center"
+                    px={16}
+                    py={16}
+                    mt="auto"
+                    borderTopWidth={1}
+                    borderColor={theme.colors.gray[800]}
+                >
+                    {renderPaymentButton()}
+                </HStack>
+            </VStack>
+
+            {/* Status Indicators */}
+            {renderStatusIndicators()}
         </Box>
     );
 }

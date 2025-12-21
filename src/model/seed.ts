@@ -206,6 +206,9 @@ const generateTables = () => {
     status: randomInt(0, 1),
     size: randomInt(2, 8),
     location: '',
+    guest_name: '',
+    guest_count: 0,
+    start_time: '',
   }));
 };
 

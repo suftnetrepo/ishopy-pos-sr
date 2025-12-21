@@ -7,9 +7,11 @@ import SideBar from '../../../components/tablet/sideBar';
 
 interface SideBarAdapterProps {
   collapse: boolean;
+  selectedMenu: number;
+  showMenu?: boolean;
 }
 
-const SideBarAdapter: React.FC<SideBarAdapterProps> = ({collapse}) => {
+const SideBarAdapter: React.FC<SideBarAdapterProps> = ({collapse, selectedMenu, showMenu}) => {
   return (
     <Stack
       paddingBottom={16}
@@ -25,7 +27,7 @@ const SideBarAdapter: React.FC<SideBarAdapterProps> = ({collapse}) => {
       shadowRadius={8}
       backgroundColor={theme.colors.gray[1]}>
       <StyledSpacer marginVertical={7} />
-      <SideBar collapse={collapse} />
+      <SideBar selectedMenu={selectedMenu} collapse={collapse} showMenu={showMenu} />
       <StyledSpacer flex={1} />
     </Stack>
   );

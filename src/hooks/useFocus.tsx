@@ -1,19 +1,22 @@
-
 import React, { useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 
 const useFocus = () => {
-    const [key, setKey] = useState(false);
+    const [isFocused, setIsFocused] = useState(false);
+    
     useFocusEffect(
         React.useCallback(() => {
-            setKey(true);
+            // Screen is focused
+            setIsFocused(true);
+            
             return () => {
-                setKey(false);
+                // Screen is unfocused
+                setIsFocused(false);
             };
         }, [])
     );
-      console.log('.............mmmmmmmmm', key);
-    return key;
+
+    return isFocused;
 };
 
 export { useFocus };

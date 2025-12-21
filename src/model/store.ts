@@ -11,9 +11,13 @@ export const TableSchema: ObjectSchema = {
   properties: {
     table_id: 'string',
     tableName: 'string',
-    isOccupied: 'int?',
-    status: 'int',
-    size: 'int?',
+    isOccupied: { type: 'int', default: 0 },
+    status: { type: 'int', default: 1 },
+    size: { type: 'int', default: 0 },
+    location: 'string?',      // Add this
+    guest_count: 'int?',      // Add this
+    guest_name: 'string?',    // Add this
+    start_time: 'string?',    // Add this
   },
 };
 
@@ -225,7 +229,7 @@ const schema = [
 
 const RealmOptions = () => {
   return {
-    path: 'sr____pos____.realm',
+    path: 'pos_sr.realm',
     schema: schema,
     schemaVersion: SCHEMA_VERSION,
     migration 

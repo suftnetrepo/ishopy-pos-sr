@@ -87,7 +87,7 @@ const queryTablesByStatus = async (status: number): Promise<Table[]> => {
           status: table.status,
           isOccupied: table.isOccupied,
           size: table.size,
-           guest_name: table.guest_name,
+          guest_name: table.guest_name,
           guest_count: table.guest_count,
           start_time: table.start_time,
           location: table.location,

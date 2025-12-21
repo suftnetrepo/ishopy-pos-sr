@@ -62,7 +62,7 @@ export default function ItemCard({ onChangeItem }) {
           {item.name}
         </StyledText>
         <StyledSpacer marginVertical={2} />
-        <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.light} color={theme.colors.gray[500]}>
+        <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.light} color={theme.colors.gray[400]}>
           {item.stock} Available
         </StyledText>
         <StyledSpacer marginVertical={4} />

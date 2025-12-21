@@ -9,8 +9,6 @@ import { Pressable } from "react-native";
 export default function AddOn({ table_id, onClose, item, setItem }) {
     const { shop, addItem } = useAppContext();
 
-    console.log("AddOn Item:", item);
-
     const increaseAddOnQuantity = (addOn) => {
         setItem((prev) => ({
             ...prev,

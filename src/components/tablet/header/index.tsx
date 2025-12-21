@@ -58,14 +58,13 @@ const RenderHeader = ({
             name="arrow-back"
             color={theme.colors.gray[800]}
             onPress={() => {
-              updateCurrentMenu(previousSelectedMenu);
+             
               navigation.canGoBack() && navigation.goBack();
             }}
           />
         </StyledCycle>
       )}
       {showLogo && <Logo />}
-
       {showTitle && (
         <StyledText
           fontFamily={fontStyles.Roboto_Regular}

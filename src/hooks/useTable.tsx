@@ -55,7 +55,7 @@ const useTables = () => {
 
 	};
 };
-const useQueryTablesByStatus = () => {
+const useQueryTablesByStatus = (focus: boolean ) => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
@@ -64,8 +64,10 @@ const useQueryTablesByStatus = () => {
 
 	async function handleOccupancy(body: any) {
 		try {
+
+			console.log('Updating occupancy with body:', body);
 			const { table_id, isOccupied, guest_count, guest_name, start_time } = body
-			const result = await updateOccupancy(table_id, isOccupied, guest_count, guest_name, start_time);
+			const result = await updateOccupancy(table_id, isOccupied, parseInt(guest_count), guest_name, start_time);
 			console.log('Occupancy update result:', result);
 
 			if (result) {
@@ -129,7 +131,7 @@ const useQueryTablesByStatus = () => {
 
 	useEffect(() => {
 		loadTablesByStatus(1);
-	}, []);
+	}, [focus]);
 
 	const resetHandler = () => {
 		setData({
