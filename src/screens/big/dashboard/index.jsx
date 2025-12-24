@@ -44,24 +44,6 @@ const Dashboard = () => {
           </ScrollView>
         </Stack>
         <Stack flex={1} paddingHorizontal={16} gap={16} vertical>
-          <StyledButton
-            paddingVertical={12}
-            paddingHorizontal={20}
-            borderRadius={8}
-            justifyContent="center"
-            backgroundColor={theme.colors.yellow[500]}
-            borderColor={theme.colors.yellow[500]}
-            onPress={() => console.log('Dashboard clicked')}>
-            <StyledIcon name={'add'} size={25} color={theme.colors.gray[800]} />
-            <StyledText
-              color={theme.colors.gray[800]}
-              fontSize={15}
-              fontWeight={theme.fontWeight.medium}
-              marginLeft={5}
-              textAlign="center">
-              CREATE NEW ORDER
-            </StyledText>
-          </StyledButton>
           <PopularDishes />
           <LowStockItems />
         </Stack>

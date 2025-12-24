@@ -1,8 +1,8 @@
 import React from 'react';
-import {StyledSpacer} from 'fluent-styles';
+import { StyledSpacer } from 'fluent-styles';
 
-import {Stack} from '../../../components/package/stack';
-import {theme} from '../../../utils/theme';
+import { Stack } from '../../../components/package/stack';
+import { theme } from '../../../utils/theme';
 import SideBar from '../../../components/tablet/sideBar';
 
 interface SideBarAdapterProps {
@@ -11,11 +11,11 @@ interface SideBarAdapterProps {
   showMenu?: boolean;
 }
 
-const SideBarAdapter: React.FC<SideBarAdapterProps> = ({collapse, selectedMenu, showMenu}) => {
+const SideBarAdapter: React.FC<SideBarAdapterProps> = ({ collapse, selectedMenu, showMenu }) => {
   return (
     <Stack
       paddingBottom={16}
-      borderRadius={16}
+      borderRadius={12}
       flex={collapse ? 0.3 : 0.6}
       alignItems="center"
       justifyContent="center"

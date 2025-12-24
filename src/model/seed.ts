@@ -219,6 +219,7 @@ const generateOrders = (users: { user_id: string; username: string; password: st
     const user = randomItem(users);
     const table = randomItem(tables);
     const total_price = randomPrice() + randomPrice();
+   
     orders.push({
       order_id: guid(),
       user_id: user.user_id,
@@ -226,6 +227,7 @@ const generateOrders = (users: { user_id: string; username: string; password: st
       total_price: total_price,
       tax: total_price * 0.1,
       discount: total_price * 0.05,
+      table_name : table.tableName,
       status: randomItem(['Pending', 'Completed', 'Progress', 'Cancelled']),
       date: randomDate(),
     });
@@ -392,7 +394,6 @@ const seedData = async () => {
         date: new Date().toISOString(),
       }));
       stock.forEach(stockItem => realm.create('Stock', stockItem));
-
       users.forEach(user => realm.create('User', user));
       tables.forEach(table => realm.create('Table', table));
       categories.forEach(category => realm.create('Category', category));

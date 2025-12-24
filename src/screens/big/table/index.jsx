@@ -35,7 +35,7 @@ const BigTable = () => {
         </StyledHeader.Full>
       </StyledHeader>
       <Stack flex={1.5} horizonal>
-        <SideBarAdapter selectedMenu={4} collapse={true} />
+        <SideBarAdapter selectedMenu={2} collapse={true} />
         <Stack flex={2.5} paddingHorizontal={8} vertical >
          <TableCard data={data} onTableSelect={(table)=> setTable(table) } />
         </Stack>

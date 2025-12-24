@@ -43,11 +43,13 @@ interface Actions extends CartActions {
   updateSelectedCategory: (category_id: string) => void;
   updateSelectedItem: (item: any) => void;
   updateMenuQuery: (menuQuery: string) => void;
+  updateSelectedOrder: (order: any) => void;
 }
 
 interface State {
   user: User | null;
   shop: Shop | null;
+  order: any | null;
   purchase_status: boolean;
   payment_status: boolean;
   selectedMenu: number;
@@ -68,6 +70,7 @@ export const AppContext = React.createContext<(Actions & State) | undefined>(
 const initialState: State = {
   user: null,
   shop: null,
+  order: null,
   purchase_status: false,
   payment_status: false,
   selectedMenu: 1,
@@ -154,6 +157,13 @@ const AppProvider = ({children}: AppProviderProps) => {
       setState(prevState => ({
         ...prevState,
         menuQuery,
+      }));
+    },
+
+    updateSelectedOrder: order => {
+      setState(prevState => ({
+        ...prevState,
+        order,
       }));
     },
 

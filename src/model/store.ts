@@ -117,6 +117,7 @@ export const OrderSchema: ObjectSchema = {
     order_id: 'string',
     user_id: 'string?',
     table_id: 'string',
+    table_name: 'string',
     total: 'double?',
     tax: 'double?',
     discount: 'double?',
@@ -229,7 +230,7 @@ const schema = [
 
 const RealmOptions = () => {
   return {
-    path: 'pos_sr.realm',
+    path: '_rs_pos.realm',
     schema: schema,
     schemaVersion: SCHEMA_VERSION,
     migration 

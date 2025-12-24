@@ -40,9 +40,8 @@ export default function Payment({
     const baseTotal = subtotal + tax;
     
     const [amountInput, setAmountInput] = useState("");
-    const keypad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "0", "x"];
+    const keypad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "0", "<"];
     
-    // Calculate amount to pay
     const calculateAmountToPay = (input) => {
         if (!input) return 0;
         
@@ -55,11 +54,11 @@ export default function Payment({
     
     const amountToPay = calculateAmountToPay(amountInput);
     const change = amountToPay - baseTotal;
-    const canPay = amountToPay >= baseTotal && amountInput !== "";
+    const canPay = parseFloat(amountToPay.toFixed(2)) >= parseFloat(baseTotal.toFixed(2));
 
     const handleKeyPress = (key) => {
         setAmountInput((prev) => {
-            if (key === "x") {
+            if (key === "<") {
                 return prev.slice(0, -1);
             }
 

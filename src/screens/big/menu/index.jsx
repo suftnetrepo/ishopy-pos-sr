@@ -33,7 +33,7 @@ const BigMenu = () => {
         </StyledHeader.Full>
       </StyledHeader>
       <Stack flex={1.5} horizonal>
-        <SideBarAdapter selectedMenu={2} showMenu={true} collapse={true} />
+        <SideBarAdapter selectedMenu={3} showMenu={true} collapse={true} />
         <Stack flex={2.5} paddingHorizontal={8} vertical >
           <MenuCategory />
           <StyledSpacer marginVertical={4} />

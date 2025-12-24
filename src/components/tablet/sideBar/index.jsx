@@ -1,12 +1,9 @@
-import React, { Fragment } from 'react';
-import { useNavigation, CommonActions } from '@react-navigation/native';
+import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { SidebarItem } from '../../package/sidebar';
-import { useAppContext } from '../../../hooks/appContext';
 
 const SideBar = ({ collapse = false, selectedMenu = 1, showMenu = false }) => {
   const navigate = useNavigation();
-
-  console.log('Selected Menu:', selectedMenu);
 
   const items = [
     {
@@ -19,6 +16,14 @@ const SideBar = ({ collapse = false, selectedMenu = 1, showMenu = false }) => {
     },
     {
       id: 2,
+      label: 'Table',
+      icon: 'table-chair',
+      active: false,
+      name: 'big-table',
+      show: true,
+    },
+    {
+      id: 3,
       label: 'Menu',
       icon: 'book-open-outline',
       active: false,
@@ -26,21 +31,14 @@ const SideBar = ({ collapse = false, selectedMenu = 1, showMenu = false }) => {
       show: false,
     },
     {
-      id: 3,
+      id: 4,
       label: 'Orders',
       icon: 'receipt',
       active: false,
       name: 'big-orders',
       show: true,
     },
-    {
-      id: 4,
-      label: 'Table',
-      icon: 'table-chair',
-      active: false,
-      name: 'big-table',
-      show: true,
-    },
+    
     {
       id: 5,
       label: 'Settings',

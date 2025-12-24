@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+
 import { faker } from '@faker-js/faker';
 import { theme } from './theme';
 
@@ -151,4 +151,58 @@ const paymentOptions = [
   { key: "card", label: "Card", icon: "credit-card" },
 ];
 
-export { guid, paymentOptions, formatDateTime, getGreetings, generatePaymentId, currencySymbolMapper, generateRandomData, toWordCase, formatCurrency, dateConverter, backgroundColorHelper, textColorHelper }
+function getDateAndTimeSeparate(dateInput = new Date()) {
+    const date = new Date(dateInput);
+    
+    const year = date.getUTCFullYear();
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
+    const day = date.getUTCDate().toString().padStart(2, '0');
+    const hours = date.getUTCHours().toString().padStart(2, '0');
+    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+    const seconds = date.getUTCSeconds().toString().padStart(2, '0');
+    
+    return {
+        date: `${year}-${month}-${day}`,     // "2025-12-22"
+        time: `${hours}:${minutes}:${seconds}` // "09:25:21"
+    };
+}
+
+function getFormattedDate(dateInput = new Date()) {
+    const date = new Date(dateInput);
+    const year = date.getUTCFullYear();
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
+    const day = date.getUTCDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+function getFormattedTime(dateInput = new Date()) {
+    const date = new Date(dateInput);
+    const hours = date.getUTCHours().toString().padStart(2, '0');
+    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+    const seconds = date.getUTCSeconds().toString().padStart(2, '0');
+    return `${hours}:${minutes}:${seconds}`;
+}
+
+const colorCodeStatus = status => {
+  switch (status?.toLowerCase()) {
+    case 'progress':
+      return theme.colors.amber[600];
+    case 'completed':
+    case 'paid':
+      return theme.colors.green[600];
+    case 'pending':
+    case 'unpaid':
+      return theme.colors.purple[600];
+    case 'cancelled':
+      return theme.colors.red[600];
+    default:
+      return theme.colors.gray[800];
+  }
+};
+
+const getLastChars = (str, limit = 8) => {
+    if (!str || typeof str !== 'string') return '';
+    return str.slice(-Math.max(0, Math.floor(limit)));
+};
+
+export { getLastChars, colorCodeStatus, getFormattedTime,getFormattedDate,getDateAndTimeSeparate, guid, paymentOptions, formatDateTime, getGreetings, generatePaymentId, currencySymbolMapper, generateRandomData, toWordCase, formatCurrency, dateConverter, backgroundColorHelper, textColorHelper }

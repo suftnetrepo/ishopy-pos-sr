@@ -19,6 +19,7 @@ import { OrderStatusAggregate } from '../model/orders';
 
 interface Initialize {
   data: Order[] | null | Order | [] | boolean | OrderStatusAggregate | null;
+  copyData? : Order[] | null | Order | [] | boolean | OrderStatusAggregate | null;
   error: Error | null;
   loading: boolean;
   success: boolean
@@ -76,10 +77,29 @@ const useOrderStatusAggregate = () => {
 const useOrders = (load: boolean) => {
   const [data, setData] = useState<Initialize>({
     data: [],
+    copyData : [],
     error: null,
     loading: true,
     success: false
   });
+
+   async function filterOrders(status : string) {
+     setData(prev => ({
+        ...prev,
+        data: Array.isArray(prev.copyData) 
+          ? (prev.copyData as Order[]).filter((j: Order) => j.status?.toLowerCase() === status.toLowerCase())
+          : [],
+        loading: false,
+      }));
+  }
+
+    async function restoreOrders() {
+     setData(prev => ({
+        ...prev,
+        data: Array.isArray(prev.copyData) ? prev.copyData : [],
+        loading: false,
+      }));
+  }
 
   async function loadOrders() {
     try {
@@ -87,11 +107,13 @@ const useOrders = (load: boolean) => {
       setData(prev => ({
         ...prev,
         data: result,
+        copyData: result,
         loading: false,
       }));
     } catch (error) {
       setData({
         data: null,
+        copyData: [],
         error: error as Error,
         loading: false,
         success: false
@@ -134,6 +156,8 @@ const useOrders = (load: boolean) => {
     ...data,
     resetHandler,
     loadOrdersByDateRange,
+    filterOrders,
+    restoreOrders,
   };
 };
 
@@ -171,7 +195,7 @@ const useQueryOrderById = (order_id: string) => {
   };
 };
 
-const useInsertOrder = (table_id: string) => {
+const useInsertOrder = (table_id: string, table_name:string) => {
   const {
     user,
     getItems,
@@ -219,6 +243,7 @@ const useInsertOrder = (table_id: string) => {
       order.tax = getTotalTax(table_id) || 0;
       order.total = getTotal(table_id) || 0;
       order.table_id = table_id;
+      order.table_name = table_name;
       order.status = 'progress';
       order.total_price = getTotalPrice(table_id) || 0;
 
@@ -248,7 +273,7 @@ const useInsertOrder = (table_id: string) => {
         loading: false,
         success: true
       });
-
+      
       return orderResult.order_id;
     } catch (error) {
       setData({

@@ -38,7 +38,7 @@ export default function Cart({ table_id, table_name }) {
         deleteHandler,
         queryOrderByIdhandler,
         data
-    } = useInsertOrder(table_id);
+    } = useInsertOrder(table_id, table_name);
 
     const [paymentMethod, setPaymentMethod] = useState("");
     const [showPayment, setShowPayment] = useState(false);

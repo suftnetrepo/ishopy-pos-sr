@@ -6,6 +6,7 @@ export interface Order {
   order_id: string;
   user_id?: string;
   table_id: string;
+  table_name?: string;
   total_price: number;
   total: number;
   status: string;
@@ -82,6 +83,7 @@ const queryAllOrders = async (): Promise<Order[]> => {
           date: order.date,
           tax: order.tax,
           discount: order.discount,
+          table_name:order.table_name
         }));
       resolve(orders);
     } catch (error) {
@@ -111,6 +113,7 @@ const queryOrdersByDateRange = async (
           date: order.date,
           tax: order.tax,
           discount: order.discount,
+          table_name:order.table_name
         }));
       resolve(orders);
     } catch (error) {
@@ -136,6 +139,7 @@ const queryOrderById = async (order_id: string): Promise<Order | null> => {
               date: order.date,
               tax: order.tax,
               discount: order.discount,
+              table_name:order.table_name
             }
           : null
       );

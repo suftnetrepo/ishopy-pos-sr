@@ -39,6 +39,7 @@ import { useDeviceType } from '../hooks/useDeviceType';
 import Dashboard from '../screens/big/dashboard';
 import BigMenu from '../screens/big/menu';
 import BigTable from '../screens/big/table';
+import BigOrder from '../screens/big/order';
 
 const Stack = createStackNavigator();
 function Navigator() {
@@ -63,6 +64,13 @@ function Navigator() {
       <Stack.Screen
         name="big-menu"
         component={BigMenu}
+        options={{
+          headerShown: false,
+        }}
+      />
+       <Stack.Screen
+        name="big-orders"
+        component={BigOrder}
         options={{
           headerShown: false,
         }}
