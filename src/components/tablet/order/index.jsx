@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FlatList, Pressable } from "react-native";
-import { StyledText } from 'fluent-styles';
+import { StyledText, StyledSpacer, StyledCycle } from 'fluent-styles';
 import {
     Box,
     Text,
@@ -13,7 +13,7 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { useOrders } from "../../../hooks/useOrder";
 import { useAppContext } from "../../../hooks/appContext";
 
-export default function OrderCard({ onOrderChange }) {
+export default function OrderCard({ onOrderChange, onHandleFilter }) {
     const { updateSelectedOrder } = useAppContext()
     const [state, setState] = useState('All')
     const { data, filterOrders, restoreOrders, loading, error } = useOrders(true)
@@ -29,9 +29,9 @@ export default function OrderCard({ onOrderChange }) {
         await filterOrders(status)
     }
 
-    const handleOrder =(order)=> {
+    const handleOrder = (order) => {
         updateSelectedOrder(order)
-        onOrderChange()
+        onOrderChange('basket')
     }
 
     const Card = ({ order }) => {
@@ -85,8 +85,8 @@ export default function OrderCard({ onOrderChange }) {
 
     return (
         <ScrollView flex={3} showsVerticalScrollIndicator={false}>
-            <ScrollView marginBottom={8} horizontal showsHorizontalScrollIndicator={false} >
-                <Stack gap={8} horizonal >
+            <Stack marginBottom={8} flex={1} marginLeft={8} marginRight={24} horizonal justifyContent="space-between" alignItems="center" >
+                <Stack gap={8} horizonal>
                     {StatusOptions.map((status) => {
                         const isActive = status === state;
                         return (
@@ -105,8 +105,24 @@ export default function OrderCard({ onOrderChange }) {
                         );
                     })}
                 </Stack>
-            </ScrollView>
+                <StyledSpacer flex={1} />
+                <Pressable onPress={() => { onHandleFilter('filter')}}>
+                    <StyledCycle
+                        paddingHorizontal={10}
+                        borderWidth={1}
+                        height={48}
+                        width={48}
+                        backgroundColor={theme.colors.gray[100]}
+                        borderColor={theme.colors.gray[400]}>
+                        <MaterialIcon
+                            size={24}
+                            name="filter-list"
+                            color={theme.colors.gray[800]}
 
+                        />
+                    </StyledCycle>
+                </Pressable>
+            </Stack>
             <FlatList
                 data={data}
                 keyExtractor={(item) => item.order_id}

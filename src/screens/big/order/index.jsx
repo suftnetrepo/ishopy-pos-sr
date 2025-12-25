@@ -12,14 +12,16 @@ import { useAppContext } from '../../../hooks/appContext';
 import OrderCard from '../../../components/tablet/order';
 import Drawer from '../../../components/package/drawer';
 import OrderCart from '../../../components/tablet/order/orderCart';
+import DateRangeFilter from './DateRangeFilter';
 
 const BigOrder = () => {
     const { updateMenuQuery } = useAppContext();
-    const [show, setShow] = useState(false);
+    const [show, setShow] = useState(null);
+    const [showCalendar, setCalendarShow] = useState(null);
 
     return (
         <StyledSafeAreaView backgroundColor={theme.colors.gray[100]}>
-            <StyledHeader borderRadius={30} statusProps={{ translucent: true }}>
+            <StyledHeader borderRadius={30} statusProps={{ translucent: true, hidden: false }}>
                 <StyledHeader.Full>
                     <RenderHeader showBackButton={true} showLogo={false} showTitle={true} title='Order' >
                         <StyledSearchBar placeholder="Search orders..." flex={1} onTextChange={(query) => updateMenuQuery(query)} />
@@ -29,16 +31,22 @@ const BigOrder = () => {
             <Stack flex={1.5} horizonal>
                 <SideBarAdapter selectedMenu={4} showMenu={true} collapse={true} />
                 <Stack flex={3} paddingHorizontal={8} vertical >
-                    <OrderCard onOrderChange={() => setShow(true)} />
+                    <OrderCard onOrderChange={(j) => setShow(j)} onHandleFilter={(i) => setCalendarShow(i)} />
                 </Stack>
             </Stack>
             <Drawer
                 direction="right"
-                isOpen={show}
-                onClose={() => setShow(false)}
+                isOpen={!!show}
+                onClose={() => setShow(null)}
             >
-                <OrderCart onClose={()=> setShow(false)} />
+                <OrderCart onClose={() => setShow(null)} />
             </Drawer>
+            {
+                showCalendar && (
+                    <DateRangeFilter onApplyFilter={(f)=> {console.log(f)}} visible={!!showCalendar} setVisible={setCalendarShow} />
+                )
+            }
+
         </StyledSafeAreaView>
     );
 };
