@@ -106,9 +106,7 @@ const DateRangeFilter = ({ visible, setVisible, onApplyFilter }) => {
 
         <ModalContent w="90%" maxWidth={400} bg="white" rounded="$xl">
           <ModalHeader>
-            <Text fontSize="$lg" fontWeight="$bold" color="$black">
-          
-            </Text>
+
 
             <ModalCloseButton onPress={() => setVisible(false)}>
               <Text fontSize="$2xl" color="$trueGray500">✕</Text>
