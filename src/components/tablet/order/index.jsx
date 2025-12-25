@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FlatList, Pressable } from "react-native";
 import { StyledText, StyledSpacer, StyledCycle } from 'fluent-styles';
 import {
@@ -8,16 +8,28 @@ import {
 } from "@gluestack-ui/themed";
 import { Stack } from "../../package/stack";
 import { theme, fontStyles } from "../../../utils/theme";
-import { colorCodeStatus, getLastChars } from "../../../utils/help";
+import { colorCodeStatus, convertDateFilter, getLastChars, statusOptions } from "../../../utils/help";
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { useOrders } from "../../../hooks/useOrder";
 import { useAppContext } from "../../../hooks/appContext";
 
 export default function OrderCard({ onOrderChange, onHandleFilter }) {
-    const { updateSelectedOrder } = useAppContext()
+    const { updateSelectedOrder, date_filter, updateDateFilter } = useAppContext()
     const [state, setState] = useState('All')
-    const { data, filterOrders, restoreOrders, loading, error } = useOrders(true)
-    const StatusOptions = ["All", "Progress", "Pending", "Completed", "Cancelled"];
+    const { data, filterOrders, restoreOrders, loadOrdersByDateRange, loadOrders, loading, error } = useOrders(true)
+    const hasActiveFilter = date_filter?.startDate && date_filter?.endDate;
+
+    useEffect(() => {
+        if (date_filter?.startDate && date_filter?.endDate) {
+            try {
+                const { startDate, endDate } = convertDateFilter(date_filter.startDate, date_filter.endDate);
+                loadOrdersByDateRange(startDate, endDate);
+            } catch (error) {
+                if (__DEV__)
+                    console.error("Error parsing dates:", error);
+            }
+        }
+    }, [date_filter?.startDate, date_filter?.endDate])
 
     const handleFilter = async (status) => {
         setState(status)
@@ -32,6 +44,17 @@ export default function OrderCard({ onOrderChange, onHandleFilter }) {
     const handleOrder = (order) => {
         updateSelectedOrder(order)
         onOrderChange('basket')
+    }
+
+    const handleClearDateFilter = async () => {
+        try {
+            await loadOrders();
+            updateDateFilter({ startDate: '', endDate: '' });
+            setState('All'); 
+        } catch (error) {
+            if (__DEV__)
+                console.error("Error clearing date filter:", error);
+        }
     }
 
     const Card = ({ order }) => {
@@ -87,7 +110,7 @@ export default function OrderCard({ onOrderChange, onHandleFilter }) {
         <ScrollView flex={3} showsVerticalScrollIndicator={false}>
             <Stack marginBottom={8} flex={1} marginLeft={8} marginRight={24} horizonal justifyContent="space-between" alignItems="center" >
                 <Stack gap={8} horizonal>
-                    {StatusOptions.map((status) => {
+                    {statusOptions.map((status) => {
                         const isActive = status === state;
                         return (
                             <Pressable key={status} onPress={async () => { await handleFilter(status) }}>
@@ -106,7 +129,27 @@ export default function OrderCard({ onOrderChange, onHandleFilter }) {
                     })}
                 </Stack>
                 <StyledSpacer flex={1} />
-                <Pressable onPress={() => { onHandleFilter('filter')}}>
+                {
+                    hasActiveFilter && (
+                        <Pressable onPress={handleClearDateFilter}>
+                            <StyledCycle
+                                paddingHorizontal={10}
+                                borderWidth={1}
+                                height={48}
+                                width={48}
+                                backgroundColor={theme.colors.gray[100]}
+                                borderColor={theme.colors.gray[400]}>
+                                <MaterialIcon
+                                    size={24}
+                                    name="close"
+                                    color={theme.colors.gray[800]}
+                                />
+                            </StyledCycle>
+                        </Pressable>
+                    )
+                }
+                <StyledSpacer marginHorizontal={4} />
+                <Pressable onPress={() => { onHandleFilter('filter') }}>
                     <StyledCycle
                         paddingHorizontal={10}
                         borderWidth={1}

@@ -12,7 +12,7 @@ import { useAppContext } from '../../../hooks/appContext';
 import OrderCard from '../../../components/tablet/order';
 import Drawer from '../../../components/package/drawer';
 import OrderCart from '../../../components/tablet/order/orderCart';
-import DateRangeFilter from './DateRangeFilter';
+import OrderDateFilter from './orderDateFilter';
 
 const BigOrder = () => {
     const { updateMenuQuery } = useAppContext();
@@ -43,7 +43,7 @@ const BigOrder = () => {
             </Drawer>
             {
                 showCalendar && (
-                    <DateRangeFilter onApplyFilter={(f)=> {console.log(f)}} visible={!!showCalendar} setVisible={setCalendarShow} />
+                    <OrderDateFilter visible={!!showCalendar} setVisible={setCalendarShow} />
                 )
             }
 

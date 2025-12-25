@@ -131,6 +131,7 @@ const useOrders = (load: boolean) => {
       setData(prev => ({
         ...prev,
         data: result,
+        copyData: result,
         loading: false,
       }));
     } catch (error) {
@@ -158,6 +159,7 @@ const useOrders = (load: boolean) => {
     loadOrdersByDateRange,
     filterOrders,
     restoreOrders,
+    loadOrders
   };
 };
 

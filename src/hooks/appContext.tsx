@@ -34,6 +34,11 @@ interface CartActions {
   updateOrderId:(order_id: string, table_id: string) => void
 }
 
+type  date_filter = {
+    startDate : string,
+    endDate : string
+  }
+
 interface Actions extends CartActions {
   login: (params: {user: User; shop: Shop}) => Promise<void>;
   logout: () => Promise<void>;
@@ -44,12 +49,14 @@ interface Actions extends CartActions {
   updateSelectedItem: (item: any) => void;
   updateMenuQuery: (menuQuery: string) => void;
   updateSelectedOrder: (order: any) => void;
+  updateDateFilter :(date_filter :date_filter ) => void
 }
 
 interface State {
   user: User | null;
   shop: Shop | null;
   order: any | null;
+  date_filter :date_filter
   purchase_status: boolean;
   payment_status: boolean;
   selectedMenu: number;
@@ -78,6 +85,10 @@ const initialState: State = {
   selectedItem: null,
   category_id: '',
   menuQuery: '',
+  date_filter :{
+    startDate : '',
+    endDate : ''
+  }
 };
 
 const AppProvider = ({children}: AppProviderProps) => {
@@ -164,6 +175,13 @@ const AppProvider = ({children}: AppProviderProps) => {
       setState(prevState => ({
         ...prevState,
         order,
+      }));
+    },
+
+    updateDateFilter: date_filter => {
+      setState(prevState => ({
+        ...prevState,
+        date_filter,
       }));
     },
 

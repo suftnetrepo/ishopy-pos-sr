@@ -205,4 +205,17 @@ const getLastChars = (str, limit = 8) => {
     return str.slice(-Math.max(0, Math.floor(limit)));
 };
 
-export { getLastChars, colorCodeStatus, getFormattedTime,getFormattedDate,getDateAndTimeSeparate, guid, paymentOptions, formatDateTime, getGreetings, generatePaymentId, currencySymbolMapper, generateRandomData, toWordCase, formatCurrency, dateConverter, backgroundColorHelper, textColorHelper }
+const convertDateFilter = (startDateString, endDateString) => {
+    // Convert string dates to Date objects for Realm query
+    const startDate = new Date(startDateString);
+    const endDate = new Date(endDateString);
+    
+    // Set end date to end of day to include all orders on that day
+    endDate.setHours(23, 59, 59, 999);
+    
+    return { startDate, endDate };
+};
+
+ const statusOptions = ["All", "Progress", "Pending", "Completed", "Cancelled"];
+
+export { statusOptions, convertDateFilter, getLastChars, colorCodeStatus, getFormattedTime,getFormattedDate,getDateAndTimeSeparate, guid, paymentOptions, formatDateTime, getGreetings, generatePaymentId, currencySymbolMapper, generateRandomData, toWordCase, formatCurrency, dateConverter, backgroundColorHelper, textColorHelper }

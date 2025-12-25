@@ -5,13 +5,12 @@ import { StyledMIcon } from '../../../components/icon';
 import { fontStyles, theme } from '../../../configs/theme';
 import { useAppContext } from '../../../hooks/appContext';
 import { useQueryOrderItemByOrder } from '../../../hooks/useOrderItems';
-import { formatCurrency, formatDateTime, colorCodeStatus, getLastChars, toWordCase } from '../../../utils/help';
+import { formatCurrency, colorCodeStatus, getLastChars } from '../../../utils/help';
 import { ScrollView } from 'react-native';
 import { Stack } from '../../../components/package/stack';
 
 const OrderCart = ({ onClose }) => {
     const { shop, order } = useAppContext()
-    console.log(".......................", order)
     const { data } = useQueryOrderItemByOrder(order?.order_id)
 
     const Card = ({ order }) => {
@@ -32,7 +31,7 @@ const OrderCart = ({ onClose }) => {
                 backgroundColor={theme.colors.gray[1]}
                 borderRadius={8}
                 paddingHorizontal={16}
-                paddingVertical={8}
+                paddingVertical={16}
                 shadowColor="black"
                 shadowOffset={{ width: 0, height: 1 }}
                 shadowOpacity={0.1}

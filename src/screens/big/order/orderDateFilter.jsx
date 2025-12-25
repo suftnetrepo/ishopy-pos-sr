@@ -3,7 +3,6 @@ import { Calendar } from 'react-native-calendars';
 import {
   Box,
   Text,
-  Pressable,
   Modal,
   ModalBackdrop,
   ModalContent,
@@ -16,8 +15,10 @@ import {
   VStack,
   Divider,
 } from '@gluestack-ui/themed';
+import { useAppContext } from '../../../hooks/appContext';
 
-const DateRangeFilter = ({ visible, setVisible, onApplyFilter }) => {
+const OrderDateFilter = ({ visible, setVisible }) => {
+  const { updateDateFilter } = useAppContext()
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [markedDates, setMarkedDates] = useState({});
@@ -95,7 +96,7 @@ const DateRangeFilter = ({ visible, setVisible, onApplyFilter }) => {
 
   const applyFilter = () => {
     setVisible(false);
-    onApplyFilter?.({ startDate, endDate });
+    updateDateFilter({ startDate, endDate })
   };
 
   return (
@@ -106,7 +107,9 @@ const DateRangeFilter = ({ visible, setVisible, onApplyFilter }) => {
 
         <ModalContent w="90%" maxWidth={400} bg="white" rounded="$xl">
           <ModalHeader>
-
+            <Text fontSize="$lg" fontWeight="$bold" color="$black">
+          
+            </Text>
 
             <ModalCloseButton onPress={() => setVisible(false)}>
               <Text fontSize="$2xl" color="$trueGray500">✕</Text>
@@ -164,7 +167,7 @@ const DateRangeFilter = ({ visible, setVisible, onApplyFilter }) => {
             <Button
               flex={1}
               borderRadius={8}
-              bg={startDate && endDate ? "$yellow400" : "$trueGray400"}
+              bg={startDate && endDate ? "$yellow400" : "$trueGray200"}
               disabled={!startDate || !endDate}
               onPress={applyFilter}
             >
@@ -180,4 +183,4 @@ const DateRangeFilter = ({ visible, setVisible, onApplyFilter }) => {
   );
 };
 
-export default DateRangeFilter;
+export default OrderDateFilter;
