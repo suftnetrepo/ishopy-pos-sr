@@ -1,9 +1,10 @@
 /* eslint-disable prettier/prettier */
-import React, {useState, ReactNode, useContext} from 'react';
-import {User, Shop, CartItem} from '../model/types';
-import {useCart} from './useCart';
-import {useInAppPurchase} from './useInAppPurchase';
-import {AddOn} from '../model/types';
+import React, { useState, ReactNode, useContext, useEffect } from 'react';
+import { User, Shop, CartItem } from '../model/types';
+import { useCart } from './useCart';
+import { useInAppPurchase } from './useInAppPurchase';
+import { AddOn } from '../model/types';
+import { useShop } from './useShop';
 
 interface CartActions {
   addItem: (
@@ -31,16 +32,16 @@ interface CartActions {
   deleteAddOn: (itemId: string, addOnId: string, table_id: string) => void;
   addAddOn: (itemId: string, addOns: AddOn[], table_id: string) => void;
   getCartItemByIndex: (index: number, table_id: string) => CartItem | undefined;
-  updateOrderId:(order_id: string, table_id: string) => void
+  updateOrderId: (order_id: string, table_id: string) => void
 }
 
-type  date_filter = {
-    startDate : string,
-    endDate : string
-  }
+type date_filter = {
+  startDate: string,
+  endDate: string
+}
 
 interface Actions extends CartActions {
-  login: (params: {user: User; shop: Shop}) => Promise<void>;
+  login: (params: { user: User; shop: Shop }) => Promise<void>;
   logout: () => Promise<void>;
   updateCurrentUser: (user: User) => void;
   updateCurrentShop: (shop: Shop) => void;
@@ -49,14 +50,14 @@ interface Actions extends CartActions {
   updateSelectedItem: (item: any) => void;
   updateMenuQuery: (menuQuery: string) => void;
   updateSelectedOrder: (order: any) => void;
-  updateDateFilter :(date_filter :date_filter ) => void
+  updateDateFilter: (date_filter: date_filter) => void
 }
 
 interface State {
   user: User | null;
   shop: Shop | null;
   order: any | null;
-  date_filter :date_filter
+  date_filter: date_filter
   purchase_status: boolean;
   payment_status: boolean;
   selectedMenu: number;
@@ -85,15 +86,16 @@ const initialState: State = {
   selectedItem: null,
   category_id: '',
   menuQuery: '',
-  date_filter :{
-    startDate : '',
-    endDate : ''
+  date_filter: {
+    startDate: '',
+    endDate: ''
   }
 };
 
-const AppProvider = ({children}: AppProviderProps) => {
+const AppProvider = ({ children }: AppProviderProps) => {
   const [state, setState] = useState<State>(initialState);
-  const {payment_status, purchase_status} = useInAppPurchase();
+  const { payment_status, purchase_status } = useInAppPurchase();
+  const { data } = useShop()
   const {
     addItem,
     updateItem,
@@ -115,12 +117,18 @@ const AppProvider = ({children}: AppProviderProps) => {
     updateOrderId
   } = useCart();
 
+  useEffect(() => {
+    setState(prevState => ({
+      ...prevState,
+      shop: data as Shop,
+    }));
+  }, [data])
+
   const actions: Actions = {
-    login: async (params: {user: User; shop: Shop}) => {
-      const {shop, user} = params;
+    login: async (params: { user: User;}) => {
+      const { user } = params;
       setState(prevState => ({
         ...prevState,
-        shop,
         user,
       }));
     },

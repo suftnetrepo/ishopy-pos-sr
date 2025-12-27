@@ -27,7 +27,7 @@ const SideBarAdapter: React.FC<SideBarAdapterProps> = ({ collapse, selectedMenu,
       shadowRadius={8}
       backgroundColor={theme.colors.gray[1]}>
       <StyledSpacer marginVertical={7} />
-      <SideBar selectedMenu={selectedMenu} collapse={collapse} showMenu={showMenu} />
+        <SideBar selectedMenu={selectedMenu} collapse={collapse} showMenu={showMenu} />
       <StyledSpacer flex={1} />
     </Stack>
   );

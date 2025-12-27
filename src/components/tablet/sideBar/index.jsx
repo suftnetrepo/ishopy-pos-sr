@@ -44,7 +44,7 @@ const SideBar = ({ collapse = false, selectedMenu = 1, showMenu = false }) => {
       label: 'Settings',
       icon: 'cog-outline',
       active: false,
-      name: 'big-menu',
+      name: 'big-settings',
       show: true,
     },
   ];

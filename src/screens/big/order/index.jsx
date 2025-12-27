@@ -29,7 +29,7 @@ const BigOrder = () => {
                 </StyledHeader.Full>
             </StyledHeader>
             <Stack flex={1.5} horizonal>
-                <SideBarAdapter selectedMenu={4} showMenu={true} collapse={true} />
+                <SideBarAdapter selectedMenu={4} showMenu={false} collapse={true} />
                 <Stack flex={3} paddingHorizontal={8} vertical >
                     <OrderCard onOrderChange={(j) => setShow(j)} onHandleFilter={(i) => setCalendarShow(i)} />
                 </Stack>
