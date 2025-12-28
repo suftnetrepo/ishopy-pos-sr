@@ -16,7 +16,7 @@ interface Initialize {
 	success :boolean
 }
 
-const usePayments = (load: boolean) => {
+const usePayments = () => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
@@ -44,7 +44,7 @@ const usePayments = (load: boolean) => {
 
 	useEffect(() => {		
 		loadPayment();
-	}, [load]);
+	}, []);
 
 	async function loadPaymentsByDateRange(startDate: Date, endDate: Date) {
 		try {
@@ -76,7 +76,8 @@ const usePayments = (load: boolean) => {
 	return {
 		...data,
 		resetHandler,
-		loadPaymentsByDateRange
+		loadPaymentsByDateRange,
+		loadPayment
 	};
 };
 

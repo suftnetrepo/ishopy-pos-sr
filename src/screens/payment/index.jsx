@@ -1,8 +1,4 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable no-undef */
-/* eslint-disable prettier/prettier */
-/* eslint-disable react/prop-types */
-/* eslint-disable prettier/prettier */
+
 import React, { useState } from 'react';
 import { YStack, XStack, StyledSafeAreaView, StyledText, StyledButton, StyledInput, StyledCycle, StyledBadge, StyledHeader, StyledSpinner, StyledOkDialog, StyledSpacer } from 'fluent-styles';
 import { useNavigation } from '@react-navigation/native';

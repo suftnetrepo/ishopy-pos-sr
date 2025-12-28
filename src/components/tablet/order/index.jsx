@@ -8,7 +8,7 @@ import {
 } from "@gluestack-ui/themed";
 import { Stack } from "../../package/stack";
 import { theme, fontStyles } from "../../../utils/theme";
-import { colorCodeStatus, convertDateFilter, getLastChars, statusOptions } from "../../../utils/help";
+import { colorCodeStatus, convertDateFilter, getLastChars, formatDate, statusOptions } from "../../../utils/help";
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { useOrders } from "../../../hooks/useOrder";
 import { useAppContext } from "../../../hooks/appContext";
@@ -58,17 +58,7 @@ export default function OrderCard({ onOrderChange, onHandleFilter }) {
     }
 
     const Card = ({ order }) => {
-        const formatDate = (dateString) => {
-            const date = new Date(dateString);
-            return date.toLocaleString('en-US', {
-                day: 'numeric',
-                month: 'short',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: true
-            });
-        };
-
+       
         return (
             <Stack
                 flex={1}

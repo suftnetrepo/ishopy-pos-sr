@@ -31,8 +31,7 @@ const SETTINGS_CONFIG = {
         [
             { id: 'back', icon: require('../../../../assets/img/back-1.png'), name: 'Back' },
             { id: 'restore', icon: require('../../../../assets/img/restore-1.png'), name: 'Restore' },
-            ,
-            { id: 'report', icon: require('../../../../assets/img/report-1.png'), name: 'Report' }
+            { id: 'payment', icon: require('../../../../assets/img/report-1.png'), name: 'Payment' }
         ]
     ]
 };
@@ -58,6 +57,12 @@ const BigSettings = () => {
                 break;
             case 'item':
                 navigation.navigate('big-item')
+                break;
+            case 'user':
+                navigation.navigate('big-user')
+                break;
+                 case 'payment':
+                navigation.navigate('big-payment')
                 break;
             default:
                 break;

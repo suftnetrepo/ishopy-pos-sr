@@ -1,6 +1,4 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable no-undef */
-/* eslint-disable prettier/prettier */
+
 import React, { useState, useEffect } from 'react';
 import { YStack, XStack, StyledHeader, StyledSafeAreaView, StyledBadge, StyledSpacer, StyledText, StyledSpinner, StyledButton } from 'fluent-styles';
 import { fontStyles, theme } from '../configs/theme';
@@ -36,7 +34,7 @@ const Keypad = () => {
                 loginByPin(parseInt(passCode)).then(async (result) => {
                     if (result) {
                         await login(result)
-                        navigator.navigate("bottom-tabs")
+                        navigator.navigate("big-dashboard")
                     }
                 })
             }

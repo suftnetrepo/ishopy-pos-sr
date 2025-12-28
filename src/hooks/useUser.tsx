@@ -11,7 +11,7 @@ interface Initialize {
 	loading: boolean;
 }
 
-const useUsers = () => {
+const useUsers = (flag:boolean = false) => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
@@ -36,8 +36,8 @@ const useUsers = () => {
 	}
 
 	useEffect(() => {
-		loadUsers();
-	}, []);
+		flag && loadUsers();
+	}, [flag]);
 
 	const resetHandler = () => {
 		setData({

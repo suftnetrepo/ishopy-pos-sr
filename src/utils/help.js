@@ -218,4 +218,15 @@ const convertDateFilter = (startDateString, endDateString) => {
 
  const statusOptions = ["All", "Progress", "Pending", "Completed", "Cancelled"];
 
-export { statusOptions, convertDateFilter, getLastChars, colorCodeStatus, getFormattedTime,getFormattedDate,getDateAndTimeSeparate, guid, paymentOptions, formatDateTime, getGreetings, generatePaymentId, currencySymbolMapper, generateRandomData, toWordCase, formatCurrency, dateConverter, backgroundColorHelper, textColorHelper }
+ const formatDate = (dateString) => {
+            const date = new Date(dateString);
+            return date.toLocaleString('en-US', {
+                day: 'numeric',
+                month: 'short',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            });
+        };
+
+export { formatDate, statusOptions, convertDateFilter, getLastChars, colorCodeStatus, getFormattedTime,getFormattedDate,getDateAndTimeSeparate, guid, paymentOptions, formatDateTime, getGreetings, generatePaymentId, currencySymbolMapper, generateRandomData, toWordCase, formatCurrency, dateConverter, backgroundColorHelper, textColorHelper }
