@@ -12,7 +12,7 @@ import {
 	deleteMenu, queryMenuByNamePrefix
 } from "../model/menu";
 import { Menu } from "../model/menu";
-import {AddOn} from "../model/addOn";
+import { AddOn } from "../model/addOn";
 
 interface Initialize {
 	data: Menu[] | null | Menu | [] | boolean;
@@ -20,9 +20,10 @@ interface Initialize {
 	loading: boolean;
 }
 
-const useMenus = () => {
-	const [data, setData] = useState<Initialize>({
+const useMenus = (flag: boolean = false) => {
+	const [data, setData] = useState<Initialize & { copyData: Menu[] }>({
 		data: [],
+		copyData: [],
 		error: null,
 		loading: true,
 	});
@@ -32,6 +33,7 @@ const useMenus = () => {
 			const result = await queryAllMenus();
 			setData({
 				data: result,
+				copyData: result,
 				error: null,
 				loading: false,
 			});
@@ -39,19 +41,74 @@ const useMenus = () => {
 		} catch (error) {
 			setData({
 				data: null,
+				copyData: [],
 				error: error as Error,
 				loading: false,
 			});
 		}
 	}
 
+	async function filterMenus(category_id: string) {
+		setData(prev => ({
+			...prev,
+			data: Array.isArray(prev.copyData)
+				? (prev.copyData as Menu[]).filter((j: Menu) => j.category_id === category_id)
+				: [],
+			loading: false,
+		}));
+	}
+
+	async function freeTextSearch(terms: string) {
+		try {
+			
+			const searchTerm = terms.trim().toLowerCase();
+			if (!searchTerm) {
+				setData(prev => ({
+					...prev,
+					data: Array.isArray(prev.copyData) ? prev.copyData : [],
+					loading: false,
+				}));
+				return;
+			}
+
+			const filtered = Array.isArray(data.copyData)
+				? (data.copyData as Menu[]).filter((item: Menu) =>
+					item.name.toLowerCase().includes(searchTerm)
+				)
+				: [];
+
+			setData(prev => ({
+				...prev,
+				data: filtered,
+				loading: false,
+				error: null,
+			}));
+		} catch (error) {
+			setData(prev => ({
+				...prev,
+				data: [],
+				error: error as Error,
+				loading: false,
+			}));
+		}
+	}
+
+	async function restoreMenus() {
+		setData(prev => ({
+			...prev,
+			data: Array.isArray(prev.copyData) ? prev.copyData : [],
+			loading: false,
+		}));
+	}
+
 	useEffect(() => {
-		loadMenus();
-	}, []);
+		flag && loadMenus();
+	}, [flag]);
 
 	const resetHandler = () => {
 		setData({
 			data: null,
+			copyData: [],
 			error: null,
 			loading: false,
 		});
@@ -60,7 +117,10 @@ const useMenus = () => {
 	return {
 		...data,
 		resetHandler,
-		loadMenus
+		loadMenus,
+		restoreMenus,
+		filterMenus,
+		freeTextSearch
 	};
 };
 
@@ -416,12 +476,12 @@ const useDeleteMenu = () => {
 	};
 };
 
-const useQuery = async (menu_id: string, addOn : AddOn[]) => {
-	
+const useQuery = async (menu_id: string, addOn: AddOn[]) => {
+
 	const results = await queryMenuById(menu_id);
 
 	return {
-	
+
 	};
 };
 

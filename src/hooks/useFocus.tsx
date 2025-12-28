@@ -6,11 +6,13 @@ const useFocus = () => {
     
     useFocusEffect(
         React.useCallback(() => {
-            // Screen is focused
+            // Screen gained focus
+            if (__DEV__) console.log("📱 SCREEN GAINED FOCUS");
             setIsFocused(true);
             
             return () => {
-                // Screen is unfocused
+                // Screen lost focus
+                if (__DEV__) console.log("❌ SCREEN LOST FOCUS");
                 setIsFocused(false);
             };
         }, [])

@@ -10,7 +10,6 @@ import { fontStyles, theme } from '../../../utils/theme';
 import { StyledImage } from '../../../components/package/image';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Logo from '../../../components/tablet/logo';
-import { useAppContext } from '../../../hooks/appContext';
 
 type Props = {
   showLogo?: boolean;
@@ -18,6 +17,7 @@ type Props = {
   showTitle?: boolean;
   title?: string;
   children?: React.ReactNode;
+  CopyIcon?: React.ReactNode
 };
 
 const RenderHeader = ({
@@ -25,10 +25,10 @@ const RenderHeader = ({
   showBackButton = false,
   showTitle,
   title,
-  children
+  children,
+  CopyIcon
 }: Props) => {
   const navigation = useNavigation();
-  const { user, previousSelectedMenu, updateCurrentMenu } = useAppContext();
 
   return (
     <Stack
@@ -58,7 +58,7 @@ const RenderHeader = ({
             name="arrow-back"
             color={theme.colors.gray[800]}
             onPress={() => {
-             
+
               navigation.canGoBack() && navigation.goBack();
             }}
           />
@@ -84,59 +84,68 @@ const RenderHeader = ({
         !children && <StyledSpacer flex={1} />
       }
 
-      <Stack
-        horizonal
-        paddingHorizontal={16}
-        justifyContent="flex-start"
-        alignItems="center">
-        <StyledImage
-          source={require('./../../../../assets/img/doctor_1.png')}
-          size={50}
-          cycle
-          resizeMode="contain"></StyledImage>
-        <Stack
-          vertical
-          marginLeft={8}
-          justifyContent="flex-start"
-          alignItems="flex-start">
-          <StyledText
-            color={theme.colors.gray[900]}
-            fontSize={theme.fontSize.small}
-            fontWeight={theme.fontWeight.semiBold}>
-            Gladina Samantha
-          </StyledText>
-          <StyledText
-            color={theme.colors.gray[400]}
-            fontSize={theme.fontSize.small}
-            fontWeight={theme.fontWeight.medium}>
-            Waiter
-          </StyledText>
-        </Stack>
-      </Stack>
+      {
+        CopyIcon ? CopyIcon : (
+          <>
+            <Stack
+              horizonal
+              paddingHorizontal={16}
+              justifyContent="flex-start"
+              alignItems="center">
+              <StyledImage
+                source={require('./../../../../assets/img/doctor_1.png')}
+                size={50}
+                cycle
+                resizeMode="contain"></StyledImage>
+              <Stack
+                vertical
+                marginLeft={8}
+                justifyContent="flex-start"
+                alignItems="flex-start">
+                <StyledText
+                  color={theme.colors.gray[900]}
+                  fontSize={theme.fontSize.small}
+                  fontWeight={theme.fontWeight.semiBold}>
+                  Gladina Samantha
+                </StyledText>
+                <StyledText
+                  color={theme.colors.gray[400]}
+                  fontSize={theme.fontSize.small}
+                  fontWeight={theme.fontWeight.medium}>
+                  Waiter
+                </StyledText>
+              </Stack>
+            </Stack>
 
-      <Stack horizonal>
-        <StyledCycle
-          paddingHorizontal={10}
-          borderWidth={1}
-          height={48}
-          width={48}
-          backgroundColor={theme.colors.gray[1]}
-          borderColor={theme.colors.gray[400]}>
-          <Icon
-            size={24}
-            name="exit-to-app"
-            color={theme.colors.gray[800]}
-            onPress={() => {
-              navigation.dispatch(
-                CommonActions.reset({
-                  index: 0,
-                  routes: [{ name: 'keypad' }],
-                })
-              );
-            }}
-          />
-        </StyledCycle>
-      </Stack>
+            <Stack horizonal>
+              <StyledCycle
+                paddingHorizontal={10}
+                borderWidth={1}
+                height={48}
+                width={48}
+                backgroundColor={theme.colors.gray[1]}
+                borderColor={theme.colors.gray[400]}>
+                <Icon
+                  size={24}
+                  name="exit-to-app"
+                  color={theme.colors.gray[800]}
+                  onPress={() => {
+                    navigation.dispatch(
+                      CommonActions.reset({
+                        index: 0,
+                        routes: [{ name: 'keypad' }],
+                      })
+                    );
+                  }}
+                />
+              </StyledCycle>
+            </Stack>
+          </>
+        )
+      }
+
+
+
     </Stack>
   );
 };

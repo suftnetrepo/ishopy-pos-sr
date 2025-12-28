@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+
 import { useEffect, useState } from "react";
 import { queryAllTaxes, insertTax, queryByStatus, updateTax, deleteTax } from "../model/tax";
 import { Tax } from "../model/types";
@@ -9,7 +9,7 @@ interface Initialize {
 	loading: boolean;
 }
 
-const useTaxes = () => {
+const useTaxes = (flag : boolean =false ) => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
@@ -34,8 +34,8 @@ const useTaxes = () => {
 	}
 
 	useEffect(() => {
-		loadTaxes();
-	}, []);
+	   flag &&	loadTaxes();
+	}, [flag]);
 
 	const resetHandler = () => {
 		setData({

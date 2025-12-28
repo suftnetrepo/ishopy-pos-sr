@@ -41,6 +41,10 @@ import BigMenu from '../screens/big/menu';
 import BigTable from '../screens/big/table';
 import BigOrder from '../screens/big/order';
 import BigSettings from '../screens/big/settings';
+import BigCategory from '../screens/big/settings/category';
+import BigTax from '../screens/big/settings/tax';
+import BigDiscount from '../screens/big/settings/discount';
+import BigItem from '../screens/big/settings/item';
 
 const Stack = createStackNavigator();
 function Navigator() {
@@ -51,6 +55,13 @@ function Navigator() {
        <Stack.Screen
         name="big-dashboard"
         component={Dashboard}
+        options={{
+          headerShown: false,
+        }}
+      />
+       <Stack.Screen
+        name="big-item"
+        component={BigItem}
         options={{
           headerShown: false,
         }}
@@ -79,6 +90,27 @@ function Navigator() {
       <Stack.Screen
         name="big-settings"
         component={BigSettings}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="big-category"
+        component={BigCategory}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="big-tax"
+        component={BigTax}
+        options={{
+          headerShown: false,
+        }}
+      />
+       <Stack.Screen
+        name="big-discount"
+        component={BigDiscount}
         options={{
           headerShown: false,
         }}

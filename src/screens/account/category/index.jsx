@@ -1,9 +1,4 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable react/prop-types */
-/* eslint-disable no-undef */
-/* eslint-disable prettier/prettier */
-/* eslint-disable react/jsx-key */
-/* eslint-disable prettier/prettier */
+
 import React, { useState } from 'react';
 import { YStack, XStack, StyledConfirmDialog, StyledCycle, StyledHeader, StyledSafeAreaView, StyledSpinner, StyledOkDialog, StyledSpacer, StyledText } from 'fluent-styles';
 import { theme, fontStyles } from '../../../configs/theme';

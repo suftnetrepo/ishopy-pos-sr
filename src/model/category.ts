@@ -50,7 +50,7 @@ const queryCategoriesWithMenuCount = async (): Promise<Category[]> => {
     try {
       const categories = realm
         .objects<Category>('Category')
-        .filtered('status == 1') // Only active categories
+        .filtered('status == 1') 
         .sorted('name')
         .map(category => {
           const menuCount = realm
@@ -150,7 +150,6 @@ const updateCategory = async (
   name: string,
   status: number,
   color_code: string,
-  icon: Icon
 ): Promise<Category> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
@@ -165,7 +164,6 @@ const updateCategory = async (
           category.name = name;
           category.status = status;
           category.color_code = color_code;
-          category.icon = icon;
           resolve(category);
         } else {
           reject(new Error('Category not found'));
@@ -182,12 +180,12 @@ const deleteCategory = async (category_id: string): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     try {
       const products = realm
-        .objects('Product')
+        .objects('Menu')
         .filtered('category_id == $0', category_id);
       if (products.length > 0) {
         reject(
           new Error(
-            'Cannot delete category: Products are associated with this category.'
+            'Cannot delete category: Menu are associated with this category.'
           )
         );
       } else {

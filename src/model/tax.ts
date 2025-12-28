@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+
 import { guid } from '../utils/help';
 import { getRealmInstance } from './store';
 

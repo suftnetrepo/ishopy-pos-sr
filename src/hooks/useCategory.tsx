@@ -3,6 +3,7 @@ import {
   queryCategoriesByStatus,
   queryCategoryById,
   queryCategoriesWithMenuCount,
+  queryAllCategories,
   deleteCategory,
   insertCategory,
   updateCategory,
@@ -18,7 +19,7 @@ const useCategories = () => {
   const [data, setData] = useState<Initialize>({
     data: [],
     error: null,
-    loading: true,
+    loading: false,
   });
 
   async function loadCategories() {
@@ -41,6 +42,49 @@ const useCategories = () => {
   useEffect(() => {
     loadCategories();
   }, []);
+
+  const resetHandler = () => {
+    setData({
+      data: null,
+      error: null,
+      loading: false,
+    });
+  };
+
+  return {
+    ...data,
+    data: Array.isArray(data.data) ? data.data : [data.data],
+    resetHandler,
+  };
+};
+
+const useCategory = (flag= false) => {
+  const [data, setData] = useState<Initialize>({
+    data: [],
+    error: null,
+    loading: false,
+  });
+
+  async function loadCategories() {
+    try {
+      const result = await queryAllCategories();
+      setData(prev => ({
+        ...prev,
+        data: result,
+        loading: false,
+      }));
+    } catch (error) {
+      setData({
+        data: null,
+        error: error as Error,
+        loading: false,
+      });
+    }
+  }
+
+  useEffect(() => {
+    loadCategories();
+  }, [flag]);
 
   const resetHandler = () => {
     setData({
@@ -216,7 +260,6 @@ const useUpdateCategory = () => {
     name: string,
     status: number,
     color_code: string,
-    icon: Icon
   ) => {
     setData(prev => ({...prev, loading: true}));
 
@@ -226,7 +269,6 @@ const useUpdateCategory = () => {
         name,
         status,
         color_code,
-        icon
       );
       setData({
         data: result,
@@ -311,4 +353,5 @@ export {
   useDeleteCategory,
   updateCategory,
   useCategories,
+  useCategory
 };

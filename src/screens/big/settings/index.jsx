@@ -13,7 +13,7 @@ import Drawer from '../../../components/package/drawer';
 import { StyledShape } from '../../../components/package/shape';
 import { StyledImage } from '../../../components/package/image';
 import Shop from './shop';
-
+import { useNavigation } from '@react-navigation/native';
 
 const SETTINGS_CONFIG = {
     rows: [
@@ -32,17 +32,37 @@ const SETTINGS_CONFIG = {
             { id: 'back', icon: require('../../../../assets/img/back-1.png'), name: 'Back' },
             { id: 'restore', icon: require('../../../../assets/img/restore-1.png'), name: 'Restore' },
             ,
-            // { id: 'category2', icon: require('../../../../assets/img/category-1.png'), name: 'Category' }
+            { id: 'report', icon: require('../../../../assets/img/report-1.png'), name: 'Report' }
         ]
     ]
 };
 
 const BigSettings = () => {
+    const navigation = useNavigation()
     const [show, setShow] = useState(null);
 
     const handleCardPress = useCallback((itemId) => {
         console.log('Card pressed:', itemId);
-        setShow(itemId);
+        switch (itemId) {
+            case 'shop':
+                setShow(itemId);
+                break;
+            case 'category':
+                navigation.navigate('big-category')
+                break;
+            case 'tax':
+                navigation.navigate('big-tax')
+                break;
+            case 'discount':
+                navigation.navigate('big-discount')
+                break;
+            case 'item':
+                navigation.navigate('big-item')
+                break;
+            default:
+                break;
+        }
+
     }, []);
 
     const RenderCard = ({ icon, name, onTouchStart }) => {
@@ -137,7 +157,7 @@ const BigSettings = () => {
                 isOpen={!!show}
                 onClose={() => setShow(null)}
             >
-                <Shop onClose={()=> setShow(null)} />
+                <Shop onClose={() => setShow(null)} />
             </Drawer>
         </StyledSafeAreaView>
     );

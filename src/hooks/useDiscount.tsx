@@ -9,7 +9,7 @@ interface Initialize {
 	loading: boolean;
 }
 
-const useDiscounts = () => {
+const useDiscounts = (flag: boolean = false) => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
@@ -34,8 +34,8 @@ const useDiscounts = () => {
 	}
 
 	useEffect(() => {		
-		loadDiscount();
-	}, []);
+		flag && loadDiscount();
+	}, [flag]);
 
 	const resetHandler = () => {
 		setData({
@@ -152,9 +152,9 @@ const useUpdateDiscount = () => {
 		setData((prev) => ({ ...prev, loading: true }));
 
 		try {
-			const user = await updateDiscount(discount.discount_id, discount.name, discount.status, discount.rate);
+			const result = await updateDiscount(discount.discount_id, discount.name, discount.status, discount.rate);
 			setData({
-				data: user,
+				data: result,
 				error: null,
 				loading: false,
 			});
