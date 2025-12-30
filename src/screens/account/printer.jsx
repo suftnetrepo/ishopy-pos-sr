@@ -1,6 +1,4 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable no-undef */
-/* eslint-disable prettier/prettier */
+
 import React, { useEffect } from 'react';
 import { YStack, XStack, StyledHeader, StyledRadioButton, StyledSafeAreaView, StyledSpacer, StyledText } from 'fluent-styles';
 import { useNavigation } from '@react-navigation/native';
@@ -9,7 +7,6 @@ import { useRadioContext } from '../../hooks/radioContext';
 import BluetoothPrinter from './bluetoothPrinter';
 import { FEATURE_FLAG } from '../../feature-flags';
 import { ScrollView } from 'react-native';
-
 
 const Printer = () => {
     const navigator = useNavigation()

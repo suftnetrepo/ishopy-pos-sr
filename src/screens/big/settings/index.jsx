@@ -14,6 +14,9 @@ import { StyledShape } from '../../../components/package/shape';
 import { StyledImage } from '../../../components/package/image';
 import Shop from './shop';
 import { useNavigation } from '@react-navigation/native';
+import { Backup } from '../../../components/backup/backup';
+import { Restore } from '../../../components/backup/restore';
+import Printer from './printer';
 
 const SETTINGS_CONFIG = {
     rows: [
@@ -29,22 +32,29 @@ const SETTINGS_CONFIG = {
 
         ],
         [
-            { id: 'back', icon: require('../../../../assets/img/back-1.png'), name: 'Back' },
+            { id: 'back-up', icon: require('../../../../assets/img/back-1.png'), name: 'Back' },
             { id: 'restore', icon: require('../../../../assets/img/restore-1.png'), name: 'Restore' },
-            { id: 'payment', icon: require('../../../../assets/img/report-1.png'), name: 'Payment' }
+            { id: 'payment', icon: require('../../../../assets/img/report-1.png'), name: 'Payment' },
+        ],
+        [
+            { id: 'printer', icon: require('../../../../assets/img/report-2.png'), name: 'Printer' }
         ]
     ]
 };
 
 const BigSettings = () => {
     const navigation = useNavigation()
-    const [show, setShow] = useState(null);
+    const [show, setShow] = useState({
+        data: null,
+        id: '',
+        tag: ''
+    });
 
     const handleCardPress = useCallback((itemId) => {
         console.log('Card pressed:', itemId);
         switch (itemId) {
             case 'shop':
-                setShow(itemId);
+                setShow(({ ...show, id: itemId, tag: 'shop' }))
                 break;
             case 'category':
                 navigation.navigate('big-category')
@@ -61,8 +71,17 @@ const BigSettings = () => {
             case 'user':
                 navigation.navigate('big-user')
                 break;
-                 case 'payment':
+            case 'payment':
                 navigation.navigate('big-payment')
+                break;
+            case 'back-up':
+                setShow(({ ...show, id: 'back-up', tag: 'back-up' }))
+                break;
+            case 'restore':
+                setShow(({ ...show, id: 'restore', tag: 'restore' }))
+                break;
+                 case 'printer':
+                setShow(({ ...show, id: 'printer', tag: 'printer' }))
                 break;
             default:
                 break;
@@ -159,10 +178,21 @@ const BigSettings = () => {
 
             <Drawer
                 direction="right"
-                isOpen={!!show}
-                onClose={() => setShow(null)}
+                isOpen={['shop', 'restore', 'back-up', 'printer'].includes(show.tag)}
+                onClose={() => setShow({ data: null, id: '', tag: '' })}
             >
-                <Shop onClose={() => setShow(null)} />
+                {show.tag === 'shop' && (
+                    <Shop onClose={() => setShow({ data: null, id: '', tag: '' })} />
+                )}
+                {show.tag === 'back-up' && (
+                    <Backup></Backup>
+                )}
+                {show.tag === 'restore' && (
+                    <Restore></Restore>
+                )}
+                {show.tag === 'printer' && (
+                    <Printer onClose={() => setShow({ data: null, id: '', tag: '' })} />
+                )}
             </Drawer>
         </StyledSafeAreaView>
     );

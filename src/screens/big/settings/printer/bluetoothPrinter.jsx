@@ -1,9 +1,9 @@
 
 import React from 'react';
 import { YStack, XStack, StyledButton, StyledImage, StyledBadge, StyledSpinner, StyledOkDialog, StyledSpacer, StyledText } from 'fluent-styles';
-import { theme, fontStyles } from '../../configs/theme';
-import { StyledMIcon } from '../../components/icon';
-import { useBluetoothPrinterContext } from '../../hooks/bluetoothPrinterProvider';
+import { theme, fontStyles } from '../../../../configs/theme';
+import { StyledMIcon } from '../../../../components/icon';
+import { useBluetoothPrinterContext } from '../../../../hooks/bluetoothPrinterProvider';
 
 const BluetoothPrinter = () => {
     const { isEnabled, devices, enableBluetooth, selectedPrinter, connectDevice, setError, error, testPrint, loading } = useBluetoothPrinterContext();
@@ -23,19 +23,20 @@ const BluetoothPrinter = () => {
     }
 
     return (
-        <YStack width={'100%'} backgroundColor={theme.colors.gray[1]}>       
+        <YStack width={'100%'} paddingHorizontal={16} backgroundColor={theme.colors.gray[1]}>       
           <YStack
                 justifyContent='center'
                 alignItems='center'
                 paddingVertical={16}
-                paddingHorizontal={16}
+              
                 marginBottom={8}
             >
                 <StyledImage
                     local
                     height={100}
                     width={100}
-                    source={require('../../../assets/img/printer.png')}
+                    borderWidth={0}
+                    source={require('../../../../../assets/img/printer.png')}
                 />
                 <StyledSpacer marginVertical={8} />
                 <StyledText
@@ -47,7 +48,7 @@ const BluetoothPrinter = () => {
                     Make sure your Bluetooth printer is in pairing mode. Once it’s ready, use the button below to scan for available Bluetooth devices.
                     `
                 </StyledText>
-                <StyledSpacer marginVertical={4} />
+                <StyledSpacer marginVertical={16} />
                 <StyledButton backgroundColor={isEnabled ? theme.colors.green[600] : theme.colors.pink[600]} onPress={enableBluetooth}>
                     <XStack paddingHorizontal={8} justifyContent='flex-start' alignItems='center'>
                         <StyledSpacer marginHorizontal={2} />

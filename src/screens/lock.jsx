@@ -12,6 +12,7 @@ import { StyledMIcon } from '../components/icon';
 import { useAppContext } from '../hooks/appContext';
 import { FEATURE_FLAG } from '../feature-flags';
 import { clearSeedData, seedData } from '../model/seed';
+import { Stack } from '../components/package/stack';
 
 const Keypad = () => {
     const navigator = useNavigation()
@@ -121,23 +122,6 @@ const Keypad = () => {
         )
     }
 
-    const Notice = () => {
-        return (
-            <YStack marginBottom={32} marginHorizontal={16} borderRadius={16} justifyContent='flex-start' paddingVertical={16} paddingHorizontal={16} alignItems='flex-start' backgroundColor={theme.colors.lightBlue[50]}>
-
-                <XStack justifyContent='flex-start' alignItems='center'>
-                    <StyledMIcon size={32} name='info' color={theme.colors.cyan[500]} />
-                    <StyledText paddingHorizontal={8} fontFamily={fontStyles.Roboto_Regular} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.large} color={theme.colors.gray[800]}>
-                        Welcome to iRit
-                    </StyledText>
-                </XStack>
-                <StyledText fontFamily={fontStyles.Roboto_Regular} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.medium} color={theme.colors.gray[800]}>
-                    Get started quickly! Tap Sample User to generate dummy User to see a sample of what the app can do. Feel free to explore the features!.
-                </StyledText>
-            </YStack>
-        )
-    }
-
     return (
         <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
             <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
@@ -152,15 +136,11 @@ const Keypad = () => {
                         <ResetPasswordNotice />
                     )
                 }
-                {
-                    !purchase_status && !recovery_password && (
-                        <Notice />
-                    )
-                }
-
+               
+                <StyledSpacer marginVertical={16} />
                 <XStack marginBottom={20}>
                     {[0, 1, 2, 3].map((_, index) => (
-                        <YStack key={index} width={60} height={60} borderWidth={1} borderRadius={10} margin={5} borderColor={theme.colors.gray[400]} justifyContent='center' alignItems='center'>
+                        <YStack key={index} width={60} height={60} borderWidth={1} borderRadius={10} margin={5} borderColor={theme.colors.gray[600]} justifyContent='center' alignItems='center'>
                             <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.bold} >
                                 {pin[index]}
                             </StyledText>
@@ -175,24 +155,26 @@ const Keypad = () => {
                     )
                 }
                 <StyledSpacer marginVertical={8} />
-                <XStack flexWrap='wrap' justifyContent='center' alignItems='center'>
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((num, index) => (
-                        <YStack key={index} margin={5}>
-                            <StyledButton
-                                width={70} height={70}
-                                borderWidth={1} borderRadius={35}
-                                backgroundColor={theme.colors.gray[1]}
-                                borderColor={theme.colors.gray[400]}
-                                key={index}
-                                onPress={() => handlePress(num.toString())}
-                            >
-                                <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.xxlarge} fontWeight={theme.fontWeight.bold} >
-                                    {num}
-                                </StyledText>
-                            </StyledButton>
-                        </YStack>
+                <Stack vertical flexWrap='wrap' justifyContent='center' alignItems='center'>
+                    {[['1', '2', '3'], ['4', '5', '6'], ['7', '8', '9']].map((row, index) => (
+                        <Stack gap={16} horizonal key={index} margin={5}>
+                            {row.map(num => (
+                                <StyledButton
+                                    key={num}
+                                    width={70} height={70}
+                                    borderWidth={1} borderRadius={35}
+                                    backgroundColor={theme.colors.gray[1]}
+                                    borderColor={theme.colors.gray[600]}
+                                    onPress={() => handlePress(num.toString())}
+                                >
+                                    <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.xxlarge} fontWeight={theme.fontWeight.bold} >
+                                        {num}
+                                    </StyledText>
+                                </StyledButton>))}
+                        </Stack>
 
                     ))}
+                    <StyledSpacer marginVertical={8} />
                     <StyledButton
                         width={70} height={70}
                         borderWidth={1} borderRadius={35}
@@ -204,7 +186,7 @@ const Keypad = () => {
                             ⌫
                         </StyledText>
                     </StyledButton>
-                </XStack>
+                </Stack>
                 <StyledSpacer marginVertical={8} />
                 {
                     purchase_status && (
