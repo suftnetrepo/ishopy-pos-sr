@@ -19,39 +19,39 @@ import { StyledIcon } from "../../../package/icon";
 import { fontStyles, theme } from "../../../../utils/theme";
 import { useAppContext } from "../../../../hooks/appContext";
 import { formatCurrency } from "../../../../utils/help";
-import { Stack } from "../../../../components/package/stack";
 import CheckOut from "../../../../components/tablet/checkout";
 import { useInsertPayment } from "../../../../hooks/usePayment";
+import { updataStatusHandler } from "../../../../hooks/useOrder";
 
-export default function Payment({ 
-    payment_method, 
-    onClose, 
-    table_name, 
-    table_id, 
-    order_id, 
-    printHandler, 
-    shareReceipt 
+export default function Payment({
+    payment_method,
+    onClose,
+    table_name,
+    table_id,
+    order_id,
+    printHandler,
+    shareReceipt
 }) {
     const { getTotalPrice, shop } = useAppContext();
     const { insert, data, error, loading, success } = useInsertPayment();
-    
+
     const subtotal = getTotalPrice(table_id) || 0;
     const tax = 0;
     const baseTotal = subtotal + tax;
-    
+
     const [amountInput, setAmountInput] = useState("");
     const keypad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "0", "<"];
-    
+
     const calculateAmountToPay = (input) => {
         if (!input) return 0;
-        
+
         if (input.includes(".")) {
             return parseFloat(input) || 0;
         }
-        
+
         return (parseInt(input, 10) || 0) / 100;
     };
-    
+
     const amountToPay = calculateAmountToPay(amountInput);
     const change = amountToPay - baseTotal;
     const canPay = parseFloat(amountToPay.toFixed(2)) >= parseFloat(baseTotal.toFixed(2));
@@ -80,25 +80,30 @@ export default function Payment({
 
     const handleSubmit = async () => {
         if (!canPay || !order_id) return;
-        
+
         const body = {
             order_id: order_id,
             amount: parseFloat(baseTotal),
             payment_method: payment_method,
             date: new Date().toISOString()
         };
-        
-        await insert(body);
+
+        console.log("........before", order_id)
+        insert(body).then(() => {
+               console.log("........inside", order_id)
+            updataStatusHandler(order_id, "Completed");
+              console.log("........after", order_id)
+        })
     };
 
     const renderAmountDisplay = () => {
         if (amountInput && amountInput.length > 0) {
             return (
-                <StyledText 
-                    fontFamily={fontStyles.Roboto_Regular} 
-                    textAlign="center" 
-                    color={theme.colors.gray[500]} 
-                    fontSize={theme.fontSize.xxxlarge} 
+                <StyledText
+                    fontFamily={fontStyles.Roboto_Regular}
+                    textAlign="center"
+                    color={theme.colors.gray[500]}
+                    fontSize={theme.fontSize.xxxlarge}
                     fontWeight={theme.fontWeight.thin}
                 >
                     {formatCurrency(shop?.currency || "£", amountToPay)}
@@ -113,14 +118,14 @@ export default function Payment({
             return (
                 <>
                     <StyledSpacer marginVertical={2} />
-                    <StyledText 
-                        textAlign="center" 
-                        fontFamily={fontStyles.Roboto_Regular} 
-                        fontSize={theme.fontSize.xlarge} 
-                        color={theme.colors.red[500]} 
+                    <StyledText
+                        textAlign="center"
+                        fontFamily={fontStyles.Roboto_Regular}
+                        fontSize={theme.fontSize.xlarge}
+                        color={theme.colors.red[500]}
                         fontWeight={theme.fontWeight.medium}
                     >
-                     {formatCurrency(shop?.currency || "£", change)}
+                        {formatCurrency(shop?.currency || "£", change)}
                     </StyledText>
                 </>
             );
@@ -144,10 +149,10 @@ export default function Payment({
                         justifyContent: "center",
                     }}
                 >
-                    <Text 
-                        color={theme.colors.gray[1]} 
-                        fontFamily={fontStyles.Roboto_Regular} 
-                        fontSize={theme.fontSize.large} 
+                    <Text
+                        color={theme.colors.gray[1]}
+                        fontFamily={fontStyles.Roboto_Regular}
+                        fontSize={theme.fontSize.large}
                         fontWeight={theme.fontWeight.medium}
                     >
                         {num}
@@ -160,17 +165,17 @@ export default function Payment({
     const renderPaymentButton = () => {
         if (canPay) {
             return (
-                <Button 
-                    flex={1} 
-                    bg={theme.colors.green[600]} 
-                    px={30} 
-                    py={10} 
-                    borderRadius={12} 
+                <Button
+                    flex={1}
+                    bg={theme.colors.green[600]}
+                    px={30}
+                    py={10}
+                    borderRadius={12}
                     onPress={handleSubmit}
                     disabled={loading}
                 >
-                    <ButtonText 
-                        fontFamily={fontStyles.Roboto_Regular} 
+                    <ButtonText
+                        fontFamily={fontStyles.Roboto_Regular}
                         color={theme.colors.gray[1]}
                     >
                         Pay
@@ -188,10 +193,10 @@ export default function Payment({
 
         if (error) {
             return (
-                <StyledOkDialog 
-                    title={error?.message || "Payment Error"} 
-                    description="Please try again" 
-                    visible={true} 
+                <StyledOkDialog
+                    title={error?.message || "Payment Error"}
+                    description="Please try again"
+                    visible={true}
                     onOk={() => { /* Add reset handler if available */ }}
                 />
             );
@@ -200,12 +205,12 @@ export default function Payment({
         if (success && data) {
             return (
                 <StyledDialog visible>
-                    <CheckOut 
-                        table_name={table_name} 
-                        table_id={table_id} 
-                        order={data} 
-                        printHandler={printHandler} 
-                        shareReceipt={shareReceipt} 
+                    <CheckOut
+                        table_name={table_name}
+                        table_id={table_id}
+                        order={data}
+                        printHandler={printHandler}
+                        shareReceipt={shareReceipt}
                     />
                 </StyledDialog>
             );
@@ -217,20 +222,20 @@ export default function Payment({
     return (
         <Box borderRadius={30} flex={1} backgroundColor={theme.colors.gray[900]}>
             {/* Header */}
-            <HStack  justifyContent="space-between" alignItems="center" px={24} py={16}>
+            <HStack justifyContent="space-between" alignItems="center" px={24} py={16}>
                 <HStack flex={1} horizontal justifyContent="flex-start" alignItems="flex-start">
                     <StyledIcon
                         name="attach-money"
                         size={24}
                         color={theme.colors.gray[1]}
                     />
-                    <Text 
-                        fontFamily={fontStyles.Roboto_Regular} 
-                        color={theme.colors.gray[1]} 
-                        fontSize={theme.fontSize.large} 
+                    <Text
+                        fontFamily={fontStyles.Roboto_Regular}
+                        color={theme.colors.gray[1]}
+                        fontSize={theme.fontSize.large}
                         fontWeight={theme.fontWeight.medium}
                     >
-                        Cash 
+                        Cash
                     </Text>
                 </HStack>
                 <StyledIcon
@@ -245,7 +250,7 @@ export default function Payment({
             <VStack px={16} py={16} flex={1}>
                 {/* Amount Display */}
                 {renderAmountDisplay()}
-                
+
                 {/* Total Amount */}
                 <StyledText
                     textAlign="center"
@@ -256,15 +261,15 @@ export default function Payment({
                 >
                     {formatCurrency(shop?.currency || "£", baseTotal)}
                 </StyledText>
-                
+
                 {/* Change Display */}
                 {renderChangeDisplay()}
-                
+
                 <StyledSpacer marginVertical={16} />
-                
+
                 {/* Keypad */}
                 {renderKeypad()}
-                
+
                 {/* Payment Button */}
                 <HStack
                     justifyContent="center"

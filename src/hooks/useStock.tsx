@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { useEffect, useState } from "react";
-import { queryStockById,queryStockByProductId, insertStock,updateStock,deleteStock, getLowStockItems } from "../model/stock";
+import { DEFAULT_STOCK_LEVELS, queryStockById,queryStockByProductId, insertStock,updateStock,deleteStock, getLowStockItems } from "../model/stock";
 import { Stock } from "../model/types";
 import {LowStockItem} from "../model/stock";
 
@@ -83,7 +83,11 @@ const useQueryGetLowerStock = () => {
 	useEffect(() => {
 		async function load() {
 			try {
-				const lowStock = await getLowStockItems();
+				const lowStock = await getLowStockItems(10, {
+					warning : 10,
+					critical : 1,
+					low : 5
+				});
 				setData(prev => ({
 					...prev,
 					data: lowStock,

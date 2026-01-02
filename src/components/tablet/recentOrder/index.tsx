@@ -1,14 +1,15 @@
 import React from 'react';
-import {StyledText, StyledSpacer} from 'fluent-styles';
-import {Stack} from '../../../components/package/stack';
-import {theme} from '../../../utils/theme';
-import {StyledImage} from '../../../components/package/image';
-import {ScrollView} from 'react-native';
-import {backgroundColorHelper, textColorHelper} from '../../../utils/help';
-import {useQueryRecentOrders} from '../../../hooks/useOrderItems';
+import { StyledText, StyledSpacer } from 'fluent-styles';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import { Stack } from '../../../components/package/stack';
+import { theme } from '../../../utils/theme';
+import { StyledIcon } from '../../../components/package/icon';
+import { ScrollView } from 'react-native';
+import { backgroundColorHelper, formatDate, textColorHelper, capitalize } from '../../../utils/help';
+import { useQueryRecentOrders } from '../../../hooks/useOrderItems';
 
 const RecentOrder = () => {
-  const {data} = useQueryRecentOrders();
+  const { data } = useQueryRecentOrders();
 
   return (
     <Stack
@@ -32,14 +33,9 @@ const RecentOrder = () => {
           fontWeight={theme.fontWeight.normal}>
           Recent Orders
         </StyledText>
-        <StyledText
-          color={theme.colors.gray[800]}
-          fontSize={14}
-          fontWeight={theme.fontWeight.thin}>
-          View All
-        </StyledText>
+           <StyledIcon size={24} name='share' color={theme.colors.gray[300]} />
       </Stack>
-      <StyledSpacer marginVertical={8} />
+          <StyledSpacer borderWidth={0.4} borderColor={theme.colors.gray[300]} width={'100%'} marginVertical={8} />
       <ScrollView showsVerticalScrollIndicator={false}>
         {data.map((dish, index) => (
           <Stack
@@ -50,54 +46,50 @@ const RecentOrder = () => {
             alignItems="center"
             gap={8}
             marginBottom={16}>
-            <StyledImage
-              source={{
-                uri: 'https://img1.wsimg.com/isteam/ip/8fa9801a-9459-437f-ac41-7e7e90b4e436/Making%20Egusi%20Soup%20Recipe%20(with%20Assorted%20Meat)%20.jpg/:/rs=w:1280',
-              }}
-              size={32}
-              cycle
-              resizeMode="contain"></StyledImage>
             <Stack vertical>
-              <StyledText
-                color={theme.colors.gray[500]}
-                fontSize={16}
-                fontWeight={theme.fontWeight.medium}
-                marginLeft={2}>
-                {dish.menu_name}
-              </StyledText>
               <Stack
                 horizonal
                 justifyContent="flex-start"
                 alignItems="center"
                 gap={4}>
                 <StyledText
-                  color={theme.colors.gray[400]}
-                  fontSize={14}
-                  fontWeight={theme.fontWeight.normal}
+                  color={theme.colors.gray[800]}
+                  fontSize={theme.fontSize.small}
+                  fontWeight={theme.fontWeight.bold}
                   marginLeft={2}>
-                  Items:
+                  {dish.order.table_name}
                 </StyledText>
                 <StyledText
-                  color={theme.colors.green[800]}
-                  fontSize={14}
-                  fontWeight={theme.fontWeight.semiBold}
+                  color={theme.colors.gray[800]}
+                  fontSize={theme.fontSize.small}
+                  fontWeight={theme.fontWeight.thin}
                   marginLeft={5}>
-                  {dish.order_count}
+                  X {dish.item_count}
                 </StyledText>
+              </Stack>
+              <Stack
+                horizonal
+                justifyContent="flex-start"
+                alignItems="center"
+                gap={4}>
+                <Stack gap={4} horizonal alignItems="center">
+                  <MaterialIcon name="access-time" size={16} color={theme.colors.gray[600]} />
+                  <StyledText color={theme.colors.gray[600]} fontSize={theme.fontSize.small}>{formatDate(dish.order?.date)}</StyledText>
+                </Stack>
               </Stack>
             </Stack>
             <StyledSpacer flex={1} />
             <Stack
-              borderColor={backgroundColorHelper(dish.status)}
-              backgroundColor={backgroundColorHelper(dish.status)}
+              borderColor={backgroundColorHelper(dish.order.status)}
+              backgroundColor={backgroundColorHelper(dish.order.status)}
               borderRadius={30}>
               <StyledText
-                color={textColorHelper(dish.status)}
+                color={textColorHelper(dish.order.status)}
                 fontSize={12}
                 paddingHorizontal={12}
                 paddingVertical={4}
                 fontWeight={theme.fontWeight.normal}>
-                {dish.status}
+                {capitalize(dish.order.status)}
               </StyledText>
             </Stack>
           </Stack>

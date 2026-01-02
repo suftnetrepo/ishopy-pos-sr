@@ -17,7 +17,7 @@ import { formatCurrency, paymentOptions } from "../../../utils/help";
 import { theme } from "../../../utils/theme";
 import Drawer from "../../../components/package/drawer";
 import Payment from "../payment/cash";
-import { useInsertOrder } from "../../../hooks/useOrder";
+import { useInsertOrder, updataStatusHandler } from "../../../hooks/useOrder";
 
 export default function Cart({ table_id, table_name }) {
     const {
@@ -74,15 +74,15 @@ export default function Cart({ table_id, table_name }) {
 
     const handleVoid = async () => {
         if (!hasOrderId) return;
-
-        await deleteHandler(items.order_id);
-        clearItem(table_id);
+        updataStatusHandler(items?.order_id, "Cancelled").then(() => {
+            clearItem(table_id);
+        })
     };
 
     const handleUpdateOrder = () => {
         if (!hasOrderId) return;
 
-        deleteHandler(items.order_id).then(() => {
+        deleteHandler(items?.order_id).then(() => {
             handleOrder();
         });
     };

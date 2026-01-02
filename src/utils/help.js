@@ -113,16 +113,16 @@ function guid() {
 }
 
 const backgroundColorHelper = status => {
-  switch (status) {
-    case 'Progress':
+  switch (status.toLowerCase()) {
+    case 'progress':
       return theme.colors.amber[100];
-    case 'Completed':
-    case 'Paid':
+    case 'completed':
+    case 'paid':
       return theme.colors.green[100];
-    case 'Pending':
-    case 'Unpaid':
+    case 'pending':
+    case 'unpaid':
       return theme.colors.indigo[100];
-    case 'Cancelled':
+    case 'cancelled':
       return theme.colors.red[100];
     default:
       return theme.colors.gray[100];
@@ -130,16 +130,16 @@ const backgroundColorHelper = status => {
 };
 
 const textColorHelper = status => {
-  switch (status) {
-    case 'Progress':
+  switch (status.toLowerCase()) {
+    case 'progress':
       return theme.colors.amber[800];
-    case 'Completed':
-    case 'Paid':
+    case 'completed':
+    case 'paid':
       return theme.colors.green[800];
-    case 'Pending':
-    case 'Unpaid':
+    case 'pending':
+    case 'unpaid':
       return theme.colors.indigo[800];
-    case 'Cancelled':
+    case 'cancelled':
       return theme.colors.red[800];
     default:
       return theme.colors.gray[800];
@@ -229,4 +229,7 @@ const convertDateFilter = (startDateString, endDateString) => {
             });
         };
 
-export { formatDate, statusOptions, convertDateFilter, getLastChars, colorCodeStatus, getFormattedTime,getFormattedDate,getDateAndTimeSeparate, guid, paymentOptions, formatDateTime, getGreetings, generatePaymentId, currencySymbolMapper, generateRandomData, toWordCase, formatCurrency, dateConverter, backgroundColorHelper, textColorHelper }
+        const capitalize = (value = '') =>
+  value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+
+export { capitalize, formatDate, statusOptions, convertDateFilter, getLastChars, colorCodeStatus, getFormattedTime,getFormattedDate,getDateAndTimeSeparate, guid, paymentOptions, formatDateTime, getGreetings, generatePaymentId, currencySymbolMapper, generateRandomData, toWordCase, formatCurrency, dateConverter, backgroundColorHelper, textColorHelper }

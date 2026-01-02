@@ -38,9 +38,9 @@ interface StockLevels {
 
 // Default stock levels - you can customize these
 const DEFAULT_STOCK_LEVELS: StockLevels = {
-  critical: 2,
+  critical: 1,
   low: 5,
-  warning: 10,
+  warning: 20,
 };
 
 const insertStock = async (
@@ -154,39 +154,30 @@ const deleteStock = async (stock_id: number): Promise<boolean> => {
 };
 
 const getLowStockItems = async (
+  limit: number = 20,
   stockLevels: StockLevels = DEFAULT_STOCK_LEVELS
 ): Promise<LowStockItem[]> => {
   const realm = await getRealmInstance();
+  
   return new Promise((resolve, reject) => {
     try {
-      // Get the latest stock entry for each menu_id
-      const allStocks = realm.objects<Stock>('Stock').sorted('date', true);
-      const latestStocks: Record<string, Stock> = {};
-
-      // Get most recent stock for each menu item
-      for (const stock of allStocks) {
-        if (!latestStocks[stock.menu_id]) {
-          latestStocks[stock.menu_id] = stock;
-        }
-      }
-
-      // Get all menu items for joining
       const allMenus = realm.objects<Menu>('Menu');
-      const menuMap: Record<string, Menu> = {};
-      for (const menu of allMenus) {
-        menuMap[menu.menu_id] = menu;
+      
+      // Return empty array if no menus exist
+      if (allMenus.length === 0) {
+        resolve([]);
+        return;
       }
-
-      // Filter for low stock items and join with menu data
-      const lowStockItems: LowStockItem[] = Object.values(latestStocks)
-        .filter(stock => {
-          const currentStock = stock.stock ?? 0;
-          return currentStock <= stockLevels.warning && menuMap[stock.menu_id];
-        })
-        .map(stock => {
-          const currentStock = stock.stock ?? 0;
-          const menu = menuMap[stock.menu_id];
-
+      
+      // Filter for low stock items
+      const lowStockItems: LowStockItem[] = [];
+      
+      for (const menu of allMenus) {
+        const currentStock = menu.stock ?? 0;
+        
+        // Only include items at or below warning threshold
+        if (currentStock <= stockLevels.warning) {
+          // Determine status based on stock levels
           let status: 'Critical' | 'Low' | 'Warning';
           if (currentStock <= stockLevels.critical) {
             status = 'Critical';
@@ -195,14 +186,14 @@ const getLowStockItems = async (
           } else {
             status = 'Warning';
           }
-
+          
           // Calculate potential revenue impact
           const effectivePrice = menu.price_offer ?? menu.price;
           const revenueImpact = currentStock * effectivePrice;
-
-          return {
-            stock_id: stock.stock_id,
-            menu_id: stock.menu_id,
+          
+          lowStockItems.push({
+            stock_id: menu.menu_id,
+            menu_id: menu.menu_id,
             menu_name: menu.name,
             bar_code: menu.bar_code,
             color_code: menu.color_code,
@@ -213,15 +204,20 @@ const getLowStockItems = async (
             category_name: menu.category_name,
             description: menu.description,
             current_stock: currentStock,
-            menu_stock: menu.stock,
-            date: stock.date,
+            menu_stock: currentStock,
+            date: new Date().toISOString(),
             status,
             revenue_impact: revenueImpact,
-          };
-        })
-        .sort((a, b) => a.current_stock - b.current_stock); // Sort by stock level (lowest first)
-
-      resolve(lowStockItems);
+          });
+        }
+      }
+      
+      // Sort by stock level (lowest first) and limit to top N
+      const result = lowStockItems
+        .sort((a, b) => a.current_stock - b.current_stock)
+        .slice(0, limit);
+      
+      resolve(result);
     } catch (error) {
       reject(error);
     }
@@ -234,4 +230,5 @@ export {
   queryStockById,
   queryStockByProductId,
   getLowStockItems,
+  DEFAULT_STOCK_LEVELS
 };

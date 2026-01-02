@@ -8,6 +8,7 @@ import {
   deleteOrder,
   queryOrdersByDateRange,
   getOrderStatusAggregate,
+  updateOrderStatus
 } from '../model/orders';
 import { Order, OrderItem, CartItem } from '../model/types';
 import { insertOrderItem } from '../model/orderItems';
@@ -488,7 +489,7 @@ const useInsertOrder = (table_id: string, table_name:string) => {
     printHandler,
     shareReceipt,
     deleteHandler,
-    queryOrderByIdhandler
+    queryOrderByIdhandler,
   };
 };
 
@@ -527,10 +528,27 @@ const useDeleteOrder = () => {
   };
 };
 
+  const updataStatusHandler = async (order_id: string, status : string) => {
+    try {
+
+           console.log("........updateStatusHandler", order_id)
+                 console.log("........updateStatusHandler", status)
+      const result = await updateOrderStatus(order_id, status);
+    console.log("........result", result)
+      return true
+    } catch (error) {
+       if(__DEV__) {
+        console.log("Error", error)
+       }
+      return false
+    }
+  };
+
 export {
   useDeleteOrder,
   useInsertOrder,
   useQueryOrderById,
   useOrders,
   useOrderStatusAggregate,
+  updataStatusHandler
 };

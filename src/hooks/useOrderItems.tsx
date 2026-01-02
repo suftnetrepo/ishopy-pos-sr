@@ -8,8 +8,13 @@ import {
   getMostPopularMenuByQuantity,
   queryRecentOrders,
 } from '../model/orderItems';
-import {OrderItem} from '../model/types';
+import {OrderItem, Order} from '../model/types';
 import {PopularMenuItem, RecentOrderDisplay} from '../model/orderItems';
+
+type RecentOrderWithItemCount = {
+  order: Order;
+  item_count: number;
+};
 
 interface Initialize {
   data:
@@ -27,38 +32,55 @@ interface Initialize {
 }
 
 const useQueryRecentOrders = () => {
-  const [data, setData] = useState<Initialize>({
+  const [data, setData] = useState<{
+    data: RecentOrderWithItemCount[];
+    error: Error | null;
+    loading: boolean;
+  }>({
     data: [],
     error: null,
     loading: true,
   });
 
   useEffect(() => {
+    let mounted = true;
+
     async function load() {
       try {
         const result = await queryRecentOrders(5);
-        setData(prev => ({
-          ...prev,
-          data: result,
-          loading: false,
-        }));
-      } catch (error) {
+
+        if (!mounted) return;
+
         setData({
-          data: null,
+          data: result,
+          error: null,
+          loading: false,
+        });
+      } catch (error) {
+        if (!mounted) return;
+
+        setData({
+          data: [],
           error: error as Error,
           loading: false,
         });
       }
     }
+
     load();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   return {
-    data: data.data as RecentOrderDisplay[] | [],
+    data: data.data,
     error: data.error,
     loading: data.loading,
   };
 };
+
 
 const useQueryPopularMenuItems = () => {
   const [data, setData] = useState<Initialize>({

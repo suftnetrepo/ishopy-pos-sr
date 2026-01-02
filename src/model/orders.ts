@@ -23,6 +23,10 @@ export interface OrderStatusAggregate {
   total: number;
 }
 
+let cachedAggregate: OrderStatusAggregate | null = null;
+let cacheTimestamp: number = 0;
+const CACHE_DURATION = 30000; // 30 seconds
+
 const insertOrder = async (order: Omit<Order, 'order_id'>): Promise<Order> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
@@ -41,24 +45,58 @@ const insertOrder = async (order: Omit<Order, 'order_id'>): Promise<Order> => {
   });
 };
 
-const getOrderStatusAggregate = async (): Promise<OrderStatusAggregate> => {
+const updateOrderStatus = async (
+  order_id: string,
+  status: string,
+): Promise<boolean> => {
   const realm = await getRealmInstance();
+  
   return new Promise((resolve, reject) => {
     try {
+      realm.write(() => {
+        const updateOrder = realm.objectForPrimaryKey<Order>('Order', order_id);
+        
+        if (updateOrder) {
+          updateOrder.status = status;
+        } else {
+          throw new Error('order_id not found');
+        }
+      });
+      
+      // Resolve after write transaction completes successfully
+      resolve(true);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+const getOrderStatusAggregate = async (forceRefresh: boolean = false): Promise<OrderStatusAggregate> => {
+  const realm = await getRealmInstance();
+  
+  return new Promise((resolve, reject) => {
+    try {
+      const now = Date.now();
+      
+      // Return cached result if still valid
+      if (!forceRefresh && cachedAggregate && (now - cacheTimestamp) < CACHE_DURATION) {
+        resolve(cachedAggregate);
+        return;
+      }
+      
+      // Use Realm's optimized filtered queries with case-insensitive matching
       const aggregate: OrderStatusAggregate = {
-        Pending: realm.objects<Order>('Order').filtered('status == "Pending"')
-          .length,
-        Progress: realm.objects<Order>('Order').filtered('status == "Progress"')
-          .length,
-        Completed: realm
-          .objects<Order>('Order')
-          .filtered('status == "Completed"').length,
-        Cancelled: realm
-          .objects<Order>('Order')
-          .filtered('status == "Cancelled"').length,
+        Pending: realm.objects<Order>('Order').filtered('status ==[c] "pending"').length,
+        Progress: realm.objects<Order>('Order').filtered('status ==[c] "progress"').length,
+        Completed: realm.objects<Order>('Order').filtered('status ==[c] "completed"').length,
+        Cancelled: realm.objects<Order>('Order').filtered('status ==[c] "cancelled"').length,
         total: realm.objects<Order>('Order').length,
       };
-
+      
+      // Update cache
+      cachedAggregate = aggregate;
+      cacheTimestamp = now;
+      
       resolve(aggregate);
     } catch (error) {
       reject(error);
@@ -186,4 +224,5 @@ export {
   queryOrderById,
   queryOrdersByDateRange,
   getOrderStatusAggregate,
+  updateOrderStatus
 };

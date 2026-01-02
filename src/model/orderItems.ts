@@ -2,6 +2,11 @@
 import {getRealmInstance} from './store';
 import {Order} from './orders';
 
+type RecentOrderWithItemCount = {
+  order: Order;
+  item_count: number;
+};
+
 export interface OrderItem {
   detail_id: string;
   order_id: string;
@@ -132,10 +137,16 @@ const getMostPopularMenuByQuantity = async (limit: number = 10): Promise<Popular
     try {
       const orderItems = realm.objects<OrderItem>('OrderItem');
       
-      // Optimization 1: Use a plain object instead of Map for better performance
+      // Return empty array if no order items exist
+      if (orderItems.length === 0) {
+        resolve([]);
+        return;
+      }
+      
+      // Use a plain object for better performance
       const menuStats: Record<string, PopularMenuItem> = {};
       
-      // Optimization 2: Use for-of loop which is generally faster than forEach
+      // Aggregate data for each menu item
       for (const item of orderItems) {
         const key = item.menu_id;
         const existing = menuStats[key];
@@ -151,20 +162,19 @@ const getMostPopularMenuByQuantity = async (limit: number = 10): Promise<Popular
             total_quantity: item.quantity,
             order_count: 1,
             total_revenue: item.price * item.quantity,
-            average_price: 0, // Optimization 3: Defer average_price calculation to final step
+            average_price: 0,
           };
         }
       }
       
-      // Optimization 4: Convert to array and process in one pass
+      // Convert to array, calculate average price, sort, and limit
       const popularItems = Object.values(menuStats)
         .map(item => ({
           ...item,
           average_price: item.total_revenue / item.total_quantity,
         }))
-        // Optimization 5: Use more efficient sorting for large datasets
         .sort((a, b) => {
-          // Compare total_quantity first (descending)
+          // Sort by total_quantity first (descending)
           if (a.total_quantity !== b.total_quantity) {
             return b.total_quantity - a.total_quantity;
           }
@@ -180,60 +190,45 @@ const getMostPopularMenuByQuantity = async (limit: number = 10): Promise<Popular
   });
 };
 
-const queryRecentOrders = async (limit: number = 50): Promise<RecentOrderDisplay[]> => {
+const queryRecentOrders = async (
+  limit: number = 5
+): Promise<RecentOrderWithItemCount[]> => {
   const realm = await getRealmInstance();
 
   return new Promise((resolve, reject) => {
     try {
-      // Optimization 1: Query only recent orders to reduce dataset size
-      const recentOrders = realm.objects<Order>('Order')
-        .sorted('date', true)
-        .slice(0, limit * 5); // Get more orders than needed to ensure good coverage
+      // 1️⃣ Get latest N orders
+      const recentOrders = realm
+        .objects<Order>('Order')
+        .sorted('date', true) // DESC → latest first
+        .slice(0, limit);
 
-      // Optimization 2: Create order map only for recent orders
-      const orderMap = new Map<string, Order>();
-      for (const order of recentOrders) {
-        orderMap.set(order.order_id, order);
+      if (recentOrders.length === 0) {
+        resolve([]);
+        return;
       }
 
-      // Optimization 3: Query only items from recent orders
-      const orderIds = Array.from(orderMap.keys());
-      const recentItems = realm.objects<OrderItem>('OrderItem')
+      // 2️⃣ Collect order IDs
+      const orderIds = recentOrders.map(o => o.order_id);
+
+      // 3️⃣ Fetch items only for those orders
+      const orderItems = realm
+        .objects<OrderItem>('OrderItem')
         .filtered('order_id IN $0', orderIds);
 
-      // Optimization 4: Use plain object for grouping (faster than Map)
-      const grouped: Record<string, RecentOrderDisplay> = {};
+      // 4️⃣ Count items per order
+      const itemCountMap: Record<string, number> = {};
 
-      for (const item of recentItems) {
-        const order = orderMap.get(item.order_id);
-        if (!order) continue;
-
-        const key = item.menu_name;
-        const existing = grouped[key];
-
-        if (!existing) {
-          grouped[key] = {
-            menu_name: item.menu_name,
-            quantity: item.quantity,
-            status: order.status,
-            latest_date: order.date,
-            order_count: 1
-          };
-        } else {
-          grouped[key] = {
-            ...existing,
-            quantity: existing.quantity + item.quantity,
-            latest_date: order.date > existing.latest_date ? order.date : existing.latest_date,
-            status: order.date > existing.latest_date ? order.status : existing.status,
-            order_count: existing.order_count + 1
-          };
-        }
+      for (const item of orderItems) {
+        itemCountMap[item.order_id] =
+          (itemCountMap[item.order_id] ?? 0) + item.quantity;
       }
 
-      // Optimization 5: Sort by most recently ordered and limit results
-      const result = Object.values(grouped)
-        .sort((a, b) => b.latest_date.getTime() - a.latest_date.getTime())
-        .slice(0, limit);
+      // 5️⃣ Build final response (order + item count)
+      const result: RecentOrderWithItemCount[] = recentOrders.map(order => ({
+        order,
+        item_count: itemCountMap[order.order_id] ?? 0,
+      }));
 
       resolve(result);
     } catch (error) {
@@ -241,6 +236,7 @@ const queryRecentOrders = async (limit: number = 50): Promise<RecentOrderDisplay
     }
   });
 };
+
 
 export {
   insertOrderItem,

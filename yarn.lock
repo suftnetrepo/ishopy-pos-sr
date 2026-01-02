@@ -3424,6 +3424,23 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
+"@robinbobin/mimetype-constants@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@robinbobin/mimetype-constants/-/mimetype-constants-2.0.3.tgz#064bed7a0ab4896b3e1cda0636d0b26b6fb2b3b6"
+  integrity sha512-elfj39euC34YHvx8siGdx1CHAWKZey4tIiLzDomn7Dq5co5XVsCnru8UWSEfeKSnI+KwEm8IrF9vOWufeEUL/w==
+  dependencies:
+    radashi "^12.7.1"
+
+"@robinbobin/react-native-google-drive-api-wrapper@^2.2.6":
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/@robinbobin/react-native-google-drive-api-wrapper/-/react-native-google-drive-api-wrapper-2.2.6.tgz#d055b01e247bb44f94e29600558faa799cba0c5f"
+  integrity sha512-RAHj1Zplql7dTT6DQXOsV4TnvewMI6EvmdfSfdrt9MNyyixT1nlrsgvBqtg6N32P2gWnZzPAS9OXUQBWthKdtA==
+  dependencies:
+    "@robinbobin/mimetype-constants" "^2.0.3"
+    base64-js "^1.5.1"
+    radashi "^12.6.0"
+    utf8 "^3.0.0"
+
 "@sideway/address@^4.1.5":
   version "4.1.5"
   resolved "https://registry.npmjs.org/@sideway/address/-/address-4.1.5.tgz"
@@ -7682,7 +7699,7 @@ queue@6.0.2:
   dependencies:
     inherits "~2.0.3"
 
-radashi@^12.7.0:
+radashi@^12.6.0, radashi@^12.7.0, radashi@^12.7.1:
   version "12.7.1"
   resolved "https://registry.yarnpkg.com/radashi/-/radashi-12.7.1.tgz#f57ae58b9d8a2bba3efebbd733580ca456daa429"
   integrity sha512-rwxcGY3oKMQJ+ojhS4MlxyVWqdXPVJSxg3ZjXDYYz26DYRuAAs+7XBM406/GYzPEBbjSJqdKfHDpBRfjWn34RQ==

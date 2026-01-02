@@ -15,55 +15,11 @@ const Tiles = () => {
       justifyContent="flex-start"
       gap={16}
       marginLeft={16}
-  
       shadowOpacity={0.9}
       shadowColor={theme.colors.gray[200]}
       shadowRadius={8}
       alignItems="center">
-      <Stack horizonal flex={1}>
-        <Stack
-          flex={1}
-          vertical
-          borderRadius={8}
-          backgroundColor={theme.colors.gray[1]}
-          paddingHorizontal={18}
-          paddingVertical={18}
-          justifyContent="flex-end"
-          alignItems="flex-end">
-          <StyledShape
-            cycle
-            height={60}
-            width={60}
-            borderColor={theme.colors.indigo[100]}
-            backgroundColor={theme.colors.indigo[100]}>
-            <FontAwesome
-              name="clock-o"
-              size={24}
-              color={theme.colors.indigo[400]}
-            />
-          </StyledShape>
-          <StyledSpacer marginVertical={24} />
-          <Stack
-            width={'100%'}
-            horizonal
-            justifyContent="space-between"
-            alignItems="center">
-            <StyledText
-              color={theme.colors.gray[500]}
-              fontSize={16}
-              fontWeight={theme.fontWeight.medium}>
-              Pending
-            </StyledText>
-            <StyledText
-              color={theme.colors.gray[800]}
-              fontSize={18}
-              fontWeight={theme.fontWeight.medium}
-              marginLeft={10}>
-              {data?.Pending || 0}
-            </StyledText>
-          </Stack>
-        </Stack>
-      </Stack>
+     
       <Stack horizonal flex={1}>
         <Stack
           flex={1}
@@ -86,7 +42,7 @@ const Tiles = () => {
               color={theme.colors.amber[500]}
             />
           </StyledShape>
-          <StyledSpacer marginVertical={24} />
+          <StyledSpacer marginVertical={8} />
           <Stack
             width={'100%'}
             horizonal
@@ -131,7 +87,7 @@ const Tiles = () => {
               color={theme.colors.green[400]}
             />
           </StyledShape>
-          <StyledSpacer marginVertical={24} />
+          <StyledSpacer marginVertical={8} />
           <Stack
             width={'100%'}
             horizonal
@@ -150,6 +106,50 @@ const Tiles = () => {
               fontWeight={theme.fontWeight.medium}
               marginLeft={10}>
               {data?.Completed || 0}
+            </StyledText>
+          </Stack>
+        </Stack>
+      </Stack>
+       <Stack horizonal flex={1}>
+        <Stack
+          flex={1}
+          vertical
+          borderRadius={8}
+          backgroundColor={theme.colors.gray[1]}
+          paddingHorizontal={18}
+          paddingVertical={18}
+          justifyContent="flex-end"
+          alignItems="flex-end">
+          <StyledShape
+            cycle
+            height={60}
+            width={60}
+            borderColor={theme.colors.rose[100]}
+            backgroundColor={theme.colors.rose[100]}>
+            <FontAwesome
+              name="remove"
+              size={24}
+              color={theme.colors.rose[400]}
+            />
+          </StyledShape>
+          <StyledSpacer marginVertical={8} />
+          <Stack
+            width={'100%'}
+            horizonal
+            justifyContent="space-between"
+            alignItems="center">
+            <StyledText
+              color={theme.colors.gray[500]}
+              fontSize={16}
+              fontWeight={theme.fontWeight.medium}>
+              Cancelled
+            </StyledText>
+            <StyledText
+              color={theme.colors.gray[800]}
+              fontSize={18}
+              fontWeight={theme.fontWeight.medium}
+              marginLeft={10}>
+              {data?.Cancelled || 0}
             </StyledText>
           </Stack>
         </Stack>

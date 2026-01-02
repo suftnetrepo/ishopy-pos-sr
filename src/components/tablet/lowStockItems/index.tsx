@@ -1,14 +1,13 @@
 import React from 'react';
-import {StyledText, StyledSpacer} from 'fluent-styles';
-
-import {Stack} from '../../../components/package/stack';
-import {theme} from '../../../utils/theme';
-import {StyledImage} from '../../../components/package/image';
-import {ScrollView} from 'react-native';
-import {useQueryGetLowerStock} from '../../../hooks/useStock';
+import { StyledText, StyledSpacer } from 'fluent-styles';
+import { Stack } from '../../../components/package/stack';
+import { theme } from '../../../utils/theme';
+import { StyledIcon } from '../../../components/package/icon';
+import { ScrollView } from 'react-native';
+import { useQueryGetLowerStock } from '../../../hooks/useStock';
 
 const LowStockItems = () => {
-  const {data} = useQueryGetLowerStock();
+  const { data } = useQueryGetLowerStock();
 
   return (
     <Stack
@@ -35,14 +34,9 @@ const LowStockItems = () => {
           fontWeight={theme.fontWeight.normal}>
           Low Stock Items
         </StyledText>
-        <StyledText
-          color={theme.colors.gray[800]}
-          fontSize={16}
-          fontWeight={theme.fontWeight.thin}>
-          View All
-        </StyledText>
+        <StyledIcon size={24} name='share' color={theme.colors.gray[300]} />
       </Stack>
-      <StyledSpacer marginVertical={8} />
+      <StyledSpacer borderWidth={0.5} borderColor={theme.colors.gray[300]} width={'100%'} marginVertical={8} />
       <ScrollView showsVerticalScrollIndicator={false}>
         {data.map((dish, index) => (
           <Stack
@@ -52,13 +46,13 @@ const LowStockItems = () => {
             alignItems="center"
             gap={8}
             marginBottom={16}>
-            <StyledImage
+            {/* <StyledImage
               source={{
                 uri: 'https://img1.wsimg.com/isteam/ip/8fa9801a-9459-437f-ac41-7e7e90b4e436/Making%20Egusi%20Soup%20Recipe%20(with%20Assorted%20Meat)%20.jpg/:/rs=w:1280',
               }}
               size={32}
               cycle
-              resizeMode="contain"></StyledImage>
+              resizeMode="contain"></StyledImage> */}
             <Stack vertical>
               <StyledText
                 color={theme.colors.gray[500]}

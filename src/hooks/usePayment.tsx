@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import {
-	queryAllPayments,	
+	queryAllPayments,
 	queryPaymentsByDateRange,
 	queryPaymentsByOrderId,
 	insertPayment,
@@ -13,7 +13,7 @@ interface Initialize {
 	data: Payment[] | null | Payment | [] | boolean;
 	error: Error | null;
 	loading: boolean;
-	success :boolean
+	success: boolean
 }
 
 const usePayments = () => {
@@ -21,7 +21,7 @@ const usePayments = () => {
 		data: [],
 		error: null,
 		loading: true,
-		success : false
+		success: false
 	});
 
 	async function loadPayment() {
@@ -37,12 +37,12 @@ const usePayments = () => {
 				data: null,
 				error: error as Error,
 				loading: false,
-				success : false
+				success: false
 			});
 		}
 	}
 
-	useEffect(() => {		
+	useEffect(() => {
 		loadPayment();
 	}, []);
 
@@ -59,7 +59,7 @@ const usePayments = () => {
 				data: null,
 				error: error as Error,
 				loading: false,
-				success : false
+				success: false
 			});
 		}
 	}
@@ -69,7 +69,7 @@ const usePayments = () => {
 			data: null,
 			error: null,
 			loading: false,
-			success : false
+			success: false
 		});
 	};
 
@@ -86,7 +86,7 @@ const usePaymentsByOrderId = (order_id: number) => {
 		data: [],
 		error: null,
 		loading: true,
-		success : false
+		success: false
 	});
 
 	useEffect(() => {
@@ -97,14 +97,14 @@ const usePaymentsByOrderId = (order_id: number) => {
 					...prev,
 					data: result,
 					loading: false,
-					success : true
+					success: true
 				}));
 			} catch (error) {
 				setData({
 					data: null,
 					error: error as Error,
 					loading: false,
-					success : false
+					success: false
 				});
 			}
 		}
@@ -122,7 +122,7 @@ const useInsertPayment = () => {
 		data: null,
 		error: null,
 		loading: false,
-		success : false
+		success: false
 	});
 
 	const insertHandler = async (payment: Omit<Payment, "id">) => {
@@ -134,15 +134,19 @@ const useInsertPayment = () => {
 				data: result,
 				error: null,
 				loading: false,
-				success : true
+				success: true
 			});
+
+			return true
 		} catch (error) {
 			setData({
 				data: null,
 				error: error as Error,
 				loading: false,
-				success : false
+				success: false
 			});
+
+			return false
 		}
 	};
 
@@ -191,5 +195,5 @@ export {
 	useDeletePayment,
 	useInsertPayment,
 	usePayments,
-	usePaymentsByOrderId	
+	usePaymentsByOrderId
 };
