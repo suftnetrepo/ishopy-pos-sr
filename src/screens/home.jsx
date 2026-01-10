@@ -63,7 +63,7 @@ const Home = () => {
         justifyContent="flex-start"
         alignItems="center"
         paddingVertical={8}
-        paddingHorizontal={16}>
+        paddingHorizontal={8}>
         <StyledCycle
           paddingHorizontal={10}
           borderWidth={1}

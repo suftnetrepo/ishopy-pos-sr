@@ -2,7 +2,7 @@ import React from 'react';
 import { StyledText } from 'fluent-styles';
 import { Stack } from '../../../package/stack';
 import { fontStyles, theme } from '../../../../utils/theme';
-import { Icon } from './icon';
+import { Icon } from '../../icon/icon';
 import { Pressable } from 'react-native';
 import { useAppContext } from '../../../../hooks/appContext';
 import { StyledIcon } from "../../../package/icon";
@@ -11,15 +11,12 @@ const CategoryCard = ({
   name,
   category_id,
   status,
-  icon,
+  icon_name,
   total_menu = 0,
   onPress,
   color_code
 }) => {
   const { category_id: selected_category_id } = useAppContext()
-  if (!name || !icon) {
-    return null;
-  }
 
   const menuText = total_menu === 1 ? 'item' : 'items';
 
@@ -43,10 +40,8 @@ const CategoryCard = ({
         shadowOpacity={0.1}
         shadowRadius={2}
         elevation={3}
-       
         >
-        <Icon {...icon} />
-
+        <Icon name={icon_name} type={'solid'} isSelected={false} />
         <Stack vertical flex={1} justifyContent="center">
           {
             selected_category_id === category_id && (

@@ -16,7 +16,7 @@ const SideBar = ({ collapse = false, selectedMenu = 1, showMenu = false }) => {
     },
     {
       id: 2,
-      label: 'Table',
+      label: 'Tables',
       icon: 'table-chair',
       active: false,
       name: 'big-table',

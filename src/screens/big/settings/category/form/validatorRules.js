@@ -3,6 +3,7 @@ const reset = {
   name: "",
   color_code: "",
   status: 0,
+  icon_name: ""
 }
 const categoryRules = {
   rules: {

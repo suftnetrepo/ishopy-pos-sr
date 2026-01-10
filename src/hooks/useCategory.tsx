@@ -142,12 +142,7 @@ const useQueryCategoriesByStatus = () => {
     category_id: '-1',
     name: 'All',
     status: 1,
-    icon: {
-      name: '',
-      label: '',
-      library: '',
-      type: '',
-    },
+    icon_name: '',
   };
 
   const newData = Array.isArray(data.data)
@@ -212,12 +207,13 @@ const useInsertCategory = () => {
     name: string,
     status: number = 0,
     color_code: string,
-    icon: Icon
+    icon: Icon,
+    icon_name?: string,
   ) => {
     setData(prev => ({...prev, loading: true}));
 
     try {
-      const result = await insertCategory(name, status, color_code, icon);
+      const result = await insertCategory(name, status, color_code, icon_name);
       setData({
         data: result,
         error: null,
@@ -260,6 +256,7 @@ const useUpdateCategory = () => {
     name: string,
     status: number,
     color_code: string,
+    icon_name?: string,
   ) => {
     setData(prev => ({...prev, loading: true}));
 
@@ -269,6 +266,7 @@ const useUpdateCategory = () => {
         name,
         status,
         color_code,
+        icon_name
       );
       setData({
         data: result,

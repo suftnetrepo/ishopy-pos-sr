@@ -88,11 +88,8 @@ export default function Payment({
             date: new Date().toISOString()
         };
 
-        console.log("........before", order_id)
         insert(body).then(() => {
-               console.log("........inside", order_id)
             updataStatusHandler(order_id, "Completed");
-              console.log("........after", order_id)
         })
     };
 

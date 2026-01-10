@@ -41,6 +41,7 @@ export const MenuSchema: ObjectSchema = {
     name: 'string',
     bar_code: 'string?',
     color_code: 'string?',
+    icon_name :'string?',
     price: 'double',
     price_offer: {type: 'double', default: 0},
     cost: {type: 'double', default: 0},
@@ -82,6 +83,7 @@ export const CategorySchema: ObjectSchema = {
     name: 'string',
     color_code: 'string?',
     icon: 'mixed',
+    icon_name :'string?',
     description: 'string?',
     sort_order: { type: 'int', default: 0 },
     status: { type: 'int', default: 0 },
@@ -135,6 +137,7 @@ export const OrderItemSchema: ObjectSchema = {
     order_id: 'string',
     menu_id: 'string',
     menu_name: 'string',
+    menu_icon_name :'string?',
     quantity: 'int',
     price: 'double',
     date: 'date',
@@ -230,7 +233,7 @@ const schema = [
 
 const RealmOptions = () => {
   return {
-    path: '_rs_pos.realm',
+    path: '_pos__j_.realm',
     schema: schema,
     schemaVersion: SCHEMA_VERSION,
     migration 

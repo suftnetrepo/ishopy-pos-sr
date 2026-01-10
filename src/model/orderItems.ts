@@ -12,6 +12,7 @@ export interface OrderItem {
   order_id: string;
   menu_id: string;
   menu_name: string;
+  menu_icon_name? : string;
   quantity: number;
   price: number;
   date: Date;
@@ -29,6 +30,7 @@ export interface RecentOrderDisplay {
 export interface PopularMenuItem {
   menu_id: string;
   menu_name: string;
+  menu_icon_name? : string;
   total_quantity: number;
   order_count: number;
   total_revenue: number;
@@ -67,6 +69,7 @@ const queryOrderItemByOrderId = async(order_id: string): Promise<OrderItem[]> =>
           order_id: orderItem.order_id,
           menu_id: orderItem.menu_id,
           menu_name: orderItem.menu_name,
+          menu_icon_name: orderItem.menu_icon_name,
           quantity: orderItem.quantity,
           price: orderItem.price,
           date: orderItem.date,
@@ -95,6 +98,7 @@ const queryOrderItemById = async(detail_id: string): Promise<OrderItem | null> =
               order_id: orderItem.order_id,
               menu_id: orderItem.menu_id,
               menu_name: orderItem.menu_name,
+              menu_icon_name: orderItem.menu_icon_name,
               quantity: orderItem.quantity,
               price: orderItem.price,
               date: orderItem.date,
@@ -159,6 +163,7 @@ const getMostPopularMenuByQuantity = async (limit: number = 10): Promise<Popular
           menuStats[key] = {
             menu_id: item.menu_id,
             menu_name: item.menu_name,
+            menu_icon_name :item.menu_icon_name,
             total_quantity: item.quantity,
             order_count: 1,
             total_revenue: item.price * item.quantity,

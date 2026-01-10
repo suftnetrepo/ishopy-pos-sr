@@ -10,6 +10,7 @@ import { Stack } from "../../../package/stack";
 import { theme, fontStyles } from "../../../../utils/theme";
 import { StyledIcon } from "../../../package/icon";
 import { formatCurrency } from "../../../../utils/help";
+import { Icon } from "../../../../components/tablet/icon/icon";
 
 export default function ItemCard({ onChangeItem }) {
   const { category_id, updateSelectedItem, selectedItem, shop, addItem, menuQuery } = useAppContext()
@@ -25,7 +26,7 @@ export default function ItemCard({ onChangeItem }) {
       return;
     }
     const index = `${Date.now()}${Math.random().toString(36).slice(2, 8)}`;
-    addItem(index, item.menu_id, item.name, item.price, 1, "1").then(() => { });
+    addItem(index, item.menu_id, item.name, item.price, 1, "1", item?.icon_name).then(() => { });
   };
 
   const handleTouchStart = async (item) => {
@@ -57,7 +58,7 @@ export default function ItemCard({ onChangeItem }) {
             <StyledIcon position='absolute' right={1} top={1} name="check-circle" size={32} color={theme.colors.blue[500]} />
           )
         }
-
+     
         <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.medium} fontWeight={theme.fontWeight.medium} color={theme.colors.gray[800]}>
           {item.name}
         </StyledText>

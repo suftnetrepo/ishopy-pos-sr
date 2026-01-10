@@ -10,6 +10,7 @@ import { fontStyles, theme } from '../../../utils/theme';
 import { StyledImage } from '../../../components/package/image';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Logo from '../../../components/tablet/logo';
+import { useAppContext } from '../../../hooks/appContext';
 
 type Props = {
   showLogo?: boolean;
@@ -29,6 +30,9 @@ const RenderHeader = ({
   CopyIcon
 }: Props) => {
   const navigation = useNavigation();
+  const { user } = useAppContext();
+
+  console.log('User Info:', user);
 
   return (
     <Stack
@@ -37,7 +41,7 @@ const RenderHeader = ({
       backgroundColor={theme.colors.gray[1]}
       justifyContent="flex-start"
       alignItems="center"
-      paddingVertical={16}
+      paddingVertical={8}
       marginTop={14}
       marginBottom={14}
       marginHorizontal={16}
@@ -45,7 +49,7 @@ const RenderHeader = ({
       shadowOpacity={0.1}
       shadowColor={theme.colors.gray[600]}
       shadowRadius={30}
-      paddingHorizontal={16}>
+      paddingHorizontal={8}>
       {showBackButton && (
         <StyledCycle
           paddingHorizontal={10}
@@ -94,7 +98,7 @@ const RenderHeader = ({
               alignItems="center">
               <StyledImage
                 source={require('./../../../../assets/img/doctor_1.png')}
-                size={50}
+                size={32}
                 cycle
                 resizeMode="contain"></StyledImage>
               <Stack
@@ -106,13 +110,13 @@ const RenderHeader = ({
                   color={theme.colors.gray[900]}
                   fontSize={theme.fontSize.small}
                   fontWeight={theme.fontWeight.semiBold}>
-                  Gladina Samantha
+                  {user?.first_name} {user?.last_name}  
                 </StyledText>
                 <StyledText
                   color={theme.colors.gray[400]}
                   fontSize={theme.fontSize.small}
                   fontWeight={theme.fontWeight.medium}>
-                  Waiter
+                {user?.role}
                 </StyledText>
               </Stack>
             </Stack>

@@ -12,6 +12,8 @@ import {
 } from "@gluestack-ui/themed";
 import { StyledIcon } from "../../../../../components/package/icon";
 import { ShowToast } from "../../../../../components/toast";
+import IconPicker from "../../../../../components/icon-picker";
+import { Stack } from "../../../../../components/package/stack";
 
 const CategoryForm = ({ category, onClose }) => {
   const [errorMessages, setErrorMessages] = useState({})
@@ -37,18 +39,18 @@ const CategoryForm = ({ category, onClose }) => {
     }
 
     if (fields.category_id) {
-      await updateCategory(fields.category_id, fields.name, fields.status, fields.color_code).then(async (result) => {
-           result && handleResult("Category was updated successfully")
+      await updateCategory(fields.category_id, fields.name, fields.status, fields.color_code, fields.icon_name).then(async (result) => {
+        result && handleResult("Category was updated successfully")
       })
     } else {
       delete fields.category_id
-      await insertCategory(fields.name, fields.status, fields.color_code).then(async (result) => {
-            result && handleResult("Category was added successfully")
+      await insertCategory(fields.name, fields.status, fields.color_code, fields.icon_name).then(async (result) => {
+        result && handleResult("Category was added successfully")
       })
     }
   }
 
- const handleResult = (message) => {
+  const handleResult = (message) => {
     ShowToast("Success", message)
     !category && setFields(discountRules.reset)
   }
@@ -106,6 +108,18 @@ const CategoryForm = ({ category, onClose }) => {
             error={!!errorMessages?.name}
             errorMessage={errorMessages?.name?.message}
           />
+          <StyledSpacer marginVertical={4} />
+          <Stack marginLeft={8}>
+            <StyledText
+              fontWeight={theme.fontWeight.normal}
+              color={theme.colors.gray[800]}
+              fontSize={theme.fontSize.large}
+            >
+              Icon
+            </StyledText>
+               <StyledSpacer marginVertical={4} />
+            <IconPicker name="Appetizers" size={18} selectedIcon={fields?.icon_name} onPress={(icon) => setFields({ ...fields, icon_name: icon })} />
+          </Stack>
           <StyledSpacer marginVertical={4} />
           <XStack
             justifyContent='flex-start'

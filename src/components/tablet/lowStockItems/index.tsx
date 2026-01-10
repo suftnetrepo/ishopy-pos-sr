@@ -5,6 +5,7 @@ import { theme } from '../../../utils/theme';
 import { StyledIcon } from '../../../components/package/icon';
 import { ScrollView } from 'react-native';
 import { useQueryGetLowerStock } from '../../../hooks/useStock';
+import { Icon } from '../icon/icon';
 
 const LowStockItems = () => {
   const { data } = useQueryGetLowerStock();
@@ -44,15 +45,9 @@ const LowStockItems = () => {
             horizonal
             justifyContent="flex-start"
             alignItems="center"
-            gap={8}
+            gap={4}
             marginBottom={16}>
-            {/* <StyledImage
-              source={{
-                uri: 'https://img1.wsimg.com/isteam/ip/8fa9801a-9459-437f-ac41-7e7e90b4e436/Making%20Egusi%20Soup%20Recipe%20(with%20Assorted%20Meat)%20.jpg/:/rs=w:1280',
-              }}
-              size={32}
-              cycle
-              resizeMode="contain"></StyledImage> */}
+            <Icon name={dish?.icon_name} isSelected={false} />
             <Stack vertical>
               <StyledText
                 color={theme.colors.gray[500]}

@@ -14,7 +14,7 @@ export interface Category {
   name: string;
   status: number;
   color_code?: string;
-  icon: Icon;
+  icon_name? : string;
   total_menu?: number; // Optional, used for categories with menu count
 }
 
@@ -22,7 +22,8 @@ const insertCategory = async (
   name: string,
   status: number = 0,
   color_code: string,
-  icon: Icon
+  icon_name? : string
+
 ): Promise<Category> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
@@ -33,7 +34,7 @@ const insertCategory = async (
           name,
           status,
           color_code,
-          icon,
+          icon_name
         };
         realm.create('Category', category);
         resolve(category);
@@ -63,7 +64,7 @@ const queryCategoriesWithMenuCount = async (): Promise<Category[]> => {
             name: category.name,
             status: category.status,
             color_code: category.color_code,
-            icon: category.icon,
+            icon_name: category.icon_name,
             total_menu: menuCount,
           };
         });
@@ -86,7 +87,7 @@ const queryAllCategories = async (): Promise<Category[]> => {
           name: category.name,
           status: category.status,
           color_code: category.color_code,
-          icon: category.icon,
+          icon_name: category.icon_name,
         }));
       resolve(categories);
     } catch (error) {
@@ -108,7 +109,7 @@ const queryCategoriesByStatus = async (status: number): Promise<Category[]> => {
           name: category.name,
           status: category.status,
           color_code: category.color_code,
-          icon: category.icon,
+          icon_name: category.icon_name,
         }));
 
       resolve(categories);
@@ -135,7 +136,7 @@ const queryCategoryById = async (
               name: category.name,
               status: category.status,
               color_code: category.color_code,
-              icon: category.icon,
+              icon_name: category.icon_name,
             }
           : null
       );
@@ -150,6 +151,7 @@ const updateCategory = async (
   name: string,
   status: number,
   color_code: string,
+  icon_name? : string
 ): Promise<Category> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
@@ -164,6 +166,7 @@ const updateCategory = async (
           category.name = name;
           category.status = status;
           category.color_code = color_code;
+          category.icon_name= icon_name,
           resolve(category);
         } else {
           reject(new Error('Category not found'));

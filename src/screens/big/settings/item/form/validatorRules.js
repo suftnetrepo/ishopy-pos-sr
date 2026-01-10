@@ -7,7 +7,8 @@ const reset = {
   cost: '',
   stock: '',
   status: 0,
-  category_id: ''
+  category_id: '',
+  icon_name: ''
 }
 const menuRules = {
   rules: {

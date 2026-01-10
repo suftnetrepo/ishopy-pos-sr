@@ -37,13 +37,14 @@ const useCart = () => {
 		price: number,
 		quantity: number,
 		table_id: string,
-		addOns?: AddOn[]
+		addOns?: AddOn[],
+		icon?:string,
 	) => {
 		setCarts((prev) => {
 			const currentCart = getCart(table_id);
 			const updatedCart = {
 				...currentCart,
-				items: [...currentCart.items, { index, id, name, price, quantity, addOns }]
+				items: [...currentCart.items, { index, id, name, price, quantity, addOns, icon }]
 			};
 
 			return {

@@ -14,6 +14,8 @@ import { StyledIcon } from "../../../../../components/package/icon";
 import { StyledDropdown } from "../../../../../components/dropdown";
 import ColorPicker from "../../../../../components/colorPicker";
 import { useCategories } from "../../../../../hooks/useCategory";
+import IconPicker from "../../../../../components/icon-picker";
+import { Stack } from "../../../../../components/package/stack";
 
 const ItemForm = ({ item, onClose }) => {
   const [errorMessages, setErrorMessages] = useState({})
@@ -40,12 +42,12 @@ const ItemForm = ({ item, onClose }) => {
     }
 
     if (fields?.menu_id) {
-      await update(fields.menu_id, { ...fields, stock: parseInt(fields.stock), price: parseFloat(fields.price), cost: parseFloat(fields.cost) }).then(async (result) => {
+      await update(fields.menu_id, { ...fields, stock: parseInt(fields.stock), price: parseFloat(fields.price), cost: parseFloat(fields.cost),icon_name: fields.icon_name }).then(async (result) => {
         result && handleResult("Item was updated successfully")
       })
     } else {
       delete fields.menu_id
-      await insert({ ...fields, stock: parseInt(fields.stock), price: parseFloat(fields.price), cost: parseFloat(fields.cost || 0) }).then(async (result) => {
+      await insert({ ...fields, stock: parseInt(fields.stock), price: parseFloat(fields.price), cost: parseFloat(fields.cost || 0), icon_name: fields.icon_name }).then(async (result) => {
         result && handleResult("Item was added successfully")
       })
     }
@@ -171,11 +173,23 @@ const ItemForm = ({ item, onClose }) => {
             onSelectItem={e => setFields({ ...fields, category_id: e.value })}
             error={!!errorMessages?.category_id}
             errorMessage={errorMessages?.category_id?.message}
-              borderColor={theme.colors.gray[400]}
+            borderColor={theme.colors.gray[400]}
             backgroundColor={theme.colors.gray[1]}
             listMode='MODAL'
           />
-             <StyledSpacer marginVertical={4} />
+          <StyledSpacer marginVertical={4} />
+          <Stack marginLeft={8}>
+            <StyledText
+              fontWeight={theme.fontWeight.normal}
+              color={theme.colors.gray[800]}
+              fontSize={theme.fontSize.large}
+            >
+              Icon
+            </StyledText>
+            <StyledSpacer marginVertical={4} />
+            <IconPicker name="Main" size={18} selectedIcon={fields?.icon_name} onPress={(icon) => setFields({ ...fields, icon_name: icon })} />
+          </Stack>
+          <StyledSpacer marginVertical={4} />
           <XStack
             justifyContent='flex-start'
             alignItems='center'

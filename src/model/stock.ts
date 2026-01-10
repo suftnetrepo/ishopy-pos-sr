@@ -27,6 +27,7 @@ export interface LowStockItem {
   date: string;
   status: 'Critical' | 'Low' | 'Warning';
   revenue_impact: number;
+  icon_name?: string;
 }
 
 // Interface for stock levels configuration
@@ -208,6 +209,7 @@ const getLowStockItems = async (
             date: new Date().toISOString(),
             status,
             revenue_impact: revenueImpact,
+            icon_name: menu.icon_name
           });
         }
       }

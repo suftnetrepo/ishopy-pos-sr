@@ -9,7 +9,8 @@ import {
   Shop,
   Payment
 } from './types';
-import { generateCategories } from '../utils/categoryIcon'
+import { icons } from '../components/icon-picker/icons';
+
 
 const colorPalettes = {
   rose: ['#e11d48', '#be123c'],
@@ -37,8 +38,9 @@ const colorPalettes = {
   blueGray: ['#475569', '#334155'],
 };
 
-
+const menuIcons = icons['Main']
 // Helper functions
+const randomMenuIcon = () => menuIcons[Math.floor(Math.random() * menuIcons?.length)];
 const randomItem = (items: string | any[]) => items[Math.floor(Math.random() * items.length)];
 const randomPrice = () => parseFloat((Math.random() * (20 - 5) + 5).toFixed(2));
 const randomInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -86,6 +88,39 @@ const addOnTypes = [
   'Drink',
   'Dessert',
 ];
+
+const dishCategories = [
+  { title: 'Main', color: '#FF6B6B' },
+  { title: 'Desserts', color: '#4ECDC4' },
+  { title: 'Beverages', color: '#45B7D1' },
+  { title: 'Fruits', color: '#F39C12' },
+  { title: 'Vegetables', color: colorPalettes.green[1] },
+  { title: 'Appetizers', color: colorPalettes.fuchsia[1] },
+]
+
+// Type for icon category keys
+type IconCategoryKey = keyof typeof icons;
+
+const getCategories = () => {
+
+  console.log(".............dishCategories", dishCategories)
+  
+  return dishCategories.map((item) => {
+    const categoryTitle = item.title as IconCategoryKey
+    const iconName = icons[categoryTitle]?.[0]; 
+
+    console.log(".............categoryTitle", categoryTitle, iconName)
+
+    return {
+      category_id: guid(),
+      name: item.title,
+      color_code: item.color,
+      icon_name: iconName ?? 'candy',
+      status: 1,
+    }
+  })
+
+}
 
 const generateAddOns = (menus: any[]) => {
   let addOns: {
@@ -147,7 +182,8 @@ const generateMenuItems = (categories: { category_id: string; name: string; colo
       stock: Math.floor(Math.random() * 100),
       category_id: randomItem(categories).category_id,
       status: Math.random() < 0.5 ? 1 : 0,
-      description: `Description for menu item ${i + 1}`
+      description: `Description for menu item ${i + 1}`,
+      icon_name : randomMenuIcon()
     });
   }
   return menus;
@@ -219,7 +255,7 @@ const generateOrders = (users: { user_id: string; username: string; password: st
     const user = randomItem(users);
     const table = randomItem(tables);
     const total_price = randomPrice() + randomPrice();
-   
+
     orders.push({
       order_id: guid(),
       user_id: user.user_id,
@@ -227,7 +263,7 @@ const generateOrders = (users: { user_id: string; username: string; password: st
       total_price: total_price,
       tax: total_price * 0.1,
       discount: total_price * 0.05,
-      table_name : table.tableName,
+      table_name: table.tableName,
       status: randomItem(['Pending', 'Completed', 'Progress', 'Cancelled']),
       date: randomDate(),
     });
@@ -242,6 +278,7 @@ const generateOrderItems = (orders: any[], menus: any[], addOns: any[]) => {
     order_id: string;
     menu_id: string;
     menu_name: string;
+    menu_icon_name :string;
     quantity: number;
     price: number;
     date: Date;
@@ -275,6 +312,7 @@ const generateOrderItems = (orders: any[], menus: any[], addOns: any[]) => {
         order_id: order.order_id,
         menu_id: menu.menu_id,
         menu_name: menu.name,
+        menu_icon_name: menu.icon_name,
         quantity: randomInt(1, 3),
         price: menu.price,
         date: order.date,
@@ -331,12 +369,15 @@ const seedData = async () => {
 
   const users = generateUsers();
   const tables = generateTables();
-  const categories = generateCategories();
+  const categories = getCategories();
   const menus = generateMenuItems(categories);
   const addOns = generateAddOns(menus);
   const orders = generateOrders(users, tables);
   const orderItems = generateOrderItems(orders, menus, addOns);
   const payments = generatePayments(orders);
+
+  console.log("..................categories", categories.map((j)=> (j.icon_name)))
+    console.log("..................menus", menus.map((j)=> j.icon_name))
 
   try {
     realm.write(() => {

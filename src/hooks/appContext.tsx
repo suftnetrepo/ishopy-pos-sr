@@ -14,7 +14,8 @@ interface CartActions {
     price: number,
     quantity: number,
     table_id: string,
-    addOns?: AddOn[]
+    addOns?: AddOn[],
+    icon?:string
   ) => Promise<void>;
   updateItem: (item: CartItem, table_id: string) => void;
   deleteItem: (id: string, table_id: string) => void;

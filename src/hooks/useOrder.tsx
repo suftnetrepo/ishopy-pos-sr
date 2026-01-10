@@ -249,6 +249,7 @@ const useInsertOrder = (table_id: string, table_name:string) => {
       order.table_name = table_name;
       order.status = 'progress';
       order.total_price = getTotalPrice(table_id) || 0;
+      order.date = new Date()
 
       const orderResult = await insertOrder(order);
 
@@ -260,6 +261,7 @@ const useInsertOrder = (table_id: string, table_name:string) => {
             price: item.price,
             menu_id: item.id,
             menu_name: item.name,
+            menu_icon_name : item?.icon_name,
             quantity: 1,
             date: new Date(),
             addOns:

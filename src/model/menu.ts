@@ -1,6 +1,4 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable no-useless-catch */
-/* eslint-disable prettier/prettier */
+
 import { guid } from '../utils/help';
 import { AddOn, queryAddonByMenuId } from './addOn';
 import { getRealmInstance } from './store';
@@ -11,6 +9,7 @@ export interface Menu {
   name: string;
   bar_code?: string;
   color_code?: string;
+  icon_name? : string;
   price: number;
   price_offer?: number;
   cost?: number;
@@ -64,6 +63,7 @@ const queryAllMenus = async (
           category_id: menu.category_id,
           status: menu.status,
           description: menu.description,
+          icon_name : menu.icon_name
         }));
 
       const categories = realm.objects<Category>('Category');
@@ -111,6 +111,7 @@ const queryMenuByStatus = async (status: number = 1): Promise<Menu[]> => {
           category_id: menu.category_id,
           status: menu.status,
           description: menu.description,
+          icon_name : menu.icon_name,
           addOns: addOns,
         };
       })
@@ -150,6 +151,7 @@ const queryMenuByNamePrefix = async (searchString: string): Promise<Menu[]> => {
           category_id: menu.category_id,
           status: menu.status,
           description: menu.description,
+          icon_name : menu.icon_name
         };
 
         const addOns = await queryAddonByMenuId(menu.menu_id);
@@ -191,6 +193,7 @@ const queryMenuByName = async (name: string): Promise<Menu[]> => {
           category_id: menu.category_id,
           status: menu.status,
           description: menu.description,
+          icon_name : menu.icon_name,
           addOns: addOns,
         };
       }))
@@ -223,6 +226,7 @@ const queryMenuByCategory = async (category_id: string): Promise<Menu[]> => {
           category_id: menu.category_id,
           status: menu.status,
           description: menu.description,
+          icon_name : menu.icon_name,
         };
 
         const addOns = await queryAddonByMenuId(menu.menu_id);
@@ -263,6 +267,7 @@ const queryMenuById = async (menu_id: string): Promise<Menu | null> => {
       category_id: menu.category_id,
       status: menu.status,
       description: menu.description,
+      icon_name : menu.icon_name,
       addOns: addOns,
     };
   } catch (error) {
@@ -290,6 +295,7 @@ const queryMenuByBarCode = async (bar_code: string): Promise<Menu | null> => {
       category_id: menu.category_id,
       status: menu.status,
       description: menu.description,
+      icon_name : menu.icon_name,
       addOns: addOns,
     };
 
@@ -315,6 +321,7 @@ const updateMenu = async (menu_id: number, menu: Menu): Promise<Menu> => {
           existingMenu.category_id = menu.category_id;
           existingMenu.status = menu.status;
           existingMenu.description = menu.description;
+          existingMenu.icon_name = menu.icon_name
           resolve(existingMenu);
         } else {
           reject(new Error('Menu not found'));

@@ -5,6 +5,7 @@ import { theme } from '../../../utils/theme';
 import { StyledIcon } from '../../../components/package/icon';
 import { ScrollView } from 'react-native';
 import { useQueryPopularMenuItems } from '../../../hooks/useOrderItems';
+import { Icon } from '../icon/icon';
 
 const PopularDishes = () => {
   const { data } = useQueryPopularMenuItems();
@@ -45,8 +46,9 @@ const PopularDishes = () => {
             flexWrap="wrap"
             justifyContent="flex-start"
             alignItems="center"
-            gap={8}
+            gap={4}
             marginBottom={16}>
+            <Icon name={dish?.menu_icon_name} isSelected={false} />
             <Stack vertical>
               <StyledText
                 color={theme.colors.gray[500]}

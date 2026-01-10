@@ -99,6 +99,7 @@ const getCategoryIcon = (categoryKey, categoryData) => {
 
 // Modified generateCategories function
 const generateCategories = () => {
+  
   return Object.entries(iconCategories).map(([categoryKey, categoryData]) => ({
     category_id: guid(),
     name: categoryData.title, // "Appetizers & Sides", "Main Meals", etc.
@@ -106,6 +107,7 @@ const generateCategories = () => {
     icon: getCategoryIcon(categoryKey, categoryData), // Icon object with name, library, etc.
     status: 1,
   }));
+
 };
 
 // Alternative version if you want to specify custom icons for categories

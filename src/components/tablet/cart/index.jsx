@@ -351,10 +351,10 @@ export default function Cart({ table_id, table_name }) {
             </VStack>
 
             <VStack flex={1} mb="lg">
-                {renderOrderSummary()}
-
+                {
+                    items?.items?.length > 0 ? renderOrderSummary() : null
+                }
                 {hasOrderId && renderPaymentMethods()}
-
                 <HStack flex={1} mt={16} gap={8} justifyContent="space-between" alignItems="center">
                     {renderActionButtons()}
                 </HStack>

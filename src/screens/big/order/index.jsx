@@ -13,8 +13,10 @@ import OrderCard from '../../../components/tablet/order';
 import Drawer from '../../../components/package/drawer';
 import OrderCart from '../../../components/tablet/order/orderCart';
 import OrderDateFilter from './orderDateFilter';
+import { useFocus } from '../../../hooks/useFocus';
 
 const BigOrder = () => {
+    const focus = useFocus()
     const { updateMenuQuery } = useAppContext();
     const [show, setShow] = useState(null);
     const [showCalendar, setCalendarShow] = useState(null);
@@ -28,7 +30,7 @@ const BigOrder = () => {
                     </RenderHeader>
                 </StyledHeader.Full>
             </StyledHeader>
-            <Stack flex={1.5} horizonal>
+            <Stack key={focus} flex={1.5} horizonal>
                 <SideBarAdapter selectedMenu={4} showMenu={false} collapse={true} />
                 <Stack flex={3} paddingHorizontal={8} vertical >
                     <OrderCard onOrderChange={(j) => setShow(j)} onHandleFilter={(i) => setCalendarShow(i)} />

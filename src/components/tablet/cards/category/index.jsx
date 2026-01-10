@@ -10,14 +10,14 @@ const MenuCategory = () => {
   const { updateSelectedCategory} = useAppContext();
 
   const renderItem = ({ item }) => {
-    const { category_id, name, status, icon, total_menu, color_code } = item;
+    const { category_id, name, status, icon_name, total_menu, color_code } = item;
 
     return (
       <CategoryCard
         category_id={category_id}
         name={name}
         status={status}
-        icon={icon}
+        icon_name={icon_name}
         total_menu={total_menu}
         color_code={color_code}
         onPress={() => updateSelectedCategory(category_id)}

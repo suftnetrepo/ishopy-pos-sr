@@ -17,6 +17,7 @@ interface CartItem {
   index?: number;
   id: string;
   name: string;
+  icon?: string;
   price: number;
   quantity: number;
   addOns?: AddOn[] 
