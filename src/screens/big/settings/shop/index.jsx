@@ -13,9 +13,10 @@ import { useAppContext } from "../../../../hooks/appContext";
 import { useSelector } from "@legendapp/state/react";
 import { state } from "../../../../store";
 import { StyledIcon } from "../../../../components/package/icon";
+import { Stack } from "../../../../components/package/stack";
 
-const Shop = ({onClose}) => {
-  const { updateCurrentShop, shop } = useAppContext()
+const Shop = ({ onClose }) => {
+  const { updateCurrentShop, shop, updateShop } = useAppContext()
   const { purchase_status } = useSelector(() => state.get());
   const [errorMessages, setErrorMessages] = useState({})
   const [fields, setFields] = useState(shopRules.fields)
@@ -28,7 +29,7 @@ const Shop = ({onClose}) => {
         ...shop
       }
     })
-  }, [shop])
+  }, [])
 
   const onSubmit = async () => {
     setErrorMessages({})
@@ -39,7 +40,8 @@ const Shop = ({onClose}) => {
     }
 
     const update = () => {
-      updateCurrentShop(fields)
+      updateCurrentShop({...fields})
+
     }
 
     await updateHandler(fields).then(async (result) => {
@@ -174,7 +176,6 @@ const Shop = ({onClose}) => {
             errorMessage={errorMessages?.address?.message}
             marginBottom={4}
           />
-
           <StyledMultiInput
             label={'Description'}
             keyboardType='default'
@@ -191,11 +192,33 @@ const Shop = ({onClose}) => {
             placeholderTextColor={theme.colors.gray[400]}
             onChangeText={(text) => setFields({ ...fields, description: text })}
           />
-
+          <StyledSpacer marginVertical={8} />
+          <Stack horizonal gap={8} >
+            <StyledButton borderRadius={8} flex={1} borderWidth={1} borderColor={fields.mode === "restaurant" ? theme.colors.blue[600] : theme.colors.gray[200]} backgroundColor={theme.colors.gray[1]} onPress={() => setFields({ ...fields, mode: 'restaurant' })} >
+              {
+                fields.mode === "restaurant" && (
+                  <StyledIcon position='absolute' right={2} top={2} name="check-circle" size={20} color={theme.colors.green[500]} />
+                )
+              }
+              <StyledText paddingHorizontal={20} paddingVertical={10} color={theme.colors.gray[800]}>
+                Restaurant
+              </StyledText>
+            </StyledButton>
+            <StyledButton borderRadius={8} flex={1} borderColor={fields.mode === "shop" ? theme.colors.blue[600] : theme.colors.gray[200]} backgroundColor={theme.colors.gray[1]} onPress={() => setFields({ ...fields, mode: 'shop' })} >
+              {
+                fields.mode === "shop" && (
+                  <StyledIcon position='absolute' right={2} top={2} name="check-circle" size={20} color={theme.colors.green[500]} />
+                )
+              }
+              <StyledText paddingHorizontal={20} paddingVertical={10} color={theme.colors.gray[800]}>
+                Shop
+              </StyledText>
+            </StyledButton>
+          </Stack>
           <StyledSpacer marginVertical={8} />
           {
             !purchase_status && (
-              <StyledButton width='100%' backgroundColor={theme.colors.yellow[500]} onPress={() => onSubmit()} >
+              <StyledButton flex={1} backgroundColor={theme.colors.yellow[500]} onPress={() => onSubmit()} >
                 <StyledText paddingHorizontal={20} paddingVertical={10} color={theme.colors.gray[800]}>
                   Save Changes
                 </StyledText>

@@ -7,8 +7,6 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { Stack } from '../../../components/package/stack';
 import { fontStyles, theme } from '../../../utils/theme';
-import { StyledButton } from '../../../components/package/button';
-import { StyledIcon } from '../../../components/package/icon';
 import PopularDishes from '../../../components/tablet/popularDishes';
 import LowStockItems from '../../../components/tablet/lowStockItems';
 import DailyTransactionChart from '../../../components/tablet/chart';
@@ -23,9 +21,9 @@ import { useFocus } from '../../../hooks/useFocus';
 const Dashboard = () => {
   const focused = useFocus();
   const navigate = useNavigation();
-  const { user } = useAppContext();
+  const { user, shop } = useAppContext();
 
-  console.log('.............Dashboard', focused);
+  console.log('.............shop', shop);
 
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[100]}>

@@ -2,6 +2,7 @@
 import Realm, { ObjectSchema } from 'realm';
 import { createRealmContext } from '@realm/react';
 import { migration, SCHEMA_VERSION } from './migration';
+import { theme } from '@utils/theme';
 
 let realmInstance: Realm | null = null;
 
@@ -171,6 +172,10 @@ export const ShopSchema: ObjectSchema = {
     address: 'string',
     currency: 'string?',
     description: 'string?',
+    mode: 'string?',
+    theme: 'string?',
+    receipt_header: 'string?',
+    receipt_footer: 'string?',
   },
 };
 
@@ -233,7 +238,7 @@ const schema = [
 
 const RealmOptions = () => {
   return {
-    path: '_pos__j_.realm',
+    path: 'store.realm',
     schema: schema,
     schemaVersion: SCHEMA_VERSION,
     migration 

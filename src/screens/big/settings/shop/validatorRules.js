@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
-// Sample validation rules for a registration form
+
 const shopRules = {
   rules: {
-     name: [
+    name: [
       {
         pattern: /^.+$/,
         message: 'store name is required'
@@ -11,7 +11,7 @@ const shopRules = {
         pattern: /^.{0,50}$/,
         message: 'store name must be no more than 50 characters'
       }
-    ],    
+    ],
     mobile: [
       { pattern: /^.+$/, message: 'mobile number is required' },
       {
@@ -19,7 +19,7 @@ const shopRules = {
         message: 'mobile number must be no more than 20 characters',
       },
     ],
-     address: [
+    address: [
       { pattern: /^.+$/, message: 'address is required' },
       {
         pattern: /^.{0,100}$/,
@@ -36,15 +36,20 @@ const shopRules = {
         pattern: /^.{0,50}$/,
         message: 'email address must be no more than 50 characters',
       },
-    ],      
+    ],
   },
-  fields: {  
-    name: "",   
-    email: "",   
-    mobile: '',    
-    address: '' , 
-    currency : '£',  
-    description : ''
+  fields: {
+    name: "",
+    email: "",
+    mobile: '',
+    address: '',
+    currency: '£',
+    description: '',
+    mode: '',
+    theme: 'light',
+    receipt_header: '',
+    receipt_footer: '',
+    shop_id: '',
   }
 }
 

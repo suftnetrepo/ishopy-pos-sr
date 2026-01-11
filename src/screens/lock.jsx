@@ -16,7 +16,7 @@ import { Stack } from '../components/package/stack';
 
 const Keypad = () => {
     const navigator = useNavigation()
-    const { login } = useAppContext()
+    const { login, updateShop } = useAppContext()
     const { purchase_status } = useSelector(() => state.get());
     const { error, loading, loginByPin, resetHandler, recoveryHandler } = usePin()
     const [pin, setPin] = useState('');
@@ -59,8 +59,10 @@ const Keypad = () => {
                     (FEATURE_FLAG.MOCK_STORE || !purchase_status) && (
                         <>
                             <StyledSpacer marginHorizontal={4} />
-                            <StyledButton onPress={async () => {
-                                await seedData()
+                            <StyledButton onPress={() => {
+                                seedData().then(() => {
+                                    updateShop()
+                                })
                             }}>
                                 <StyledBadge
                                     color={theme.colors.orange[800]}

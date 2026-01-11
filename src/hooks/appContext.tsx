@@ -15,7 +15,7 @@ interface CartActions {
     quantity: number,
     table_id: string,
     addOns?: AddOn[],
-    icon?:string
+    icon?: string
   ) => Promise<void>;
   updateItem: (item: CartItem, table_id: string) => void;
   deleteItem: (id: string, table_id: string) => void;
@@ -52,6 +52,7 @@ interface Actions extends CartActions {
   updateMenuQuery: (menuQuery: string) => void;
   updateSelectedOrder: (order: any) => void;
   updateDateFilter: (date_filter: date_filter) => void
+  updateShop: () => void; 
 }
 
 interface State {
@@ -96,7 +97,7 @@ const initialState: State = {
 const AppProvider = ({ children }: AppProviderProps) => {
   const [state, setState] = useState<State>(initialState);
   const { payment_status, purchase_status } = useInAppPurchase();
-  const { data } = useShop()
+
   const {
     addItem,
     updateItem,
@@ -118,20 +119,33 @@ const AppProvider = ({ children }: AppProviderProps) => {
     updateOrderId
   } = useCart();
 
+  const { data: shopData, error: shopError, loading: shopLoading } = useShop();
+
+  const loadShop = () => {
+    if (shopData) {
+      console.log('AppProvider shop data', shopData);
+      setState(prevState => ({
+        ...prevState,
+        shop: shopData as Shop,
+      }));
+    }
+  };
+
   useEffect(() => {
-    setState(prevState => ({
-      ...prevState,
-      shop: data as Shop,
-    }));
-  }, [data])
+    loadShop();
+  }, [shopData])
 
   const actions: Actions = {
-    login: async (params: { user: User;}) => {
+    login: async (params: { user: User; }) => {
       const { user } = params;
       setState(prevState => ({
         ...prevState,
         user,
       }));
+    },
+
+    updateShop: () => {
+      loadShop();
     },
 
     logout: async () => {

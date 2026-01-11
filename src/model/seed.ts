@@ -11,7 +11,6 @@ import {
 } from './types';
 import { icons } from '../components/icon-picker/icons';
 
-
 const colorPalettes = {
   rose: ['#e11d48', '#be123c'],
   pink: ['#db2777', '#be185d'],
@@ -102,15 +101,9 @@ const dishCategories = [
 type IconCategoryKey = keyof typeof icons;
 
 const getCategories = () => {
-
-  console.log(".............dishCategories", dishCategories)
-  
   return dishCategories.map((item) => {
     const categoryTitle = item.title as IconCategoryKey
-    const iconName = icons[categoryTitle]?.[0]; 
-
-    console.log(".............categoryTitle", categoryTitle, iconName)
-
+    const iconName = icons[categoryTitle]?.[0];
     return {
       category_id: guid(),
       name: item.title,
@@ -166,7 +159,6 @@ function generateMenuItemNames() {
   return menuNames;
 }
 
-// Generate Menu Items
 const generateMenuItems = (categories: { category_id: string; name: string; color_code: string; status: number; }[]) => {
   let menus = [];
   let menuNames = generateMenuItemNames();
@@ -183,13 +175,12 @@ const generateMenuItems = (categories: { category_id: string; name: string; colo
       category_id: randomItem(categories).category_id,
       status: Math.random() < 0.5 ? 1 : 0,
       description: `Description for menu item ${i + 1}`,
-      icon_name : randomMenuIcon()
+      icon_name: randomMenuIcon()
     });
   }
   return menus;
 };
 
-// Generate sample users
 const generateUsers = () => {
   return userNames.map(name => ({
     user_id: guid(),
@@ -218,13 +209,17 @@ export const generateUser = () => {
 
 export const generateShop = () => {
   return {
-    shop_id: guid(),
-    name: 'Shop A',
-    email: 'shop@test.com',
+    shop_id: 'default-shop-id', // Use a fixed ID so it's consistent across sessions
+    name: 'Njsine ',
+    email: 'info@njsine.com',
     mobile: '1234566778',
     description: 'No thing',
     address: '12 High Street, Cambridge, CB2 3QZ, United Kingdom',
     currency: '£',
+    theme: 'light',
+    mode: 'restaurant',
+    receipt_header: 'Welcome to Shop A',
+    receipt_footer: 'Thank you for visiting Shop A',
   };
 
 }
@@ -278,7 +273,7 @@ const generateOrderItems = (orders: any[], menus: any[], addOns: any[]) => {
     order_id: string;
     menu_id: string;
     menu_name: string;
-    menu_icon_name :string;
+    menu_icon_name: string;
     quantity: number;
     price: number;
     date: Date;
@@ -375,9 +370,7 @@ const seedData = async () => {
   const orders = generateOrders(users, tables);
   const orderItems = generateOrderItems(orders, menus, addOns);
   const payments = generatePayments(orders);
-
-  console.log("..................categories", categories.map((j)=> (j.icon_name)))
-    console.log("..................menus", menus.map((j)=> j.icon_name))
+  const shop = generateShop();
 
   try {
     realm.write(() => {
@@ -397,19 +390,7 @@ const seedData = async () => {
       ];
       discounts.forEach(discount => realm.create('Discount', discount));
 
-      // Seed Shop
-      const shops: Shop[] = [
-        {
-          shop_id: guid(),
-          name: 'Shop A',
-          email: 'kabelsus@yahoo.com',
-          mobile: '1234566778',
-          description: 'No thing',
-          address: '12 High Street, Cambridge, CB2 3QZ, United Kingdom',
-          currency: '£',
-        },
-      ];
-      shops.forEach(shop => realm.create('Shop', shop));
+      realm.create('Shop', shop);
 
       // Seed Customers
       const customers: Customer[] = [
@@ -446,8 +427,12 @@ const seedData = async () => {
 
       console.log('Database seeded successfully');
     });
+
+    return true;  
   } catch (error) {
+
     console.log('..................', error);
+        return false
   }
 };
 

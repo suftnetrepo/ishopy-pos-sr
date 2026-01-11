@@ -34,19 +34,17 @@ const useShop = () => {
 	useEffect(() => {
 		async function load() {
 			try {
-				const shop = await queryAllShops();			
+				const shop = await queryAllShops();		
+				console.log('useShop shop', shop);	
 				setData({
-					
 					data: shop,
 					error: null,
 					loading: false,
 				});
 			} catch (error) {
-				setData({
-					data: null,
-					error: error as Error,
-					loading: false,
-				});
+				if(__DEV__){
+					console.log("useShop error", error);
+				}
 			}
 		}
 		load();
@@ -131,11 +129,12 @@ const useUpdateShop = () => {
 			});
 			return true
 		} catch (error) {
-			setData({
-				data: null,
-				error: error as Error,
-				loading: false,
-			});
+			console.log('error', error);
+			// setData({
+			// 	data: null,
+			// 	error: error as Error,
+			// 	loading: false,
+			// });
 		}
 	};
 
