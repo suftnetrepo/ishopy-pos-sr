@@ -1,15 +1,17 @@
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { SidebarItem } from '../../package/sidebar';
+import { useAppContext } from '../../../hooks/appContext';
 
-const SideBar = ({ collapse = false, selectedMenu = 1, showMenu = false }) => {
+const SideBar = ({ collapse = false, selectedMenu = 1, showMenu }) => {
   const navigate = useNavigation();
+  const { shop } = useAppContext();
 
   const items = [
     {
       id: 1,
       label: 'Dashboard',
-      icon: 'view-dashboard-outline',
+      icon: 'view-dashboard-outline', 
       active: true,
       name: 'big-dashboard',
       show: true,
@@ -20,15 +22,15 @@ const SideBar = ({ collapse = false, selectedMenu = 1, showMenu = false }) => {
       icon: 'table-chair',
       active: false,
       name: 'big-table',
-      show: true,
+      show: shop.mode === 'restaurant' ? true : false,
     },
     {
       id: 3,
-      label: 'Menu',
+      label: shop.mode === 'shop' ? 'Items' : 'Menu',
       icon: 'book-open-outline',
       active: false,
       name: 'big-menu',
-      show: false,
+      show: shop.mode === 'shop' ? true : false,
     },
     {
       id: 4,
@@ -38,9 +40,16 @@ const SideBar = ({ collapse = false, selectedMenu = 1, showMenu = false }) => {
       name: 'big-orders',
       show: true,
     },
-    
     {
       id: 5,
+      label: 'Payments',
+      icon: 'card-outline',
+      active: false,
+      name: 'big-payment',
+      show: true,
+    },
+    {
+      id: 6,
       label: 'Settings',
       icon: 'cog-outline',
       active: false,
@@ -50,7 +59,7 @@ const SideBar = ({ collapse = false, selectedMenu = 1, showMenu = false }) => {
   ];
 
  return items
-  .filter(item => showMenu || item.show)
+  .filter(item => (showMenu && showMenu.includes(item.id)) || item.show)
   .map((item, index) => (
     <SidebarItem
       collapse={collapse}

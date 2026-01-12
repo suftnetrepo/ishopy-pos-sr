@@ -6,8 +6,10 @@ import {
 	updateShop,
 	deleteShop,
 } from "../model/shop";
+import { getTableId } from "../model/table";
 import { Shop } from "../model/types";
 import { insertUser } from "../model/user";
+
 interface Initialize {
 	data: Shop[] | [] | null | Shop;
 	error: Error | null;
@@ -119,6 +121,13 @@ const useUpdateShop = () => {
 
 	const updateHandler = async (shop: Shop) => {
 		setData((prev) => ({ ...prev, loading: true }));
+
+		if(!shop.table_id && shop.mode === 'shop'){
+			const result = await getTableId();
+			shop.table_id = result.table_id;
+		}
+
+		console.log('updateHandler shop', shop);
 		
 		try {
 			const user = await updateShop(shop);

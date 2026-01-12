@@ -14,6 +14,7 @@ export interface Shop {
   theme?: string;
   receipt_header?: string;
   receipt_footer?: string;
+  table_id?: string;
 }
 
 const insertShop = async (
@@ -40,14 +41,9 @@ const queryAllShops = async (): Promise<Shop | null> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
-      // Since there's only ever one shop, get the first one
+  
       const shopObj = realm.objects<Shop>('Shop')[0];
-      
-      if (!shopObj) {
-        resolve(null);
-        return;
-      }
-
+  
       const shop: Shop = {
         shop_id: shopObj.shop_id,
         name: shopObj.name,
@@ -60,6 +56,7 @@ const queryAllShops = async (): Promise<Shop | null> => {
         theme: shopObj.theme,
         receipt_header: shopObj.receipt_header,
         receipt_footer: shopObj.receipt_footer,
+        table_id: shopObj.table_id,
       };
       
       resolve(shop);
@@ -88,6 +85,7 @@ const queryShopById = async (shop_id: string): Promise<Shop | null> => {
               theme: shop.theme,
               receipt_header: shop.receipt_header,
               receipt_footer: shop.receipt_footer,
+              table_id: shop.table_id,
             }
           : null
       );
@@ -106,12 +104,6 @@ const updateShop = async (
       realm.write(() => {
         // Since there's only ever one shop in the database, get the first (and only) shop
         const allShops = realm.objects<Shop>('Shop');
-        
-        if (allShops.length === 0) {
-          reject(new Error('No shop found in database'));
-          return;
-        }
-
         const existingShop = allShops[0];
         
         // Update all shop properties (DO NOT update shop_id - it's the primary key)
@@ -125,6 +117,7 @@ const updateShop = async (
         existingShop.theme = shop.theme;
         existingShop.receipt_header = shop.receipt_header;
         existingShop.receipt_footer = shop.receipt_footer;
+        existingShop.table_id = shop.table_id;
         
         // Create a copy of the object data before the transaction ends
         const updatedShop: Shop = {
@@ -139,6 +132,7 @@ const updateShop = async (
           theme: existingShop.theme,
           receipt_header: existingShop.receipt_header,
           receipt_footer: existingShop.receipt_footer,
+          table_id: existingShop.table_id,
         };
         
         resolve(updatedShop);

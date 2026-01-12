@@ -18,6 +18,7 @@ import { theme } from "../../../utils/theme";
 import Drawer from "../../../components/package/drawer";
 import Payment from "../payment/cash";
 import { useInsertOrder, updataStatusHandler } from "../../../hooks/useOrder";
+import EmptyView from "../../../components/utils/empty";
 
 export default function Cart({ table_id, table_name }) {
     const {
@@ -44,6 +45,7 @@ export default function Cart({ table_id, table_name }) {
     const [showPayment, setShowPayment] = useState(false);
 
     const items = getItems(table_id);
+
     const totalPrice = getTotalPrice(table_id);
     const hasOrderId = !!items?.order_id;
     const isCartChanged = (parseFloat(totalPrice) > parseFloat(data?.total_price || 0) && hasOrderId);
@@ -56,7 +58,7 @@ export default function Cart({ table_id, table_name }) {
     }, [items?.order_id]);
 
     const calculateItemPrice = (item) => {
-        const addOnsTotal = item?.addOns?.reduce((total, addOn) => {
+        const addOnsTotal = [item?.addOns || []].reduce((total, addOn) => {
             return total + (parseFloat(addOn.price || 0) * parseInt(addOn.quantity || 0));
         }, 0) || 0;
 
@@ -337,6 +339,27 @@ export default function Cart({ table_id, table_name }) {
         return null;
     };
 
+    if (items?.items?.length === 0) {
+        return (
+            <VStack
+                flex={1}
+                px={16}
+                py={16}
+                space="lg"
+                backgroundColor={theme.colors.gray[700]}
+                borderRadius={16}
+                justifyContent="center"
+                alignItems="center"
+            >
+                <EmptyView
+                    color={theme.colors.gray[300]}
+                    title="Your cart is empty"
+                    description="Add items to your cart to see them here."
+                />
+            </VStack>
+        )
+    }
+
     return (
         <VStack
             flex={1}
@@ -375,6 +398,7 @@ export default function Cart({ table_id, table_name }) {
                     onClose={() => setShowPayment(false)}
                 />
             </Drawer>
+
         </VStack>
     );
 }

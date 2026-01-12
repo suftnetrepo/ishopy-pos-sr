@@ -202,6 +202,34 @@ const deleteTable = async (table_id: number): Promise<boolean> => {
   });
 };
 
+const getTableId = async (): Promise<{ table_id: string }> => {
+  const realm = await getRealmInstance();
+  return new Promise((resolve, reject) => {
+    try {
+      realm.write(() => {
+        const tableId = guid();
+        const newTable: Table = {
+          table_id: tableId,
+          tableName: `Table `,
+          status: 0,
+          isOccupied: 0,
+          size: 1,
+          guest_name: undefined,
+          guest_count: 0,
+          start_time: undefined,
+          location: undefined,
+        };
+        realm.create('Table', newTable);
+        resolve({
+          table_id: tableId,
+        });
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 export {
   insertTable,
   updateTable,
@@ -209,5 +237,6 @@ export {
   queryAllTables,
   deleteTable,
   updateOccupancy,
-  resetOccupancy
+  resetOccupancy,
+  getTableId
 };

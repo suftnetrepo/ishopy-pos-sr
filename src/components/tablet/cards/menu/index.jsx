@@ -10,9 +10,8 @@ import { Stack } from "../../../package/stack";
 import { theme, fontStyles } from "../../../../utils/theme";
 import { StyledIcon } from "../../../package/icon";
 import { formatCurrency } from "../../../../utils/help";
-import { Icon } from "../../../../components/tablet/icon/icon";
 
-export default function ItemCard({ onChangeItem }) {
+export default function ItemCard({ onChangeItem, table_id}) {
   const { category_id, updateSelectedItem, selectedItem, shop, addItem, menuQuery } = useAppContext()
   const { data, handleQueryMemu } = useQueryMenuByCategory(category_id)
 
@@ -21,12 +20,12 @@ export default function ItemCard({ onChangeItem }) {
   }, [menuQuery]);
 
   const handleAddItem = async (item) => {
-    if (item?.addOns) {
+    if ([item?.addOns || []].length > 0) {
       onChangeItem(item)
       return;
     }
     const index = `${Date.now()}${Math.random().toString(36).slice(2, 8)}`;
-    addItem(index, item.menu_id, item.name, item.price, 1, "1", item?.icon_name).then(() => { });
+    addItem(index, item.menu_id, item.name, item.price, 1, table_id, item?.icon_name).then(() => { });
   };
 
   const handleTouchStart = async (item) => {

@@ -208,6 +208,7 @@ export default function Payment({
                         order={data}
                         printHandler={printHandler}
                         shareReceipt={shareReceipt}
+                        onClose={handleClose}
                     />
                 </StyledDialog>
             );

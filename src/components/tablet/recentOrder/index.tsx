@@ -5,7 +5,7 @@ import { Stack } from '../../../components/package/stack';
 import { theme } from '../../../utils/theme';
 import { StyledIcon } from '../../../components/package/icon';
 import { ScrollView } from 'react-native';
-import { backgroundColorHelper, formatDate, textColorHelper, capitalize } from '../../../utils/help';
+import { backgroundColorHelper, formatDate, textColorHelper, capitalize, getLastChars } from '../../../utils/help';
 import { useQueryRecentOrders } from '../../../hooks/useOrderItems';
 
 const RecentOrder = () => {
@@ -55,9 +55,10 @@ const RecentOrder = () => {
                 <StyledText
                   color={theme.colors.gray[800]}
                   fontSize={theme.fontSize.small}
-                  fontWeight={theme.fontWeight.bold}
+                  fontWeight={theme.fontWeight.medium}
                   marginLeft={2}>
-                  {dish.order.table_name}
+               
+                    #{getLastChars(dish.order?.order_id, 8)}
                 </StyledText>
                 <StyledText
                   color={theme.colors.gray[800]}

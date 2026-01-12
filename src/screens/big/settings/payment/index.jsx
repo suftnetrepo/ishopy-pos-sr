@@ -55,7 +55,7 @@ const BigPayment = () => {
                         showBackButton={true}
                         showLogo={false}
                         showTitle={true}
-                        title='Payment'
+                        title='Payments'
                         CopyIcon={
                             <>
                                 {

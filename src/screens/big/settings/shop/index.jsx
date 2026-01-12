@@ -22,6 +22,8 @@ const Shop = ({ onClose }) => {
   const [fields, setFields] = useState(shopRules.fields)
   const { updateHandler, error, loading, resetHandler } = useUpdateShop()
 
+  console.log('shop fields', fields);
+
   useEffect(() => {
     setFields((pre) => {
       return {
@@ -41,7 +43,6 @@ const Shop = ({ onClose }) => {
 
     const update = () => {
       updateCurrentShop({...fields})
-
     }
 
     await updateHandler(fields).then(async (result) => {

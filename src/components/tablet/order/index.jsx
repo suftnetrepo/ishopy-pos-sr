@@ -14,10 +14,11 @@ import { useOrders } from "../../../hooks/useOrder";
 import { useAppContext } from "../../../hooks/appContext";
 
 export default function OrderCard({ onOrderChange, onHandleFilter }) {
-    const { updateSelectedOrder, date_filter, updateDateFilter } = useAppContext()
+    const { updateSelectedOrder, date_filter, updateDateFilter, shop } = useAppContext()
     const [state, setState] = useState('All')
     const { data, filterOrders, restoreOrders, loadOrdersByDateRange, loadOrders, loading, error } = useOrders(true)
     const hasActiveFilter = date_filter?.startDate && date_filter?.endDate;
+    const isShop = shop?.mode === 'shop';
 
     useEffect(() => {
         if (date_filter?.startDate && date_filter?.endDate) {
@@ -50,7 +51,7 @@ export default function OrderCard({ onOrderChange, onHandleFilter }) {
         try {
             await loadOrders();
             updateDateFilter({ startDate: '', endDate: '' });
-            setState('All'); 
+            setState('All');
         } catch (error) {
             if (__DEV__)
                 console.error("Error clearing date filter:", error);
@@ -58,13 +59,14 @@ export default function OrderCard({ onOrderChange, onHandleFilter }) {
     }
 
     const Card = ({ order }) => {
-       
+
         return (
             <Stack
                 flex={1}
                 backgroundColor={theme.colors.gray[1]}
                 borderRadius={16}
-                padding={16}
+                paddingHorizontal={8}
+                paddingVertical={8}
                 marginVertical={4}
                 marginHorizontal={4}
                 shadowColor="black"
@@ -76,16 +78,20 @@ export default function OrderCard({ onOrderChange, onHandleFilter }) {
                 vertical
                 onTouchStart={() => handleOrder(order)}
             >
-                <Stack marginBottom={2} horizonal flex={1} justifyContent="space-between" alignItems="center">
-                    <Stack gap={4} horizonal alignItems="center">
-                        {/* <Ionicons name="restaurant-outline" size={18} color={theme.colors.gray[600]} /> */}
-                        <StyledText color={theme.colors.gray[600]} fontSize={theme.fontSize.normal}>{order?.table_name}</StyledText>
-                    </Stack>
-                    <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.normal} color={theme.colors.gray[600]}>
-                        #{getLastChars(order?.order_id, 3)}
-                    </StyledText>
-                </Stack>
+                <Stack  horizonal flex={1} justifyContent="space-between" alignItems="center">
+                     <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.normal} color={theme.colors.gray[600]}>
+                                #{getLastChars(order?.order_id, 8)}
+                            </StyledText>
+                    <StyledCycle
+                        borderWidth={1}
+                        height={24}
+                        width={24}
+                        backgroundColor={theme.colors.gray[50]}
+                        borderColor={theme.colors.gray[400]}>
+                        <MaterialIcon name="chevron-right" size={12} color={theme.colors.gray[500]} />
+                    </StyledCycle>
 
+                </Stack>
                 <Stack vertical >
                     <Stack gap={4} horizonal alignItems="center">
                         <MaterialIcon name="access-time" size={18} color={theme.colors.gray[600]} />

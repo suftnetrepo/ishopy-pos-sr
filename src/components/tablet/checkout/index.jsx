@@ -8,14 +8,19 @@ import { fontStyles } from '../../../utils/fontStyles';
 import { theme } from '../../../utils/theme';
 import { updateOccupancy } from '../../../hooks/useTable';
 
-const CheckOut = ({ table_id, table_name, order, printHandler, shareReceipt }) => {
-    const { clearItem } = useAppContext()
+const CheckOut = ({ table_id, table_name, order, printHandler, shareReceipt, onClose }) => {
+    const { clearItem, shop } = useAppContext()
     const navigator = useNavigation()
 
     const close = async () => {
         clearItem(table_id)
         await updateOccupancy(table_id, 0, 0, '', '');
-        navigator.navigate("big-table")
+
+        if (shop.mode === 'restaurant') {
+            navigator.navigate("big-table")
+        }else {
+            onClose()
+        }
     }
 
     const print = () => {

@@ -25,7 +25,7 @@ const BigOrder = () => {
         <StyledSafeAreaView backgroundColor={theme.colors.gray[100]}>
             <StyledHeader borderRadius={30} statusProps={{ translucent: true, hidden: false }}>
                 <StyledHeader.Full>
-                    <RenderHeader showBackButton={true} showLogo={false} showTitle={true} title='Order' >
+                    <RenderHeader showBackButton={true} showLogo={false} showTitle={true} title='Orders' >
                         <StyledSearchBar placeholder="Search orders..." flex={1} onTextChange={(query) => updateMenuQuery(query)} />
                     </RenderHeader>
                 </StyledHeader.Full>

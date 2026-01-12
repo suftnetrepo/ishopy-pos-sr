@@ -34,11 +34,9 @@ const SETTINGS_CONFIG = {
         [
             { id: 'back-up', icon: require('../../../../assets/img/back-1.png'), name: 'Back' },
             { id: 'restore', icon: require('../../../../assets/img/restore-1.png'), name: 'Restore' },
-            { id: 'payment', icon: require('../../../../assets/img/report-1.png'), name: 'Payment' },
-        ],
-        [
-            { id: 'printer', icon: require('../../../../assets/img/report-2.png'), name: 'Printer' }
+             { id: 'printer', icon: require('../../../../assets/img/report-2.png'), name: 'Printer' }
         ]
+       
     ]
 };
 
@@ -70,9 +68,6 @@ const BigSettings = () => {
                 break;
             case 'user':
                 navigation.navigate('big-user')
-                break;
-            case 'payment':
-                navigation.navigate('big-payment')
                 break;
             case 'back-up':
                 setShow(({ ...show, id: 'back-up', tag: 'back-up' }))
@@ -151,7 +146,7 @@ const BigSettings = () => {
             </StyledHeader>
 
             <Stack flex={1.5} horizonal>
-                <SideBarAdapter selectedMenu={5} showMenu={false} collapse={true} />
+                <SideBarAdapter selectedMenu={6} showMenu={false} collapse={true} />
                 <Stack flex={3} gap={8} marginHorizontal={16} vertical>
                     {SETTINGS_CONFIG.rows.map((row, rowIndex) => (
                         <Stack

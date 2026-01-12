@@ -532,11 +532,7 @@ const useDeleteOrder = () => {
 
   const updataStatusHandler = async (order_id: string, status : string) => {
     try {
-
-           console.log("........updateStatusHandler", order_id)
-                 console.log("........updateStatusHandler", status)
       const result = await updateOrderStatus(order_id, status);
-    console.log("........result", result)
       return true
     } catch (error) {
        if(__DEV__) {

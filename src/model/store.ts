@@ -176,6 +176,7 @@ export const ShopSchema: ObjectSchema = {
     theme: 'string?',
     receipt_header: 'string?',
     receipt_footer: 'string?',
+    table_id: 'string?',
   },
 };
 
@@ -238,7 +239,7 @@ const schema = [
 
 const RealmOptions = () => {
   return {
-    path: 'store.realm',
+    path: '_store_.realm',
     schema: schema,
     schemaVersion: SCHEMA_VERSION,
     migration 

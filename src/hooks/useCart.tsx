@@ -38,7 +38,7 @@ const useCart = () => {
 		quantity: number,
 		table_id: string,
 		addOns?: AddOn[],
-		icon?:string,
+		icon?: string,
 	) => {
 		setCarts((prev) => {
 			const currentCart = getCart(table_id);
@@ -150,7 +150,10 @@ const useCart = () => {
 	};
 
 	const calculateTotalAddOnsPrice = (addOns: any[]) => {
-		return addOns.reduce((total, addOn) => {
+		if (!addOns || !Array.isArray(addOns) || addOns.length === 0) {
+			return 0;
+		}
+		return addOns?.reduce((total, addOn) => {
 			return (
 				total + parseFloat(addOn.price || 0) * parseInt(addOn.quantity || 0)
 			);

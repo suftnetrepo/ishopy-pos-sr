@@ -23,8 +23,6 @@ const Dashboard = () => {
   const navigate = useNavigation();
   const { user, shop } = useAppContext();
 
-  console.log('.............shop', shop);
-
   return (
     <StyledSafeAreaView backgroundColor={theme.colors.gray[100]}>
       <StyledHeader borderRadius={30} statusProps={{ translucent: true }}>
@@ -33,7 +31,7 @@ const Dashboard = () => {
         </StyledHeader.Full>
       </StyledHeader>
       <Stack key={focused} flex={1.5} horizonal backgroundColor={theme.colors.gray[100]}>
-        <SideBarAdapter selectedMenu={1} key={focused} collapse={false} />
+        <SideBarAdapter showBuy={true} selectedMenu={1} key={focused} collapse={false} />
         <Stack flex={2} vertical backgroundColor={theme.colors.transparent}>
           <ScrollView vertical showsVerticalScrollIndicator={false}>
             <Tiles />

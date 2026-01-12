@@ -7,7 +7,7 @@ import { StyledMIcon } from "../icon";
 import { fontStyles, theme } from "../../configs/theme";
 import { useNavigation } from "@react-navigation/native";
 
-const EmptyView = ({ button, icon = "notifications-active", title, description, screen }) => {
+const EmptyView = ({ button, icon = "notifications-active", title, description, screen, color=theme.colors.gray[1] }) => {
     const navigator = useNavigation()
 
     return (
@@ -18,7 +18,7 @@ const EmptyView = ({ button, icon = "notifications-active", title, description, 
                     <StyledMIcon
                         size={60}
                         name={icon}
-                        color={theme.colors.gray[800]}
+                        color={color}
                     />
                 )
             }
@@ -29,7 +29,8 @@ const EmptyView = ({ button, icon = "notifications-active", title, description, 
                         fontSize={theme.fontSize.large}
                         fontWeight={theme.fontWeight.bold}
                         paddingHorizontal={8}
-                        color={theme.colors.gray[800]}>
+                        textAlign="center"
+                        color={color}>
                         {title}
                     </StyledText>
                 )
@@ -42,7 +43,8 @@ const EmptyView = ({ button, icon = "notifications-active", title, description, 
                         fontWeight={theme.fontWeight.normal}
                         paddingHorizontal={8}
                         paddingVertical={8}
-                        color={theme.colors.gray[800]}>
+                          textAlign="center"
+                        color={color}>
                         {description}
                     </StyledText>
                 )
