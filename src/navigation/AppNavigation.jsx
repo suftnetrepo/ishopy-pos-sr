@@ -19,15 +19,23 @@ import BigUser from '../screens/big/settings/user';
 import BigPayment from '../screens/big/settings/payment';
 import FAQ from '../screens/account/faq';
 import HelpCenter from '../screens/account/helpCenter';
+import Start from '../screens/start';
 
 const Stack = createStackNavigator();
 function Navigator() {
 
   return (
-    <Stack.Navigator initialRouteName={"keypad"}>
+    <Stack.Navigator initialRouteName={"big-start"}>
       <Stack.Screen
         name="big-dashboard"
         component={Dashboard}
+        options={{
+          headerShown: false,
+        }}
+      />
+       <Stack.Screen
+        name="big-start"
+        component={Start}
         options={{
           headerShown: false,
         }}

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { YStack, XStack, StyledHeader, StyledSafeAreaView, StyledBadge, StyledSpacer, StyledText, StyledSpinner, StyledButton } from 'fluent-styles';
+import { YStack, XStack, StyledHeader, StyledSafeAreaView, StyledSpacer, StyledText, StyledSpinner, StyledButton } from 'fluent-styles';
 import { fontStyles, theme } from '../configs/theme';
 import { usePin } from '../hooks/useUser';
 import { useNavigation } from '@react-navigation/native';
@@ -10,17 +10,17 @@ import { useSelector } from '@legendapp/state/react';
 import { state } from '../store';
 import { StyledMIcon } from '../components/icon';
 import { useAppContext } from '../hooks/appContext';
-import { FEATURE_FLAG } from '../feature-flags';
-import { clearSeedData, seedData } from '../model/seed';
 import { Stack } from '../components/package/stack';
+import Drawer from '../components/package/drawer';
 
 const Keypad = () => {
     const navigator = useNavigation()
-    const { login, updateShop } = useAppContext()
+    const { login } = useAppContext()
     const { purchase_status } = useSelector(() => state.get());
     const { error, loading, loginByPin, resetHandler, recoveryHandler } = usePin()
     const [pin, setPin] = useState('');
     const [recovery_password, setRecovery_password] = useState(false);
+    const [showPayment, setShowPayment] = useState(false);
 
     useEffect(() => {
         recovery_password && recoveryHandler()
@@ -55,42 +55,7 @@ const Keypad = () => {
 
         return (
             <XStack flex={1} justifyContent='flex-end' alignItems='center' marginHorizontal={16} paddingVertical={8}>
-                {
-                    (FEATURE_FLAG.MOCK_STORE || !purchase_status) && (
-                        <>
-                            <StyledSpacer marginHorizontal={4} />
-                            <StyledButton onPress={() => {
-                                seedData().then(() => {
-                                    updateShop()
-                                })
-                            }}>
-                                <StyledBadge
-                                    color={theme.colors.orange[800]}
-                                    backgroundColor={theme.colors.orange[100]}
-                                    fontWeight={theme.fontWeight.normal}
-                                    fontSize={theme.fontSize.normal}
-                                    paddingHorizontal={10}
-                                    paddingVertical={5}
-                                >
-                                    Sample User
-                                </StyledBadge>
-                            </StyledButton>
-
-                            <StyledButton onPress={async () => clearSeedData()}>
-                                <StyledBadge
-                                    color={theme.colors.gray[800]}
-                                    backgroundColor={theme.colors.gray[100]}
-                                    fontWeight={theme.fontWeight.normal}
-                                    fontSize={theme.fontSize.normal}
-                                    paddingHorizontal={10}
-                                    paddingVertical={5}
-                                >
-                                    Clear
-                                </StyledBadge>
-                            </StyledButton>
-                        </>
-                    )
-                }
+               <StyledMIcon size={32} name='help' color={theme.colors.violet[700]} onPress={() => setShowPayment(true)} />
             </XStack>
         )
     }
@@ -212,6 +177,13 @@ const Keypad = () => {
             {
                 error && (handleError())
             }
+             <Drawer
+                            direction="right"
+                            isOpen={showPayment}
+                            onClose={() => setShowPayment(false)}
+                        >
+                           
+                        </Drawer>
         </StyledSafeAreaView>
     );
 };

@@ -207,7 +207,7 @@ export const generateUser = () => {
   };
 };
 
-export const generateShop = () => {
+export const generateShop = (mode: string) => {
   return {
     shop_id: 'default-shop-id', // Use a fixed ID so it's consistent across sessions
     name: 'Njsine ',
@@ -217,7 +217,7 @@ export const generateShop = () => {
     address: '12 High Street, Cambridge, CB2 3QZ, United Kingdom',
     currency: '£',
     theme: 'light',
-    mode: 'restaurant',
+    mode: mode,
     receipt_header: 'Welcome to Shop A',
     receipt_footer: 'Thank you for visiting Shop A',
   };
@@ -359,7 +359,7 @@ const prepareSeedData = async () => {
     console.log('..................', error);
   }
 };
-const seedData = async () => {
+const seedData = async (mode: string) => {
   const realm = await getRealmInstance();
 
   const users = generateUsers();
@@ -370,7 +370,7 @@ const seedData = async () => {
   const orders = generateOrders(users, tables);
   const orderItems = generateOrderItems(orders, menus, addOns);
   const payments = generatePayments(orders);
-  const shop = generateShop();
+  const shop = generateShop(mode);
 
   try {
     realm.write(() => {
