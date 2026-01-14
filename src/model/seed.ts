@@ -208,6 +208,7 @@ export const generateUser = () => {
 };
 
 export const generateShop = (mode: string) => {
+  console.log('Generating shop with mode:', mode);
   return {
     shop_id: 'default-shop-id', // Use a fixed ID so it's consistent across sessions
     name: 'Njsine ',

@@ -12,6 +12,7 @@ import { StyledMIcon } from '../components/icon';
 import { useAppContext } from '../hooks/appContext';
 import { Stack } from '../components/package/stack';
 import Drawer from '../components/package/drawer';
+import HelpScreen from '../components/help';
 
 const Keypad = () => {
     const navigator = useNavigation()
@@ -55,7 +56,7 @@ const Keypad = () => {
 
         return (
             <XStack flex={1} justifyContent='flex-end' alignItems='center' marginHorizontal={16} paddingVertical={8}>
-               <StyledMIcon size={32} name='help' color={theme.colors.violet[700]} onPress={() => setShowPayment(true)} />
+                <StyledMIcon size={32} name='help' color={theme.colors.violet[700]} onPress={() => setShowPayment(true)} />
             </XStack>
         )
     }
@@ -72,23 +73,6 @@ const Keypad = () => {
         )
     }
 
-    const ResetPasswordNotice = () => {
-        return (
-            <YStack marginHorizontal={16} marginBottom={32} borderRadius={16} justifyContent='flex-start' paddingVertical={16} paddingHorizontal={16} alignItems='flex-start' backgroundColor={theme.colors.lightBlue[50]}>
-
-                <XStack justifyContent='flex-start' alignItems='center'>
-                    <StyledMIcon size={32} name='info' color={theme.colors.cyan[500]} />
-                    <StyledText paddingHorizontal={8} fontFamily={fontStyles.Roboto_Regular} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.large} color={theme.colors.gray[800]}>
-                        Password Reset
-                    </StyledText>
-                </XStack>
-                <StyledText fontFamily={fontStyles.Roboto_Regular} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.medium} color={theme.colors.gray[800]}>
-                    You have requested your password to be reset. After updating your password, we recommend updating your login details for enhanced security.
-                </StyledText>
-            </YStack>
-        )
-    }
-
     return (
         <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
             <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
@@ -98,12 +82,7 @@ const Keypad = () => {
             </StyledHeader>
             <YStack flex={1} justifyContent='center' alignItems='center'>
                 <RenderLockIcon />
-                {
-                    recovery_password && (
-                        <ResetPasswordNotice />
-                    )
-                }
-               
+
                 <StyledSpacer marginVertical={16} />
                 <XStack marginBottom={20}>
                     {[0, 1, 2, 3].map((_, index) => (
@@ -155,19 +134,6 @@ const Keypad = () => {
                     </StyledButton>
                 </Stack>
                 <StyledSpacer marginVertical={8} />
-                {
-                    purchase_status && (
-                        <XStack justifyContent='flex-end' alignItems='center'>
-                            <StyledButton link backgroundColor={theme.colors.cyan[500]} onPress={() => setRecovery_password(true)} >
-                                <StyledText paddingHorizontal={20} fontFamily={fontStyles.Roboto_Regular}
-                                    fontSize={theme.fontSize.normal}
-                                    fontWeight={theme.fontWeight.normal} color={theme.colors.gray[400]}>
-                                    Forgot password
-                                </StyledText>
-                            </StyledButton>
-                        </XStack>
-                    )
-                }
             </YStack>
             {
                 (loading) && (
@@ -177,13 +143,13 @@ const Keypad = () => {
             {
                 error && (handleError())
             }
-             <Drawer
-                            direction="right"
-                            isOpen={showPayment}
-                            onClose={() => setShowPayment(false)}
-                        >
-                           
-                        </Drawer>
+            <Drawer
+                direction="right"
+                isOpen={showPayment}
+                onClose={() => setShowPayment(false)}
+            >
+                <HelpScreen onClose={() => setShowPayment(false)} />
+            </Drawer>
         </StyledSafeAreaView>
     );
 };

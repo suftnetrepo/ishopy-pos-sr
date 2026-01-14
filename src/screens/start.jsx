@@ -3,29 +3,35 @@ import React, { useState, useEffect } from 'react';
 import { StyledSpinner } from 'fluent-styles';
 import Welcome from './welcome';
 import Keypad from './lock';
-import { getStore } from '../utils/asyncStorage';
+import { getStore, clearStore } from '../utils/asyncStorage';
 import { theme } from '../utils/theme';
 
 const Start = () => {
-    const [state, setState] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [hasOnboarded, setHasOnboarded] = useState(false);
 
     useEffect(() => {
         const checkOnboarding = async () => {
-            const hasOnboarded = await getStore('hasOnboarded');
-            setState(hasOnboarded === 'true');
+            try {
+                const onboardingStatus = await getStore('hasOnboarded');
+                setHasOnboarded(onboardingStatus === true || onboardingStatus === 'true');
+            } catch (error) {
+                if(__DEV__)
+                console.error('Error checking onboarding status:', error);
+            } finally {
+                setIsLoading(false);
+            }
         };
         checkOnboarding();
     }, []);
 
-    if (!state) {
+    if (isLoading) {
         return <StyledSpinner size={48} color={theme.colors.indigo[500]} />;
     }
 
     return (
         <>
-            {
-                state ? <Keypad /> : <Welcome onChange={(j) => setState(j)} />
-            }
+            {hasOnboarded ? <Keypad /> : <Welcome onChange={(j) => setHasOnboarded(j)} />}
         </>
     );
 }

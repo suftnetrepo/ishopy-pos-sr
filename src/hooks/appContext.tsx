@@ -119,21 +119,15 @@ const AppProvider = ({ children }: AppProviderProps) => {
     updateOrderId
   } = useCart();
 
-  const { data: shopData, error: shopError, loading: shopLoading } = useShop();
-
-  const loadShop = () => {
+  const { data: shopData, load } = useShop();
+  useEffect(() => {
     if (shopData) {
-      console.log('AppProvider shop data', shopData);
       setState(prevState => ({
         ...prevState,
         shop: shopData as Shop,
       }));
     }
-  };
-
-  useEffect(() => {
-    loadShop();
-  }, [shopData])
+  }, [shopData]);
 
   const actions: Actions = {
     login: async (params: { user: User; }) => {
@@ -144,8 +138,12 @@ const AppProvider = ({ children }: AppProviderProps) => {
       }));
     },
 
-    updateShop: () => {
-      loadShop();
+    updateShop: async() => {
+      const data = await load();
+     setState(prevState => ({
+        ...prevState,
+        shop: data as Shop,
+      }));
     },
 
     logout: async () => {

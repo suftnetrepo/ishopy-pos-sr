@@ -39,3 +39,30 @@ export const getStore = async (key) => {
     console.error(`Error retrieving data for key "${key}":`, e);
   }
 };
+
+/**
+ * Clears all data from AsyncStorage.
+ *
+ * @returns {Promise<void>}
+ */
+export const clearStore = async () => {
+  try {
+    await AsyncStorage.clear();
+  } catch (e) {
+    console.error('Error clearing AsyncStorage:', e);
+  }
+};
+
+/**
+ * Removes a specific key from AsyncStorage.
+ *
+ * @param {string} key - The key to remove from storage.
+ * @returns {Promise<void>}
+ */
+export const removeFromStore = async (key) => {
+  try {
+    await AsyncStorage.removeItem(key);
+  } catch (e) {
+    console.error(`Error removing key "${key}" from AsyncStorage:`, e);
+  }
+};

@@ -10,19 +10,21 @@ import {
 } from '@gluestack-ui/themed';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { theme } from '../utils/theme';
-import { clearSeedData, seedData  } from '../model/seed';
-import { store } from '../utils/asyncStorage';
-
+import { clearSeedData, seedData } from '../model/seed';
+import { store, clearStore } from '../utils/asyncStorage';
+import { useAppContext } from '../hooks/appContext';
 
 export default function WelcomeScreen({ onChange }) {
+    const { updateShop } = useAppContext();
     const [state, setState] = useState({
-        mode: 'retail',
+        mode: 'shop',
     });
 
     const handleGetStarted = async () => {
         await clearSeedData();
         seedData(state.mode).then(() => {
             store('hasOnboarded', 'true');
+            updateShop();
             onChange(true)
         });
     };
@@ -65,7 +67,7 @@ export default function WelcomeScreen({ onChange }) {
         {
             icon: 'storefront-outline',
             title: 'Retail',
-            value: 'retail',
+            value: 'shop',
             description: 'Perfect for shops, boutiques, and retail stores',
         },
         {

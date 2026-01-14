@@ -278,9 +278,9 @@ const usePin = () => {
 				user.pass_code = 1234
 				await updatePassCode(user)					
 			} else {
-				const shop = generateShop()
-				const user = generateUser()				
-				await createUser(user, shop)								
+				// const shop = generateShop()
+				// const user = generateUser()				
+				// await createUser(user, shop)								
 			}
 
 			return true

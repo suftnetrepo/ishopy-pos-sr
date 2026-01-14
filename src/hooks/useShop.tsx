@@ -16,8 +16,8 @@ interface Initialize {
 	loading: boolean;
 }
 
-interface IShop 
-extends Shop {
+interface IShop
+	extends Shop {
 	first_name: string;
 	last_name: string;
 	user_name: string;
@@ -33,27 +33,30 @@ const useShop = () => {
 		loading: true,
 	});
 
-	useEffect(() => {
-		async function load() {
-			try {
-				const shop = await queryAllShops();		
-				console.log('useShop shop', shop);	
-				setData({
-					data: shop,
-					error: null,
-					loading: false,
-				});
-			} catch (error) {
-				if(__DEV__){
-					console.log("useShop error", error);
-				}
+	async function load() {
+		try {
+			const shop = await queryAllShops();
+			setData({
+				data: shop,
+				error: null,
+				loading: false,
+			});
+
+			return shop;
+		} catch (error) {
+			if (__DEV__) {
+				console.log("useShop error", error);
 			}
 		}
+	}
+
+	useEffect(() => {
 		load();
 	}, []);
 
 	return {
 		...data,
+		load
 	};
 };
 
@@ -122,13 +125,13 @@ const useUpdateShop = () => {
 	const updateHandler = async (shop: Shop) => {
 		setData((prev) => ({ ...prev, loading: true }));
 
-		if(!shop.table_id && shop.mode === 'shop'){
+		if (!shop.table_id && shop.mode === 'shop') {
 			const result = await getTableId();
 			shop.table_id = result.table_id;
 		}
 
 		console.log('updateHandler shop', shop);
-		
+
 		try {
 			const user = await updateShop(shop);
 			setData({
