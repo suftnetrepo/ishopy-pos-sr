@@ -14,7 +14,7 @@ const PurchaseButton = ({ collapse = false }) => {
     const { purchaseHandler } = useInAppPurchase();
 
     return (
-        <StyledButton borderRadius={50} borderWidth={1} borderColor={theme.colors.orange[400]} backgroundColor={theme.colors.orange[400]} onPress={async () => await purchaseHandler()}>
+        <StyledButton borderRadius={50} borderWidth={1} borderColor={theme.colors.orange[400]} backgroundColor={theme.colors.orange[400]} onPress={purchaseHandler}>
             <XStack justifyContent='center' alignItems='center' paddingHorizontal={16} paddingVertical={8}>
                 <StyledMIcon size={24} name='apps' color={theme.colors.gray[1]} />
                 {

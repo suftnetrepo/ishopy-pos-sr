@@ -40,9 +40,9 @@ export default function TableCard({ data, onTableSelect }) {
                 backgroundColor={theme.colors.gray[1]}
                 borderColor={theme.colors.gray[1]}
                 borderRadius={16}
-                padding={16}
-                marginVertical={8}
-                marginHorizontal={8}
+                padding={8}
+                marginBottom={8}
+                marginHorizontal={4}
                 shadowColor={theme.colors.gray[1]}
                 shadowOffset={{ width: 0, height: 1 }}
                 shadowOpacity={0.1}
@@ -60,18 +60,19 @@ export default function TableCard({ data, onTableSelect }) {
 
                     <Stack horizonal marginTop={4} alignItems="center" justifyContent="flex-start">
                         <StyledIcon name="person" size={24} color={theme.colors.gray[500]} />
-                        <StyledText marginHorizontal={4} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.light} color={theme.colors.gray[500]}>
+                        <StyledText marginHorizontal={2} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.light} color={theme.colors.gray[500]}>
                             {table.guest_count || 0}
                         </StyledText>
-                        <StyledSpacer marginHorizontal={4} />
+                        <StyledSpacer marginHorizontal={2} />
                         <StyledIcon name="access-time" size={24} color={theme.colors.gray[500]} />
                         <StyledText marginHorizontal={4} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.light} color={theme.colors.gray[500]}>
                             {table.start_time || "--:--"}
                         </StyledText>
                     </Stack>
                 </Stack>
+                 <StyledSpacer marginHorizontal={4} />
                 <Stack horizonal alignItems="center" justifyContent="space-between">
-                    <StyledSpacer marginHorizontal={4} />
+                   
                     <StyledCycle
                         paddingHorizontal={10}
                         borderWidth={1}

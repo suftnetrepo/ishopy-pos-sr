@@ -22,7 +22,7 @@ export default function Drawer({
   direction = "right",
   children,
 }) {
-  const drawerWidth = width * 0.30; // 55% width like POS
+  const drawerWidth = width/3 ; // 55% width like POS
   const slideAnim = useRef(new Animated.Value(0)).current; // 0 = closed, 1 = open
 
   // open or close animation effect

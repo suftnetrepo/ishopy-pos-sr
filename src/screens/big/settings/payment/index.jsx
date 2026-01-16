@@ -70,7 +70,7 @@ const BigPayment = () => {
 
                                 <StyledSpacer marginHorizontal={4} />
                                 <Pressable onTouchStart={() => setCalendarShow(true)}>
-                                    <StyledCycle width={48} height={48} borderWidth={1} backgroundColor={theme.colors.yellow[500]} borderColor={theme.colors.yellow[500]}>
+                                    <StyledCycle width={48} height={48} borderWidth={1} backgroundColor={theme.colors.gray[100]} borderColor={theme.colors.gray[400]}>
                                         <StyledIcon size={24} name={'filter-list'} color={theme.colors.gray[800]} />
                                     </StyledCycle>
                                 </Pressable>

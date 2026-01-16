@@ -6,7 +6,7 @@ import {
 } from 'fluent-styles';
 import { useNavigation } from '@react-navigation/native';
 import { Stack } from '../../../components/package/stack';
-import { fontStyles, theme } from '../../../utils/theme';
+import { theme } from '../../../utils/theme';
 import PopularDishes from '../../../components/tablet/popularDishes';
 import LowStockItems from '../../../components/tablet/lowStockItems';
 import DailyTransactionChart from '../../../components/tablet/chart';

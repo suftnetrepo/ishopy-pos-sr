@@ -11,7 +11,7 @@ interface Initialize {
 	loading: boolean;
 }
 
-const useUsers = (flag:boolean = false) => {
+const useUsers = (flag: boolean = false) => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
@@ -272,17 +272,8 @@ const usePin = () => {
 		setData((prev) => ({ ...prev, loading: false }));
 
 		try {
-			const users = await queryUsers();			
-			if (users.length) {
-				const user = users[0]
-				user.pass_code = 1234
-				await updatePassCode(user)					
-			} else {
-				// const shop = generateShop()
-				// const user = generateUser()				
-				// await createUser(user, shop)								
-			}
-
+			const user = generateUser()
+			await createUser(user)
 			return true
 		} catch (error) {
 			setData({
@@ -292,7 +283,6 @@ const usePin = () => {
 			});
 		}
 	};
-
 
 	const resetHandler = () => {
 		setData({

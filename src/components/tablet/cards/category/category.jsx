@@ -21,7 +21,7 @@ const CategoryCard = ({
   const menuText = total_menu === 1 ? 'item' : 'items';
 
   return (
-    <Pressable onPress={() => onPress(category_id)} style={{ flex: 1 }}>
+    <Pressable onTouchStart={() => onPress(category_id)} style={{ flex: 1 }}>
       <Stack
         green={selected_category_id === category_id}
         horizonal

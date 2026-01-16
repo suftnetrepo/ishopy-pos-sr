@@ -56,12 +56,6 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
-	<key>NSCameraUsageDescription</key>
-	<string>We use the camera to allow users to capture images for their profile or product uploads.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>We use location data to provide better services such as nearby store recommendations.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app uses your location to find nearby shores and deliver personalized recommendations.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>CrimsonText-Bold.ttf</string>
@@ -100,12 +94,16 @@
 	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
-		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Bluetooth access may be used to support optional external accessories such as printers when enabled by the user.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We use the camera to allow users to capture images for product uploads or profile images.</string>
 </dict>
 </plist>

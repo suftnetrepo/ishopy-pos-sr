@@ -26,9 +26,9 @@ const PaymentCard = ({data}) => {
                 paddingVertical={16} justifyContent='space-between' marginBottom={8} borderRadius={16} alignItems='center' >
                 <YStack justifyContent='flex-start' alignItems='flex-start'>
                     <XStack justifyContent='flex-start' alignItems='center'>
-                        <StyledMIcon size={16} name='money' color={theme.colors.blueGray[600]} />
+                        <StyledMIcon size={16} name='money' color={theme.colors.gray[600]} />
                         <StyledText
-                            fontWeight={theme.fontWeight.normal}
+                            fontWeight={theme.fontWeight.semiBold}
                             fontSize={theme.fontSize.normal}
                             paddingHorizontal={4}
                             paddingVertical={1}
@@ -55,7 +55,7 @@ const PaymentCard = ({data}) => {
                     fontSize={theme.fontSize.small}
                     paddingHorizontal={4}
                     paddingVertical={1}
-                    color={theme.colors.gray[500]}
+                    color={theme.colors.gray[300]}
                     fontFamily={fontStyles.Roboto_Regular}
                 >
                     #{getLastChars(item?.order_id, 3)}

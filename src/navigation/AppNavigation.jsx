@@ -20,6 +20,7 @@ import BigPayment from '../screens/big/settings/payment';
 import FAQ from '../screens/account/faq';
 import HelpCenter from '../screens/account/helpCenter';
 import Start from '../screens/start';
+import PurchaseScreen from '../screens/sandbox/PurchaseScreen';
 
 const Stack = createStackNavigator();
 function Navigator() {
@@ -29,6 +30,13 @@ function Navigator() {
       <Stack.Screen
         name="big-dashboard"
         component={Dashboard}
+        options={{
+          headerShown: false,
+        }}
+      />
+       <Stack.Screen
+        name="big-purchase"
+        component={PurchaseScreen}
         options={{
           headerShown: false,
         }}

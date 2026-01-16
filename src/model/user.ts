@@ -46,7 +46,6 @@ const insertUser = async (
 
 const createUser = async (
   user: Omit<User, 'user_id'>,
-  shop: Omit<Shop, 'shop_id'>
 ): Promise<true> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
@@ -57,12 +56,6 @@ const createUser = async (
           user_id: guid(),
           ...user,
         });
-
-        const newShop = {
-          shop_id: guid(),
-          ...shop,
-        };
-        realm.create('Shop', newShop);
 
         resolve(true);
       });

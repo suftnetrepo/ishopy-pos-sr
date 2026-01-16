@@ -14,11 +14,10 @@ import { useOrders } from "../../../hooks/useOrder";
 import { useAppContext } from "../../../hooks/appContext";
 
 export default function OrderCard({ onOrderChange, onHandleFilter }) {
-    const { updateSelectedOrder, date_filter, updateDateFilter, shop } = useAppContext()
+    const { updateSelectedOrder, date_filter, updateDateFilter } = useAppContext()
     const [state, setState] = useState('All')
-    const { data, filterOrders, restoreOrders, loadOrdersByDateRange, loadOrders, loading, error } = useOrders(true)
+    const { data, filterOrders, restoreOrders, loadOrdersByDateRange, loadOrders } = useOrders(true)
     const hasActiveFilter = date_filter?.startDate && date_filter?.endDate;
-    const isShop = shop?.mode === 'shop';
 
     useEffect(() => {
         if (date_filter?.startDate && date_filter?.endDate) {

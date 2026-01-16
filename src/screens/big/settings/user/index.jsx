@@ -14,8 +14,10 @@ import UserForm from '../user/form/form';
 import { useFocus } from '../../../../hooks/useFocus';
 import { StyledIcon } from '../../../../components/package/icon';
 import { Pressable } from 'react-native';
+import { useAppContext } from '../../../../hooks/appContext';
 
 const BigUser = () => {
+    const { user } = useAppContext();
     const navigationFocus = useFocus()
     const [state, setState] = useState({
         data: null,
@@ -63,7 +65,7 @@ const BigUser = () => {
             <Stack flex={1.5} horizonal>
                 <SideBarAdapter selectedMenu={5} showMenu={false} collapse={true} />
                 <Stack flex={3} gap={8} marginLeft={8} marginRight={16} vertical>
-                    <UserCard flag={isFocused} onUserDeleting={() => update('Deleting')} onUserDeleted={() => reset()} onUserChange={(j) => setState({ ...state, tag: j?.tag, data: j?.data })} />
+                    <UserCard user_id={user?.user_id} flag={isFocused} onUserDeleting={() => update('Deleting')} onUserDeleted={() => reset()} onUserChange={(j) => setState({ ...state, tag: j?.tag, data: j?.data })} />
                 </Stack>
             </Stack>
             <Drawer

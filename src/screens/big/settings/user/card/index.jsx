@@ -6,10 +6,9 @@ import { StyledMIcon } from '../../../../../components/icon';
 import { useUsers, useDeleteUser } from '../../../../../hooks/useUser';
 import { FlatList } from 'react-native';
 import { toWordCase } from '../../../../../utils/help';
-import { convertJsonToCsv } from '../../../../../utils/convertJsonToCsv';
 import { Stack } from '../../../../../components/package/stack';
 
-const DiscountCard = ({ onUserChange, onUserDeleted, onUserDeleting, flag = false }) => {
+const UserCard = ({ user_id, onUserChange, onUserDeleted, onUserDeleting, flag = false }) => {
     const [isDialogVisible, setIsDialogVisible] = useState(false)
     const [user, setUser] = useState()
     const { data, error, loading, resetHandler } = useUsers(flag)
@@ -40,6 +39,7 @@ const DiscountCard = ({ onUserChange, onUserDeleted, onUserDeleting, flag = fals
                     <StyledSpacer marginHorizontal={4} />
                     <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]}>
                         <StyledMIcon size={32} name='delete-outline' color={theme.colors.gray[600]} onPress={() => {
+                            if(item.user_id === user_id) return
                             onUserDeleting()
                             setIsDialogVisible(true)
                             setUser(item)
@@ -80,7 +80,7 @@ const DiscountCard = ({ onUserChange, onUserDeleted, onUserDeleting, flag = fals
             {isDialogVisible &&
                 <StyledConfirmDialog
                     visible
-                    description='Are you sure you want to delete this discount?'
+                    description='Are you sure you want to delete this user?'
                     confirm='Yes'
                     cancel='No'
                     title={'Confirmation'}
@@ -91,4 +91,4 @@ const DiscountCard = ({ onUserChange, onUserDeleted, onUserDeleting, flag = fals
     );
 }
 
-export default DiscountCard
+export default UserCard

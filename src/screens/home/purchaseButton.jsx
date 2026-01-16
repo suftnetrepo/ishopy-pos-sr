@@ -12,7 +12,7 @@ import {
 } from 'fluent-styles';
 import { StyledMIcon } from '../../components/icon';
 import { fontStyles, theme } from '../../configs/theme';
-import { useInAppPurchase } from '../../hooks/useInAppPurchase';
+import { useInAppPurchase } from '../../hooks/_useInAppPurchase';
 
 const PurchaseButton = () => { 
     const { purchaseHandler } = useInAppPurchase();

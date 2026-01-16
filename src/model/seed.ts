@@ -199,11 +199,11 @@ export const generateUser = () => {
     user_id: guid(),
     username: 'user',
     password: 'user123',
-    first_name: 'James',
-    last_name: 'Smith',
-    pass_code: 1234,
+    first_name: 'Default',
+    last_name: 'user',
+    pass_code: 1235,
     status: 1,
-    role: 'user',
+    role: 'admin',
   };
 };
 

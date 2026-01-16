@@ -21,14 +21,14 @@ const PurchaseSuccess = () => {
 
     const clearHandler = async () => {
         setPaymentStatus(false)
-        clearSeed && await prepareSeedData()
-        navigator.navigate("bottom-tabs", { screen: 'Settings' })
+        navigator.navigate("big-settings")
     }
 
     return (
         <YStack
             backgroundColor={palettes.transparent05}
             flex={1}
+            width='50%'
             justifyContent='center'
             alignItems='center'
         >
@@ -90,7 +90,7 @@ const PurchaseSuccess = () => {
                         color={theme.colors.gray[600]}
                         fontSize={theme.fontSize.normal}
                     >
-                        Clear Sample Restaurant data
+                        Do you want to clear sample data
                     </StyledText>
                     
                 </XStack>

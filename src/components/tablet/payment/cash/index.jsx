@@ -99,7 +99,7 @@ export default function Payment({
                 <StyledText
                     fontFamily={fontStyles.Roboto_Regular}
                     textAlign="center"
-                    color={theme.colors.gray[500]}
+                    color={theme.colors.gray[100]}
                     fontSize={theme.fontSize.xxxlarge}
                     fontWeight={theme.fontWeight.thin}
                 >

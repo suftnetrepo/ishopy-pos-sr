@@ -2,7 +2,7 @@
 import React, { useState, ReactNode, useContext, useEffect } from 'react';
 import { User, Shop, CartItem } from '../model/types';
 import { useCart } from './useCart';
-import { useInAppPurchase } from './useInAppPurchase';
+import { useInAppPurchase } from './_useInAppPurchase';
 import { AddOn } from '../model/types';
 import { useShop } from './useShop';
 

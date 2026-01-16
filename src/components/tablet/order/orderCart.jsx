@@ -44,7 +44,6 @@ const OrderCart = ({ onClose }) => {
             >
                 <Stack marginBottom={2} horizonal  justifyContent="space-between" alignItems="center">
                     <Stack gap={4} horizonal alignItems="center">
-                        {/* <Ionicons name="restaurant-outline" size={18} color={theme.colors.gray[600]} /> */}
                         <StyledText color={theme.colors.gray[800]} fontSize={theme.fontSize.normal}>{order?.table_name}</StyledText>
                     </Stack>
                     <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.normal} color={theme.colors.gray[700]}>
