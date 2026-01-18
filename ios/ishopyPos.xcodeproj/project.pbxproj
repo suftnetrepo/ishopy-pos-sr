@@ -11,11 +11,11 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		1EBCAD99AA676B01A6DAADC6 /* libPods-ishopyPos-ishopyPosTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46787C53F820934D29F4D7F3 /* libPods-ishopyPos-ishopyPosTests.a */; };
 		361B3DC32F0352D500D56979 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 361B3DC22F0352D500D56979 /* GoogleService-Info.plist */; };
 		562D6D787F51A81BD9CB20A8 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4CF57A246B7E2D244B12658F /* PrivacyInfo.xcprivacy */; };
+		7120837583F014DC84A8DB76 /* libPods-ishopyPos-ishopyPosTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F93FC33E26A600E7B42CCB1 /* libPods-ishopyPos-ishopyPosTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		C4B56740D74E52CCDBB61AF7 /* libPods-ishopyPos.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 862635C0A8DAD2DC5E978F58 /* libPods-ishopyPos.a */; };
+		91E923DA15E6FB72C5563CEC /* libPods-ishopyPos.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D66C2BE2213E4FF4FB0139D9 /* libPods-ishopyPos.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,7 +29,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0068E452ACEF9326E1CE43B3 /* Pods-ishopyPos.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ishopyPos.release.xcconfig"; path = "Target Support Files/Pods-ishopyPos/Pods-ishopyPos.release.xcconfig"; sourceTree = "<group>"; };
 		00E356EE1AD99517003FC87E /* ishopyPosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ishopyPosTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* ishopyPosTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ishopyPosTests.m; sourceTree = "<group>"; };
@@ -41,14 +40,15 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ishopyPos/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = ishopyPos/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		361B3DC22F0352D500D56979 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		3AFCA4F36256C48DC23F1EC6 /* Pods-ishopyPos-ishopyPosTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ishopyPos-ishopyPosTests.debug.xcconfig"; path = "Target Support Files/Pods-ishopyPos-ishopyPosTests/Pods-ishopyPos-ishopyPosTests.debug.xcconfig"; sourceTree = "<group>"; };
-		46787C53F820934D29F4D7F3 /* libPods-ishopyPos-ishopyPosTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ishopyPos-ishopyPosTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF57A246B7E2D244B12658F /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = ishopyPos/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		53836A634D171A7C720A509A /* Pods-ishopyPos-ishopyPosTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ishopyPos-ishopyPosTests.release.xcconfig"; path = "Target Support Files/Pods-ishopyPos-ishopyPosTests/Pods-ishopyPos-ishopyPosTests.release.xcconfig"; sourceTree = "<group>"; };
+		7F93FC33E26A600E7B42CCB1 /* libPods-ishopyPos-ishopyPosTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ishopyPos-ishopyPosTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ishopyPos/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		862635C0A8DAD2DC5E978F58 /* libPods-ishopyPos.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ishopyPos.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D8711101D0310E4C28DB2C8 /* Pods-ishopyPos-ishopyPosTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ishopyPos-ishopyPosTests.release.xcconfig"; path = "Target Support Files/Pods-ishopyPos-ishopyPosTests/Pods-ishopyPos-ishopyPosTests.release.xcconfig"; sourceTree = "<group>"; };
+		A270672056C134AD4B1AE328 /* Pods-ishopyPos-ishopyPosTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ishopyPos-ishopyPosTests.debug.xcconfig"; path = "Target Support Files/Pods-ishopyPos-ishopyPosTests/Pods-ishopyPos-ishopyPosTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B06C5F91B706FFB42091CE2E /* Pods-ishopyPos.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ishopyPos.release.xcconfig"; path = "Target Support Files/Pods-ishopyPos/Pods-ishopyPos.release.xcconfig"; sourceTree = "<group>"; };
+		D66C2BE2213E4FF4FB0139D9 /* libPods-ishopyPos.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ishopyPos.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		EF0D5C9B1562F93E68B245FC /* Pods-ishopyPos.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ishopyPos.debug.xcconfig"; path = "Target Support Files/Pods-ishopyPos/Pods-ishopyPos.debug.xcconfig"; sourceTree = "<group>"; };
+		F159E08D9AFEFBF9F7093F53 /* Pods-ishopyPos.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ishopyPos.debug.xcconfig"; path = "Target Support Files/Pods-ishopyPos/Pods-ishopyPos.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,7 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1EBCAD99AA676B01A6DAADC6 /* libPods-ishopyPos-ishopyPosTests.a in Frameworks */,
+				7120837583F014DC84A8DB76 /* libPods-ishopyPos-ishopyPosTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,7 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C4B56740D74E52CCDBB61AF7 /* libPods-ishopyPos.a in Frameworks */,
+				91E923DA15E6FB72C5563CEC /* libPods-ishopyPos.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,8 +107,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				862635C0A8DAD2DC5E978F58 /* libPods-ishopyPos.a */,
-				46787C53F820934D29F4D7F3 /* libPods-ishopyPos-ishopyPosTests.a */,
+				D66C2BE2213E4FF4FB0139D9 /* libPods-ishopyPos.a */,
+				7F93FC33E26A600E7B42CCB1 /* libPods-ishopyPos-ishopyPosTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -148,10 +148,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				EF0D5C9B1562F93E68B245FC /* Pods-ishopyPos.debug.xcconfig */,
-				0068E452ACEF9326E1CE43B3 /* Pods-ishopyPos.release.xcconfig */,
-				3AFCA4F36256C48DC23F1EC6 /* Pods-ishopyPos-ishopyPosTests.debug.xcconfig */,
-				53836A634D171A7C720A509A /* Pods-ishopyPos-ishopyPosTests.release.xcconfig */,
+				F159E08D9AFEFBF9F7093F53 /* Pods-ishopyPos.debug.xcconfig */,
+				B06C5F91B706FFB42091CE2E /* Pods-ishopyPos.release.xcconfig */,
+				A270672056C134AD4B1AE328 /* Pods-ishopyPos-ishopyPosTests.debug.xcconfig */,
+				8D8711101D0310E4C28DB2C8 /* Pods-ishopyPos-ishopyPosTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -163,12 +163,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "ishopyPosTests" */;
 			buildPhases = (
-				2FEBF634318286D958BC195D /* [CP] Check Pods Manifest.lock */,
+				88B2E47C52C0D15CF0F45E05 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				25FCC8AC44A04B60D37B68BD /* [CP] Copy Pods Resources */,
-				6677477690DE494A43C8CD32 /* [CP] Embed Pods Frameworks */,
+				EC1ACC3574ACAE163E4BB6EE /* [CP] Copy Pods Resources */,
+				C89F570457BF128C6F350A8C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -184,13 +184,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "ishopyPos" */;
 			buildPhases = (
-				1DB25AE0C105BFFB112FA15B /* [CP] Check Pods Manifest.lock */,
+				E315CA1A29C75E9C60DA7950 /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				663E7DF32F1E8BB29A85F9A2 /* [CP] Copy Pods Resources */,
-				6886F3D82334269721604668 /* [CP] Embed Pods Frameworks */,
+				991608E2E1C30022463D57B2 /* [CP] Copy Pods Resources */,
+				513131927F4C22FCCD789751 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -275,46 +275,24 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		1DB25AE0C105BFFB112FA15B /* [CP] Check Pods Manifest.lock */ = {
+		513131927F4C22FCCD789751 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ishopyPos/Pods-ishopyPos-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
+			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ishopyPos-checkManifestLockResult.txt",
+				"${PODS_ROOT}/Target Support Files/Pods-ishopyPos/Pods-ishopyPos-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ishopyPos/Pods-ishopyPos-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		25FCC8AC44A04B60D37B68BD /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ishopyPos-ishopyPosTests/Pods-ishopyPos-ishopyPosTests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ishopyPos-ishopyPosTests/Pods-ishopyPos-ishopyPosTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ishopyPos-ishopyPosTests/Pods-ishopyPos-ishopyPosTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		2FEBF634318286D958BC195D /* [CP] Check Pods Manifest.lock */ = {
+		88B2E47C52C0D15CF0F45E05 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -336,7 +314,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		663E7DF32F1E8BB29A85F9A2 /* [CP] Copy Pods Resources */ = {
+		991608E2E1C30022463D57B2 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -353,7 +331,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ishopyPos/Pods-ishopyPos-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6677477690DE494A43C8CD32 /* [CP] Embed Pods Frameworks */ = {
+		C89F570457BF128C6F350A8C /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -370,21 +348,43 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ishopyPos-ishopyPosTests/Pods-ishopyPos-ishopyPosTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6886F3D82334269721604668 /* [CP] Embed Pods Frameworks */ = {
+		E315CA1A29C75E9C60DA7950 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ishopyPos/Pods-ishopyPos-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ishopyPos/Pods-ishopyPos-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ishopyPos-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ishopyPos/Pods-ishopyPos-frameworks.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EC1ACC3574ACAE163E4BB6EE /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ishopyPos-ishopyPosTests/Pods-ishopyPos-ishopyPosTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ishopyPos-ishopyPosTests/Pods-ishopyPos-ishopyPosTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ishopyPos-ishopyPosTests/Pods-ishopyPos-ishopyPosTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -420,7 +420,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3AFCA4F36256C48DC23F1EC6 /* Pods-ishopyPos-ishopyPosTests.debug.xcconfig */;
+			baseConfigurationReference = A270672056C134AD4B1AE328 /* Pods-ishopyPos-ishopyPosTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -447,7 +447,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 53836A634D171A7C720A509A /* Pods-ishopyPos-ishopyPosTests.release.xcconfig */;
+			baseConfigurationReference = 8D8711101D0310E4C28DB2C8 /* Pods-ishopyPos-ishopyPosTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -471,7 +471,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EF0D5C9B1562F93E68B245FC /* Pods-ishopyPos.debug.xcconfig */;
+			baseConfigurationReference = F159E08D9AFEFBF9F7093F53 /* Pods-ishopyPos.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
@@ -507,7 +507,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0068E452ACEF9326E1CE43B3 /* Pods-ishopyPos.release.xcconfig */;
+			baseConfigurationReference = B06C5F91B706FFB42091CE2E /* Pods-ishopyPos.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
@@ -612,7 +612,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -684,7 +687,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

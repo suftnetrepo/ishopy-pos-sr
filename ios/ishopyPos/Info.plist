@@ -102,7 +102,9 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Bluetooth access may be used to support optional external accessories such as printers when enabled by the user.</string>
+	<string>This app needs Bluetooth access to connect to thermal printers</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>This app needs Bluetooth access to connect to thermal printers</string>
 	<key>NSCameraUsageDescription</key>
 	<string>We use the camera to allow users to capture images for product uploads or profile images.</string>
 </dict>
