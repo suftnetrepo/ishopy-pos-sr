@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { FC } from 'react';
 import { YStack, XStack, StyledSpacer, StyledText, StyledCard, StyledSeparator, StyledBadge } from 'fluent-styles';
 import { StyledMIcon } from '../../../components/icon';
 import { fontStyles, theme } from '../../../configs/theme';
@@ -8,12 +7,44 @@ import { useQueryOrderItemByOrder } from '../../../hooks/useOrderItems';
 import { formatCurrency, colorCodeStatus, getLastChars } from '../../../utils/help';
 import { ScrollView } from 'react-native';
 
-const OrderCart = ({ onClose }) => {
-    const { shop, order } = useAppContext()
-    const { data } = useQueryOrderItemByOrder(order?.order_id)
+interface AddOn {
+    addOnName: string;
+    quantity: number;
+    price: number;
+}
 
-    const Card = ({ order }) => {
-        const formatDate = (dateString) => {
+interface OrderItem {
+    menu_name: string;
+    quantity: number;
+    price: number;
+    addOns?: string;
+}
+
+interface Order {
+    order_id: string;
+    table_name: string;
+    status: string;
+    date: string;
+    total: number;
+    discount: number;
+    tax: number;
+    total_price: number;
+}
+
+interface Shop {
+    currency: string;
+}
+
+interface OrderCartProps {
+    onClose: () => void;
+}
+
+const OrderCart: FC<OrderCartProps> = ({ onClose }) => {
+    const { shop, order } = useAppContext();
+    const { data } = useQueryOrderItemByOrder(order?.order_id);
+
+    const Card: FC<{ order: Order }> = ({ order }) => {
+        const formatDate = (dateString: string): string => {
             const date = new Date(dateString);
             return date.toLocaleString('en-US', {
                 day: 'numeric',
@@ -59,7 +90,7 @@ const OrderCart = ({ onClose }) => {
         );
     };
 
-    const RenderAddOn = ({ addOn }) => {
+    const RenderAddOn: FC<{ addOn: AddOn }> = ({ addOn }) => {
         return (
             <>
                 <XStack flex={1} justifyContent='space-between' paddingVertical={8} paddingHorizontal={16} alignItems='center' backgroundColor={theme.colors.gray[1]}>
@@ -89,9 +120,10 @@ const OrderCart = ({ onClose }) => {
                     borderColor: theme.colors.gray[200]
                 }} />
             </>
-        )
-    }
-    const RenderItem = ({ item }) => {
+        );
+    };
+
+    const RenderItem: FC<{ item: OrderItem }> = ({ item }) => {
         return (
             <>
                 <XStack backgroundColor={theme.colors.blueGray[100]} borderColor={theme.colors.blueGray[100]} justifyContent='space-between' paddingVertical={8} paddingHorizontal={16} alignItems='center'>
@@ -119,19 +151,20 @@ const OrderCart = ({ onClose }) => {
                     borderColor: theme.colors.gray[200]
                 }} />
             </>
-        )
-    }
-    const RenderOrderItems = () => {
+        );
+    };
+
+    const RenderOrderItems: FC = () => {
         return (
             <StyledCard shadow='dark' borderColor={theme.colors.gray[200]} borderRadius={8} borderWidth={1} backgroundColor={theme.colors.gray[1]} >
                 {
-                    (data || []).map((item, index) => (
+                    (data || []).map((item: OrderItem, index: number) => (
                         <React.Fragment key={index}>
                             <RenderItem item={item} />
                             <StyledSeparator line lineProps={{
                                 borderColor: theme.colors.gray[200]
                             }} />
-                            {(item?.addOns ? JSON.parse(item.addOns) : []).map((addOn, addOnIndex) => (
+                            {(item?.addOns ? JSON.parse(item.addOns) : []).map((addOn: AddOn, addOnIndex: number) => (
                                 <RenderAddOn
                                     addOn={addOn}
                                     key={`${index}-${addOnIndex}`}
@@ -143,8 +176,8 @@ const OrderCart = ({ onClose }) => {
                 }
 
             </StyledCard>
-        )
-    }
+        );
+    };
 
     return (
         <YStack flex={1} marginTop={0} borderRadius={8} justifyContent='flex-start' alignItems='flex-start' backgroundColor={theme.colors.gray[50]} paddingHorizontal={16} paddingVertical={8}>
@@ -241,7 +274,7 @@ const OrderCart = ({ onClose }) => {
                 </XStack>
             </YStack>
         </YStack>
-    )
-}
+    );
+};
 
-export default OrderCart
+export default OrderCart;
