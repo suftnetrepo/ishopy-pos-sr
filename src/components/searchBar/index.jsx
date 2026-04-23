@@ -1,9 +1,6 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable react/prop-types */
-/* eslint-disable prettier/prettier */
+
 import React, { useState } from "react";
-import { styled, StyledSpacer, isValidColor, StyledCycle, isValidNumber, InputText } from 'fluent-styles';
-import { theme } from "../../configs/theme";
+import { styled, theme, StyledSpacer, isValidColor, StyledCycle, isValidNumber, StyledInput } from 'fluent-styles';
 import { StyledMIcon } from "../icon";
 import { View } from "react-native";
 
@@ -52,8 +49,8 @@ const StyledSearchBar = ({ size = 24, name = 'search', placeholder = 'Search ite
     }
 
     return (
-        <SearchBar flex={1} borderWidth={1} borderColor={theme.colors.gray[200]} {...rest}>
-            <InputText marginHorizontal={8} flex={1} placeholder={placeholder} fontSize={theme.fontSize.normal} value={searchQuery}
+        <SearchBar flex={1}  {...rest}>
+            <StyledInput variant="outline" marginHorizontal={8} flex={1} placeholder={placeholder} fontSize={theme.fontSize.normal} value={searchQuery}
                 onChangeText={(text) => {
                     setSearchQuery((pre) => {
                         return {
@@ -62,7 +59,7 @@ const StyledSearchBar = ({ size = 24, name = 'search', placeholder = 'Search ite
                         }
                     })
                     onTextChange(text)
-                }} returnKeyType='search' noBorder={true} onSubmitEditing={handleSubmit} />
+                }} returnKeyType='search'  onSubmitEditing={handleSubmit} />
             <StyledSpacer marginHorizontal={2} />
             {
                 showSearchIcon && (

@@ -37,7 +37,7 @@ const RenderHeader = ({
   return (
     <Stack
       horizonal
-      flex={1}
+    
       backgroundColor={theme.colors.gray[1]}
       justifyContent="flex-start"
       alignItems="center"
@@ -73,7 +73,7 @@ const RenderHeader = ({
         <StyledText
           fontFamily={fontStyles.Roboto_Regular}
           fontSize={theme.fontSize.normal}
-          fontWeight={theme.fontWeight.normal}
+          fontWeight={theme.fontWeight.normal as any}
           paddingHorizontal={8}
           color={theme.colors.gray[600]}>
           {title || 'Dashboard'}
@@ -109,13 +109,13 @@ const RenderHeader = ({
                 <StyledText
                   color={theme.colors.gray[900]}
                   fontSize={theme.fontSize.small}
-                  fontWeight={theme.fontWeight.semiBold}>
+                  fontWeight={theme.fontWeight.semiBold as any}>
                   {user?.first_name} {user?.last_name}  
                 </StyledText>
                 <StyledText
                   color={theme.colors.gray[400]}
                   fontSize={theme.fontSize.small}
-                  fontWeight={theme.fontWeight.medium}>
+                  fontWeight={theme.fontWeight.medium as any}>
                 {user?.role}
                 </StyledText>
               </Stack>
