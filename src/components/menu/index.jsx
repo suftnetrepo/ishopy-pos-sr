@@ -1,8 +1,4 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable react/display-name */
-/* eslint-disable prettier/prettier */
-/* eslint-disable react/prop-types */
-/* eslint-disable prettier/prettier */
+
 import React, { useEffect } from "react";
 import { YStack, StyledText, StyledButton, StyledSpinner } from 'fluent-styles';
 import { useQueryMenuByStatus } from "../../hooks/useMenu"

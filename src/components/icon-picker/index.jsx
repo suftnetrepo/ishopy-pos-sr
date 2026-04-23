@@ -3,7 +3,7 @@ import {
   Pressable,
   ScrollView,
 } from "@gluestack-ui/themed";
-import { Stack } from "../package/stack";
+import { Stack } from 'fluent-styles';
 import { theme } from "../../utils/theme";
 import { icons } from './icons';
 import { Icon } from '../tablet/icon/icon';

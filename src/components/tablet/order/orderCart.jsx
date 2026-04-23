@@ -7,7 +7,6 @@ import { useAppContext } from '../../../hooks/appContext';
 import { useQueryOrderItemByOrder } from '../../../hooks/useOrderItems';
 import { formatCurrency, colorCodeStatus, getLastChars } from '../../../utils/help';
 import { ScrollView } from 'react-native';
-import { Stack } from '../../../components/package/stack';
 
 const OrderCart = ({ onClose }) => {
     const { shop, order } = useAppContext()
@@ -26,7 +25,7 @@ const OrderCart = ({ onClose }) => {
         };
 
         return (
-            <Stack
+            <YStack
                 width={'100%'}
                 backgroundColor={theme.colors.gray[1]}
                 borderRadius={8}
@@ -40,24 +39,23 @@ const OrderCart = ({ onClose }) => {
                 borderWidth={1}
                 borderColor={theme.colors.gray[800]}
                 status={colorCodeStatus(order?.status)}
-                vertical
             >
-                <Stack marginBottom={2} horizontal  justifyContent="space-between" alignItems="center">
-                    <Stack gap={4} horizontal alignItems="center">
+                <XStack marginBottom={2} justifyContent="space-between" alignItems="center">
+                    <XStack gap={4} alignItems="center">
                         <StyledText color={theme.colors.gray[800]} fontSize={theme.fontSize.normal}>{order?.table_name}</StyledText>
-                    </Stack>
+                    </XStack>
                     <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.normal} color={theme.colors.gray[700]}>
                         #{getLastChars(order?.order_id, 3)}
                     </StyledText>
-                </Stack>
+                </XStack>
 
-                <Stack vertical >
-                    <Stack gap={4} horizontal alignItems="center">
+                <YStack>
+                    <XStack gap={4} alignItems="center">
                         <StyledMIcon name="access-time" size={18} color={theme.colors.gray[600]} />
                         <StyledText color={theme.colors.gray[600]} fontSize={theme.fontSize.small}>{formatDate(order?.date)}</StyledText>
-                    </Stack>
-                </Stack>
-            </Stack>
+                    </XStack>
+                </YStack>
+            </YStack>
         );
     };
 
