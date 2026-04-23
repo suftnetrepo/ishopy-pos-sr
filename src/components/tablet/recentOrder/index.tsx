@@ -23,7 +23,7 @@ const RecentOrder = () => {
       paddingVertical={24}
       marginLeft={16}>
       <Stack
-        horizonal
+        horizontal
         justifyContent="space-between"
         alignItems="center"
         gap={8}>
@@ -41,14 +41,14 @@ const RecentOrder = () => {
           <Stack
             key={index}
             flex={1}
-            horizonal
+            horizontal
             justifyContent="flex-start"
             alignItems="center"
             gap={8}
             marginBottom={16}>
             <Stack vertical>
               <Stack
-                horizonal
+                horizontal
                 justifyContent="flex-start"
                 alignItems="center"
                 gap={4}>
@@ -69,11 +69,11 @@ const RecentOrder = () => {
                 </StyledText>
               </Stack>
               <Stack
-                horizonal
+                horizontal
                 justifyContent="flex-start"
                 alignItems="center"
                 gap={4}>
-                <Stack gap={4} horizonal alignItems="center">
+                <Stack gap={4} horizontal alignItems="center">
                   <MaterialIcon name="access-time" size={16} color={theme.colors.gray[600]} />
                   <StyledText color={theme.colors.gray[600]} fontSize={theme.fontSize.small}>{formatDate(dish.order?.date)}</StyledText>
                 </Stack>

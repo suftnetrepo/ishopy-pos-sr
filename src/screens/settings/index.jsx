@@ -87,7 +87,7 @@ const BigSettings = () => {
     const RenderCard = ({ icon, name, onTouchStart }) => {
         return (
             <Stack
-                horizonal
+                horizontal
                 flex={1}
                 borderRadius={8}
                 backgroundColor={theme.colors.gray[1]}
@@ -145,13 +145,13 @@ const BigSettings = () => {
                 </StyledHeader.Full>
             </StyledHeader>
 
-            <Stack flex={1.5} horizonal>
+            <Stack flex={1.5} horizontal>
                 <SideBarAdapter selectedMenu={6} showMenu={false} collapse={true} />
                 <Stack flex={3} gap={8} marginHorizontal={16} vertical>
                     {SETTINGS_CONFIG.rows.map((row, rowIndex) => (
                         <Stack
                             key={`row-${rowIndex}`}
-                            horizonal
+                            horizontal
                             gap={8}
                             {...(rowIndex === 2 && {
                                 borderColor: theme.colors.gray[200],

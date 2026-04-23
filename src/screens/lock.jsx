@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { YStack, XStack, StyledHeader, StyledSafeAreaView, StyledSpacer, StyledText, StyledSpinner, StyledButton } from 'fluent-styles';
+import { YStack, XStack, Stack, StyledHeader, StyledSafeAreaView, StyledSpacer, StyledText, StyledSpinner, StyledButton } from 'fluent-styles';
 import { fontStyles, theme } from '../configs/theme';
 import { usePin } from '../hooks/useUser';
 import { useNavigation } from '@react-navigation/native';
@@ -10,7 +10,6 @@ import { useSelector } from '@legendapp/state/react';
 import { state } from '../store';
 import { StyledMIcon } from '../components/icon';
 import { useAppContext } from '../hooks/appContext';
-import { Stack } from '../components/package/stack';
 import Drawer from '../components/package/drawer';
 import HelpScreen from '../components/help';
 
@@ -103,7 +102,7 @@ const Keypad = () => {
                 <StyledSpacer marginVertical={8} />
                 <Stack vertical flexWrap='wrap' justifyContent='center' alignItems='center'>
                     {[['1', '2', '3'], ['4', '5', '6'], ['7', '8', '9']].map((row, index) => (
-                        <Stack gap={16} horizonal key={index} margin={5}>
+                        <Stack gap={16} horizontal key={index} margin={5}>
                             {row.map(num => (
                                 <StyledButton
                                     key={num}

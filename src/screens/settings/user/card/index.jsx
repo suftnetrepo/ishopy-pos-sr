@@ -23,7 +23,7 @@ const UserCard = ({ user_id, onUserChange, onUserDeleted, onUserDeleting, flag =
 
     const RenderCard = ({ item }) => {
         return (
-            <Stack horizonal marginHorizontal={2} flex={1} status={item.status === 1 ? theme.colors.green[600] : theme.colors.gray[100]} paddingHorizontal={8} backgroundColor={theme.colors.gray[1]}
+            <Stack horizontal marginHorizontal={2} flex={1} status={item.status === 1 ? theme.colors.green[600] : theme.colors.gray[100]} paddingHorizontal={8} backgroundColor={theme.colors.gray[1]}
                 paddingVertical={8} justifyContent='flex-start' marginBottom={8} borderRadius={16} alignItems='center' >
                 <YStack flex={2}>
                     <StyledText paddingHorizontal={8} fontFamily={fontStyles.Roboto_Regular} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.normal} color={theme.colors.gray[700]}>

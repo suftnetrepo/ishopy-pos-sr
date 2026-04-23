@@ -48,7 +48,7 @@ export default function TableCard({ data, onTableSelect }) {
                 shadowOpacity={0.1}
                 shadowRadius={2}
                 elevation={3}
-                horizonal
+                horizontal
                 justifyContent="space-between"
                 alignItems="center"
                 status={table?.isOccupied === 1 ? theme.colors.green[500] : theme.colors.purple[700]}
@@ -58,7 +58,7 @@ export default function TableCard({ data, onTableSelect }) {
                         {table.tableName}
                     </StyledText>
 
-                    <Stack horizonal marginTop={4} alignItems="center" justifyContent="flex-start">
+                    <Stack horizontal marginTop={4} alignItems="center" justifyContent="flex-start">
                         <StyledIcon name="person" size={24} color={theme.colors.gray[500]} />
                         <StyledText marginHorizontal={2} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.light} color={theme.colors.gray[500]}>
                             {table.guest_count || 0}
@@ -71,7 +71,7 @@ export default function TableCard({ data, onTableSelect }) {
                     </Stack>
                 </Stack>
                  <StyledSpacer marginHorizontal={4} />
-                <Stack horizonal alignItems="center" justifyContent="space-between">
+                <Stack horizontal alignItems="center" justifyContent="space-between">
                    
                     <StyledCycle
                         paddingHorizontal={10}

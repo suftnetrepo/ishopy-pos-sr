@@ -60,7 +60,7 @@ const BigTax = () => {
                     />
                 </StyledHeader.Full>
             </StyledHeader>
-            <Stack flex={1.5} horizonal>
+            <Stack flex={1.5} horizontal>
                 <SideBarAdapter selectedMenu={5} showMenu={false} collapse={true} />
                 <Stack flex={3} gap={8} marginHorizontal={16} vertical>
                     <TaxCard flag={isFocused} onTaxDeleting={() => update('Deleting')} onTaxDeleted={() => reset()} onTaxChange={(j) => setState({ ...state, tag: j?.tag, data: j?.data })} />

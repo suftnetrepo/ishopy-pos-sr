@@ -65,7 +65,7 @@ export default function KeyCard({ onSubmit, onClose, table_name, table_id }) {
 
                 <Box borderRadius={16}  backgroundColor={theme.colors.gray[900]}>
                     <HStack justifyContent="space-between" alignItems="center" px={24} py={16}>
-                        <Stack horizonal flex={1} justifyContent="flex-start" alignItems="center">
+                        <Stack horizontal flex={1} justifyContent="flex-start" alignItems="center">
                             <StyledIcon
                                 name="attach-money"
                                 size={24}

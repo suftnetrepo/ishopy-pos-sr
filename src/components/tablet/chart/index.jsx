@@ -59,7 +59,7 @@ const DailyTransactionChart = () => {
         Daily transaction
       </StyledText>
       <StyledSpacer marginVertical={8} />
-      <Stack horizonal justifyContent="flex-start" alignItems="center">
+      <Stack horizontal justifyContent="flex-start" alignItems="center">
         <StyledText
           fontFamily={fontStyles.Roboto_Regular}
           fontSize={theme.fontSize.xxxlarge}
@@ -80,7 +80,7 @@ const DailyTransactionChart = () => {
             trend === 'up' ? theme.colors.green[500] : theme.colors.red[400]
           }>
           <Stack
-            horizonal
+            horizontal
             justifyContent="center"
             paddingVertical={1}
             alignItems="center">

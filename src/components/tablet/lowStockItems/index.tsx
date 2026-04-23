@@ -24,7 +24,7 @@ const LowStockItems = () => {
       justifyContent="flex-start"
       alignItems="flex-start">
       <Stack
-        horizonal
+        horizontal
         width="100%"
         justifyContent="space-between"
         alignItems="center"
@@ -42,7 +42,7 @@ const LowStockItems = () => {
         {data.map((dish, index) => (
           <Stack
             key={index}
-            horizonal
+            horizontal
             justifyContent="flex-start"
             alignItems="center"
             gap={4}
@@ -57,7 +57,7 @@ const LowStockItems = () => {
                 {dish.menu_name}
               </StyledText>
               <Stack
-                horizonal
+                horizontal
                 justifyContent="flex-start"
                 alignItems="center"
                 gap={4}>

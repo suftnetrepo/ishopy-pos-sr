@@ -93,7 +93,7 @@ export default function AddOn({ table_id, onClose, item, setItem }) {
                 <Menu item={item} />
                 {
                     item?.addOns?.map((addOn, index) => (
-                        <Stack horizonal key={index}
+                        <Stack horizontal key={index}
                             borderBottomWidth={1}
                             borderBottomColor={theme.colors.gray[300]}
                             paddingHorizontal={8} paddingVertical={8} justifyContent='space-between' alignItems='center'  >
@@ -190,7 +190,7 @@ export default function AddOn({ table_id, onClose, item, setItem }) {
                     </StyledButton>
                     <StyledSpacer marginHorizontal={4} />
                     <Pressable style={{ flex: 1 }} onPress={() => onSubmit()}>
-                        <Stack flex={1} borderRadius={30} paddingHorizontal={16} paddingVertical={9} horizonal justifyContent='space-between' alignItems='center' backgroundColor={theme.colors.amber[600]} >
+                        <Stack flex={1} borderRadius={30} paddingHorizontal={16} paddingVertical={9} horizontal justifyContent='space-between' alignItems='center' backgroundColor={theme.colors.amber[600]} >
                             <StyledText
                                 fontFamily={fontStyles.Roboto_Regular}
                                 color={theme.colors.gray[1]}

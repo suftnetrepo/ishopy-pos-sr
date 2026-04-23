@@ -194,7 +194,7 @@ const Shop = ({ onClose }) => {
             onChangeText={(text) => setFields({ ...fields, description: text })}
           />
           <StyledSpacer marginVertical={8} />
-          <Stack horizonal gap={8} >
+          <Stack horizontal gap={8} >
             <StyledButton borderRadius={8} flex={1} borderWidth={1} borderColor={fields.mode === "restaurant" ? theme.colors.blue[600] : theme.colors.gray[200]} backgroundColor={theme.colors.gray[1]} onPress={() => setFields({ ...fields, mode: 'restaurant' })} >
               {
                 fields.mode === "restaurant" && (

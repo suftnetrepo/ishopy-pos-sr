@@ -42,8 +42,8 @@ const OrderCart = ({ onClose }) => {
                 status={colorCodeStatus(order?.status)}
                 vertical
             >
-                <Stack marginBottom={2} horizonal  justifyContent="space-between" alignItems="center">
-                    <Stack gap={4} horizonal alignItems="center">
+                <Stack marginBottom={2} horizontal  justifyContent="space-between" alignItems="center">
+                    <Stack gap={4} horizontal alignItems="center">
                         <StyledText color={theme.colors.gray[800]} fontSize={theme.fontSize.normal}>{order?.table_name}</StyledText>
                     </Stack>
                     <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.normal} color={theme.colors.gray[700]}>
@@ -52,7 +52,7 @@ const OrderCart = ({ onClose }) => {
                 </Stack>
 
                 <Stack vertical >
-                    <Stack gap={4} horizonal alignItems="center">
+                    <Stack gap={4} horizontal alignItems="center">
                         <StyledMIcon name="access-time" size={18} color={theme.colors.gray[600]} />
                         <StyledText color={theme.colors.gray[600]} fontSize={theme.fontSize.small}>{formatDate(order?.date)}</StyledText>
                     </Stack>

@@ -77,7 +77,7 @@ export default function OrderCard({ onOrderChange, onHandleFilter }) {
                 vertical
                 onTouchStart={() => handleOrder(order)}
             >
-                <Stack  horizonal flex={1} justifyContent="space-between" alignItems="center">
+                <Stack  horizontal flex={1} justifyContent="space-between" alignItems="center">
                      <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.normal} color={theme.colors.gray[600]}>
                                 #{getLastChars(order?.order_id, 8)}
                             </StyledText>
@@ -92,7 +92,7 @@ export default function OrderCard({ onOrderChange, onHandleFilter }) {
 
                 </Stack>
                 <Stack vertical >
-                    <Stack gap={4} horizonal alignItems="center">
+                    <Stack gap={4} horizontal alignItems="center">
                         <MaterialIcon name="access-time" size={18} color={theme.colors.gray[600]} />
                         <StyledText color={theme.colors.gray[400]} fontSize={theme.fontSize.small}>{formatDate(order?.date)}</StyledText>
                     </Stack>
@@ -103,8 +103,8 @@ export default function OrderCard({ onOrderChange, onHandleFilter }) {
 
     return (
         <ScrollView flex={3} showsVerticalScrollIndicator={false}>
-            <Stack marginBottom={8} flex={1} marginLeft={8} marginRight={24} horizonal justifyContent="space-between" alignItems="center" >
-                <Stack gap={8} horizonal>
+            <Stack marginBottom={8} flex={1} marginLeft={8} marginRight={24} horizontal justifyContent="space-between" alignItems="center" >
+                <Stack gap={8} horizontal>
                     {statusOptions.map((status) => {
                         const isActive = status === state;
                         return (

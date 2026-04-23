@@ -45,7 +45,7 @@ const ItemCard = ({ onItemChange, onItemDeleted, onItemDeleting, flag = false, s
 
     const RenderCard = ({ item }) => {
         return (
-            <Stack horizonal marginHorizontal={4} flex={1} status={item.status === 1 ? theme.colors.green[600] : theme.colors.red[400]} paddingHorizontal={8} backgroundColor={theme.colors.gray[1]}
+            <Stack horizontal marginHorizontal={4} flex={1} status={item.status === 1 ? theme.colors.green[600] : theme.colors.red[400]} paddingHorizontal={8} backgroundColor={theme.colors.gray[1]}
                 paddingVertical={8} justifyContent='flex-start' marginBottom={8} borderRadius={16} alignItems='center' >
                 <YStack flex={2}>
                     <StyledText paddingHorizontal={8} fontFamily={fontStyles.Roboto_Regular} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.normal} color={theme.colors.gray[700]}>
@@ -78,7 +78,7 @@ const ItemCard = ({ onItemChange, onItemDeleted, onItemDeleting, flag = false, s
 
     return (
         <>
-            <Stack gap={8} horizonal>
+            <Stack gap={8} horizontal>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     {[{ category_id: 'All', name: 'All' }, ...categories].map((category) => {
                         const isActive = category.category_id === state;

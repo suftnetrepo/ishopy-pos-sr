@@ -24,7 +24,7 @@ const DiscountCard = ({ onDiscountChange, onDiscountDeleted, onDiscountDeleting,
 
     const RenderCard = ({ item }) => {
         return (
-            <Stack horizonal flex={1} status={item.status === 1 ? theme.colors.green[600] : theme.colors.red[400]} paddingHorizontal={8} backgroundColor={theme.colors.gray[1]}
+            <Stack horizontal flex={1} status={item.status === 1 ? theme.colors.green[600] : theme.colors.red[400]} paddingHorizontal={8} backgroundColor={theme.colors.gray[1]}
                 paddingVertical={8} justifyContent='flex-start' marginHorizontal={4} marginBottom={8} borderRadius={16} alignItems='center' >
                 <YStack flex={2}>
                     <StyledText paddingHorizontal={8} fontFamily={fontStyles.Roboto_Regular} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.normal} color={theme.colors.gray[600]}>

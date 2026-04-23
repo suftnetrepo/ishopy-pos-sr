@@ -62,7 +62,7 @@ const BigUser = () => {
                     />
                 </StyledHeader.Full>
             </StyledHeader>
-            <Stack flex={1.5} horizonal>
+            <Stack flex={1.5} horizontal>
                 <SideBarAdapter selectedMenu={5} showMenu={false} collapse={true} />
                 <Stack flex={3} gap={8} marginLeft={8} marginRight={16} vertical>
                     <UserCard user_id={user?.user_id} flag={isFocused} onUserDeleting={() => update('Deleting')} onUserDeleted={() => reset()} onUserChange={(j) => setState({ ...state, tag: j?.tag, data: j?.data })} />

@@ -11,7 +11,7 @@ const Tiles = () => {
 
   return (
     <Stack
-      horizonal
+      horizontal
       justifyContent="flex-start"
       gap={16}
       marginLeft={16}
@@ -20,7 +20,7 @@ const Tiles = () => {
       shadowRadius={8}
       alignItems="center">
      
-      <Stack horizonal flex={1}>
+      <Stack horizontal flex={1}>
         <Stack
           flex={1}
           vertical
@@ -45,7 +45,7 @@ const Tiles = () => {
           <StyledSpacer marginVertical={8} />
           <Stack
             width={'100%'}
-            horizonal
+            horizontal
             flexWrap="wrap"
             justifyContent="space-between"
             alignItems="center">
@@ -65,7 +65,7 @@ const Tiles = () => {
           </Stack>
         </Stack>
       </Stack>
-      <Stack horizonal flex={1}>
+      <Stack horizontal flex={1}>
         <Stack
           flex={1}
           vertical
@@ -90,7 +90,7 @@ const Tiles = () => {
           <StyledSpacer marginVertical={8} />
           <Stack
             width={'100%'}
-            horizonal
+            horizontal
             flexWrap="wrap"
             justifyContent="space-between"
             alignItems="center">
@@ -110,7 +110,7 @@ const Tiles = () => {
           </Stack>
         </Stack>
       </Stack>
-       <Stack horizonal flex={1}>
+       <Stack horizontal flex={1}>
         <Stack
           flex={1}
           vertical
@@ -135,7 +135,8 @@ const Tiles = () => {
           <StyledSpacer marginVertical={8} />
           <Stack
             width={'100%'}
-            horizonal
+            horizontal
+            flexWrap="wrap"
             justifyContent="space-between"
             alignItems="center">
             <StyledText

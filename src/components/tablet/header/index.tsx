@@ -36,7 +36,7 @@ const RenderHeader = ({
 
   return (
     <Stack
-      horizonal
+      horizontal
     
       backgroundColor={theme.colors.gray[1]}
       justifyContent="flex-start"
@@ -81,7 +81,7 @@ const RenderHeader = ({
       )}
       {
         children && (
-          <Stack marginHorizontal={8} flex={1} horizonal>{children}</Stack>
+          <Stack marginHorizontal={8} flex={1} horizontal>{children}</Stack>
         )
       }
       {
@@ -92,7 +92,7 @@ const RenderHeader = ({
         CopyIcon ? CopyIcon : (
           <>
             <Stack
-              horizonal
+              horizontal
               paddingHorizontal={16}
               justifyContent="flex-start"
               alignItems="center">
@@ -121,7 +121,7 @@ const RenderHeader = ({
               </Stack>
             </Stack>
 
-            <Stack horizonal>
+            <Stack horizontal>
               <StyledCycle
                 paddingHorizontal={10}
                 borderWidth={1}

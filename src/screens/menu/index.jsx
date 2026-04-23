@@ -32,7 +32,7 @@ const BigMenu = () => {
           </RenderHeader>
         </StyledHeader.Full>
       </StyledHeader>
-      <Stack flex={1.5} horizonal>
+      <Stack flex={1.5} horizontal>
         <SideBarAdapter selectedMenu={3} showMenu={shop.mode ==="restaurant" ? '3' : ''} collapse={true} />
         <Stack flex={2.5} paddingHorizontal={8} vertical >
           <MenuCategory />

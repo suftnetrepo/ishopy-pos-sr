@@ -12,7 +12,7 @@ const IconPicker = ({ name, size = 28, selectedIcon, onPress }) => {
   const options = icons[name];
 
   return (<ScrollView horizontal showsHorizontalScrollIndicator={false}>
-    <Stack gap={8} horizonal>
+    <Stack gap={8} horizontal>
       {options.map((icon) => {
         const isActive = icon === selectedIcon;
         return (

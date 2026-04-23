@@ -24,7 +24,7 @@ const CategoryCard = ({
     <Pressable onTouchStart={() => onPress(category_id)} style={{ flex: 1 }}>
       <Stack
         green={selected_category_id === category_id}
-        horizonal
+        horizontal
         padding={12}
         gap={8}
         justifyContent="flex-start"
