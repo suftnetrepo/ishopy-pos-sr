@@ -3,9 +3,10 @@ import {
   StyledText,
   StyledSpacer,
   StyledCycle,
+  Stack
 } from 'fluent-styles';
 import { useNavigation, CommonActions } from '@react-navigation/native';
-import { Stack } from '../../../components/package/stack';
+
 import { fontStyles, theme } from '../../../utils/theme';
 import { StyledImage } from '../../../components/package/image';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -36,7 +37,7 @@ const RenderHeader = ({
 
   return (
     <Stack
-      horizontal
+     horizontal
     
       backgroundColor={theme.colors.gray[1]}
       justifyContent="flex-start"
