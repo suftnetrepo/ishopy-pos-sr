@@ -228,7 +228,7 @@ const SignUp = () => {
             errorMessage={errorMessages?.password?.message}
           />
           <StyledSpacer marginVertical={8} />
-          <StyledButton width='100%' backgroundColor={theme.colors.cyan[500]} onPress={() => onSubmit()} >
+          <StyledButton flex={1} backgroundColor={theme.colors.cyan[500]} onPress={() => onSubmit()} >
             <StyledText paddingHorizontal={20} paddingVertical={10} color={theme.colors.gray[1]}>
               Sign up
             </StyledText>

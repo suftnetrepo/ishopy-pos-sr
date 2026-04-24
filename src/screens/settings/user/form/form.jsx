@@ -72,7 +72,7 @@ const UserForm = ({ user, onClose }) => {
               fontFamily={fontStyles.Roboto_Regular}
               color={theme.colors.gray[800]}
               fontSize={theme.fontSize.large}
-              fontWeight={theme.fontWeight.thin}
+              fontWeight={theme.fontWeight.normal}
             >
               User
             </Text>
@@ -94,9 +94,7 @@ const UserForm = ({ user, onClose }) => {
             maxLength={50}
             height={40}
             fontSize={theme.fontSize.small}
-            borderColor={theme.colors.gray[400]}
-            backgroundColor={theme.colors.gray[1]}
-            borderRadius={32}
+          
             paddingHorizontal={8}
             value={fields.first_name}
             placeholderTextColor={theme.colors.gray[400]}
@@ -112,10 +110,9 @@ const UserForm = ({ user, onClose }) => {
             maxLength={50}
            height={40}
             fontSize={theme.fontSize.small}
-            borderColor={theme.colors.gray[400]}
-            backgroundColor={theme.colors.gray[1]}
-            borderRadius={32}
+          
             paddingHorizontal={8}
+          
             value={fields.last_name}
             placeholderTextColor={theme.colors.gray[400]}
             onChangeText={(text) => setFields({ ...fields, last_name: text })}
@@ -130,9 +127,7 @@ const UserForm = ({ user, onClose }) => {
             maxLength={50}
             height={40}
             fontSize={theme.fontSize.small}
-            borderColor={theme.colors.gray[400]}
-            backgroundColor={theme.colors.gray[1]}
-            borderRadius={32}
+           
             paddingHorizontal={8}
             value={fields.username}
             placeholderTextColor={theme.colors.gray[400]}
@@ -149,9 +144,7 @@ const UserForm = ({ user, onClose }) => {
             maxLength={8}
             height={40}
             fontSize={theme.fontSize.small}
-            borderColor={theme.colors.gray[400]}
-            backgroundColor={theme.colors.gray[1]}
-            borderRadius={32}
+           
             paddingHorizontal={8}
             value={fields.password}
             placeholderTextColor={theme.colors.gray[400]}
@@ -167,9 +160,7 @@ const UserForm = ({ user, onClose }) => {
             maxLength={4}
             height={40}
             fontSize={theme.fontSize.small}
-            borderColor={theme.colors.gray[400]}
-            backgroundColor={theme.colors.gray[1]}
-            borderRadius={32}
+           
             paddingHorizontal={8}
             value={fields.pass_code}
             placeholderTextColor={theme.colors.gray[400]}
@@ -178,7 +169,7 @@ const UserForm = ({ user, onClose }) => {
             errorMessage={errorMessages?.pass_code?.message}
           />
           <StyledSpacer marginVertical={8} />
-          <StyledButton width='100%' backgroundColor={theme.colors.yellow[500]} onPress={() => onSubmit()} >
+          <StyledButton flex={1} backgroundColor={theme.colors.yellow[500]} onPress={() => onSubmit()} >
             <StyledText paddingHorizontal={20} paddingVertical={10} color={theme.colors.gray[800]}>
               Save Changes
             </StyledText>

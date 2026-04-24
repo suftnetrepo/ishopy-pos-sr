@@ -74,7 +74,7 @@ const CategoryForm = ({ category, onClose }) => {
               fontFamily={fontStyles.Roboto_Regular}
               color={theme.colors.gray[800]}
               fontSize={theme.fontSize.large}
-              fontWeight={theme.fontWeight.thin}
+              fontWeight={theme.fontWeight.normal}
             >
               Category
             </Text>
@@ -97,9 +97,7 @@ const CategoryForm = ({ category, onClose }) => {
             maxLength={50}
             height={40}
             fontSize={theme.fontSize.normal}
-            borderColor={theme.colors.gray[300]}
-            backgroundColor={theme.colors.gray[1]}
-            borderRadius={32}
+           
             paddingHorizontal={8}
             value={fields.name}
             placeholderTextColor={theme.colors.gray[400]}
@@ -145,7 +143,7 @@ const CategoryForm = ({ category, onClose }) => {
           </XStack>
 
           <StyledSpacer marginVertical={4} />
-          <StyledButton width='100%' backgroundColor={theme.colors.yellow[500]} onPress={() => onSubmit()} >
+          <StyledButton flex={1} backgroundColor={theme.colors.yellow[500]} onPress={() => onSubmit()} >
             <StyledText paddingHorizontal={20} paddingVertical={10} color={theme.colors.gray[800]}>
               Save Changes
             </StyledText>

@@ -61,7 +61,7 @@ const CheckOut = ({ table_id, table_name, order, printHandler, shareReceipt, onC
                 </StyledText>
                 <StyledSpacer marginVertical={48}></StyledSpacer>
                 <XStack justifyContent='flex-end' alignItems='flex-end'>
-                    <StyledButton borderRadius={8} color={theme.colors.cyan[500]} borderColor={theme.colors.cyan[500]} backgroundColor={theme.colors.gray[1]} flex={1} onPress={() => {
+                    <StyledButton outline borderRadius={8} color={theme.colors.cyan[500]} borderColor={theme.colors.cyan[500]} backgroundColor={theme.colors.gray[1]} flex={1} onPress={() => {
                         share()
                     }} >
                         <XStack justifyContent='flex-end' alignItems='center' gap={4}>
@@ -70,11 +70,11 @@ const CheckOut = ({ table_id, table_name, order, printHandler, shareReceipt, onC
                                 size={24}
                                 color={theme.colors.cyan[600]}
                             />
-                            <StyledText paddingVertical={8} fontWeight={theme.fontWeight.bold} color={theme.colors.gray[800]} fontSize={theme.fontSize.small}>Email Receipt</StyledText>
+                            <StyledText fontFamily={fontStyles.Roboto_Regular} paddingVertical={8} fontWeight={theme.fontWeight.normal} color={theme.colors.gray[800]} fontSize={theme.fontSize.small}>Email Receipt</StyledText>
                         </XStack>
                     </StyledButton>
-                    <StyledSpacer marginHorizontal={4}></StyledSpacer>
-                    <StyledButton borderRadius={8} color={theme.colors.green[500]} borderColor={theme.colors.green[500]} backgroundColor={theme.colors.gray[1]} flex={1} onPress={() => {
+                    <StyledSpacer marginHorizontal={8}></StyledSpacer>
+                    <StyledButton outline borderRadius={8} color={theme.colors.green[500]} borderColor={theme.colors.green[500]} backgroundColor={theme.colors.gray[1]} flex={1} onPress={() => {
                         print();
                     }} >
                         <XStack justifyContent='flex-end' alignItems='center' gap={4}>
@@ -83,7 +83,7 @@ const CheckOut = ({ table_id, table_name, order, printHandler, shareReceipt, onC
                                 size={24}
                                 color={theme.colors.green[600]}
                             />
-                            <StyledText paddingVertical={8} fontWeight={theme.fontWeight.bold} color={theme.colors.gray[800]} fontSize={theme.fontSize.small}>Print Receipt</StyledText>
+                            <StyledText fontFamily={fontStyles.Roboto_Regular} paddingVertical={8} fontWeight={theme.fontWeight.normal} color={theme.colors.gray[800]} fontSize={theme.fontSize.small}>Print Receipt</StyledText>
                         </XStack>
                     </StyledButton>
                 </XStack>

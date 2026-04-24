@@ -1,6 +1,6 @@
-
-import { useEffect, useState } from 'react';
-import { Share } from 'react-native';
+import {useEffect, useState} from 'react';
+import {Share} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   queryAllOrders,
   queryOrderById,
@@ -8,22 +8,29 @@ import {
   deleteOrder,
   queryOrdersByDateRange,
   getOrderStatusAggregate,
-  updateOrderStatus
+  updateOrderStatus,
 } from '../model/orders';
-import { Order, OrderItem, CartItem } from '../model/types';
-import { insertOrderItem } from '../model/orderItems';
-import { AddOn } from '../model/addOn';
-import { useAppContext } from './appContext';
-import { guid } from '../utils/help';
-import { printReceipt } from '../utils/printReceipt';
-import { OrderStatusAggregate } from '../model/orders';
+import {Order, OrderItem, CartItem} from '../model/types';
+import {insertOrderItem} from '../model/orderItems';
+import {AddOn} from '../model/addOn';
+import {useAppContext} from './appContext';
+import {guid} from '../utils/help';
+import {printReceipt} from '../utils/printReceipt';
+import {OrderStatusAggregate} from '../model/orders';
 
 interface Initialize {
   data: Order[] | null | Order | [] | boolean | OrderStatusAggregate | null;
-  copyData? : Order[] | null | Order | [] | boolean | OrderStatusAggregate | null;
+  copyData?:
+    | Order[]
+    | null
+    | Order
+    | []
+    | boolean
+    | OrderStatusAggregate
+    | null;
   error: Error | null;
   loading: boolean;
-  success: boolean
+  success: boolean;
 }
 
 const order: Order = {
@@ -43,7 +50,7 @@ const useOrderStatusAggregate = () => {
     data: null,
     error: null,
     loading: true,
-    success: false
+    success: false,
   });
 
   async function load() {
@@ -59,7 +66,7 @@ const useOrderStatusAggregate = () => {
         data: null,
         error: error as Error,
         loading: false,
-        success: false
+        success: false,
       });
     }
   }
@@ -78,28 +85,30 @@ const useOrderStatusAggregate = () => {
 const useOrders = (load: boolean) => {
   const [data, setData] = useState<Initialize>({
     data: [],
-    copyData : [],
+    copyData: [],
     error: null,
     loading: true,
-    success: false
+    success: false,
   });
 
-   async function filterOrders(status : string) {
-     setData(prev => ({
-        ...prev,
-        data: Array.isArray(prev.copyData) 
-          ? (prev.copyData as Order[]).filter((j: Order) => j.status?.toLowerCase() === status.toLowerCase())
-          : [],
-        loading: false,
-      }));
+  async function filterOrders(status: string) {
+    setData(prev => ({
+      ...prev,
+      data: Array.isArray(prev.copyData)
+        ? (prev.copyData as Order[]).filter(
+            (j: Order) => j.status?.toLowerCase() === status.toLowerCase()
+          )
+        : [],
+      loading: false,
+    }));
   }
 
-    async function restoreOrders() {
-     setData(prev => ({
-        ...prev,
-        data: Array.isArray(prev.copyData) ? prev.copyData : [],
-        loading: false,
-      }));
+  async function restoreOrders() {
+    setData(prev => ({
+      ...prev,
+      data: Array.isArray(prev.copyData) ? prev.copyData : [],
+      loading: false,
+    }));
   }
 
   async function loadOrders() {
@@ -117,7 +126,7 @@ const useOrders = (load: boolean) => {
         copyData: [],
         error: error as Error,
         loading: false,
-        success: false
+        success: false,
       });
     }
   }
@@ -140,7 +149,7 @@ const useOrders = (load: boolean) => {
         data: null,
         error: error as Error,
         loading: false,
-        success: false
+        success: false,
       });
     }
   }
@@ -150,7 +159,7 @@ const useOrders = (load: boolean) => {
       data: null,
       error: null,
       loading: false,
-      success: false
+      success: false,
     });
   };
 
@@ -160,7 +169,7 @@ const useOrders = (load: boolean) => {
     loadOrdersByDateRange,
     filterOrders,
     restoreOrders,
-    loadOrders
+    loadOrders,
   };
 };
 
@@ -169,7 +178,7 @@ const useQueryOrderById = (order_id: string) => {
     data: [],
     error: null,
     loading: false,
-    success: false
+    success: false,
   });
 
   useEffect(() => {
@@ -186,7 +195,7 @@ const useQueryOrderById = (order_id: string) => {
           data: null,
           error: error as Error,
           loading: false,
-          success: false
+          success: false,
         });
       }
     }
@@ -198,7 +207,7 @@ const useQueryOrderById = (order_id: string) => {
   };
 };
 
-const useInsertOrder = (table_id: string, table_name:string) => {
+const useInsertOrder = (table_id: string, table_name: string) => {
   const {
     user,
     getItems,
@@ -213,11 +222,11 @@ const useInsertOrder = (table_id: string, table_name:string) => {
     data: null,
     error: null,
     loading: false,
-    success: false
+    success: false,
   });
 
   const insertHandler = async (order: Order) => {
-    setData(prev => ({ ...prev, loading: true }));
+    setData(prev => ({...prev, loading: true}));
 
     try {
       const result = await insertOrder(order);
@@ -225,20 +234,20 @@ const useInsertOrder = (table_id: string, table_name:string) => {
         data: result,
         error: null,
         loading: false,
-        success: true
+        success: true,
       });
     } catch (error) {
       setData({
         data: null,
         error: error as Error,
         loading: false,
-        success: false
+        success: false,
       });
     }
   };
 
   const orderHandler = async () => {
-    setData(prev => ({ ...prev, loading: true }));
+    setData(prev => ({...prev, loading: true}));
     try {
       order.order_id = guid();
       order.user_id = user?.user_id;
@@ -249,7 +258,7 @@ const useInsertOrder = (table_id: string, table_name:string) => {
       order.table_name = table_name;
       order.status = 'progress';
       order.total_price = getTotalPrice(table_id) || 0;
-      order.date = new Date()
+      order.date = new Date();
 
       const orderResult = await insertOrder(order);
 
@@ -261,7 +270,7 @@ const useInsertOrder = (table_id: string, table_name:string) => {
             price: item.price,
             menu_id: item.id,
             menu_name: item.name,
-            menu_icon_name : item?.icon_name,
+            menu_icon_name: item?.icon_name,
             quantity: 1,
             date: new Date(),
             addOns:
@@ -276,62 +285,62 @@ const useInsertOrder = (table_id: string, table_name:string) => {
         data: orderResult,
         error: null,
         loading: false,
-        success: true
+        success: true,
       });
-      
+
       return orderResult.order_id;
     } catch (error) {
       setData({
         data: null,
         error: error as Error,
         loading: false,
-        success: false
+        success: false,
       });
     }
   };
 
   const deleteHandler = async (order_id: string) => {
-    setData(prev => ({ ...prev, loading: true }));
+    setData(prev => ({...prev, loading: true}));
     try {
       const result = await deleteOrder(order_id);
       setData({
         data: result,
         error: null,
         loading: false,
-         success: true
+        success: true,
       });
-      return true
+      return true;
     } catch (error) {
       setData({
         data: false,
         error: error as Error,
         loading: false,
-         success: false
+        success: false,
       });
-      return false
+      return false;
     }
   };
 
-  async function queryOrderByIdhandler(order_id :string) {
-      try {
-        const result = await queryOrderById(order_id);
-        setData(prev => ({
-          ...prev,
-          data: result,
-          loading: false,
-              success: true
-        }));
-      } catch (error) {
-        setData({
-          data: null,
-          error: error as Error,
-          loading: false,
-          success: false
-        });
-      }
+  async function queryOrderByIdhandler(order_id: string) {
+    try {
+      const result = await queryOrderById(order_id);
+      setData(prev => ({
+        ...prev,
+        data: result,
+        loading: false,
+        success: true,
+      }));
+    } catch (error) {
+      setData({
+        data: null,
+        error: error as Error,
+        loading: false,
+        success: false,
+      });
     }
+  }
 
-  const printHandler = (table_name: string, order: Order) => {
+  const printHandler = async (table_name: string, order: Order) => {
     try {
       const receiptData = {
         name: shop?.name,
@@ -365,13 +374,21 @@ const useInsertOrder = (table_id: string, table_name:string) => {
           'Your satisfaction is our priority. Thank you for Dining with us!',
       };
 
-      printReceipt(receiptData);
+      const printerString = await AsyncStorage.getItem('selectedPrinter');
+
+      if (!printerString) {
+        throw new Error('No printer selected');
+      }
+
+      const selectedPrinter = JSON.parse(printerString);
+      await printReceipt(selectedPrinter, receiptData);
+
     } catch (error) {
       setData({
         data: null,
         error: error as Error,
         loading: false,
-        success:false
+        success: false,
       });
     }
   };
@@ -383,7 +400,7 @@ const useInsertOrder = (table_id: string, table_name:string) => {
       phone: shop?.mobile,
       email: shop?.email,
       orderNumber: order.order_id.slice(0, 8),
-      date: order.date,
+      date: new Date(order.date).toLocaleString(),
       cashier: `${user?.first_name} ${user?.last_name}`,
       items: items?.items?.map((item: CartItem) => {
         const addOnDetails =
@@ -427,23 +444,24 @@ const useInsertOrder = (table_id: string, table_name:string) => {
       `Date: ${new Date(date).toLocaleString()}\n` +
       `Cashier: ${cashier}\n\n` +
       `Items:\n` +
-      items?.items?.map((item: CartItem) => {
-        const itemTotal = (item.price * item.quantity).toFixed(2);
-        const addOnsText =
-          item.addOns
-            ?.map(
-              (addOn: AddOn) =>
-                `${addOn.quantity} ${addOn.addOnName} - ${(
-                  addOn.price * (addOn.quantity || 0)
-                ).toFixed(2)}\n`
-            )
-            .join('') || '';
-        return `${item.quantity} ${item.name} - ${itemTotal}\n${addOnsText}`;
-      })
+      items?.items
+        ?.map((item: CartItem) => {
+          const itemTotal = (item.price * item.quantity).toFixed(2);
+          const addOnsText =
+            item.addOns
+              ?.map(
+                (addOn: AddOn) =>
+                  `${addOn.quantity} ${addOn.addOnName} - ${(
+                    addOn.price * (addOn.quantity || 0)
+                  ).toFixed(2)}\n`
+              )
+              .join('') || '';
+          return `${item.quantity} ${item.name} - ${itemTotal}\n${addOnsText}`;
+        })
         .join('') +
       `\nSubtotal: ${subtotal.toFixed(2)}\n` +
-      `Tax: ${tax.toFixed(2)}\n` +
-      `Total: ${total.toFixed(2)}\n\n` +
+      `Tax: ${Number(tax || 0).toFixed(2)}\n` +
+      `Total: ${Number(total || 0).toFixed(2)}\n\n` +
       `Address: ${address}\n` +
       `Phone: ${phone}\n` +
       `Email: ${email}\n\n` +
@@ -469,7 +487,7 @@ const useInsertOrder = (table_id: string, table_name:string) => {
         data: null,
         error: error as Error,
         loading: false,
-        success :false
+        success: false,
       });
     }
   };
@@ -479,7 +497,7 @@ const useInsertOrder = (table_id: string, table_name:string) => {
       data: null,
       error: null,
       loading: false,
-      success:false
+      success: false,
     });
   };
 
@@ -507,7 +525,7 @@ const useDeleteOrder = () => {
   });
 
   const deleteHandler = async (order_id: string) => {
-    setData(prev => ({ ...prev, loading: true }));
+    setData(prev => ({...prev, loading: true}));
     try {
       const result = await deleteOrder(order_id);
       setData({
@@ -530,17 +548,17 @@ const useDeleteOrder = () => {
   };
 };
 
-  const updataStatusHandler = async (order_id: string, status : string) => {
-    try {
-      const result = await updateOrderStatus(order_id, status);
-      return true
-    } catch (error) {
-       if(__DEV__) {
-        console.log("Error", error)
-       }
-      return false
+const updataStatusHandler = async (order_id: string, status: string) => {
+  try {
+    const result = await updateOrderStatus(order_id, status);
+    return true;
+  } catch (error) {
+    if (__DEV__) {
+      console.log('Error', error);
     }
-  };
+    return false;
+  }
+};
 
 export {
   useDeleteOrder,
@@ -548,5 +566,5 @@ export {
   useQueryOrderById,
   useOrders,
   useOrderStatusAggregate,
-  updataStatusHandler
+  updataStatusHandler,
 };

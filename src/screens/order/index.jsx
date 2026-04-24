@@ -42,7 +42,7 @@ const BigOrder = () => {
         </Stack>
       </Stack>
       <Drawer direction="right" isOpen={!!show} onClose={() => setShow(null)}>
-        {/* <OrderCart onClose={() => setShow(null)} /> */}
+        <OrderCart onClose={() => setShow(null)} />
       </Drawer>
       {showCalendar && (
         <OrderDateFilter

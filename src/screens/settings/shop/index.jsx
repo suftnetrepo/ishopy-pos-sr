@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { theme, validate, StyledSpinner, YStack, StyledOkDialog, StyledMultiInput, StyledSpacer, StyledInput, StyledText, StyledButton } from 'fluent-styles';
+import { theme, validate, StyledSpinner, YStack, StyledOkDialog, StyledTextInput, StyledSpacer, StyledInput, StyledText, StyledButton } from 'fluent-styles';
 import {
   Text,
   HStack,
@@ -21,8 +21,6 @@ const Shop = ({ onClose }) => {
   const [errorMessages, setErrorMessages] = useState({})
   const [fields, setFields] = useState(shopRules.fields)
   const { updateHandler, error, loading, resetHandler } = useUpdateShop()
-
-  console.log('shop fields', fields);
 
   useEffect(() => {
     setFields((pre) => {
@@ -159,7 +157,7 @@ const Shop = ({ onClose }) => {
             errorMessage={errorMessages?.currency?.message}
             marginBottom={4}
           />
-          <StyledMultiInput
+          <StyledTextInput
             label={'Address'}
             keyboardType='default'
             placeholder='Enter your address'
@@ -176,8 +174,10 @@ const Shop = ({ onClose }) => {
             error={!!errorMessages?.address}
             errorMessage={errorMessages?.address?.message}
             marginBottom={4}
+              multiline
+                                numberOfLines={4}
           />
-          <StyledMultiInput
+          <StyledTextInput
             label={'Description'}
             keyboardType='default'
             placeholder='Enter shop description'
@@ -192,6 +192,8 @@ const Shop = ({ onClose }) => {
             paddingHorizontal={8}
             placeholderTextColor={theme.colors.gray[400]}
             onChangeText={(text) => setFields({ ...fields, description: text })}
+              multiline
+                                numberOfLines={4}
           />
           <StyledSpacer marginVertical={8} />
           <Stack horizontal gap={8} >

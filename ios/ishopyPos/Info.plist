@@ -107,5 +107,7 @@
 	<string>This app needs Bluetooth access to connect to thermal printers</string>
 	<key>NSCameraUsageDescription</key>
 	<string>We use the camera to allow users to capture images for product uploads or profile images.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>This app uses your local network to connect to WiFi printers.</string>
 </dict>
 </plist>

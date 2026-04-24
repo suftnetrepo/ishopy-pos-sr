@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
-  StyledSafeAreaView,
-  StyledHeader,
+  StyledPage,
   StyledSpacer,
   StyledDialog,
   Stack,
@@ -24,14 +23,13 @@ const BigMenu = () => {
   const params  = route.params;
 
   return (
-    <StyledSafeAreaView backgroundColor={theme.colors.gray[100]}>
-      <StyledHeader borderRadius={30} statusProps={{ translucent: true }}>
-        <StyledHeader.Full>
-          <RenderHeader showBackButton={true} showLogo={false} showTitle={true} title={`${params?.table_name || "Items"}`} >
+      <StyledPage backgroundColor={theme.colors.gray[100]}>
+      <StyledPage.Header.Full>
+         <RenderHeader showBackButton={true} showLogo={false} showTitle={true} title={`${params?.table_name || "Items"}`} >
             <StyledSearchBar placeholder="Search menu items..." flex={1} onTextChange={(query) => updateMenuQuery(query)} />
           </RenderHeader>
-        </StyledHeader.Full>
-      </StyledHeader>
+      </StyledPage.Header.Full>
+   
       <Stack flex={1.5} horizontal>
         <SideBarAdapter selectedMenu={3} showMenu={shop.mode ==="restaurant" ? '3' : ''} collapse={true} />
         <Stack flex={2.5} paddingHorizontal={8} vertical >
@@ -47,7 +45,7 @@ const BigMenu = () => {
         <StyledDialog visible>
           <AddOn table_id={params?.table_id || shop?.table_id} item={item} setItem={setItem} onClose={() => setItem(null)} />
         </StyledDialog>}
-    </StyledSafeAreaView>
+    </StyledPage>
   );
 };
 

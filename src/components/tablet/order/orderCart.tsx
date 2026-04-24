@@ -18,7 +18,7 @@ import {
   getLastChars,
 } from '../../../utils/help';
 import {ScrollView} from 'react-native';
-import { Stack } from '../../../components/package/stack'
+import {Stack} from '../../../components/package/stack';
 
 interface AddOn {
   addOnName: string;
@@ -213,17 +213,19 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
         borderRadius={8}
         borderWidth={1}
         backgroundColor={theme.colors.gray[1]}>
-        {(Array.isArray(data) ? (data as OrderItem[]) : []).map((item: OrderItem, index: number) => (
-          <React.Fragment key={index}>
-            <RenderItem item={item} />
-            <StyledDivider borderColor={theme.colors.gray[200]} />
-            {(item?.addOns ? JSON.parse(item.addOns) : []).map(
-              (addOn: AddOn, addOnIndex: number) => (
-                <RenderAddOn addOn={addOn} key={`${index}-${addOnIndex}`} />
-              )
-            )}
-          </React.Fragment>
-        ))}
+        {(Array.isArray(data) ? (data as OrderItem[]) : []).map(
+          (item: OrderItem, index: number) => (
+            <React.Fragment key={index}>
+              <RenderItem item={item} />
+              <StyledDivider borderColor={theme.colors.gray[200]} />
+              {(item?.addOns ? JSON.parse(item.addOns) : []).map(
+                (addOn: AddOn, addOnIndex: number) => (
+                  <RenderAddOn addOn={addOn} key={`${index}-${addOnIndex}`} />
+                )
+              )}
+            </React.Fragment>
+          )
+        )}
       </StyledCard>
     );
   };
@@ -257,109 +259,103 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
       <StyledSpacer marginVertical={8} />
       <Card order={order} />
       <StyledSpacer marginVertical={4} />
-      <XStack flex={1}>
+      <XStack>
         <ScrollView showsVerticalScrollIndicator={false}>
           <RenderOrderItems />
+          <YStack flex={1} width={'100%'}>
+            <XStack
+              justifyContent="flex-end"
+              paddingVertical={8}
+              paddingHorizontal={16}
+              alignItems="center"
+              backgroundColor={theme.colors.gray[100]}>
+              <StyledText
+                color={theme.colors.gray[800]}
+                fontWeight={theme.fontWeight.bold as any}
+                paddingHorizontal={16}
+                fontSize={theme.fontSize.normal}>
+                Subtotal
+              </StyledText>
+              <StyledText
+                color={theme.colors.gray[800]}
+                fontWeight={theme.fontWeight.normal as any}
+                fontSize={theme.fontSize.normal}>
+                {formatCurrency(shop?.currency || '£', order?.total || 0)}
+              </StyledText>
+            </XStack>
+
+            <XStack
+              justifyContent="flex-end"
+              paddingVertical={8}
+              paddingHorizontal={16}
+              alignItems="center"
+              backgroundColor={theme.colors.gray[100]}>
+              <StyledText
+                color={theme.colors.gray[800]}
+                fontWeight={theme.fontWeight.normal as any}
+                paddingHorizontal={16}
+                fontSize={theme.fontSize.normal}>
+                Discount
+              </StyledText>
+              <StyledSpacer marginHorizontal={16} />
+              <XStack justifyContent="flex-end" alignItems="center">
+                <StyledText
+                  color={theme.colors.gray[800]}
+                  fontWeight={theme.fontWeight.normal as any}
+                  fontSize={theme.fontSize.normal}>
+                  {formatCurrency(shop?.currency || '£', order?.discount || 0)}
+                </StyledText>
+              </XStack>
+            </XStack>
+
+            <XStack
+              justifyContent="flex-end"
+              paddingVertical={8}
+              paddingHorizontal={16}
+              alignItems="center"
+              backgroundColor={theme.colors.gray[100]}>
+              <StyledText
+                color={theme.colors.gray[800]}
+                paddingHorizontal={16}
+                fontWeight={theme.fontWeight.normal as any}
+                fontSize={theme.fontSize.normal}>
+                Tax
+              </StyledText>
+              <StyledSpacer marginHorizontal={8} />
+              <XStack justifyContent="flex-end" alignItems="center">
+                <StyledText
+                  color={theme.colors.gray[800]}
+                  fontWeight={theme.fontWeight.normal as any}
+                  fontSize={theme.fontSize.normal}>
+                  {formatCurrency(shop?.currency || '£', order?.tax || 0)}
+                </StyledText>
+              </XStack>
+            </XStack>
+
+            <XStack
+              justifyContent="flex-end"
+              paddingVertical={8}
+              paddingHorizontal={16}
+              alignItems="center"
+              backgroundColor={theme.colors.gray[1]}>
+              <StyledText
+                color={theme.colors.gray[800]}
+                fontWeight={theme.fontWeight.bold as any}
+                paddingHorizontal={16}
+                fontSize={theme.fontSize.large}>
+                Total
+              </StyledText>
+              <StyledSpacer marginHorizontal={8} />
+              <StyledText
+                color={theme.colors.gray[800]}
+                fontWeight={theme.fontWeight.bold as any}
+                fontSize={theme.fontSize.large}>
+                {formatCurrency(shop?.currency || '£', order?.total_price || 0)}
+              </StyledText>
+            </XStack>
+          </YStack>
         </ScrollView>
       </XStack>
-      <YStack flex={1} width={'100%'}>
-        <XStack
-          justifyContent="flex-end"
-          paddingVertical={8}
-          paddingHorizontal={16}
-          alignItems="center"
-          backgroundColor={theme.colors.gray[100]}>
-          <YStack>
-            <StyledText
-              color={theme.colors.gray[800]}
-              fontWeight={theme.fontWeight.bold as any}
-              fontSize={theme.fontSize.normal}>
-              Subtotal
-            </StyledText>
-          </YStack>
-          <StyledSpacer marginHorizontal={8} />
-          <StyledText
-            color={theme.colors.gray[800]}
-            fontWeight={theme.fontWeight.normal as any}
-            fontSize={theme.fontSize.normal}>
-            {formatCurrency(shop?.currency || '£', order?.total || 0)}
-          </StyledText>
-        </XStack>
-        <StyledDivider borderColor={theme.colors.gray[200]} />
-        <XStack
-          justifyContent="flex-end"
-          paddingVertical={8}
-          paddingHorizontal={16}
-          alignItems="center"
-          backgroundColor={theme.colors.gray[100]}>
-          <YStack>
-            <StyledText
-              color={theme.colors.gray[800]}
-              fontWeight={theme.fontWeight.normal as any}
-              fontSize={theme.fontSize.normal}>
-              Discount
-            </StyledText>
-          </YStack>
-          <StyledSpacer marginHorizontal={8} />
-          <XStack justifyContent="flex-end" alignItems="center">
-            <StyledText
-              color={theme.colors.gray[800]}
-              fontWeight={theme.fontWeight.normal as any}
-              fontSize={theme.fontSize.normal}>
-              {formatCurrency(shop?.currency || '£', order?.discount || 0)}
-            </StyledText>
-          </XStack>
-        </XStack>
-        <StyledDivider borderColor={theme.colors.gray[200]} />
-
-        <XStack
-          justifyContent="flex-end"
-          paddingVertical={8}
-          paddingHorizontal={16}
-          alignItems="center"
-          backgroundColor={theme.colors.gray[100]}>
-          <YStack>
-            <StyledText
-              color={theme.colors.gray[800]}
-              fontWeight={theme.fontWeight.normal as any}
-              fontSize={theme.fontSize.normal}>
-              Tax
-            </StyledText>
-          </YStack>
-          <StyledSpacer marginHorizontal={8} />
-          <XStack justifyContent="flex-end" alignItems="center">
-            <StyledText
-              color={theme.colors.gray[800]}
-              fontWeight={theme.fontWeight.normal as any}
-              fontSize={theme.fontSize.normal}>
-              {formatCurrency(shop?.currency || '£', order?.tax || 0)}
-            </StyledText>
-          </XStack>
-        </XStack>
-        <StyledDivider borderColor={theme.colors.gray[200]} />
-        <XStack
-          justifyContent="flex-end"
-          paddingVertical={8}
-          paddingHorizontal={16}
-          alignItems="center"
-          backgroundColor={theme.colors.gray[1]}>
-          <YStack>
-            <StyledText
-              color={theme.colors.gray[800]}
-              fontWeight={theme.fontWeight.bold as any}
-              fontSize={theme.fontSize.large}>
-              Total
-            </StyledText>
-          </YStack>
-          <StyledSpacer marginHorizontal={8} />
-          <StyledText
-            color={theme.colors.gray[800]}
-            fontWeight={theme.fontWeight.bold as any}
-            fontSize={theme.fontSize.large}>
-            {formatCurrency(shop?.currency || '£', order?.total_price || 0)}
-          </StyledText>
-        </XStack>
-      </YStack>
     </YStack>
   );
 };
