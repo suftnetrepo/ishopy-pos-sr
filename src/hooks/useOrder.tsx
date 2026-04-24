@@ -1,6 +1,5 @@
 import {useEffect, useState} from 'react';
 import {Share} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   queryAllOrders,
   queryOrderById,
@@ -17,6 +16,8 @@ import {useAppContext} from './appContext';
 import {guid} from '../utils/help';
 import {printReceipt} from '../utils/printReceipt';
 import {OrderStatusAggregate} from '../model/orders';
+import {printerStore} from '../store/printerStore';
+import {formatReceiptData} from '../utils/receiptFormatter';
 
 interface Initialize {
   data: Order[] | null | Order | [] | boolean | OrderStatusAggregate | null;
@@ -342,47 +343,20 @@ const useInsertOrder = (table_id: string, table_name: string) => {
 
   const printHandler = async (table_name: string, order: Order) => {
     try {
-      const receiptData = {
-        name: shop?.name,
-        address: shop?.address,
-        phone: shop?.mobile,
-        email: shop?.email,
-        orderNumber: order.order_id.slice(0, 8),
-        table_name: table_name,
-        date: order.date,
-        cashier: `${user?.first_name} ${user?.last_name}`,
-        items: items?.items?.map((item: CartItem) => {
-          const addOnDetails =
-            item.addOns?.map((addOn: AddOn) => ({
-              quantity: addOn.quantity,
-              name: addOn.addOnName,
-              price: addOn.price * (addOn.quantity || 0),
-            })) || [];
+      const receiptData = await formatReceiptData({
+        order,
+        tableName: table_name,
+        shop,
+        user,
+      });
 
-          return {
-            quantity: item.quantity,
-            name: item.name,
-            price: item.price,
-            addOns: addOnDetails,
-          };
-        }),
-        subtotal: getTotal(table_id),
-        tax: getTotalTax(table_id),
-        discount: getTotalDiscount(table_id),
-        total: getTotalPrice(table_id),
-        footerMessage:
-          'Your satisfaction is our priority. Thank you for Dining with us!',
-      };
+      const selectedPrinter = await printerStore.getSelectedPrinter();
 
-      const printerString = await AsyncStorage.getItem('selectedPrinter');
-
-      if (!printerString) {
+      if (!selectedPrinter) {
         throw new Error('No printer selected');
       }
 
-      const selectedPrinter = JSON.parse(printerString);
       await printReceipt(selectedPrinter, receiptData);
-
     } catch (error) {
       setData({
         data: null,

@@ -7,6 +7,7 @@ import {
   StyledCard,
   StyledDivider,
   StyledBadge,
+  StyledPressable,
 } from 'fluent-styles';
 import {StyledMIcon} from '../../../components/icon';
 import {fontStyles, theme} from '../../../configs/theme';
@@ -19,6 +20,9 @@ import {
 } from '../../../utils/help';
 import {ScrollView} from 'react-native';
 import {Stack} from '../../../components/package/stack';
+import {formatReceiptData} from '../../../utils/receiptFormatter';
+import {printerStore} from '../../../store/printerStore';
+import {printReceipt} from '../../../utils/printReceipt';
 
 interface AddOn {
   addOnName: string;
@@ -53,8 +57,43 @@ interface OrderCartProps {
 }
 
 const OrderCart: FC<OrderCartProps> = ({onClose}) => {
-  const {shop, order} = useAppContext();
-  const {data} = useQueryOrderItemByOrder(order?.order_id);
+  const {shop, order, user} = useAppContext();
+  const {data} = useQueryOrderItemByOrder(order?.order_id || '');
+
+   console.log('Order data for receipt:', {
+          order,
+          tableName: order?.table_name,
+          shop,
+          user,
+        });
+
+  const handlePrint = async () => {
+    try {
+        console.log('Order data for receipt:', {
+          order,
+          tableName: order?.table_name,
+          shop,
+          user,
+        });
+      const selectedPrinter = await printerStore.getSelectedPrinter();
+
+      console.log('Selected printer:', selectedPrinter);
+
+      if (!selectedPrinter) {
+        throw new Error('No printer selected');
+      }
+      const receiptData = await formatReceiptData({
+        order,
+        tableName: order?.table_name,
+        shop,
+        user,
+      });
+
+      await printReceipt(selectedPrinter, receiptData);
+    } catch (error) {
+      console.error('Error printing receipt:', error);
+    }
+  };
 
   const Card: FC<{order: Order}> = ({order}) => {
     const formatDate = (dateString: string): string => {
@@ -243,18 +282,23 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
       <StyledSpacer marginVertical={16} />
       <XStack justifyContent="space-between" alignItems="center">
         <StyledSpacer flex={1}></StyledSpacer>
-        <StyledMIcon
-          {...({name: 'print'} as any)}
-          size={48}
-          color={theme.colors.gray[800]}
-          onPress={() => onClose()}
-        />
-        <StyledMIcon
-          {...({name: 'cancel'} as any)}
-          size={48}
-          color={theme.colors.gray[800]}
-          onPress={() => onClose()}
-        />
+        <StyledPressable >
+          <StyledMIcon
+            {...({name: 'print'} as any)}
+            size={48}
+            color={theme.colors.gray[800]}
+            onPress={() => handlePrint()}
+          />
+        </StyledPressable>
+
+        <StyledPressable >
+          <StyledMIcon
+            {...({name: 'cancel'} as any)}
+            size={48}
+            color={theme.colors.gray[800]}
+onPress={() => onClose()}
+          />
+        </StyledPressable>
       </XStack>
       <StyledSpacer marginVertical={8} />
       <Card order={order} />

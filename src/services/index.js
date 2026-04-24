@@ -27,10 +27,16 @@ const printReceiptByPrinter = async (printer, receiptData) => {
   validatePrinter(printer);
 
   if (printer.type === 'wifi') {
-    return printWifiReceipt(printer, receiptData);
+    return printWifiReceipt(printer, {
+      ...receiptData,
+      receiptWidth: printer.receiptWidth || 48,
+    });
   }
 
-  return printBluetoothReceipt(receiptData);
+  return printBluetoothReceipt({
+    ...receiptData,
+    receiptWidth: printer.receiptWidth || 48,
+  });
 };
 
 const printKitchenTicketByPrinter = async (printer, ticketData) => {

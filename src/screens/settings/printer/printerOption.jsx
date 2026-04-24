@@ -1,10 +1,5 @@
-import React, { useState } from 'react';
-import {
-  Alert,
-  ActivityIndicator,
-  Switch,
-  TextInput,
-} from 'react-native';
+import React, {useState,  useEffect} from 'react';
+import {Alert, ActivityIndicator, Switch, TextInput} from 'react-native';
 import MIcon from 'react-native-vector-icons/MaterialIcons';
 
 import {
@@ -20,7 +15,7 @@ import {
   Divider,
 } from '@gluestack-ui/themed';
 
-import { useBluetoothPrinterContext } from '../../../hooks/bluetoothPrinterProvider';
+import {useBluetoothPrinterContext} from '../../../hooks/bluetoothPrinterProvider';
 
 export default function PrinterOptions() {
   const {
@@ -44,6 +39,16 @@ export default function PrinterOptions() {
   const [wifiHost, setWifiHost] = useState('');
   const [wifiPort, setWifiPort] = useState('9100');
 
+  useEffect(() => {
+    if (selectedPrinter?.type === 'wifi') {
+      setWifiName(selectedPrinter.name || '');
+      setWifiHost(selectedPrinter.host || '');
+      setWifiPort(String(selectedPrinter.port || 9100));
+    }
+  }, [selectedPrinter]);
+
+  console.log('Available selectedPrinter:', selectedPrinter);
+
   const handleScan = async () => {
     if (connectionType !== 'bluetooth') return;
 
@@ -52,10 +57,15 @@ export default function PrinterOptions() {
 
     try {
       const scannedDevices = await enableBluetooth();
-      const list = Array.isArray(scannedDevices) ? scannedDevices : devices || [];
+      const list = Array.isArray(scannedDevices)
+        ? scannedDevices
+        : devices || [];
       setAvailablePrinters(list);
     } catch (error) {
-      Alert.alert('Bluetooth Error', error?.message || 'Unable to scan devices');
+      Alert.alert(
+        'Bluetooth Error',
+        error?.message || 'Unable to scan devices'
+      );
     } finally {
       setScanning(false);
     }
@@ -63,7 +73,7 @@ export default function PrinterOptions() {
 
   const handleBluetoothConnect = printer => {
     Alert.alert('Connect Printer', `Connect to ${printer.name}?`, [
-      { text: 'Cancel', style: 'cancel' },
+      {text: 'Cancel', style: 'cancel'},
       {
         text: 'Connect',
         onPress: () => {
@@ -90,7 +100,7 @@ export default function PrinterOptions() {
 
       await connectWifiPrinter(printer);
 
-      Alert.alert('Success', 'WiFi printer connected');
+      Alert.alert('Success', 'WiFi printer connected. Please tap Test Print.');
     } catch (error) {
       Alert.alert('WiFi Error', error?.message || 'Unable to connect printer');
     }
@@ -99,14 +109,18 @@ export default function PrinterOptions() {
   const handleDisconnect = () => {
     if (!selectedPrinter) return;
 
-    Alert.alert('Disconnect Printer', selectedPrinter.name || 'Selected printer', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Disconnect',
-        style: 'destructive',
-        onPress: () => disconnectPrinter(),
-      },
-    ]);
+    Alert.alert(
+      'Disconnect Printer',
+      selectedPrinter.name || 'Selected printer',
+      [
+        {text: 'Cancel', style: 'cancel'},
+        {
+          text: 'Disconnect',
+          style: 'destructive',
+          onPress: () => disconnectPrinter(),
+        },
+      ]
+    );
   };
 
   return (
@@ -153,14 +167,12 @@ export default function PrinterOptions() {
               onPress={() => {
                 setConnectionType(type);
                 setAvailablePrinters([]);
-              }}
-            >
+              }}>
               <Box
                 p="$4"
                 borderRadius="$xl"
                 alignItems="center"
-                bg={connectionType === type ? '$primary100' : '$coolGray100'}
-              >
+                bg={connectionType === type ? '$primary100' : '$coolGray100'}>
                 <MIcon
                   name={type === 'wifi' ? 'wifi' : 'bluetooth'}
                   size={30}
@@ -225,8 +237,13 @@ export default function PrinterOptions() {
                 />
               </Box>
 
-              <Button borderRadius={30} onPress={handleWifiConnect} isDisabled={loading}>
-                <ButtonText>{loading ? 'Connecting...' : 'Connect WiFi Printer'}</ButtonText>
+              <Button
+                borderRadius={30}
+                onPress={handleWifiConnect}
+                isDisabled={loading}>
+                <ButtonText>
+                  {loading ? 'Connecting...' : 'Connect WiFi Printer'}
+                </ButtonText>
               </Button>
             </VStack>
           </Box>
@@ -234,8 +251,13 @@ export default function PrinterOptions() {
 
         {connectionType === 'bluetooth' && (
           <>
-            <Button borderRadius={30} onPress={handleScan} isDisabled={scanning || loading}>
-              <ButtonText>{scanning ? 'Scanning…' : 'Scan for Bluetooth Printers'}</ButtonText>
+            <Button
+              borderRadius={30}
+              onPress={handleScan}
+              isDisabled={scanning || loading}>
+              <ButtonText>
+                {scanning ? 'Scanning…' : 'Scan for Bluetooth Printers'}
+              </ButtonText>
             </Button>
 
             {(scanning || loading) && (
@@ -254,15 +276,13 @@ export default function PrinterOptions() {
                   {availablePrinters.map(printer => (
                     <Pressable
                       key={printer.address}
-                      onPress={() => handleBluetoothConnect(printer)}
-                    >
+                      onPress={() => handleBluetoothConnect(printer)}>
                       <Box
                         p="$4"
                         bg="$white"
                         borderRadius="$xl"
                         borderWidth={1}
-                        borderColor="$coolGray200"
-                      >
+                        borderColor="$coolGray200">
                         <Text fontWeight="$bold">{printer.name}</Text>
                         <Text fontSize="$sm" color="$coolGray500">
                           {printer.address}
@@ -294,13 +314,15 @@ export default function PrinterOptions() {
           <HStack alignItems="center" justifyContent="space-between" p="$4">
             <Text>Copies</Text>
             <HStack space="md" alignItems="center">
-              <Pressable onPress={() => setPrintCopies(Math.max(1, printCopies - 1))}>
+              <Pressable
+                onPress={() => setPrintCopies(Math.max(1, printCopies - 1))}>
                 <MIcon name="remove-circle-outline" size={28} />
               </Pressable>
 
               <Text fontWeight="$bold">{printCopies}</Text>
 
-              <Pressable onPress={() => setPrintCopies(Math.min(5, printCopies + 1))}>
+              <Pressable
+                onPress={() => setPrintCopies(Math.min(5, printCopies + 1))}>
                 <MIcon name="add-circle-outline" size={28} />
               </Pressable>
             </HStack>

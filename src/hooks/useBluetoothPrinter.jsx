@@ -1,11 +1,9 @@
 import {useState, useEffect} from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BluetoothManager} from 'tp-react-native-bluetooth-printer';
 import {printReceipt, receiptTestData} from '../utils/printReceipt';
 import {testPrinterConnection} from '../services';
 import useCheckAndRequestBluetoothPermission from './useCheckAndRequestBluetoothPermission';
-
-const STORAGE_KEY = 'selectedPrinter';
+import {printerStore} from '../store/printerStore';
 
 const useBluetoothPrinter = () => {
   const [devices, setDevices] = useState([]);
@@ -37,22 +35,28 @@ const useBluetoothPrinter = () => {
     }
   };
 
-  const connectBluetoothDevice = device => {
+  const connectBluetoothDevice = async device => {
     setLoading(true);
 
-    BluetoothManager.connect(device.address)
-      .then(() => {
-        const printer = {
-          ...device,
-          type: 'bluetooth',
-        };
-        setConnectedDevice(printer);
-        saveSelectedPrinter(printer);
-      })
-      .catch(err => setError(err))
-      .finally(() => {
-        setLoading(false);
-      });
+    try {
+      await BluetoothManager.connect(device.address);
+
+      const printer = {
+        ...device,
+        type: 'bluetooth',
+        paperSize: '80mm',
+        receiptWidth: 48,
+      };
+
+      await printerStore.saveSelectedPrinter(printer);
+
+      setConnectedDevice(printer);
+      setSelectedPrinter(printer);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const connectWifiPrinter = async printer => {
@@ -60,16 +64,26 @@ const useBluetoothPrinter = () => {
 
     try {
       const wifiPrinter = {
-        ...printer,
         type: 'wifi',
+        name: printer.name || `WiFi Printer (${printer.host})`,
+        host: printer.host,
         port: Number(printer.port || 9100),
+        paperSize: printer.paperSize || '80mm',
+        receiptWidth: printer.receiptWidth || 48,
       };
 
       await testPrinterConnection(wifiPrinter);
+
+      await printerStore.saveSelectedPrinter(wifiPrinter);
+
+      setSelectedPrinter(wifiPrinter);
       setConnectedDevice(wifiPrinter);
-      await saveSelectedPrinter(wifiPrinter);
-      return true;
+
+      console.log('Saved WiFi printer:', wifiPrinter);
+
+      return wifiPrinter;
     } catch (err) {
+      console.log('connectWifiPrinter error:', err);
       setError(err);
     } finally {
       setLoading(false);
@@ -78,7 +92,7 @@ const useBluetoothPrinter = () => {
 
   const disconnectPrinter = async () => {
     try {
-      await AsyncStorage.removeItem(STORAGE_KEY);
+      await printerStore.clearSelectedPrinter();
       setConnectedDevice(null);
       setSelectedPrinter(null);
     } catch (err) {
@@ -86,28 +100,21 @@ const useBluetoothPrinter = () => {
     }
   };
 
-  const loadSelectedPrinter = async () => {
-    try {
-      const printer = await AsyncStorage.getItem(STORAGE_KEY);
+ const loadSelectedPrinter = async () => {
+  try {
+    const printer = await printerStore.getSelectedPrinter();
 
-      if (!printer) return;
+    console.log('Loaded selectedPrinter:', printer);
 
-      const parsedPrinter = JSON.parse(printer);
-      setSelectedPrinter(parsedPrinter);
-      setConnectedDevice(parsedPrinter);
-    } catch (err) {
-      setError(err);
-    }
-  };
+    if (!printer) return;
 
-  const saveSelectedPrinter = async printer => {
-    try {
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(printer));
-      setSelectedPrinter(printer);
-    } catch (err) {
-      setError(err);
-    }
-  };
+    setSelectedPrinter(printer);
+    setConnectedDevice(printer);
+  } catch (err) {
+    console.log('loadSelectedPrinter error:', err);
+    setError(err);
+  }
+};
 
   const testPrint = async () => {
     try {
