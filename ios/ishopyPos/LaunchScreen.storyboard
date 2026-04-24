@@ -1,47 +1,152 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina4_7" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
         <scene sceneID="EHf-IW-A2E">
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ishopyPos" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="GJd-Yh-RWb">
-                                <rect key="frame" x="0.0" y="202" width="375" height="43"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Powered by React Native" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="MN2-I3-ftu">
-                                <rect key="frame" x="0.0" y="626" width="375" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+
+                            <!-- Outer container - dark bg, just for centering -->
+                            <view contentMode="scaleToFill"
+                                translatesAutoresizingMaskIntoConstraints="NO"
+                                id="BBB-outer"
+                                layer.cornerRadius="28"
+                                clipsSubviews="YES">
+                                <rect key="frame" x="136.5" y="366" width="120" height="120"/>
+                                <subviews>
+
+                                    <!-- Full-size teal fill inside - this gives us the rounded bg -->
+                                    <view contentMode="scaleToFill"
+                                        translatesAutoresizingMaskIntoConstraints="NO"
+                                        id="BBC-fill">
+                                        <rect key="frame" x="0" y="0" width="120" height="120"/>
+                                        <color key="backgroundColor" red="0.176" green="0.831" blue="0.749" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="120" id="BBC-w"/>
+                                            <constraint firstAttribute="height" constant="120" id="BBC-h"/>
+                                        </constraints>
+                                    </view>
+
+                                    <!-- ══ FORK ══ -->
+                                    <!-- Left tine -->
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BCA-tl" clipsSubviews="YES" layer.cornerRadius="2">
+                                        <rect key="frame" x="26" y="14" width="6" height="28"/>
+                                        <color key="backgroundColor" red="0.059" green="0.090" blue="0.165" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="6" id="BCA-w"/>
+                                            <constraint firstAttribute="height" constant="28" id="BCA-h"/>
+                                        </constraints>
+                                    </view>
+                                    <!-- Middle tine -->
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BCB-tm" clipsSubviews="YES" layer.cornerRadius="2">
+                                        <rect key="frame" x="38" y="14" width="6" height="28"/>
+                                        <color key="backgroundColor" red="0.059" green="0.090" blue="0.165" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="6" id="BCB-w"/>
+                                            <constraint firstAttribute="height" constant="28" id="BCB-h"/>
+                                        </constraints>
+                                    </view>
+                                    <!-- Right tine -->
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BCC-tr" clipsSubviews="YES" layer.cornerRadius="2">
+                                        <rect key="frame" x="50" y="14" width="6" height="28"/>
+                                        <color key="backgroundColor" red="0.059" green="0.090" blue="0.165" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="6" id="BCC-w"/>
+                                            <constraint firstAttribute="height" constant="28" id="BCC-h"/>
+                                        </constraints>
+                                    </view>
+                                    <!-- Fork stem -->
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BCD-st" clipsSubviews="YES" layer.cornerRadius="3">
+                                        <rect key="frame" x="38" y="38" width="6" height="68"/>
+                                        <color key="backgroundColor" red="0.059" green="0.090" blue="0.165" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="6" id="BCD-w"/>
+                                            <constraint firstAttribute="height" constant="68" id="BCD-h"/>
+                                        </constraints>
+                                    </view>
+
+                                    <!-- ══ CART ══ -->
+                                    <!-- Top bar -->
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BDA-ct" clipsSubviews="YES" layer.cornerRadius="3">
+                                        <rect key="frame" x="66" y="20" width="40" height="6"/>
+                                        <color key="backgroundColor" red="0.059" green="0.090" blue="0.165" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="40" id="BDA-w"/>
+                                            <constraint firstAttribute="height" constant="6" id="BDA-h"/>
+                                        </constraints>
+                                    </view>
+                                    <!-- Right bar -->
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BDB-cr" clipsSubviews="YES" layer.cornerRadius="3">
+                                        <rect key="frame" x="100" y="20" width="6" height="48"/>
+                                        <color key="backgroundColor" red="0.059" green="0.090" blue="0.165" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="6" id="BDB-w"/>
+                                            <constraint firstAttribute="height" constant="48" id="BDB-h"/>
+                                        </constraints>
+                                    </view>
+                                    <!-- Bottom bar -->
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BDC-cb" clipsSubviews="YES" layer.cornerRadius="3">
+                                        <rect key="frame" x="66" y="62" width="40" height="6"/>
+                                        <color key="backgroundColor" red="0.059" green="0.090" blue="0.165" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="40" id="BDC-w"/>
+                                            <constraint firstAttribute="height" constant="6" id="BDC-h"/>
+                                        </constraints>
+                                    </view>
+                                    <!-- Wheel left -->
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BDD-wl" clipsSubviews="YES" layer.cornerRadius="6">
+                                        <rect key="frame" x="72" y="76" width="12" height="12"/>
+                                        <color key="backgroundColor" red="0.059" green="0.090" blue="0.165" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="12" id="BDD-w"/>
+                                            <constraint firstAttribute="height" constant="12" id="BDD-h"/>
+                                        </constraints>
+                                    </view>
+                                    <!-- Wheel right -->
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BDE-wr" clipsSubviews="YES" layer.cornerRadius="6">
+                                        <rect key="frame" x="90" y="76" width="12" height="12"/>
+                                        <color key="backgroundColor" red="0.059" green="0.090" blue="0.165" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="12" id="BDE-w"/>
+                                            <constraint firstAttribute="height" constant="12" id="BDE-h"/>
+                                        </constraints>
+                                    </view>
+
+                                </subviews>
+
+                                <color key="backgroundColor" red="0.059" green="0.090" blue="0.165" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="120" id="BBB-w"/>
+                                    <constraint firstAttribute="height" constant="120" id="BBB-h"/>
+                                </constraints>
+                            </view>
+
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+
+                        <!-- Background: dark #0f172a -->
+                        <color key="backgroundColor" red="0.059" green="0.090" blue="0.165" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+
                         <constraints>
-                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="bottom" secondItem="MN2-I3-ftu" secondAttribute="bottom" constant="20" id="OZV-Vh-mqD"/>
-                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="centerX" secondItem="GJd-Yh-RWb" secondAttribute="centerX" id="Q3B-4B-g5h"/>
-                            <constraint firstItem="MN2-I3-ftu" firstAttribute="centerX" secondItem="Bcu-3y-fUS" secondAttribute="centerX" id="akx-eg-2ui"/>
-                            <constraint firstItem="MN2-I3-ftu" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" id="i1E-0Y-4RG"/>
-                            <constraint firstItem="GJd-Yh-RWb" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="bottom" multiplier="1/3" constant="1" id="moa-c2-u7t"/>
-                            <constraint firstItem="GJd-Yh-RWb" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" symbolic="YES" id="x7j-FC-K8j"/>
+                            <constraint firstItem="BBB-outer" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="BBB-cx"/>
+                            <constraint firstItem="BBB-outer" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="BBB-cy"/>
                         </constraints>
+
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="52.173913043478265" y="375"/>
+            <point key="canvasLocation" x="52" y="375"/>
         </scene>
     </scenes>
 </document>

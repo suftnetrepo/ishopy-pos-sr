@@ -1,5 +1,5 @@
 import TcpSocket from 'react-native-tcp-socket';
-import { Buffer } from 'buffer';
+import {Buffer} from 'buffer';
 
 const DEFAULT_PORT = 9100;
 
@@ -18,7 +18,7 @@ const writeToSocket = (client, payload) =>
     });
   });
 
-const connectToPrinter = ({ host, port = DEFAULT_PORT, timeout = 5000 }) =>
+const connectToPrinter = ({host, port = DEFAULT_PORT, timeout = 5000}) =>
   new Promise((resolve, reject) => {
     const client = TcpSocket.createConnection(
       {
@@ -64,8 +64,19 @@ const buildWifiReceiptBuffer = receipt => {
   chunks.push(textEncoder(`TEL : ${receipt.phone || ''}\n\n`));
 
   chunks.push(alignLeft());
-  chunks.push(textEncoder(`Order #: ${receipt.orderNumber || ''}\n`));
-  chunks.push(textEncoder(`Table #: ${receipt.table_name || ''}\n`));
+  chunks.push(
+    textEncoder(
+      `${receipt.orderLabel || 'Order #'}: ${receipt.orderNumber || ''}\n`
+    )
+  );
+
+  if (receipt.receiptType === 'restaurant') {
+    chunks.push(
+      textEncoder(
+        `${receipt.tableLabel || 'Table #'}: ${receipt.table_name || ''}\n`
+      )
+    );
+  }
   chunks.push(textEncoder(`Date : ${receipt.date || ''}\n`));
   chunks.push(textEncoder(`Cashier: ${receipt.cashier || ''}\n\n`));
 
@@ -80,14 +91,20 @@ const buildWifiReceiptBuffer = receipt => {
   for (const item of receipt.items || []) {
     const itemName = `${item.quantity} ${item.name}`;
     const itemTotal = Number(item.price || 0).toFixed(2);
-    const itemLine = `${padRight(itemName, receiptWidth - 8)}${padLeft(itemTotal, 8)}\n`;
+    const itemLine = `${padRight(itemName, receiptWidth - 8)}${padLeft(
+      itemTotal,
+      8
+    )}\n`;
     chunks.push(textEncoder(itemLine));
 
     if (item?.addOns?.length) {
       for (const addon of item.addOns) {
         const addonName = `${addon.quantity} ${addon.name}`;
         const addonTotal = Number(addon.price || 0).toFixed(2);
-        const addonLine = `${padRight(addonName, receiptWidth - 8)}${padLeft(addonTotal, 8)}\n`;
+        const addonLine = `${padRight(addonName, receiptWidth - 8)}${padLeft(
+          addonTotal,
+          8
+        )}\n`;
         chunks.push(textEncoder(addonLine));
       }
     }
@@ -104,7 +121,10 @@ const buildWifiReceiptBuffer = receipt => {
 
   totals.forEach(([label, amount]) => {
     if (amount !== undefined && amount !== null && amount !== '') {
-      const line = `${padRight(label, receiptWidth - 8)}${padLeft(Number(amount).toFixed(2), 8)}\n`;
+      const line = `${padRight(label, receiptWidth - 8)}${padLeft(
+        Number(amount).toFixed(2),
+        8
+      )}\n`;
       chunks.push(textEncoder(line));
     }
   });
@@ -141,14 +161,22 @@ const buildWifiKitchenTicketBuffer = ticket => {
   for (const item of ticket.items || []) {
     const itemName = `${item.quantity} ${item.name}`;
     const itemTotal = Number(item.price || 0).toFixed(2);
-    const itemLine = `${padRight(itemName, receiptWidth - 8)}${padLeft(itemTotal, 8)}\n`;
+    const itemLine = `${padRight(itemName, receiptWidth - 8)}${padLeft(
+      itemTotal,
+      8
+    )}\n`;
     chunks.push(textEncoder(itemLine));
 
     if (item?.addOns?.length) {
       for (const addon of item.addOns) {
-        const addonName = `${addon.quantity} ${addon.name || addon.addOnName || ''}`;
+        const addonName = `${addon.quantity} ${
+          addon.name || addon.addOnName || ''
+        }`;
         const addonTotal = Number(addon.price || 0).toFixed(2);
-        const addonLine = `${padRight(addonName, receiptWidth - 8)}${padLeft(addonTotal, 8)}\n`;
+        const addonLine = `${padRight(addonName, receiptWidth - 8)}${padLeft(
+          addonTotal,
+          8
+        )}\n`;
         chunks.push(textEncoder(addonLine));
       }
     }

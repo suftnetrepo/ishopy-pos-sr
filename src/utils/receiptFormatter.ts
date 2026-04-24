@@ -1,12 +1,15 @@
-import {Order} from '../model/types';
-import {AddOn} from '../model/addOn';
-import {queryOrderItemByOrderId} from '../model/orderItems';
+import { Order } from '../model/types';
+import { AddOn } from '../model/addOn';
+import { queryOrderItemByOrderId } from '../model/orderItems';
+
+type BusinessType = 'restaurant' | 'shop';
 
 type ReceiptFormatterParams = {
   order: Order;
   tableName?: string;
   shop?: any;
   user?: any;
+  businessType?: BusinessType;
   footerMessage?: string;
 };
 
@@ -15,9 +18,12 @@ export const formatReceiptData = async ({
   tableName,
   shop,
   user,
+  businessType = 'shop',
   footerMessage = 'Your satisfaction is our priority. Thank you for Dining with us!',
 }: ReceiptFormatterParams) => {
   const orderItems = await queryOrderItemByOrderId(order.order_id);
+
+  const isShop = businessType === 'shop';
 
   return {
     name: shop?.name || '',
@@ -25,7 +31,10 @@ export const formatReceiptData = async ({
     phone: shop?.mobile || '',
     email: shop?.email || '',
     orderNumber: order.order_id?.slice(0, 8) || '',
-    table_name: tableName || order.table_name || '',
+    receiptType: businessType || 'shop',
+    orderLabel: isShop ? 'Order #' : 'Receipt #',
+    tableLabel: isShop ? 'Table #' : 'Sale',
+    table_name: isShop ? tableName || order.table_name || '' : 'Shop',
     date: order.date
       ? new Date(order.date).toLocaleString()
       : new Date().toLocaleString(),
@@ -59,6 +68,10 @@ export const formatReceiptData = async ({
     discount: Number(order.discount || 0),
     total: Number(order.total_price || 0),
 
-    footerMessage,
+    footerMessage:
+    footerMessage ||
+    (isShop
+      ? 'Thank you for shopping with us!'
+      : 'Your satisfaction is our priority. Thank you for Dining with us!'),
   };
 };

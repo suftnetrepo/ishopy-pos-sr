@@ -87,6 +87,7 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
         tableName: order?.table_name,
         shop,
         user,
+        businessType: shop?.mode as any,
       });
 
       await printReceipt(selectedPrinter, receiptData);

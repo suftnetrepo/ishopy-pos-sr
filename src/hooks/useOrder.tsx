@@ -348,6 +348,7 @@ const useInsertOrder = (table_id: string, table_name: string) => {
         tableName: table_name,
         shop,
         user,
+        businessType: shop?.mode as any,
       });
 
       const selectedPrinter = await printerStore.getSelectedPrinter();
@@ -368,36 +369,16 @@ const useInsertOrder = (table_id: string, table_name: string) => {
   };
 
   const shareReceipt = async (table_name: string, order: Order) => {
-    const receiptData = {
-      name: shop?.name,
-      address: shop?.address,
-      phone: shop?.mobile,
-      email: shop?.email,
-      orderNumber: order.order_id.slice(0, 8),
-      date: new Date(order.date).toLocaleString(),
-      cashier: `${user?.first_name} ${user?.last_name}`,
-      items: items?.items?.map((item: CartItem) => {
-        const addOnDetails =
-          item.addOns?.map((addOn: AddOn) => ({
-            quantity: addOn.quantity,
-            name: addOn.addOnName,
-            price: addOn.price * (addOn.quantity || 0),
-          })) || [];
+  try {
+    const receiptData = await formatReceiptData({
+      order,
+      tableName: table_name,
+      shop,
+      user,
+      businessType: shop?.mode as any,
+      footerMessage: 'Your satisfaction is our priority. Thank you for shopping with us!',
+    });
 
-        return {
-          quantity: item.quantity,
-          name: item.name,
-          price: item.price,
-          addOns: addOnDetails,
-        };
-      }),
-      subtotal: getTotal(table_id),
-      tax: getTotalTax(table_id),
-      discount: getTotalDiscount(table_id),
-      total: getTotalPrice(table_id),
-      footerMessage:
-        'Your satisfaction is our priority. Thank you for shopping with us!',
-    };
     const {
       name,
       address,
@@ -408,63 +389,64 @@ const useInsertOrder = (table_id: string, table_name: string) => {
       orderNumber,
       subtotal,
       tax,
+      discount,
       total,
       footerMessage,
+      items = [],
+      receiptType,
+      orderLabel,
+      tableLabel,
+      table_name: receiptTableName,
     } = receiptData;
+
+    const isRestaurant = receiptType === 'restaurant';
+
     const receiptText =
       `Receipt from ${name}\n\n` +
-      `Order Number: ${orderNumber}\n` +
-      `Table Number: ${table_name}\n` +
-      `Date: ${new Date(date).toLocaleString()}\n` +
+      `${orderLabel || 'Receipt #'}: ${orderNumber}\n` +
+      (isRestaurant ? `${tableLabel || 'Table #'}: ${receiptTableName}\n` : '') +
+      `Date: ${date}\n` +
       `Cashier: ${cashier}\n\n` +
       `Items:\n` +
-      items?.items
-        ?.map((item: CartItem) => {
-          const itemTotal = (item.price * item.quantity).toFixed(2);
+      items
+        .map((item: any) => {
+          const itemTotal = Number(item.price || 0).toFixed(2);
+
           const addOnsText =
             item.addOns
               ?.map(
-                (addOn: AddOn) =>
-                  `${addOn.quantity} ${addOn.addOnName} - ${(
-                    addOn.price * (addOn.quantity || 0)
+                (addOn: any) =>
+                  `  ${addOn.quantity} ${addOn.name} - ${Number(
+                    addOn.price || 0
                   ).toFixed(2)}\n`
               )
               .join('') || '';
+
           return `${item.quantity} ${item.name} - ${itemTotal}\n${addOnsText}`;
         })
         .join('') +
-      `\nSubtotal: ${subtotal.toFixed(2)}\n` +
+      `\nSubtotal: ${Number(subtotal || 0).toFixed(2)}\n` +
       `Tax: ${Number(tax || 0).toFixed(2)}\n` +
+      `Discount: ${Number(discount || 0).toFixed(2)}\n` +
       `Total: ${Number(total || 0).toFixed(2)}\n\n` +
       `Address: ${address}\n` +
       `Phone: ${phone}\n` +
       `Email: ${email}\n\n` +
       `${footerMessage}`;
 
-    try {
-      const result = await Share.share({
-        title: 'Receipt',
-        message: receiptText,
-      });
-
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // Shared via activity type
-        } else {
-          // Shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // Dismissed
-      }
-    } catch (error) {
-      setData({
-        data: null,
-        error: error as Error,
-        loading: false,
-        success: false,
-      });
-    }
-  };
+    await Share.share({
+      title: 'Receipt',
+      message: receiptText,
+    });
+  } catch (error) {
+    setData({
+      data: null,
+      error: error as Error,
+      loading: false,
+      success: false,
+    });
+  }
+};
 
   const resetHandler = () => {
     setData({
