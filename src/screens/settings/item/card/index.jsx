@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { YStack, theme, XStack,Stack, StyledConfirmDialog, StyledCycle, StyledSpinner, StyledOkDialog, StyledSpacer, StyledText } from 'fluent-styles';
+import { YStack, theme, XStack,Stack, StyledPressable, StyledConfirmDialog, StyledCycle, StyledSpinner, StyledOkDialog, StyledSpacer, StyledText } from 'fluent-styles';
 import {
     Box,
     Text,
@@ -9,11 +9,12 @@ import { fontStyles } from '../../../../configs/theme';
 import { StyledMIcon } from '../../../../components/icon';
 import { useMenus, useDeleteMenu } from '../../../../hooks/useMenu';
 import { FlatList, Pressable, ScrollView } from 'react-native';
+import { Swipeable } from 'react-native-gesture-handler';
 import { formatCurrency, toWordCase } from '../../../../utils/help';
 import { useCategories } from "../../../../hooks/useCategory";
 import { useAppContext } from '../../../../hooks/appContext';
 
-const ItemCard = ({ onItemChange, onItemDeleted, onItemDeleting, flag = false, shop }) => {
+const ItemCard = ({ onItemChange, onItemDeleted, onItemDeleting, onAddonChange, flag = false, shop }) => {
     const [isDialogVisible, setIsDialogVisible] = useState(false)
     const { menuQuery } = useAppContext()
     const [item, setItem] = useState()
@@ -43,36 +44,54 @@ const ItemCard = ({ onItemChange, onItemDeleted, onItemDeleting, flag = false, s
         await filterMenus(category.category_id)
     }
 
+    const renderRightActions = (item) => (
+        <XStack alignItems="center" justifyContent="center" height="100%" paddingRight={8}>
+            <StyledPressable
+                onPress={() => {
+                    onItemDeleting();
+                    setIsDialogVisible(true);
+                    setItem(item);
+                }}
+                backgroundColor={theme.colors.red[500]}
+                borderRadius={16}
+                padding={12}
+            
+            >
+                <StyledMIcon size={28} name="delete-outline" color={theme.colors.white} />
+            </StyledPressable>
+        </XStack>
+    );
+
     const RenderCard = ({ item }) => {
         return (
-            <Stack horizontal marginHorizontal={4} flex={1} status={item.status === 1 ? theme.colors.green[600] : theme.colors.red[400]} paddingHorizontal={8} backgroundColor={theme.colors.gray[1]}
-                paddingVertical={8} justifyContent='flex-start' marginBottom={8} borderRadius={16} alignItems='center' >
-                <YStack flex={2}>
-                    <StyledText paddingHorizontal={8} fontFamily={fontStyles.Roboto_Regular} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.normal} color={theme.colors.gray[700]}>
-                        {toWordCase(item.name)}
-                    </StyledText>
-                    <StyledSpacer marginVertical={1} />
-                    <StyledText paddingHorizontal={8} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.medium} color={theme.colors.gray[500]}>
-                        {formatCurrency(shop?.currency || "£", item.price)}
-                    </StyledText>
-                </YStack>
-                <XStack flex={1} justifyContent='flex-end' alignItems='center'>
-                    <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]}>
-                        <StyledMIcon size={24} name='edit' color={theme.colors.gray[600]} onPress={() => onItemChange({
-                            data: item, tag: 'Edit'
-                        })} />
-                    </StyledCycle>
-                    <StyledSpacer marginHorizontal={4} />
-                    <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]}>
-                        <StyledMIcon size={32} name='delete-outline' color={theme.colors.gray[600]} onPress={() => {
-                            onItemDeleting()
-                            setIsDialogVisible(true)
-                            setItem(item)
-                        }
-                        } />
-                    </StyledCycle>
-                </XStack>
-            </Stack>
+            <Swipeable containerStyle={{ flex: 1}} renderRightActions={() => renderRightActions(item)}>
+                <Stack horizontal marginHorizontal={4} flex={1} status={item.status === 1 ? theme.colors.green[600] : theme.colors.red[400]} paddingHorizontal={8} backgroundColor={theme.colors.gray[1]}
+                    paddingVertical={8} justifyContent='flex-start' marginBottom={8} borderRadius={16} alignItems='center' >
+                    <YStack flex={2}>
+                        <StyledText paddingHorizontal={8} fontFamily={fontStyles.Roboto_Regular} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.small} color={theme.colors.gray[700]}>
+                            {toWordCase(item.name)}
+                        </StyledText>
+                        <StyledSpacer marginVertical={1} />
+                        <StyledText paddingHorizontal={8} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.medium} color={theme.colors.gray[500]}>
+                            {formatCurrency(shop?.currency || "£", item.price)}
+                        </StyledText>
+                    </YStack>
+                    <XStack flex={1} justifyContent='flex-end' alignItems='center'>
+                        <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]}>
+                            <StyledMIcon size={24} name='edit' color={theme.colors.gray[600]} onPress={() => onItemChange({
+                                data: item, tag: 'Edit'
+                            })} />
+                        </StyledCycle>
+                        <StyledSpacer marginHorizontal={4} />
+                        <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]}>
+                            <StyledMIcon size={32} name='delete-outline' color={theme.colors.gray[600]} onPress={() => {
+                                onAddonChange(item)
+                            }
+                            } />
+                        </StyledCycle>
+                    </XStack>
+                </Stack>
+            </Swipeable>
         )
     }
 

@@ -25,7 +25,7 @@ const BigMenu = () => {
   return (
       <StyledPage backgroundColor={theme.colors.gray[100]}>
       <StyledPage.Header.Full>
-         <RenderHeader showBackButton={true} showLogo={false} showTitle={true} title={`${params?.table_name || "Items"}`} >
+         <RenderHeader showBackButton={true} showLogo={false} showTitle={true} title={`${params?.table_name || "Items"}`}  >
             <StyledSearchBar placeholder="Search menu items..." flex={1} onTextChange={(query) => updateMenuQuery(query)} />
           </RenderHeader>
       </StyledPage.Header.Full>

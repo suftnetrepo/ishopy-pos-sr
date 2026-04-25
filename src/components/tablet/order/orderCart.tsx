@@ -60,13 +60,6 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
   const {shop, order, user} = useAppContext();
   const {data} = useQueryOrderItemByOrder(order?.order_id || '');
 
-   console.log('Order data for receipt:', {
-          order,
-          tableName: order?.table_name,
-          shop,
-          user,
-        });
-
   const handlePrint = async () => {
     try {
         console.log('Order data for receipt:', {
@@ -273,35 +266,14 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
   return (
     <YStack
       flex={1}
-      marginTop={0}
+     
       borderRadius={8}
       justifyContent="flex-start"
       alignItems="flex-start"
       backgroundColor={theme.colors.gray[50]}
       paddingHorizontal={16}
       paddingVertical={8}>
-      <StyledSpacer marginVertical={16} />
-      <XStack justifyContent="space-between" alignItems="center">
-        <StyledSpacer flex={1}></StyledSpacer>
-        <StyledPressable >
-          <StyledMIcon
-            {...({name: 'print'} as any)}
-            size={48}
-            color={theme.colors.gray[800]}
-            onPress={() => handlePrint()}
-          />
-        </StyledPressable>
-
-        <StyledPressable >
-          <StyledMIcon
-            {...({name: 'cancel'} as any)}
-            size={48}
-            color={theme.colors.gray[800]}
-onPress={() => onClose()}
-          />
-        </StyledPressable>
-      </XStack>
-      <StyledSpacer marginVertical={8} />
+   
       <Card order={order} />
       <StyledSpacer marginVertical={4} />
       <XStack>

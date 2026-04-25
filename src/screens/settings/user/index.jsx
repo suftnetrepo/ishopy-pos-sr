@@ -51,7 +51,7 @@ const BigUser = () => {
           showBackButton={true}
           showLogo={false}
           showTitle={true}
-          title="User"
+          title="Users"
           CopyIcon={
             <Pressable onTouchStart={() => update('Add')}>
               <StyledCycle

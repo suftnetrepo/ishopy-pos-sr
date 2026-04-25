@@ -44,7 +44,7 @@ const BigTax = () => {
           showBackButton={true}
           showLogo={false}
           showTitle={true}
-          title="Tax"
+          title="Taxes"
           CopyIcon={
             <Pressable onTouchStart={() => update('Add')}>
               <StyledCycle

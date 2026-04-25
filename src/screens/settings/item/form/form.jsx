@@ -1,21 +1,14 @@
 
 import React, { useState, useEffect } from "react";
-import { validate, theme,StyledSpinner, XStack, YStack, StyledOkDialog, StyledCheckBox, StyledSpacer, StyledInput, StyledText, StyledButton } from 'fluent-styles';
-import {
-  Text,
-  HStack,
-} from "@gluestack-ui/themed";
+import { validate, StyledForm, Switch, theme,StyledSpinner, XStack,  StyledDropdown, YStack, StyledOkDialog, StyledCheckBox, StyledSpacer, StyledInput, StyledText, StyledButton } from 'fluent-styles';
 import { fontStyles } from "../../../../configs/theme";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { menuRules } from "./validatorRules";
 import { useUpdateMenu, useInsertMenu } from "../../../../hooks/useMenu";
 import { ShowToast } from "../../../../components/toast";
-import { StyledIcon } from "../../../../components/package/icon";
-import { StyledDropdown } from "../../../../components/dropdown";
 import ColorPicker from "../../../../components/colorPicker";
 import { useCategories } from "../../../../hooks/useCategory";
-import IconPicker from "../../../../components/icon-picker";
 import { Stack } from "../../../../components/package/stack";
+import PosIconPicker from '../../../../components/pos-icon-picker';
 
 const ItemForm = ({ item, onClose }) => {
   const [errorMessages, setErrorMessages] = useState({})
@@ -65,33 +58,8 @@ const ItemForm = ({ item, onClose }) => {
         backgroundColor={theme.colors.gray[100]}
         paddingHorizontal={16}
       >
-        <StyledSpacer marginVertical={16} />
-        <HStack justifyContent="space-between" alignItems="center" >
-          <HStack flex={1} horizontal justifyContent="flex-start" alignItems="center">
-            <StyledIcon
-              name={item ? "create" : "add"}
-              size={32}
-              color={theme.colors.gray[400]}
-            />
-            <Text
-              paddingHorizontal={4}
-              fontFamily={fontStyles.Roboto_Regular}
-              color={theme.colors.gray[800]}
-              fontSize={theme.fontSize.large}
-              fontWeight={theme.fontWeight.normal}
-            >
-              Item
-            </Text>
-          </HStack>
-          <StyledIcon
-            name="cancel"
-            size={48}
-            color={theme.colors.gray[800]}
-            onPress={() => onClose()}
-          />
-        </HStack>
-        <StyledSpacer marginVertical={8} />
-        <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+       
+        <StyledForm flex={1}>
           <ColorPicker color={fields.color_code || theme.colors.purple[900]} onPress={(color) => setFields({ ...fields, color_code: color })} />
           <StyledInput
             label={'Name'}
@@ -117,7 +85,6 @@ const ItemForm = ({ item, onClose }) => {
             maxLength={50}
             height={40}
             fontSize={theme.fontSize.small}
-            
             paddingHorizontal={8}
             value={fields.price.toString()}
             placeholderTextColor={theme.colors.gray[400]}
@@ -133,7 +100,6 @@ const ItemForm = ({ item, onClose }) => {
             maxLength={50}
             height={40}
             fontSize={theme.fontSize.small}
-           
             paddingHorizontal={8}
             value={fields.cost.toString()}
             placeholderTextColor={theme.colors.gray[400]}
@@ -160,16 +126,15 @@ const ItemForm = ({ item, onClose }) => {
           <StyledDropdown
             placeholder={'Select a category'}
             label={'Category'}
-            items={data.map((item) => ({ value: item.category_id, label: item.name }))}
+            data={data.map((item) => ({ value: item.category_id, label: item.name }))}
             value={fields.category_id}
-            onSelectItem={e => setFields({ ...fields, category_id: e.value })}
+            onChange={e => setFields({ ...fields, category_id: e.value })}
             error={!!errorMessages?.category_id}
             errorMessage={errorMessages?.category_id?.message}
             borderColor={theme.colors.gray[400]}
-            backgroundColor={theme.colors.gray[1]}
-            listMode='MODAL'
+   
           />
-          <StyledSpacer marginVertical={4} />
+      
           <Stack marginLeft={8}>
             <StyledText
               fontWeight={theme.fontWeight.normal}
@@ -179,40 +144,44 @@ const ItemForm = ({ item, onClose }) => {
               Icon
             </StyledText>
             <StyledSpacer marginVertical={4} />
-            <IconPicker name="Main" size={18} selectedIcon={fields?.icon_name} onPress={(icon) => setFields({ ...fields, icon_name: icon })} />
+            <PosIconPicker
+              color={fields?.color_code || theme.colors.gray[500]}
+              size={18}
+              selected={fields?.icon_name}
+              onSelect={icon => setFields({...fields, icon_name: icon})}
+            />
           </Stack>
-          <StyledSpacer marginVertical={4} />
+    
           <XStack
             justifyContent='flex-start'
             alignItems='center'
-            paddingVertical={8}
+            gap={8}
             paddingHorizontal={16}
           >
-            <StyledCheckBox
-              height={30}
-              width={30}
-              checked={fields.status === 1 ? true : false}
-              checkedColor={theme.colors.pink[600]}
-              onPress={(value) => setFields({ ...fields, status: value ? 1 : 0 })}
-            />
-            <StyledSpacer marginHorizontal={8} />
+            <Switch
+                activeValue="yes"
+                inactiveValue="no"
+                value={fields.status === 1 ? true : false}
+                onChange={(value) => setFields({ ...fields, status: value ? 1 : 0 })}
+              />
             <StyledText
               fontWeight={theme.fontWeight.normal}
               color={theme.colors.gray[600]}
-              fontSize={theme.fontSize.large}
+              fontSize={theme.fontSize.normal}
+              fontFamily={fontStyles.Roboto_Regular}
             >
               Status
             </StyledText>
 
           </XStack>
-          <StyledSpacer marginVertical={4} />
+       
           <StyledButton flex={1} backgroundColor={theme.colors.yellow[500]} onPress={() => onSubmit()} >
             <StyledText paddingHorizontal={20} paddingVertical={10} color={theme.colors.gray[800]}>
               Save Changes
             </StyledText>
           </StyledButton>
           <StyledSpacer marginVertical={4} />
-        </KeyboardAwareScrollView>
+        </StyledForm>
       </YStack>
       {
         (error) && (

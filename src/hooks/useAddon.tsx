@@ -19,6 +19,7 @@ const useAddOns = () => {
 	async function loadAddons(menu_id: string) {
 		try {
 			const result = await queryAddonByMenuId(menu_id);
+			console.log('result', result);
 			setData(prev => ({
 				...prev,
 				data: result,

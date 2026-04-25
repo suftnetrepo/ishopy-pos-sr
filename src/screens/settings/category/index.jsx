@@ -49,7 +49,7 @@ const BigCategory = () => {
           showBackButton={true}
           showLogo={false}
           showTitle={true}
-          title="Category"
+          title="Categories"
           CopyIcon={
             <Pressable onTouchStart={() => update('Add')}>
               <StyledCycle

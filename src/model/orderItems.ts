@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import {getRealmInstance} from './store';
 import {Order} from './orders';
+import { getMenuIconById } from './menu';
 
 type RecentOrderWithItemCount = {
   order: Order;
@@ -137,7 +138,7 @@ const deleteOrderItem = async (detail_id: string): Promise<boolean> => {
 const getMostPopularMenuByQuantity = async (limit: number = 10): Promise<PopularMenuItem[]> => {
   const realm = await getRealmInstance();
   
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     try {
       const orderItems = realm.objects<OrderItem>('OrderItem');
       
@@ -154,6 +155,9 @@ const getMostPopularMenuByQuantity = async (limit: number = 10): Promise<Popular
       for (const item of orderItems) {
         const key = item.menu_id;
         const existing = menuStats[key];
+
+        const menuIconData = await getMenuIconById(item.menu_id);
+        const iconName = menuIconData ? menuIconData.icon_name : item.menu_icon_name;
         
         if (existing) {
           existing.total_quantity += item.quantity;
@@ -163,7 +167,7 @@ const getMostPopularMenuByQuantity = async (limit: number = 10): Promise<Popular
           menuStats[key] = {
             menu_id: item.menu_id,
             menu_name: item.menu_name,
-            menu_icon_name :item.menu_icon_name,
+            menu_icon_name: iconName,
             total_quantity: item.quantity,
             order_count: 1,
             total_revenue: item.price * item.quantity,
@@ -190,6 +194,7 @@ const getMostPopularMenuByQuantity = async (limit: number = 10): Promise<Popular
         
       resolve(popularItems);
     } catch (error) {
+      console.error('Error in getMostPopularMenuByQuantity:', error);
       reject(error);
     }
   });

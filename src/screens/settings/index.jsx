@@ -21,27 +21,27 @@ const SETTINGS_CONFIG = {
   rows: [
     [
       {
-        id: 'category',
+        id: 'categor',
         icon: require('../../../assets/img/category-1.png'),
-        name: 'Category',
+        name: 'Categories',
       },
       {
         id: 'item',
         icon: require('../../../assets/img/box-1.png'),
-        name: 'Item',
+        name: 'Items',
       },
-      {id: 'tax', icon: require('../../../assets/img/tax-1.png'), name: 'Tax'},
+      {id: 'tax', icon: require('../../../assets/img/tax-1.png'), name: 'Taxes'},
     ],
     [
       {
         id: 'discount',
         icon: require('../../../assets/img/discount-1.png'),
-        name: 'Discount',
+        name: 'Discounts',
       },
       {
         id: 'user',
         icon: require('../../../assets/img/user-1.png'),
-        name: 'User',
+        name: 'Users',
       },
       {
         id: 'shop',

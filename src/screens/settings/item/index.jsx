@@ -1,11 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import {
-  StyledSafeAreaView,
-  StyledHeader,
   StyledCycle,
   Stack,
   theme,
   StyledPage,
+  Drawer as StyledDrawer,
 } from 'fluent-styles';
 import SideBarAdapter from '../../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../../components/tablet/header';
@@ -17,6 +16,7 @@ import {useFocus} from '../../../hooks/useFocus';
 import {StyledIcon} from '../../../components/package/icon';
 import {Pressable} from 'react-native';
 import {useAppContext} from '../../../hooks/appContext';
+import ItemAddOn from './addOn';
 
 const BigItem = () => {
   const {shop, updateMenuQuery} = useAppContext();
@@ -26,6 +26,7 @@ const BigItem = () => {
     tag: '',
   });
   const [screenFocus, setScreenFocus] = useState(true);
+  const [showAddOn, setShowAddOn] = useState(null);
   const shouldOpen = state.tag === 'Edit' || state.tag === 'Add';
   const isFocused = navigationFocus && screenFocus;
 
@@ -45,8 +46,6 @@ const BigItem = () => {
     setState({...state, tag, data: null});
   };
 
-  console.log('......................state', state);
-
   return (
     <StyledPage backgroundColor={theme.colors.gray[100]}>
       <StyledPage.Header.Full>
@@ -54,7 +53,7 @@ const BigItem = () => {
           showBackButton={true}
           showLogo={false}
           showTitle={true}
-          title="Item"
+          title="Items"
           CopyIcon={
             <Pressable onTouchStart={() => update('Add')}>
               <StyledCycle
@@ -88,12 +87,27 @@ const BigItem = () => {
             onItemDeleting={() => update('Deleting')}
             onItemDeleted={() => reset()}
             onItemChange={j => setState({...state, tag: j?.tag, data: j?.data})}
+            onAddonChange={j => setShowAddOn(j)}
           />
         </Stack>
       </Stack>
-      <Drawer direction="right" isOpen={shouldOpen} onClose={() => reset()}>
-        {shouldOpen && <ItemForm item={state?.data} onClose={() => reset()} />}
-      </Drawer>
+       <StyledDrawer
+        visible={shouldOpen ? true : false}
+        onClose={() => reset()}
+        title={`${state.tag === 'Edit' ? 'Edit' : 'Add'} Item `}
+        width={'30%'}
+        side="right">
+      <ItemForm item={state?.data} onClose={() => reset()} />
+      </StyledDrawer>
+      <StyledDrawer
+        visible={showAddOn ? true : false}
+        onClose={() => setShowAddOn(false)}
+        title={`${showAddOn?.name} `}
+        subtitle={`Add AddOns`}
+        width={'30%'}
+        side="right">
+        <ItemAddOn menu_id={showAddOn?.menu_id} onClose={() => setShowAddOn(false)} />
+      </StyledDrawer>
     </StyledPage>
   );
 };

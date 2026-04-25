@@ -49,7 +49,7 @@ const BigDiscount = () => {
           showBackButton={true}
           showLogo={false}
           showTitle={true}
-          title="Discount"
+          title="Discounts"
           CopyIcon={
             <Pressable onTouchStart={() => update('Add')}>
               <StyledCycle

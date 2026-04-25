@@ -1,14 +1,21 @@
 import React, {useState} from 'react';
-import {StyledSafeAreaView, StyledPage, Stack, theme} from 'fluent-styles';
+import {
+  Drawer as StyledDrawer,
+  StyledPressable,
+  StyledText,
+  StyledPage,
+  Stack,
+  theme,
+} from 'fluent-styles';
 import SideBarAdapter from '../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../components/tablet/header';
 import {StyledSearchBar} from '../../components/searchBar';
 import {useAppContext} from '../../hooks/appContext';
 import OrderCard from '../../components/tablet/order';
-import Drawer from '../../components/package/drawer';
 import OrderCart from '../../components/tablet/order/orderCart';
 import OrderDateFilter from './orderDateFilter';
 import {useFocus} from '../../hooks/useFocus';
+import {StyledMIcon} from '../../components/icon';
 
 const BigOrder = () => {
   const focus = useFocus();
@@ -41,9 +48,23 @@ const BigOrder = () => {
           />
         </Stack>
       </Stack>
-      <Drawer direction="right" isOpen={!!show} onClose={() => setShow(null)}>
+
+      <StyledDrawer
+        visible={show ? true : false}
+        onClose={() => setShow(null)}
+        title={`Orders `}
+        width={'30%'}
+        headerRight={
+          <StyledMIcon
+              name="print"
+              size={32}
+              color={theme.colors.gray[800]}
+              onPress={() => {}}
+            />
+        }
+        side="right">
         <OrderCart onClose={() => setShow(null)} />
-      </Drawer>
+      </StyledDrawer>
       {showCalendar && (
         <OrderDateFilter
           visible={!!showCalendar}

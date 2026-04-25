@@ -9,9 +9,8 @@ import {
   getOrderStatusAggregate,
   updateOrderStatus,
 } from '../model/orders';
-import {Order, OrderItem, CartItem} from '../model/types';
+import {Order, OrderItem} from '../model/types';
 import {insertOrderItem} from '../model/orderItems';
-import {AddOn} from '../model/addOn';
 import {useAppContext} from './appContext';
 import {guid} from '../utils/help';
 import {printReceipt} from '../utils/printReceipt';

@@ -1,11 +1,11 @@
 import React from 'react';
-import { StyledText } from 'fluent-styles';
-import { Stack } from '../../../package/stack';
-import { fontStyles, theme } from '../../../../utils/theme';
-import { Icon } from '../../icon/icon';
-import { Pressable } from 'react-native';
-import { useAppContext } from '../../../../hooks/appContext';
-import { StyledIcon } from "../../../package/icon";
+import {StyledText, StyledShape} from 'fluent-styles';
+import {Stack} from '../../../package/stack';
+import {fontStyles, theme} from '../../../../utils/theme';
+import {Pressable} from 'react-native';
+import {useAppContext} from '../../../../hooks/appContext';
+import {StyledIcon} from '../../../package/icon';
+import PosIcon from '../../../pos-icon';
 
 const CategoryCard = ({
   name,
@@ -14,40 +14,47 @@ const CategoryCard = ({
   icon_name,
   total_menu = 0,
   onPress,
-  color_code
+  color_code,
 }) => {
-  const { category_id: selected_category_id } = useAppContext()
-
+  const {category_id: selected_category_id} = useAppContext();
   const menuText = total_menu === 1 ? 'item' : 'items';
 
   return (
-    <Pressable onTouchStart={() => onPress(category_id)} style={{ flex: 1 }}>
+    <Pressable onTouchStart={() => onPress(category_id)} style={{flex: 1}}>
       <Stack
         green={selected_category_id === category_id}
-        horizontal
-        padding={12}
+        horizonal
+        padding={8}
         gap={8}
-        justifyContent="flex-start"
-        alignItems="center"
+        flex={1}
+        horizontal
+        marginVertical={4}
         marginHorizontal={4}
-        marginVertical={2}
-        borderRadius={16}
+        borderRadius={8}
         borderWidth={0}
         borderColor={theme.colors.gray[1]}
         backgroundColor={theme.colors.gray[1]}
         shadowColor="black"
-        shadowOffset={{ width: 0, height: 1 }}
+        shadowOffset={{width: 0, height: 1}}
         shadowOpacity={0.1}
         shadowRadius={2}
-        elevation={3}
-        >
-        <Icon name={icon_name} type={'solid'} isSelected={false} />
+        elevation={3}>
+        <StyledShape
+          size={48}
+          backgroundColor={ theme.colors.gray[100]}
+          justifyContent="center"
+          alignItems="center"
+          cycle
+          marginHorizontal={4}
+          padding={4}>
+          <PosIcon
+            name={icon_name}
+            size={32}
+            color={color_code || theme.colors.gray[500]}
+          />
+        </StyledShape>
+
         <Stack vertical flex={1} justifyContent="center">
-          {
-            selected_category_id === category_id && (
-              <StyledIcon position='absolute' right={-9} top={-14} name="check-circle" size={20} color={theme.colors.green[500]} />
-            )
-          }
           <StyledText
             fontFamily={fontStyles.Roboto_Regular}
             fontSize={theme.fontSize.medium}
@@ -56,7 +63,6 @@ const CategoryCard = ({
             ellipsizeMode="tail">
             {name}
           </StyledText>
-
           {total_menu !== undefined && (
             <StyledText
               fontFamily={fontStyles.Roboto_Regular}

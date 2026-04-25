@@ -33,7 +33,7 @@ const CheckOut = ({ table_id, table_name, order, printHandler, shareReceipt, onC
 
     return (
         <YStack justifyContent='center' alignItems='center' flex={1} transparent>
-            <YStack borderRadius={16} justifyContent='center' alignItems='center' width='30%' backgroundColor={theme.colors.gray[1]} paddingHorizontal={24} paddingVertical={16}>
+            <YStack borderRadius={16} justifyContent='center' alignItems='center' width='45%' backgroundColor={theme.colors.gray[1]} paddingHorizontal={16} paddingVertical={8}>
                 <XStack justifyContent='flex-end' alignItems='center' >
                     <StyledSpacer flex={1}></StyledSpacer>
                     <StyledMIcon
@@ -46,7 +46,7 @@ const CheckOut = ({ table_id, table_name, order, printHandler, shareReceipt, onC
                 <StyledSpacer marginVertical={8}></StyledSpacer>
                 <StyledMIcon
                     name="check-circle"
-                    size={90}
+                    size={120}
                     color={theme.colors.green[600]}
                 />
                 <StyledSpacer marginVertical={8}></StyledSpacer>
@@ -54,40 +54,40 @@ const CheckOut = ({ table_id, table_name, order, printHandler, shareReceipt, onC
                     fontFamily={fontStyles.Roboto_Regular}
                     color={theme.colors.gray[800]}
                     fontWeight={theme.fontWeight.normal}
-                    fontSize={theme.fontSize.normal}
+                    fontSize={theme.fontSize.large}
                     textAlign="center"
                 >
                     Payment Succeefull !
                 </StyledText>
                 <StyledSpacer marginVertical={48}></StyledSpacer>
                 <XStack justifyContent='flex-end' alignItems='flex-end'>
-                    <StyledButton outline borderRadius={8} color={theme.colors.cyan[500]} borderColor={theme.colors.cyan[500]} backgroundColor={theme.colors.gray[1]} flex={1} onPress={() => {
+                    <StyledButton secondary borderRadius={8} color={theme.colors.cyan[500]} borderColor={theme.colors.cyan[500]} backgroundColor={theme.colors.gray[1]} flex={1} onPress={() => {
                         share()
                     }} >
                         <XStack justifyContent='flex-end' alignItems='center' gap={4}>
                             <StyledMIcon
                                 name="email"
-                                size={24}
-                                color={theme.colors.cyan[600]}
+                                size={32}
+                                color={theme.colors.cyan[100]}
                             />
-                            <StyledText fontFamily={fontStyles.Roboto_Regular} paddingVertical={8} fontWeight={theme.fontWeight.normal} color={theme.colors.gray[800]} fontSize={theme.fontSize.small}>Email Receipt</StyledText>
+                            <StyledText fontFamily={fontStyles.Roboto_Regular} paddingVertical={8} fontWeight={theme.fontWeight.normal} color={theme.colors.gray[1]} fontSize={theme.fontSize.normal}>Email Receipt</StyledText>
                         </XStack>
                     </StyledButton>
                     <StyledSpacer marginHorizontal={8}></StyledSpacer>
-                    <StyledButton outline borderRadius={8} color={theme.colors.green[500]} borderColor={theme.colors.green[500]} backgroundColor={theme.colors.gray[1]} flex={1} onPress={() => {
+                    <StyledButton primary borderRadius={8} color={theme.colors.green[500]} borderColor={theme.colors.green[500]} backgroundColor={theme.colors.gray[1]} flex={1} onPress={() => {
                         print();
                     }} >
                         <XStack justifyContent='flex-end' alignItems='center' gap={4}>
                             <StyledMIcon
                                 name="print"
-                                size={24}
-                                color={theme.colors.green[600]}
+                                size={32}
+                                color={theme.colors.green[100]}
                             />
-                            <StyledText fontFamily={fontStyles.Roboto_Regular} paddingVertical={8} fontWeight={theme.fontWeight.normal} color={theme.colors.gray[800]} fontSize={theme.fontSize.small}>Print Receipt</StyledText>
+                            <StyledText fontFamily={fontStyles.Roboto_Regular} paddingVertical={8} fontWeight={theme.fontWeight.normal} color={theme.colors.gray[1]} fontSize={theme.fontSize.normal}>Print Receipt</StyledText>
                         </XStack>
                     </StyledButton>
                 </XStack>
-                <StyledSpacer marginVertical={8}></StyledSpacer>
+                <StyledSpacer marginVertical={4}></StyledSpacer>
             </YStack>
         </YStack>
     )
