@@ -5,11 +5,12 @@ import {
   theme,
   StyledPage,
   Drawer as StyledDrawer,
+  useDialogue,
+  toastService
 } from 'fluent-styles';
 import SideBarAdapter from '../../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../../components/tablet/header';
 import {StyledSearchBar} from '../../../components/searchBar';
-import Drawer from '../../../components/package/drawer';
 import ItemCard from '../item/card';
 import ItemForm from '../item/form/form';
 import {useFocus} from '../../../hooks/useFocus';
@@ -17,9 +18,14 @@ import {StyledIcon} from '../../../components/package/icon';
 import {Pressable} from 'react-native';
 import {useAppContext} from '../../../hooks/appContext';
 import ItemAddOn from './addOn';
+import {useDeleteAddOn} from '../../../hooks/useAddon';
+import { useDeleteMenu } from '../../../hooks/useMenu';
 
 const BigItem = () => {
+  const dialogue = useDialogue();
   const {shop, updateMenuQuery} = useAppContext();
+  const {deleteAddOn} = useDeleteAddOn();
+  const {deleteMenu} = useDeleteMenu();
   const navigationFocus = useFocus();
   const [state, setState] = useState({
     data: null,
@@ -44,6 +50,70 @@ const BigItem = () => {
 
   const update = tag => {
     setState({...state, tag, data: null});
+  };
+
+  const onDeleteAddon = async addOn_id => {
+    const id = dialogue.show({
+      title: 'Delete addon?',
+      message: 'This action cannot be undone.',
+      icon: '⚠️',
+      theme: 'light',
+      actions: [
+        {
+          label: 'Delete',
+          variant: 'destructive',
+          onPress: () => {
+            deleteAddOn(addOn_id).then(async result => {
+              onNotify({status: 'deleted'});
+            });
+          },
+        },
+        {
+          label: 'Keep it',
+          variant: 'secondary',
+          onPress: () => {
+            dialogue.dismiss(id);
+          },
+        },
+      ],
+    });
+  };
+
+   const onDeleteItem = async item_id => {
+    const id = dialogue.show({
+      title: 'Delete item?',
+      message: 'This action cannot be undone.',
+      icon: '⚠️',
+      theme: 'light',
+      actions: [
+         {
+          label: 'Keep it',
+          variant: 'secondary',
+          onPress: () => {
+            dialogue.dismiss(id);
+          },
+        },
+        {
+          label: 'Delete',
+          variant: 'destructive',
+          onPress: () => {
+            deleteMenu(item_id).then(async result => {
+              onNotify({status: 'deleted'});
+            });
+          },
+        },
+      ],
+    });
+  };
+
+   const onNotify = ({status}) => {
+    toastService.show({
+      message: `Item ${status}`,
+      description: `Your item was deleted successfully.`,
+      variant: 'success',
+      duration: 2500,
+      theme: 'light',
+    });
   };
 
   return (
@@ -84,29 +154,34 @@ const BigItem = () => {
           <ItemCard
             shop={shop}
             flag={isFocused}
-            onItemDeleting={() => update('Deleting')}
-            onItemDeleted={() => reset()}
+            onItemDelete={(item_id) => onDeleteItem(item_id)}
             onItemChange={j => setState({...state, tag: j?.tag, data: j?.data})}
             onAddonChange={j => setShowAddOn(j)}
           />
         </Stack>
       </Stack>
-       <StyledDrawer
+      <StyledDrawer
         visible={shouldOpen ? true : false}
         onClose={() => reset()}
         title={`${state.tag === 'Edit' ? 'Edit' : 'Add'} Item `}
         width={'30%'}
         side="right">
-      <ItemForm item={state?.data} onClose={() => reset()} />
+        <ItemForm item={state?.data} onClose={() => reset()} />
       </StyledDrawer>
       <StyledDrawer
         visible={showAddOn ? true : false}
         onClose={() => setShowAddOn(false)}
         title={`${showAddOn?.name} `}
-        subtitle={`Add AddOns`}
+        subtitle={'AddOns'}
         width={'30%'}
-        side="right">
-        <ItemAddOn menu_id={showAddOn?.menu_id} onClose={() => setShowAddOn(false)} />
+        side="right"
+        colors={{
+          background: theme.colors.gray[100],
+        }}>
+        <ItemAddOn
+          menu_id={showAddOn?.menu_id}
+          onClose={() => setShowAddOn(false)}
+        />
       </StyledDrawer>
     </StyledPage>
   );

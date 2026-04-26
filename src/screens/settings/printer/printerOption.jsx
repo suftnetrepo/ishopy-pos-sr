@@ -47,8 +47,6 @@ export default function PrinterOptions() {
     }
   }, [selectedPrinter]);
 
-  console.log('Available selectedPrinter:', selectedPrinter);
-
   const handleScan = async () => {
     if (connectionType !== 'bluetooth') return;
 

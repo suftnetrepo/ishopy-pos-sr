@@ -98,6 +98,7 @@ const useCategory = (flag= false) => {
     ...data,
     data: Array.isArray(data.data) ? data.data : [data.data],
     resetHandler,
+    loadCategories
   };
 };
 

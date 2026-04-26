@@ -21,9 +21,19 @@ const addOnRules = {
       },
     ],
   },
+  reset :() => {  
+    return {
+      addOnName: '',
+      price: '',  
+      status : 1,
+      addOn_id: '',
+      }
+  },
   fields: {
     addOnName: '',
     price: '',
+    status : 1,
+    addOn_id: '',
   },
 };
 

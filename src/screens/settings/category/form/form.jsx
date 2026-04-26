@@ -1,31 +1,27 @@
 import React, {useState, useEffect} from 'react';
 import {
   validate,
-  StyledSpinner,
   theme,
   XStack,
   YStack,
   Stack,
-  StyledOkDialog,
-  StyledCheckBox,
   StyledSpacer,
-  StyledInput,
   StyledText,
-  StyledButton,
+  Switch,
+  StyledCard,
+  StyledPressable,
+  StyledTextInput,
+  toastService
 } from 'fluent-styles';
 import {fontStyles} from '../../../../configs/theme';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {categoryRules} from './validatorRules';
 import {
   useUpdateCategory,
   useInsertCategory,
 } from '../../../../hooks/useCategory';
 import ColorPicker from '../../../../components/colorPicker';
-import {Text, HStack} from '@gluestack-ui/themed';
-import {StyledIcon} from '../../../../components/package/icon';
-import {ShowToast} from '../../../../components/toast';
-import IconPicker from '../../../../components/icon-picker';
 import PosIconPicker from '../../../../components/pos-icon-picker';
+import {useLoaderAndError} from '../../../../hooks/useLoaderAndError';
 
 const CategoryForm = ({category, onClose}) => {
   const [errorMessages, setErrorMessages] = useState({});
@@ -41,6 +37,20 @@ const CategoryForm = ({category, onClose}) => {
       };
     });
   }, [category]);
+
+  useLoaderAndError(loading, error, resetHandler);
+
+  const onNotify = ({status}) => {
+    toastService.show({
+      message: `Category ${status}`,
+      description: `Your category was ${status} successfully.`,
+      variant: 'success',
+      duration: 2500,
+      theme: 'light',
+    });
+    setFields(categoryRules.reset);
+    onClose && onClose();
+  };
 
   const onSubmit = async () => {
     setErrorMessages({});
@@ -58,7 +68,7 @@ const CategoryForm = ({category, onClose}) => {
         fields.color_code,
         fields.icon_name
       ).then(async result => {
-        result && handleResult('Category was updated successfully');
+        result && onNotify({status: 'updated'});
       });
     } else {
       delete fields.category_id;
@@ -68,73 +78,43 @@ const CategoryForm = ({category, onClose}) => {
         fields.color_code,
         fields.icon_name
       ).then(async result => {
-        result && handleResult('Category was added successfully');
+        result && onNotify({status: 'added'});
       });
     }
   };
 
-  const handleResult = message => {
-    ShowToast('Success', message);
-    !category && setFields(discountRules.reset);
-  };
-
   return (
     <>
-      <YStack
-        flex={1}
-        backgroundColor={theme.colors.gray[1]}
-        paddingHorizontal={16}>
-        <StyledSpacer marginVertical={16} />
-        <HStack justifyContent="space-between" alignItems="center">
-          <HStack
-            flex={1}
-            horizontal
-            justifyContent="flex-start"
-            alignItems="center">
-            <StyledIcon
-              name={category ? 'create' : 'add'}
-              size={32}
-              color={theme.colors.gray[400]}
-            />
-            <Text
-              paddingHorizontal={4}
-              fontFamily={fontStyles.Roboto_Regular}
-              color={theme.colors.gray[800]}
-              fontSize={theme.fontSize.large}
-              fontWeight={theme.fontWeight.normal}>
-              Category
-            </Text>
-          </HStack>
-          <StyledIcon
-            name="cancel"
-            size={48}
-            color={theme.colors.gray[800]}
-            onPress={() => onClose()}
-          />
-        </HStack>
-        <StyledSpacer marginVertical={8} />
-        <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+      <YStack flex={1} backgroundColor={theme.colors.gray[100]}>
+        <StyledCard
+          gap={8}
+          paddingHorizontal={16}
+          horizontal
+          backgroundColor={theme.colors.gray[1]}
+          borderRadius={16}
+          marginHorizontal={16}
+          marginTop={16}
+          paddingVertical={16}>
           <ColorPicker
             color={fields.color_code || theme.colors.purple[900]}
             onPress={color => setFields({...fields, color_code: color})}
           />
-          <StyledInput
+
+          <StyledTextInput
             label={'Name'}
             keyboardType="default"
             placeholder="Enter category name"
             returnKeyType="next"
             maxLength={50}
-            height={40}
-            fontSize={theme.fontSize.normal}
-            paddingHorizontal={8}
+            fontSize={theme.fontSize.small}
             value={fields.name}
             placeholderTextColor={theme.colors.gray[400]}
             onChangeText={text => setFields({...fields, name: text})}
             error={!!errorMessages?.name}
             errorMessage={errorMessages?.name?.message}
           />
-          <StyledSpacer marginVertical={4} />
-          <Stack marginLeft={8}>
+
+          <Stack>
             <StyledText
               fontWeight={theme.fontWeight.normal}
               color={theme.colors.gray[800]}
@@ -149,54 +129,50 @@ const CategoryForm = ({category, onClose}) => {
               onSelect={icon => setFields({...fields, icon_name: icon})}
             />
           </Stack>
-          <StyledSpacer marginVertical={4} />
+
           <XStack
             justifyContent="flex-start"
             alignItems="center"
-            paddingVertical={8}
+            gap={8}
             paddingHorizontal={16}>
-            <StyledCheckBox
-              height={30}
-              width={30}
-              checked={fields.status === 1 ? true : false}
-              checkedColor={theme.colors.pink[600]}
-              onPress={value => setFields({...fields, status: value ? 1 : 0})}
+            <Switch
+              activeValue={1}
+              inactiveValue={0}
+              defaultValue={0}
+              value={fields.status}
+              onChange={value =>
+                setFields({...fields, status: parseInt(value ? 1 : 0)})
+              }
+              colors={{
+                activeThumb: theme.colors.white,
+                inactiveThumb: theme.colors.white,
+                activeTrack: theme.colors.green[600],
+                inactiveTrack: theme.colors.red[400],
+              }}
             />
-            <StyledSpacer marginHorizontal={8} />
             <StyledText
               fontWeight={theme.fontWeight.normal}
               color={theme.colors.gray[600]}
-              fontSize={theme.fontSize.large}>
+              fontSize={theme.fontSize.normal}
+              fontFamily={fontStyles.Roboto_Regular}>
               Status
             </StyledText>
           </XStack>
-
-          <StyledSpacer marginVertical={4} />
-          <StyledButton
-            flex={1}
+          <StyledPressable
+            onPress={onSubmit}
             backgroundColor={theme.colors.yellow[500]}
-            onPress={() => onSubmit()}>
+            borderRadius={32}
+            paddingVertical={12}
+            alignItems="center">
             <StyledText
-              paddingHorizontal={20}
-              paddingVertical={10}
-              color={theme.colors.gray[800]}>
+              color={theme.colors.white}
+              fontSize={theme.fontSize.normal}
+              fontWeight={theme.fontWeight.medium}>
               Save Changes
             </StyledText>
-          </StyledButton>
-          <StyledSpacer marginVertical={4} />
-        </KeyboardAwareScrollView>
+          </StyledPressable>
+        </StyledCard>
       </YStack>
-      {error && (
-        <StyledOkDialog
-          title={error?.message}
-          description="please try again"
-          visible={true}
-          onOk={() => {
-            resetHandler();
-          }}
-        />
-      )}
-      {loading && <StyledSpinner />}
     </>
   );
 };

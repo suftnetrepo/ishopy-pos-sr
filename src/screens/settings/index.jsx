@@ -5,10 +5,10 @@ import {
   StyledText,
   Stack,
   theme,
+  Drawer
 } from 'fluent-styles';
 import SideBarAdapter from '../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../components/tablet/header';
-import Drawer from '../../components/package/drawer';
 import {StyledShape} from '../../components/package/shape';
 import {StyledImage} from '../../components/package/image';
 import Shop from './shop';
@@ -21,7 +21,7 @@ const SETTINGS_CONFIG = {
   rows: [
     [
       {
-        id: 'categor',
+        id: 'category',
         icon: require('../../../assets/img/category-1.png'),
         name: 'Categories',
       },
@@ -30,7 +30,11 @@ const SETTINGS_CONFIG = {
         icon: require('../../../assets/img/box-1.png'),
         name: 'Items',
       },
-      {id: 'tax', icon: require('../../../assets/img/tax-1.png'), name: 'Taxes'},
+      {
+        id: 'tax',
+        icon: require('../../../assets/img/tax-1.png'),
+        name: 'Taxes',
+      },
     ],
     [
       {
@@ -188,10 +192,18 @@ const BigSettings = () => {
       </Stack>
 
       <Drawer
-        direction="right"
-        
-        isOpen={['shop', 'restore', 'back-up', 'printer'].includes(show.tag)}
-        onClose={() => setShow({data: null, id: '', tag: ''})}>
+        visible={
+          ['shop', 'restore', 'back-up', 'printer'].includes(show.tag)
+            ? true
+            : false
+        }
+        onClose={() => setShow({data: null, id: '', tag: ''})}
+        title={show.tag}
+        width={'30%'}
+        colors={{
+          background: theme.colors.gray[100],
+        }}
+        side="right">
         {show.tag === 'shop' && (
           <Shop onClose={() => setShow({data: null, id: '', tag: ''})} />
         )}

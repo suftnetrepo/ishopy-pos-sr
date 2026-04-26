@@ -51,6 +51,8 @@ const queryAddonByMenuId = async (menu_id: string): Promise<AddOn[]> => {
           price: addOn.price,
           status :addOn.status
         }));
+
+        console.log('addOns', addOns);
       resolve(addOns);
     } catch (error) {
       reject(error);

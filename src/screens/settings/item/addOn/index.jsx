@@ -1,21 +1,21 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   YStack,
   theme,
   XStack,
-  Stack,
   StyledForm,
   StyledPressable,
-  StyledConfirmDialog,
   StyledCycle,
-  StyledSpinner,
-  StyledOkDialog,
   StyledSpacer,
   StyledText,
   StyledTextInput,
   validate,
-  StyledScrollView
+  StyledScrollView,
+  StyledCard,
+  Switch,
+  toastService,
 } from 'fluent-styles';
+import {useLoaderAndError} from '../../../../hooks/useLoaderAndError';
 import {fontStyles} from '../../../../configs/theme';
 import {StyledMIcon} from '../../../../components/icon';
 import {formatCurrency, toWordCase} from '../../../../utils/help';
@@ -29,29 +29,33 @@ import {useAppContext} from '../../../../hooks/appContext';
 import {addOnRules} from './validatorRules';
 
 const ItemAddOn = ({menu_id}) => {
-  const [isDialogVisible, setIsDialogVisible] = useState(false);
-  const {loading, data, error, loadAddons} = useAddOns();
   const {deleteAddOn} = useDeleteAddOn();
+  const {loading, data, error, loadAddons, resetHandler} = useAddOns(menu_id);
   const {insert} = useInsertAddon();
   const {update} = useUpdateAddOn();
   const {shop} = useAppContext();
   const [errorMessages, setErrorMessages] = useState({});
   const [fields, setFields] = useState(addOnRules.fields);
 
-  useEffect(() => {
-    loadAddons(menu_id);
-  }, [menu_id]);
+  useLoaderAndError(loading, error, resetHandler);
 
-  const onConfirm = () => {
-    deleteAddOn(item?.menu_id).then(async result => {
-      onItemDeleted();
-      setIsDialogVisible(false);
+  const onNotify = ({status, isDeleted}) => {
+    toastService.show({
+      message: `Addon ${status}`,
+      description: isDeleted
+        ? `Your addon was deleted successfully.`
+        : `Your addon was ${status} successfully.`,
+      variant: 'success',
+      duration: 2500,
+      theme: 'light',
     });
+    setFields(addOnRules.reset());
   };
 
-  const onUpdate = fields => {
-    update(fields).then(() => {
-      loadAddons(menu_id);
+  const onDelete =  addOn_id => {
+    deleteAddOn(addOn_id).then(async result => {
+      onNotify({status: 'deleted', isDeleted: true});
+      loadAddons(menu_id);  
     });
   };
 
@@ -63,25 +67,48 @@ const ItemAddOn = ({menu_id}) => {
       return false;
     }
 
-    insert(fields).then(() => {});
+    if (fields?.addOn_id) {
+      update(
+        fields.addOn_id,
+        fields.addOnName,
+        parseFloat(fields.price),
+        fields.status
+      ).then(() => {
+        loadAddons(menu_id).then(() => {
+          onNotify({status: 'updated'});
+        });
+      });
+      return;
+    }
+
+    insert(
+      fields.addOnName,
+      parseFloat(fields.price),
+      menu_id,
+      fields.status
+    ).then(() => {
+      loadAddons(menu_id).then(() => {
+        onNotify({status: 'added'});
+      });
+    });
   };
 
-  const RenderCard = ({item}) => {
+  const RenderCard = ({item, index}) => {
     return (
       <XStack
         flexDirection="row"
-        marginHorizontal={16}
+        marginHorizontal={8}
         flex={1}
-        borderColor={theme.colors.gray[400]}
-        borderWidth={0.5}
         paddingHorizontal={8}
         backgroundColor={theme.colors.gray[1]}
-        paddingVertical={8}
         justifyContent="flex-start"
-        marginBottom={8}
-        borderRadius={16}
+        borderBottomWidth={1}
+        borderBottomColor={
+          index === data.length - 1 ? 'transparent' : theme.colors.gray[200]
+        }
+        paddingBottom={index === data.length - 1 ? 0 : 8}
         alignItems="center">
-        <YStack flex={2}>
+        <YStack flex={2} justifyContent="center">
           <StyledText
             paddingHorizontal={8}
             fontFamily={fontStyles.Roboto_Regular}
@@ -106,7 +133,7 @@ const ItemAddOn = ({menu_id}) => {
               size={24}
               name="edit"
               color={theme.colors.gray[600]}
-              onPress={() => onUpdate(item)}
+              onPress={() => setFields({...fields, ...item})}
             />
           </StyledCycle>
           <StyledSpacer marginHorizontal={8} />
@@ -115,7 +142,7 @@ const ItemAddOn = ({menu_id}) => {
               size={32}
               name="delete-outline"
               color={theme.colors.gray[600]}
-              onPress={() => onAddonChange(item.menu_id)}
+              onPress={() => onDelete(item.addOn_id)}
             />
           </StyledCycle>
         </XStack>
@@ -125,7 +152,15 @@ const ItemAddOn = ({menu_id}) => {
 
   return (
     <>
-      <Stack gap={8} paddingHorizontal={16} horizontal>
+      <StyledCard
+        gap={8}
+        paddingHorizontal={16}
+        horizontal
+        backgroundColor={theme.colors.gray[1]}
+        borderRadius={16}
+        marginHorizontal={16}
+        marginTop={16}
+        paddingVertical={16}>
         <StyledForm>
           <StyledTextInput
             label={'Name'}
@@ -133,10 +168,7 @@ const ItemAddOn = ({menu_id}) => {
             placeholder="Enter your addOn name"
             returnKeyType="next"
             maxLength={50}
-            fontSize={theme.fontSize.normal}
-            borderColor={theme.colors.yellow[800]}
-            backgroundColor={theme.colors.gray[1]}
-            borderRadius={32}
+            fontSize={theme.fontSize.small}
             paddingHorizontal={8}
             value={fields.addOnName}
             placeholderTextColor={theme.colors.gray[300]}
@@ -149,17 +181,27 @@ const ItemAddOn = ({menu_id}) => {
             keyboardType="default"
             placeholder="Enter your addOn price"
             returnKeyType="next"
-            maxLength={50}
-            fontSize={theme.fontSize.normal}
-            borderColor={theme.colors.yellow[800]}
-            backgroundColor={theme.colors.gray[1]}
-            borderRadius={32}
+            maxLength={9}
+            fontSize={theme.fontSize.small}
             paddingHorizontal={8}
-            value={fields.price}
+            value={fields.price.toString()}
             placeholderTextColor={theme.colors.gray[300]}
             onChangeText={text => setFields({...fields, price: text})}
             error={!!errorMessages?.price}
             errorMessage={errorMessages?.price?.message}
+          />
+          <Switch
+            activeValue={1}
+            inactiveValue={0}
+            defaultValue={0}
+            value={fields.status}
+            colors={{
+              activeThumb: theme.colors.white,
+              inactiveThumb: theme.colors.white,
+              activeTrack: theme.colors.green[600],
+              inactiveTrack: theme.colors.red[400],
+            }}
+            onChange={v => setFields({...fields, status: v})}
           />
           <StyledPressable
             onPress={onSubmit}
@@ -171,41 +213,25 @@ const ItemAddOn = ({menu_id}) => {
               color={theme.colors.white}
               fontSize={theme.fontSize.normal}
               fontWeight={theme.fontWeight.medium}>
-              Submit
+              Save Changes
             </StyledText>
           </StyledPressable>
         </StyledForm>
-      </Stack>
+      </StyledCard>
       <StyledSpacer marginVertical={8} />
       <StyledScrollView>
-        {
-            data.map ((item, index) => (
-              <RenderCard item={item} key={index} />
-            ))
-        }
+        <StyledCard
+          gap={8}
+          horizontal
+          backgroundColor={theme.colors.gray[1]}
+          borderRadius={16}
+          marginHorizontal={16}
+          paddingVertical={16}>
+          {data.map((item, index) => (
+            <RenderCard item={item} key={index} index={index} />
+          ))}
+        </StyledCard>
       </StyledScrollView>
-      {error && (
-        <StyledOkDialog
-          title={error?.message}
-          description="please try again"
-          visible={true}
-          onOk={() => {
-            resetHandler();
-          }}
-        />
-      )}
-      {loading && <StyledSpinner />}
-      {isDialogVisible && (
-        <StyledConfirmDialog
-          visible
-          description="Are you sure you want to delete this Item?"
-          confirm="Yes"
-          cancel="No"
-          title={'Confirmation'}
-          onCancel={() => setIsDialogVisible(false)}
-          onConfirm={() => onConfirm()}
-        />
-      )}
     </>
   );
 };

@@ -1,24 +1,12 @@
 
-import React, { useState } from 'react';
-import { YStack, XStack,Stack, StyledConfirmDialog, StyledCycle, StyledSpinner, StyledOkDialog, StyledSpacer, StyledText } from 'fluent-styles';
+import React from 'react';
+import { YStack, XStack,Stack, StyledCycle, StyledSpacer, StyledText } from 'fluent-styles';
 import { theme, fontStyles } from '../../../../configs/theme';
 import { StyledMIcon } from '../../../../components/icon';
-import { useCategory, useDeleteCategory } from '../../../../hooks/useCategory';
 import { FlatList } from 'react-native';
 import { toWordCase } from '../../../../utils/help';
 
-const CategoryCard = ({ onCategoryChange, onCategoryDeleted, onCategoryDeleting, flag = false }) => {
-    const [isDialogVisible, setIsDialogVisible] = useState(false)
-    const [category, setCategory] = useState()
-    const { data, error, loading, resetHandler } = useCategory(flag)
-    const { deleteCategory, error: deleteError } = useDeleteCategory()
-
-    const onConfirm = () => {
-        deleteCategory(category?.category_id).then(async (result) => {
-            onCategoryDeleted()
-            setIsDialogVisible(false)
-        })
-    }
+const CategoryCard = ({ onCategoryChange, onCategoryDelete, data }) => {
 
     const RenderCard = ({ item }) => {
         return (
@@ -38,9 +26,7 @@ const CategoryCard = ({ onCategoryChange, onCategoryDeleted, onCategoryDeleting,
                     <StyledSpacer marginHorizontal={4} />
                     <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]}>
                         <StyledMIcon size={32} name='delete-outline' color={theme.colors.gray[600]} onPress={() => {
-                            onCategoryDeleting()
-                            setIsDialogVisible(true)
-                            setCategory(item)
+                            onCategoryDelete(item?.category_id)
                         }
                         } />
                     </StyledCycle>
@@ -63,28 +49,7 @@ const CategoryCard = ({ onCategoryChange, onCategoryDeleted, onCategoryDeleting,
                     )
                 }}
             />
-            {
-                (error || deleteError) && (
-                    <StyledOkDialog title={error?.message || deleteError?.message} description='please try again' visible={true} onOk={() => {
-                        resetHandler()
-                    }} />
-                )
-            }
-            {
-                (loading) && (
-                    <StyledSpinner />
-                )
-            }
-            {isDialogVisible &&
-                <StyledConfirmDialog
-                    visible
-                    description='Are you sure you want to delete this category?'
-                    confirm='Yes'
-                    cancel='No'
-                    title={'Confirmation'}
-                    onCancel={() => setIsDialogVisible(false)}
-                    onConfirm={() => onConfirm()}
-                />}
+           
         </>
     );
 }

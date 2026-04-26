@@ -1,24 +1,14 @@
 
-import React, { useState } from 'react';
-import { YStack,theme,Stack, XStack, StyledConfirmDialog, StyledCycle, StyledSpinner, StyledOkDialog, StyledSpacer, StyledText } from 'fluent-styles';
+
+import React from 'react';
+import { YStack, theme, Stack, XStack, StyledCycle, StyledSpacer, StyledText } from 'fluent-styles';
 import { fontStyles } from '../../../../configs/theme';
 import { StyledMIcon } from '../../../../components/icon';
-import { useTaxes, useDeleteTax } from '../../../../hooks/useTax';
+// import { useTaxes } from '../../../../hooks/useTax';
 import { FlatList } from 'react-native';
 import { toWordCase } from '../../../../utils/help';
 
-const TaxCard = ({ onTaxChange, onTaxDeleted, onTaxDeleting, flag = false }) => {
-    const [isDialogVisible, setIsDialogVisible] = useState(false)
-    const [tax, setTax] = useState()
-    const { data, error, loading, resetHandler } = useTaxes(flag)
-    const { deleteTax, error: deleteError } = useDeleteTax()
-
-    const onConfirm = () => {
-        deleteTax(tax?.tax_id).then(async (result) => {
-            onTaxDeleted()
-            setIsDialogVisible(false)
-        })
-    }
+const TaxCard = ({ data, onTaxChange, onTaxDelete, flag = false }) => {
 
     const RenderCard = ({ item }) => {
         return (
@@ -37,12 +27,7 @@ const TaxCard = ({ onTaxChange, onTaxDeleted, onTaxDeleting, flag = false }) => 
                     </StyledCycle>
                     <StyledSpacer marginHorizontal={4} />
                     <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]}>
-                        <StyledMIcon size={32} name='delete-outline' color={theme.colors.gray[600]} onPress={() => {
-                            onTaxDeleting()
-                            setIsDialogVisible(true)
-                            setTax(item)
-                        }
-                        } />
+                        <StyledMIcon size={32} name='delete-outline' color={theme.colors.gray[600]} onPress={() => onTaxDelete(item?.tax_id)} />
                     </StyledCycle>
                 </XStack>
             </Stack>
@@ -50,42 +35,16 @@ const TaxCard = ({ onTaxChange, onTaxDeleted, onTaxDeleting, flag = false }) => 
     }
 
     return (
-        <>
-            <FlatList
-                data={data}
-                initialNumToRender={100}
-                showsVerticalScrollIndicator={false}
-                keyExtractor={(item) => item.tax_id}
-                numColumns={3}
-                renderItem={({ item, index }) => {
-                    return (
-                        <RenderCard item={item} key={index} />
-                    )
-                }}
-            />
-            {
-                (error || deleteError) && (
-                    <StyledOkDialog title={error?.message || deleteError?.message} description='please try again' visible={true} onOk={() => {
-                        resetHandler()
-                    }} />
-                )
-            }
-            {
-                (loading) && (
-                    <StyledSpinner />
-                )
-            }
-            {isDialogVisible &&
-                <StyledConfirmDialog
-                    visible
-                    description='Are you sure you want to delete this tax?'
-                    confirm='Yes'
-                    cancel='No'
-                    title={'Confirmation'}
-                    onCancel={() => setIsDialogVisible(false)}
-                    onConfirm={() => onConfirm()}
-                />}
-        </>
+        <FlatList
+            data={data}
+            initialNumToRender={100}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item) => item.tax_id}
+            numColumns={3}
+            renderItem={({ item, index }) => (
+                <RenderCard item={item} key={index} />
+            )}
+        />
     );
 }
 

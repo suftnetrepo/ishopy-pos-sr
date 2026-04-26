@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {
   StyledSafeAreaView,
-  StyledHeader,
+  Drawer,
   StyledCycle,
   Stack,
   theme,
@@ -9,15 +9,21 @@ import {
 } from 'fluent-styles';
 import SideBarAdapter from '../../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../../components/tablet/header';
-import Drawer from '../../../components/package/drawer';
 import DiscountCard from '../discount/card';
 import DiscountForm from '../discount/form/form';
+import {useDeleteDiscount, useDiscounts} from '../../../hooks/useDiscount';
+import {useLoaderAndError} from '../../../hooks/useLoaderAndError';
+import {toastService, useDialogue} from 'fluent-styles';
 import {useFocus} from '../../../hooks/useFocus';
 import {StyledIcon} from '../../../components/package/icon';
 import {Pressable} from 'react-native';
 
 const BigDiscount = () => {
   const navigationFocus = useFocus();
+  const dialogue = useDialogue();
+  const {deleteDiscount} = useDeleteDiscount();
+  const {data, error, loading, resetHandler, loadDiscount} =
+    useDiscounts(true);
   const [state, setState] = useState({
     data: null,
     tag: '',
@@ -25,6 +31,8 @@ const BigDiscount = () => {
   const [screenFocus, setScreenFocus] = useState(true);
   const shouldOpen = state.tag === 'Edit' || state.tag === 'Add';
   const isFocused = navigationFocus && screenFocus;
+
+  useLoaderAndError(loading, error, resetHandler);
 
   useEffect(() => {
     if (state.tag) {
@@ -40,6 +48,40 @@ const BigDiscount = () => {
 
   const update = tag => {
     setState({...state, tag, data: null});
+  };
+
+  const onDiscountDelete = async discount_id => {
+    const id = dialogue.show({
+      title: 'Delete Discount?',
+      message: 'This action cannot be undone.',
+      icon: '\u26a0\ufe0f',
+      theme: 'light',
+      actions: [
+        {
+          label: 'Keep it',
+          variant: 'secondary',
+          onPress: () => {
+            dialogue.dismiss(id);
+          },
+        },
+        {
+          label: 'Delete',
+          variant: 'destructive',
+          onPress: async () => {
+            await deleteDiscount(discount_id);
+            toastService.show({
+              message: 'Discount deleted',
+              description: 'The discount was deleted successfully.',
+              variant: 'success',
+              duration: 2500,
+              theme: 'light',
+            });
+            await loadDiscount();
+            dialogue.dismiss(id);
+          },
+        },
+      ],
+    });
   };
 
   return (
@@ -73,19 +115,26 @@ const BigDiscount = () => {
         <SideBarAdapter selectedMenu={5} showMenu={false} collapse={true} />
         <Stack flex={3} gap={8} marginHorizontal={16} vertical>
           <DiscountCard
+            data={data}
             flag={isFocused}
-            onDiscountDeleting={() => update('Deleting')}
-            onDiscountDeleted={() => reset()}
+            onDiscountDelete={onDiscountDelete}
             onDiscountChange={j =>
               setState({...state, tag: j?.tag, data: j?.data})
             }
           />
         </Stack>
       </Stack>
-      <Drawer direction="right" isOpen={shouldOpen} onClose={() => reset()}>
-        {shouldOpen && (
-          <DiscountForm discount={state?.data} onClose={() => reset()} />
-        )}
+
+      <Drawer
+        visible={shouldOpen ? true : false}
+        onClose={() => reset()}
+        title={`${state.tag === 'Edit' ? 'Edit' : 'Add'} Category `}
+        width={'30%'}
+        colors={{
+          background: theme.colors.gray[100],
+        }}
+        side="right">
+        <DiscountForm discount={state?.data} onClose={() => reset()} />
       </Drawer>
     </StyledPage>
   );

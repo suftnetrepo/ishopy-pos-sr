@@ -1,18 +1,25 @@
 import React, {useState, useEffect} from 'react';
-import {StyledSafeAreaView, StyledPage, StyledCycle} from 'fluent-styles';
+import {Drawer, StyledPage, StyledCycle} from 'fluent-styles';
 import {Stack} from '../../../components/package/stack';
 import {theme} from '../../../utils/theme';
 import SideBarAdapter from '../../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../../components/tablet/header';
-import Drawer from '../../../components/package/drawer';
+
 import TaxCard from '../tax/card';
 import TaxForm from '../tax/form/form';
+import { useDeleteTax, useTaxes } from '../../../hooks/useTax';
+import { useLoaderAndError } from '../../../hooks/useLoaderAndError';
+import { toastService, useDialogue } from 'fluent-styles';
 import {useFocus} from '../../../hooks/useFocus';
 import {StyledIcon} from '../../../components/package/icon';
 import {Pressable} from 'react-native';
 
 const BigTax = () => {
   const navigationFocus = useFocus();
+  const dialogue = useDialogue();
+  const { deleteTax } = useDeleteTax();
+  const { data, error, loading, resetHandler, loadTaxes } = useTaxes(isFocused);
+    useLoaderAndError(loading, error, resetHandler);
   const [state, setState] = useState({
     data: null,
     tag: '',
@@ -35,6 +42,40 @@ const BigTax = () => {
 
   const update = tag => {
     setState({...state, tag, data: null});
+  };
+
+  const onTaxDelete = async (tax_id) => {
+    const id = dialogue.show({
+      title: 'Delete Tax?',
+      message: 'This action cannot be undone.',
+      icon: '\u26a0\ufe0f',
+      theme: 'light',
+      actions: [
+        {
+          label: 'Keep it',
+          variant: 'secondary',
+          onPress: () => {
+            dialogue.dismiss(id);
+          },
+        },
+        {
+          label: 'Delete',
+          variant: 'destructive',
+          onPress: async () => {
+            await deleteTax(tax_id);
+            toastService.show({
+              message: 'Tax deleted',
+              description: 'The tax was deleted successfully.',
+              variant: 'success',
+              duration: 2500,
+              theme: 'light',
+            });
+            await loadTaxes();
+            dialogue.dismiss(id);
+          },
+        },
+      ],
+    });
   };
 
   return (
@@ -68,15 +109,24 @@ const BigTax = () => {
         <SideBarAdapter selectedMenu={5} showMenu={false} collapse={true} />
         <Stack flex={3} gap={8} marginHorizontal={16} vertical>
           <TaxCard
+            data={data}
             flag={isFocused}
-            onTaxDeleting={() => update('Deleting')}
-            onTaxDeleted={() => reset()}
+            onTaxDelete={onTaxDelete}
             onTaxChange={j => setState({...state, tag: j?.tag, data: j?.data})}
           />
         </Stack>
       </Stack>
-      <Drawer direction="right" isOpen={shouldOpen} onClose={() => reset()}>
-        {shouldOpen && <TaxForm tax={state?.data} onClose={() => reset()} />}
+    
+       <Drawer
+        visible={shouldOpen ? true : false}
+        onClose={() => reset()}
+        title={`${state.tag === 'Edit' ? 'Edit' : 'Add'} Category `}
+        width={'30%'}
+        colors={{
+          background: theme.colors.gray[100],
+        }}
+        side="right">
+       <TaxForm tax={state?.data} onClose={() => reset()} />
       </Drawer>
     </StyledPage>
   );

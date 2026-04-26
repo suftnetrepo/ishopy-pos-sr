@@ -78,12 +78,7 @@ const PosIconPicker: React.FC<PosIconPickerProps> = ({
                 size={26}
                 color={isSelected ? theme.colors.blue[700] : color}
               />
-              <StyledText
-                fontSize={9}
-                color={isSelected ? theme.colors.blue[700] : theme.colors.gray[500]}
-                style={{ marginTop: 4, textAlign: 'center' }}>
-                {icon.label}
-              </StyledText>
+              
             </TouchableOpacity>
           );
         })}
@@ -100,11 +95,11 @@ const s = StyleSheet.create({
   },
   item: {
     width: 60,
-    height: 64,
-    borderRadius: 10,
-    borderWidth: 1.5,
-    borderColor: theme.colors.gray[200],
-    backgroundColor: theme.colors.gray[50],
+    height: 48,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: theme.colors.gray[100],
+    backgroundColor: theme.colors.gray[1],
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 6,

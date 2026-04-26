@@ -1,22 +1,26 @@
 import React, {useState, useEffect} from 'react';
 import {
-  StyledSafeAreaView,
-  StyledHeader,
   StyledCycle,
   Stack,
   theme,
   StyledPage,
+  Drawer,
+  toastService,
+  useDialogue,
 } from 'fluent-styles';
 import SideBarAdapter from '../../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../../components/tablet/header';
-import Drawer from '../../../components/package/drawer';
 import CategoryCard from './card';
 import CategoryForm from './form/form';
 import {useFocus} from '../../../hooks/useFocus';
 import {StyledIcon} from '../../../components/package/icon';
 import {Pressable} from 'react-native';
+import {useCategory, useDeleteCategory} from '../../../hooks/useCategory';
+import {useLoaderAndError} from '../../../hooks/useLoaderAndError';
 
 const BigCategory = () => {
+  const dialogue = useDialogue();
+  const {deleteCategory} = useDeleteCategory();
   const navigationFocus = useFocus();
   const [state, setState] = useState({
     data: null,
@@ -25,6 +29,9 @@ const BigCategory = () => {
   const [screenFocus, setScreenFocus] = useState(true);
   const shouldOpen = state.tag === 'Edit' || state.tag === 'Add';
   const isFocused = navigationFocus && screenFocus;
+  const {data, error, loading,  resetHandler, loadCategories} = useCategory(isFocused);
+
+  useLoaderAndError(loading, error, resetHandler);
 
   useEffect(() => {
     if (state.tag) {
@@ -33,6 +40,44 @@ const BigCategory = () => {
       setScreenFocus(true);
     }
   }, [state.tag]);
+
+  const onDelete = async category_id => {
+    const id = dialogue.show({
+      title: 'Delete Category?',
+      message: 'This action cannot be undone.',
+      icon: '⚠️',
+      theme: 'light',
+      actions: [
+        {
+          label: 'Keep it',
+          variant: 'secondary',
+          onPress: () => {
+            dialogue.dismiss(id);
+          },
+        },
+        {
+          label: 'Delete',
+          variant: 'destructive',
+          onPress: async () => {
+            deleteCategory(category_id).then(async result => {
+              onNotify({status: 'deleted'});
+              await loadCategories();
+            });
+          },
+        },
+      ],
+    });
+  };
+
+  const onNotify = ({status}) => {
+    toastService.show({
+      message: `Category ${status}`,
+      description: `Your category was ${status} successfully.`,
+      variant: 'success',
+      duration: 2500,
+      theme: 'light',
+    });
+  };
 
   const reset = () => {
     setState({...state, tag: '', data: null});
@@ -73,19 +118,24 @@ const BigCategory = () => {
         <SideBarAdapter selectedMenu={5} showMenu={false} collapse={true} />
         <Stack flex={3} gap={8} marginHorizontal={16} vertical>
           <CategoryCard
-            flag={isFocused}
-            onCategoryDeleting={() => update('Deleting')}
-            onCategoryDeleted={() => reset()}
+            data={data}
+            onCategoryDelete={async j => await onDelete(j)}
             onCategoryChange={j =>
               setState({...state, tag: j?.tag, data: j?.data})
             }
           />
         </Stack>
       </Stack>
-      <Drawer direction="right" isOpen={shouldOpen} onClose={() => reset()}>
-        {shouldOpen && (
-          <CategoryForm category={state?.data} onClose={() => reset()} />
-        )}
+      <Drawer
+        visible={shouldOpen ? true : false}
+        onClose={() => reset()}
+        title={`${state.tag === 'Edit' ? 'Edit' : 'Add'} Category `}
+        width={'30%'}
+        colors={{
+          background: theme.colors.gray[100],
+        }}
+        side="right">
+        <CategoryForm category={state?.data} onClose={() => reset()} />
       </Drawer>
     </StyledPage>
   );

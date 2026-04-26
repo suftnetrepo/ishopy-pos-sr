@@ -7,18 +7,8 @@ import { useDiscounts, useDeleteDiscount } from '../../../../hooks/useDiscount';
 import { FlatList } from 'react-native';
 import { toWordCase } from '../../../../utils/help';
 
-const DiscountCard = ({ onDiscountChange, onDiscountDeleted, onDiscountDeleting, flag = false }) => {
-    const [isDialogVisible, setIsDialogVisible] = useState(false)
-    const [discount, setDiscount] = useState()
-    const { data, error, loading, resetHandler } = useDiscounts(flag)
-    const { deleteDiscount, error: deleteError } = useDeleteDiscount()
-
-    const onConfirm = () => {
-        deleteDiscount(discount?.discount_id).then(async (result) => {
-            onDiscountDeleted()
-            setIsDialogVisible(false)
-        })
-    }
+const DiscountCard = ({ data, onDiscountChange, onDiscountDelete, flag = false }) => {
+    // No need to fetch data here, it is passed as a prop from parent
 
     const RenderCard = ({ item }) => {
         return (
@@ -38,11 +28,8 @@ const DiscountCard = ({ onDiscountChange, onDiscountDeleted, onDiscountDeleting,
                     <StyledSpacer marginHorizontal={4} />
                     <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]}>
                         <StyledMIcon size={32} name='delete-outline' color={theme.colors.gray[600]} onPress={() => {
-                            onDiscountDeleting()
-                            setIsDialogVisible(true)
-                            setDiscount(item)
-                        }
-                        } />
+                            if (onDiscountDelete) onDiscountDelete(item.discount_id);
+                        }} />
                     </StyledCycle>
                 </XStack>
             </Stack>
@@ -50,42 +37,16 @@ const DiscountCard = ({ onDiscountChange, onDiscountDeleted, onDiscountDeleting,
     }
 
     return (
-        <>
-            <FlatList
-                data={data}
-                initialNumToRender={100}
-                showsVerticalScrollIndicator={false}
-                keyExtractor={(item) => item.discount_id}
-                numColumns={3}
-                renderItem={({ item, index }) => {
-                    return (
-                        <RenderCard item={item} key={index} />
-                    )
-                }}
-            />
-            {
-                (error || deleteError) && (
-                    <StyledOkDialog title={error?.message || deleteError?.message} description='please try again' visible={true} onOk={() => {
-                        resetHandler()
-                    }} />
-                )
-            }
-            {
-                (loading) && (
-                    <StyledSpinner />
-                )
-            }
-            {isDialogVisible &&
-                <StyledConfirmDialog
-                    visible
-                    description='Are you sure you want to delete this discount?'
-                    confirm='Yes'
-                    cancel='No'
-                    title={'Confirmation'}
-                    onCancel={() => setIsDialogVisible(false)}
-                    onConfirm={() => onConfirm()}
-                />}
-        </>
+        <FlatList
+            data={data}
+            initialNumToRender={100}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item) => item.discount_id}
+            numColumns={3}
+            renderItem={({ item, index }) => (
+                <RenderCard item={item} key={index} />
+            )}
+        />
     );
 }
 
