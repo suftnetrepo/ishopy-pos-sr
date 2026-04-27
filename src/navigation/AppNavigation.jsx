@@ -17,6 +17,7 @@ import BigDiscount from '../screens/settings/discount';
 import BigItem from '../screens/settings/item';
 import BigUser from '../screens/settings/user';
 import BigPayment from '../screens/settings/payment';
+import Table from '../screens/settings/table';
 import FAQ from '../screens/faq';
 import HelpCenter from '../screens/helpCenter';
 import Start from '../screens/start';
@@ -118,8 +119,13 @@ function Navigator() {
           headerShown: false,
         }}
       />
-      
-
+      <Stack.Screen
+        name="big-table"
+        component={Table}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="faq"
         component={FAQ}

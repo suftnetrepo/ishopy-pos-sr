@@ -55,6 +55,11 @@ const SETTINGS_CONFIG = {
     ],
     [
       {
+        id: 'table',
+        icon: require('../../../assets/img/back-1.png'),
+        name: 'Tables',
+      },,
+      {
         id: 'back-up',
         icon: require('../../../assets/img/back-1.png'),
         name: 'Back',
@@ -101,6 +106,9 @@ const BigSettings = () => {
         break;
       case 'user':
         navigation.navigate('big-user');
+        break;
+      case 'table':
+        navigation.navigate('big-table');
         break;
       case 'back-up':
         setShow({...show, id: 'back-up', tag: 'back-up'});

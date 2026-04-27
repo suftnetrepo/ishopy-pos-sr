@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { queryAllTables, queryTablesByStatus, insertTable, updateTable, deleteTable, updateOccupancy, resetOccupancy } from "../model/table";
 import { Table } from "../model/types";
-import { set } from "@legendapp/state/src/ObservableObject";
 
 interface Initialize {
 	data: Table[] | null | Table | [] | boolean;
@@ -34,8 +33,6 @@ const useTables = () => {
 		}
 	}
 
-
-
 	useEffect(() => {
 		loadTables();
 	}, []);
@@ -65,11 +62,9 @@ const useQueryTablesByStatus = (focus: boolean ) => {
 	async function handleOccupancy(body: any) {
 		try {
 
-			console.log('Updating occupancy with body:', body);
 			const { table_id, isOccupied, guest_count, guest_name, start_time } = body
 			const result = await updateOccupancy(table_id, isOccupied, parseInt(guest_count), guest_name, start_time);
-			console.log('Occupancy update result:', result);
-
+	
 			if (result) {
 				setData(prev => ({
 					...prev,
@@ -159,12 +154,14 @@ const useInsertTable = () => {
 		tableName: string,
 		status: number,
 		isOccupied: number,
-		size: number
+		size: number,
+		color_code?: string,
+		location?: string
 	) => {
 		setData((prev) => ({ ...prev, loading: true }));
 
 		try {
-			const result = await insertTable(tableName, status, isOccupied, size);
+			const result = await insertTable(tableName, status, isOccupied, size, color_code, location);
 			setData({
 				data: result,
 				error: null,
@@ -207,12 +204,14 @@ const useUpdateTable = () => {
 		tableName: string,
 		status: number,
 		isOccupied: number,
-		size: number
+		size: number,
+		color_code?: string,
+		location?: string
 	) => {
 		setData((prev) => ({ ...prev, loading: true }));
 
 		try {
-			const result = await updateTable(table_id, tableName, status, isOccupied, size);
+			const result = await updateTable(table_id, tableName, status, isOccupied, size, location, color_code);
 			setData({
 				data: result,
 				error: null,

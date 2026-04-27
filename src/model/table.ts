@@ -12,6 +12,7 @@ export interface Table {
   guest_count?: number;
   start_time?: string;
   location?: string;
+  color_code?: string;
 }
 
 const insertTable = async (
@@ -19,10 +20,11 @@ const insertTable = async (
   status: number = 0,
   isOccupied: number = 0,
   size: number = 0,
+  color_code?: string,
+  location?: string,
   guest_name?: string,
   guest_count?: number,
   start_time?: string,
-  location?: string
 ): Promise<Table> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
@@ -38,6 +40,7 @@ const insertTable = async (
           guest_name,
           start_time,
           location,
+          color_code
         };
         realm.create('Table', table);
         resolve(table);
@@ -65,6 +68,7 @@ const queryAllTables = async (): Promise<Table[]> => {
           guest_count: table.guest_count,
           start_time: table.start_time,
           location: table.location,
+          color_code: table.color_code,
         }));
       resolve(tables);
     } catch (error) {
@@ -91,6 +95,7 @@ const queryTablesByStatus = async (status: number): Promise<Table[]> => {
           guest_count: table.guest_count,
           start_time: table.start_time,
           location: table.location,
+          color_code: table.color_code,
         }));
 
       resolve(tables);
@@ -106,7 +111,8 @@ const updateTable = async (
   status: number = 0,
   isOccupied: number = 0,
   size: number = 0,
-  location?: string
+  location?: string,
+  color_code?: string
 ): Promise<Table> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
@@ -120,6 +126,7 @@ const updateTable = async (
           table.isOccupied = isOccupied;
           table.size = size;
           table.location = location;
+          table.color_code = color_code;
           resolve(table);
         } else {
           reject(new Error('Table not found'));

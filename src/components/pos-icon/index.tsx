@@ -1,172 +1,129 @@
 /* eslint-disable prettier/prettier */
-/**
- * PosIcon
- *
- * Universal icon component for CosyPOS.
- * - If icon_name is in the SVG pack → renders SVG (crisp, colorable)
- * - Otherwise → renders FontAwesome5 (legacy compatibility)
- *
- * Usage:
- *   <PosIcon name="rice-bowl" size={24} color="#fff" />
- *   <PosIcon name="hamburger" size={24} color="#333" />  // FA5 fallback
- */
-
 import React from 'react';
-import { View } from 'react-native';
-import FA5 from 'react-native-vector-icons/FontAwesome5';
 
-// ── SVG icon imports ────────────────────────────────────────
-import RiceBowlIcon  from '../../../assets/icons/rice-bowl.svg';
-import SoupIcon      from '../../../assets/icons/soup.svg';
-import SwallowIcon   from '../../../assets/icons/swallow.svg';
-import GrillIcon     from '../../../assets/icons/grill.svg';
-import ProteinIcon   from '../../../assets/icons/protein.svg';
-import BeansIcon     from '../../../assets/icons/beans.svg';
-import SidesIcon     from '../../../assets/icons/sides.svg';
-import DrinkIcon     from '../../../assets/icons/drink.svg';
-import VegetableIcon from '../../../assets/icons/vegetable.svg';
-import GrainsIcon    from '../../../assets/icons/grains.svg';
-import FrozenIcon    from '../../../assets/icons/frozen.svg';
-import SpiceIcon     from '../../../assets/icons/spice.svg';
-import SnackIcon     from '../../../assets/icons/snack.svg';
-import HouseholdIcon from '../../../assets/icons/household.svg';
-import CafeIcon      from '../../../assets/icons/cafe.svg';
-import PastryIcon    from '../../../assets/icons/pastry.svg';
-import FishIcon      from '../../../assets/icons/fish.svg';
-import ChickenIcon   from '../../../assets/icons/chicken.svg';
-import BarcodeIcon   from '../../../assets/icons/barcode.svg';
-import BasketIcon    from '../../../assets/icons/basket.svg';
-import CartIcon      from '../../../assets/icons/cart.svg';
-import BeautyIcon    from '../../../assets/icons/beauty.svg';
-import MeatIcon      from '../../../assets/icons/meat.svg';
-import FlourIcon     from '../../../assets/icons/flour.svg';
-import CashIcon      from '../../../assets/icons/cash.svg';
-import ReceiptIcon   from '../../../assets/icons/receipt.svg';
-import PrinterIcon   from '../../../assets/icons/printer.svg';
-import WaterIcon     from '../../../assets/icons/water.svg';
-import StoreIcon     from '../../../assets/icons/store.svg';
 import RestaurantIcon from '../../../assets/icons/restaurant.svg';
+import DimSumIcon from '../../../assets/icons/dim-sum.svg';
+import DrinkIcon from '../../../assets/icons/drink.svg';
+import NoodlesIcon from '../../../assets/icons/noodles.svg';
+import RiceDishesIcon from '../../../assets/icons/rice-dishes.svg';
+import SoupsIcon from '../../../assets/icons/soups.svg';
+import SushiIcon from '../../../assets/icons/sushi.svg';
+import PadThaiIcon from '../../../assets/icons/pad-thai.svg';
+import RamenIcon from '../../../assets/icons/ramen.svg';
+import SobaNoodlesIcon from '../../../assets/icons/soba-noodles.svg';
+import UdonNoodleSoupIcon from '../../../assets/icons/udon-noodle-soup.svg';
+import DragonRollIcon from '../../../assets/icons/dragon-roll.svg';
+import GyozaIcon from '../../../assets/icons/gyoza.svg';
+import HarGauIcon from '../../../assets/icons/har-gau.svg';
+import SpringRollsIcon from '../../../assets/icons/spring-rolls.svg';
+import MisoSoupIcon from '../../../assets/icons/miso-soup.svg';
+import CartIcon from '../../../assets/icons/cart.svg';
+import ReceiptIcon from '../../../assets/icons/receipt.svg';
+import PrinterIcon from '../../../assets/icons/printer.svg';
+import CashIcon from '../../../assets/icons/cash.svg';
+import TableIcon from '../../../assets/icons/table.svg';
+import DashboardIcon from '../../../assets/icons/dashboard.svg';
+import PaymentsIcon from '../../../assets/icons/payments.svg';
+import SettingsIcon from '../../../assets/icons/settings.svg';
+import LogoutIcon from '../../../assets/icons/logout.svg';
+import PopularIcon from '../../../assets/icons/popular.svg';
+import LowStockIcon from '../../../assets/icons/low-stock.svg';
 
-// ── SVG map ─────────────────────────────────────────────────
 const SVG_ICONS: Record<string, React.FC<any>> = {
-  'rice-bowl':  RiceBowlIcon,
-  'soup':       SoupIcon,
-  'swallow':    SwallowIcon,
-  'grill':      GrillIcon,
-  'protein':    ProteinIcon,
-  'beans':      BeansIcon,
-  'sides':      SidesIcon,
-  'drink':      DrinkIcon,
-  'vegetable':  VegetableIcon,
-  'grains':     GrainsIcon,
-  'frozen':     FrozenIcon,
-  'spice':      SpiceIcon,
-  'snack':      SnackIcon,
-  'household':  HouseholdIcon,
-  'cafe':       CafeIcon,
-  'pastry':     PastryIcon,
-  'fish':       FishIcon,
-  'chicken':    ChickenIcon,
-  'barcode':    BarcodeIcon,
-  'basket':     BasketIcon,
-  'cart':       CartIcon,
-  'beauty':     BeautyIcon,
-  'meat':       MeatIcon,
-  'flour':      FlourIcon,
-  'cash':       CashIcon,
-  'receipt':    ReceiptIcon,
-  'printer':    PrinterIcon,
-  'water':      WaterIcon,
-  'store':      StoreIcon,
-  'restaurant': RestaurantIcon,
+  restaurant: RestaurantIcon,
+  'dim-sum': DimSumIcon,
+  drink: DrinkIcon,
+  drinks: DrinkIcon,
+  noodles: NoodlesIcon,
+  'rice-dishes': RiceDishesIcon,
+  rice: RiceDishesIcon,
+  soups: SoupsIcon,
+  soup: SoupsIcon,
+  sushi: SushiIcon,
+  'pad-thai': PadThaiIcon,
+  ramen: RamenIcon,
+  'soba-noodles': SobaNoodlesIcon,
+  soba: SobaNoodlesIcon,
+  'udon-noodle-soup': UdonNoodleSoupIcon,
+  udon: UdonNoodleSoupIcon,
+  'dragon-roll': DragonRollIcon,
+  gyoza: GyozaIcon,
+  'har-gau': HarGauIcon,
+  'spring-rolls': SpringRollsIcon,
+  'miso-soup': MisoSoupIcon,
+  cart: CartIcon,
+  receipt: ReceiptIcon,
+  printer: PrinterIcon,
+  cash: CashIcon,
+  table: TableIcon,
+  tables: TableIcon,
+  dashboard: DashboardIcon,
+  payments: PaymentsIcon,
+  settings: SettingsIcon,
+  logout: LogoutIcon,
+  popular: PopularIcon,
+  'low-stock': LowStockIcon,
 };
 
-// ── FA5 names that map to SVG equivalents ────────────────────
-// When an FA5 name is passed we try to map it to a POS SVG first
-const FA5_TO_SVG: Record<string, string> = {
-  'fish':          'fish',
-  'hamburger':     'restaurant',
-  'pizza-slice':   'restaurant',
-  'hotdog':        'sides',
-  'drumstick-bite':'chicken',
-  'utensils':      'restaurant',
-  'utensil-spoon': 'sides',
-  'coffee':        'cafe',
-  'mug-hot':       'cafe',
-  'beer':          'drink',
-  'wine-glass':    'drink',
-  'cocktail':      'drink',
-  'ice-cream':     'snack',
-  'cookie':        'snack',
-  'birthday-cake': 'snack',
-  'bread-slice':   'pastry',
-  'egg':           'sides',
-  'bacon':         'protein',
-  'cheese':        'sides',
-  'carrot':        'vegetable',
-  'lemon':         'vegetable',
-  'pepper-hot':    'spice',
-  'store':         'store',
-  'shopping-bag':  'basket',
-  'leaf':          'vegetable',
-  'apple-alt':     'vegetable',
-  'seedling':      'vegetable',
+const LEGACY_TO_SVG: Record<string, string> = {
+  fish: 'sushi',
+  hamburger: 'restaurant',
+  'pizza-slice': 'restaurant',
+  hotdog: 'spring-rolls',
+  'drumstick-bite': 'restaurant',
+  utensils: 'restaurant',
+  'utensil-spoon': 'soups',
+  coffee: 'drink',
+  'mug-hot': 'drink',
+  beer: 'drink',
+  'wine-glass': 'drink',
+  cocktail: 'drink',
+  'bread-slice': 'dim-sum',
+  'shopping-cart': 'cart',
+  'shopping-bag': 'cart',
+  'cash-register': 'cash',
+  'credit-card': 'payments',
+  cog: 'settings',
+  'sign-out-alt': 'logout',
+  'chart-pie': 'dashboard',
+  'concierge-bell': 'popular',
 };
 
 export interface PosIconProps {
-  name?: string;
+  name?: string | null;
   size?: number;
   color?: string;
   style?: any;
 }
 
-/**
- * PosIcon — renders the best available icon for a given name.
- * Priority: SVG pack → FA5 mapped to SVG → raw FA5 → fallback 'restaurant' SVG
- */
+const normaliseIconName = (name?: string | null) =>
+  String(name || 'restaurant')
+    .trim()
+    .toLowerCase()
+    .replace(/_/g, '-')
+    .replace(/\s+/g, '-');
+
 const PosIcon: React.FC<PosIconProps> = ({
   name = 'restaurant',
   size = 24,
   color = '#374151',
   style,
 }) => {
-  // 1. Direct SVG match
-  if (SVG_ICONS[name]) {
-    const Svg = SVG_ICONS[name];
-    return (
-      <Svg
-        width={size}
-        height={size}
-        color={color}
-        fill={color}
-        style={style}
-      />
-    );
-  }
+  const key = normaliseIconName(name);
+  const mappedKey = SVG_ICONS[key] ? key : LEGACY_TO_SVG[key];
+  const Svg = SVG_ICONS[mappedKey] || RestaurantIcon;
 
-  // 2. FA5 name → mapped SVG
-  const mappedSvg = FA5_TO_SVG[name];
-  if (mappedSvg && SVG_ICONS[mappedSvg]) {
-    const Svg = SVG_ICONS[mappedSvg];
-    return (
-      <Svg
-        width={size}
-        height={size}
-        color={color}
-        fill={color}
-        style={style}
-      />
-    );
-  }
-
-  // 3. Raw FontAwesome5 (for any unmapped legacy icons)
-  try {
-    return <FA5 name={name} size={size} color={color} style={style} />;
-  } catch {
-    // 4. Ultimate fallback
-    const Svg = SVG_ICONS['restaurant'];
-    return <Svg width={size} height={size} color={color} fill={color} style={style} />;
-  }
+  return (
+    <Svg
+      width={size}
+      height={size}
+      color={color}
+      stroke={color}
+      fill="none"
+      style={style}
+    />
+  );
 };
 
 export default PosIcon;
+export { SVG_ICONS };

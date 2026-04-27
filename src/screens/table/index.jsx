@@ -13,13 +13,16 @@ import TableCard from '../../components/tablet/table';
 import KeyCard from '../../components/tablet/table/keyCard';
 import {useFocus} from '../../hooks/useFocus';
 import {Stack} from '../../components/package/stack';
+import { useLoaderAndError } from '../../hooks/useLoaderAndError';
 
 const BigTable = () => {
   const focused = useFocus();
   const {updateMenuQuery} = useAppContext();
   const [table, setTable] = useState(null);
-  const {data, error, loading, handleOccupancy} =
+  const {data, error, loading, resetHandler, handleOccupancy} =
     useQueryTablesByStatus(focused);
+
+  useLoaderAndError(loading, error, resetHandler);
 
   const onSubmit = body => {
     handleOccupancy(body);
