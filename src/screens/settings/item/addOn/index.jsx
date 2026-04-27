@@ -14,6 +14,7 @@ import {
   StyledCard,
   Switch,
   toastService,
+  StyledChip,
 } from 'fluent-styles';
 import {useLoaderAndError} from '../../../../hooks/useLoaderAndError';
 import {fontStyles} from '../../../../configs/theme';
@@ -36,6 +37,7 @@ const ItemAddOn = ({menu_id}) => {
   const {shop} = useAppContext();
   const [errorMessages, setErrorMessages] = useState({});
   const [fields, setFields] = useState(addOnRules.fields);
+  const [groupId, setGroupId] = useState('optional');
 
   useLoaderAndError(loading, error, resetHandler);
 
@@ -52,10 +54,10 @@ const ItemAddOn = ({menu_id}) => {
     setFields(addOnRules.reset());
   };
 
-  const onDelete =  addOn_id => {
+  const onDelete = addOn_id => {
     deleteAddOn(addOn_id).then(async result => {
       onNotify({status: 'deleted', isDeleted: true});
-      loadAddons(menu_id);  
+      loadAddons(menu_id);
     });
   };
 
@@ -72,7 +74,8 @@ const ItemAddOn = ({menu_id}) => {
         fields.addOn_id,
         fields.addOnName,
         parseFloat(fields.price),
-        fields.status
+        fields.status,
+        fields.group_id
       ).then(() => {
         loadAddons(menu_id).then(() => {
           onNotify({status: 'updated'});
@@ -85,7 +88,8 @@ const ItemAddOn = ({menu_id}) => {
       fields.addOnName,
       parseFloat(fields.price),
       menu_id,
-      fields.status
+      fields.status,
+      fields.group_id
     ).then(() => {
       loadAddons(menu_id).then(() => {
         onNotify({status: 'added'});
@@ -190,6 +194,24 @@ const ItemAddOn = ({menu_id}) => {
             error={!!errorMessages?.price}
             errorMessage={errorMessages?.price?.message}
           />
+          <XStack horizontal gap={8} flexWrap="wrap">
+            <StyledChip
+              label="Required"
+              variant="filled"
+              bgColor="#e8f5e9"
+              color="#388e3c"
+              selected={fields.group_id === 'required'}
+              onPress={() => setFields({...fields, group_id: 'required'})}
+            />
+            <StyledChip
+              label="Optional"
+              variant="filled"
+              bgColor="#fff3e0"
+              color="#f57c00"
+              selected={fields.group_id === 'optional'}
+              onPress={() => setFields({...fields, group_id: 'optional'})}
+            />
+          </XStack>
           <Switch
             activeValue={1}
             inactiveValue={0}

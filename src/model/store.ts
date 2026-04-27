@@ -1,8 +1,7 @@
-/* eslint-disable prettier/prettier */
+
 import Realm, { ObjectSchema } from 'realm';
 import { createRealmContext } from '@realm/react';
 import { migration, SCHEMA_VERSION } from './migration';
-import { theme } from '@utils/theme';
 
 let realmInstance: Realm | null = null;
 
@@ -19,6 +18,7 @@ export const TableSchema: ObjectSchema = {
     guest_count: 'int?',      // Add this
     guest_name: 'string?',    // Add this
     start_time: 'string?',    // Add this
+    color_code: 'string?',    // Add this
   },
 };
 
@@ -31,6 +31,7 @@ export const AddOnSchema: ObjectSchema = {
     price: 'double',
     menu_id: 'string',
     status: {type: 'int', default: 0},
+    group_id: 'string?',
   },
 };
 
@@ -239,7 +240,7 @@ const schema = [
 
 const RealmOptions = () => {
   return {
-    path: '_store_.realm',
+    path: '__store__.realm',
     schema: schema,
     schemaVersion: SCHEMA_VERSION,
     migration 

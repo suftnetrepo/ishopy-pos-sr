@@ -9,13 +9,15 @@ export interface AddOn {
   addOn_id: string;
   quantity?: number;
   status: number;
+  group_id?: string;
 }
 
 const insertAddon = async (
   menu_id: string,
   addOnName: string,
   price: number,
-  status : number
+  status : number,
+  group_id?: string
 ): Promise<AddOn> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
@@ -26,7 +28,8 @@ const insertAddon = async (
           addOnName,
           price,
           menu_id,
-          status,
+          status, 
+          group_id
         };
         realm.create('AddOn', addOn);
         resolve(addOn);
@@ -49,7 +52,8 @@ const queryAddonByMenuId = async (menu_id: string): Promise<AddOn[]> => {
           addOnName: addOn.addOnName,
           menu_id: addOn.menu_id,
           price: addOn.price,
-          status :addOn.status
+          status :addOn.status,
+          group_id: addOn.group_id
         }));
 
         console.log('addOns', addOns);
@@ -64,7 +68,8 @@ const updateAddOn = async (
   addOn_id: number,
   addOnName: string,
   price: number,
-  status: number
+  status: number,
+  group_id?: string
 ): Promise<AddOn> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
@@ -75,6 +80,7 @@ const updateAddOn = async (
           addOn.addOnName = addOnName;
           addOn.price = price;
           addOn.status = status;
+          addOn.group_id = group_id;
           resolve(addOn);
         } else {
           reject(new Error('AddOn not found'));

@@ -9,7 +9,7 @@ interface Initialize {
 	loading: boolean;
 }
 
-const useTables = () => {
+const useTables = (focus: boolean = false) => {
 	const [data, setData] = useState<Initialize>({
 		data: [],
 		error: null,
@@ -34,8 +34,10 @@ const useTables = () => {
 	}
 
 	useEffect(() => {
-		loadTables();
-	}, []);
+		if (focus) {
+			loadTables();
+		}
+	}, [focus]);
 
 	const resetHandler = () => {
 		setData({

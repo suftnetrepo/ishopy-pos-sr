@@ -27,6 +27,7 @@ const addOnRules = {
       price: '',  
       status : 1,
       addOn_id: '',
+      group_id: '',
       }
   },
   fields: {
@@ -34,6 +35,7 @@ const addOnRules = {
     price: '',
     status : 1,
     addOn_id: '',
+    group_id: '',
   },
 };
 

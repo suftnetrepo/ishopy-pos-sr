@@ -65,14 +65,13 @@ const useInsertAddon = () => {
     addOnName: string,
     price: number,
     menu_id: string,
-    status: number
+    status: number,
+    group_id?: string
   ) => {
     setData(prev => ({...prev, loading: true}));
 
-	console.log('Inserting add-on:', { addOnName, price, menu_id, status });
-
     try {
-      const result = await insertAddon(menu_id, addOnName, price, status);
+      const result = await insertAddon(menu_id, addOnName, price, status, group_id);
       setData({
         data: result,
         error: null,
@@ -80,7 +79,6 @@ const useInsertAddon = () => {
       });
       return true;
     } catch (error) {
-		console.error('Error inserting add-on:', error);
       setData({
         data: null,
         error: error as Error,
@@ -115,12 +113,13 @@ const useUpdateAddOn = () => {
     addOn_id: number,
     addOnName: string,
     price: number,
-    status: number
+    status: number,
+    group_id?: string
   ) => {
     setData(prev => ({...prev, loading: true}));
 
     try {
-      const result = await updateAddOn(addOn_id, addOnName, price, status);
+      const result = await updateAddOn(addOn_id, addOnName, price, status, group_id);
       setData({
         data: result,
         error: null,

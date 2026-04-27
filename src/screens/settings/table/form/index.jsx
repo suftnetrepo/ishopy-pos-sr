@@ -24,6 +24,8 @@ const TableForm = ({table, onClose}) => {
   const {updateTable, error, loading, resetHandler} = useUpdateTable();
   const {insertTable} = useInsertTable();
 
+  console.log('table in form', table);
+
   useEffect(() => {
     setFields(pre => {
       return {
@@ -54,7 +56,7 @@ const TableForm = ({table, onClose}) => {
       setErrorMessages(errors);
       return false;
     }
-
+    
     if (fields.table_id) {
       await updateTable(
         fields.table_id,

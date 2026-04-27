@@ -18,7 +18,7 @@ import {Pressable} from 'react-native';
 import {useTables, useDeleteTable} from '../../../hooks/useTable';
 import {useLoaderAndError} from '../../../hooks/useLoaderAndError';
 
-const BigTable = () => {
+const BigTableScreen = () => {
   const dialogue = useDialogue();
   const {deleteTable} = useDeleteTable();
   const navigationFocus = useFocus();
@@ -79,8 +79,11 @@ const BigTable = () => {
     });
   };
 
-  const reset = () => {
+  const reset = async () => {
+    console.log('Resetting state and reloading tables');
     setState({...state, tag: '', data: null});
+    resetHandler();
+      await loadTables();
   };
 
   const update = tag => {
@@ -141,4 +144,4 @@ const BigTable = () => {
   );
 };
 
-export default BigTable;
+export default BigTableScreen;

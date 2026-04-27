@@ -9,114 +9,99 @@ import {useAppContext} from '../../../../hooks/appContext';
 import {formatCurrency} from '../../../../utils/help';
 import {StyledMIcon} from '../../../../components/icon';
 
-const REQUIRED_SINGLE_SELECT_GROUPS = ['Cooking Level','Spice Level','Size','Milk Type','Dressing'];
-const OPTIONAL_SINGLE_SELECT_GROUPS = ['Sauce','Crust','Side'];
-const MULTI_SELECT_GROUPS = ['Protein','Extras','Sides','Extra Toppings','Toppings','Sauces','Swallow'];
-
-const getAddOnGroupName  = a => (a?.addOnName?.split(':') || [])[0]?.trim() || 'Other';
-const getAddOnOptionName = a => (a?.addOnName?.split(':') || [])[1]?.trim() || a?.addOnName || '';
-
 export default function AddOn({table_id, onClose, item, setItem}) {
   const {shop, addItem} = useAppContext();
   const {height, width} = useWindowDimensions();
   const [validationError, setValidationError] = useState('');
 
-  // ── Grouping (unchanged) ─────────────────────────────────────
-  const groupedAddOns = useMemo(() => {
-    if (!item?.addOns || !Array.isArray(item.addOns)) return [];
-    const groups = {};
-    item.addOns.forEach(addOn => {
-      const groupName  = getAddOnGroupName(addOn);
-      const optionName = getAddOnOptionName(addOn);
-      let type = 'multi';
-      if (REQUIRED_SINGLE_SELECT_GROUPS.includes(groupName))      type = 'required-single';
-      else if (OPTIONAL_SINGLE_SELECT_GROUPS.includes(groupName)) type = 'optional-single';
-      if (!groups[groupName]) groups[groupName] = {name:groupName, type, options:[]};
-      groups[groupName].options.push({
-        ...addOn, optionName, displayName:`${groupName}: ${optionName}`, groupName, name:optionName,
-      });
-    });
-    return Object.values(groups);
+  // ── Split addOns into two buckets by group_id ────────────────
+  const {requiredAddOns, optionalAddOns} = useMemo(() => {
+    const all = item?.addOns ?? [];
+    return {
+      requiredAddOns: all.filter(a => a.group_id === 'required'),
+      optionalAddOns: all.filter(a => a.group_id === 'optional'),
+    };
   }, [item?.addOns]);
 
-  // ── Handlers (unchanged) ────────────────────────────────────
-  const increaseAddOnQuantity = addOn => {
+  const hasRequired           = requiredAddOns.length > 0;
+  const hasOptional           = optionalAddOns.length > 0;
+  const anyRequiredSelected   = requiredAddOns.some(a => qty(a) > 0);
+  const selectedOptionalCount = optionalAddOns.filter(a => qty(a) > 0).length;
+
+  // ── Helpers ──────────────────────────────────────────────────
+  function qty(addOn) {
+    return parseInt(String(addOn.quantity ?? 0), 10);
+  }
+
+  const patchAddOns = fn =>
+    setItem(prev => ({...prev, addOns: prev?.addOns?.map(fn) ?? []}));
+
+  // Required = single-select radio: selecting one clears the rest
+  const toggleRequired = addOn => {
     setValidationError('');
-    setItem(prev => ({...prev, addOns: prev?.addOns?.map(a =>
-      a.addOn_id === addOn?.addOn_id ? {...a, quantity: parseInt(a.quantity||0,10)+1} : a) || []}));
-  };
-
-  const decreaseAddOnQuantity = addOn => {
-    setValidationError('');
-    setItem(prev => ({...prev, addOns: prev?.addOns?.map(a =>
-      a.addOn_id === addOn?.addOn_id ? {...a, quantity: Math.max(0, parseInt(a.quantity||0,10)-1)} : a) || []}));
-  };
-
-  const toggleSingleSelect = (addOn, group) => {
-    setValidationError('');
-    setItem(prev => ({...prev, addOns: prev?.addOns?.map(a => {
-      const isSameGroup  = getAddOnGroupName(a) === group.name;
-      const isSameOption = a.addOn_id === addOn.addOn_id;
-      const currentQty   = parseInt(a.quantity||0,10);
-      if (!isSameGroup) return a;
-      if (group.type === 'required-single') return {...a, quantity: isSameOption ? 1 : 0};
-      if (group.type === 'optional-single') return {...a, quantity: isSameOption ? (currentQty>0?0:1) : 0};
-      return a;
-    }) || []}));
-  };
-
-  const clearOptionalSingleSelect = group => {
-    setValidationError('');
-    setItem(prev => ({...prev, addOns: prev?.addOns?.map(a =>
-      getAddOnGroupName(a)===group.name ? {...a, quantity:0} : a) || []}));
-  };
-
-  const calculateTotalAddOnsPrice = () => {
-    const sum = item?.addOns?.reduce((t,a) => t + parseFloat(a.price||0)*parseInt(a.quantity||0,10), 0) || 0;
-    return sum + Number(item?.price||0);
-  };
-
-  const getSelectedCount  = gName => item?.addOns?.filter(a => getAddOnGroupName(a)===gName && parseInt(a.quantity||0,10)>0).length || 0;
-  const getSelectedOption = group  => group.options.find(o => parseInt(o.quantity||0,10)>0);
-
-  const validateRequiredGroups = () => {
-    for (const g of groupedAddOns) {
-      if (g.type==='required-single' && !g.options.some(o => parseInt(o.quantity||0,10)>0)) {
-        setValidationError(`Select ${g.name}`);
-        return false;
-      }
-    }
-    setValidationError('');
-    return true;
-  };
-
-  const onSubmit = () => {
-    if (!validateRequiredGroups()) return;
-    const index = `${Date.now()}${Math.random().toString(36).slice(2,8)}`;
-    const selectedAddOns = groupedAddOns.flatMap(g =>
-      g.options.filter(o => parseInt(o.quantity||0,10)>0).map(o => ({
-        addOnName:o.name, quantity:parseInt(o.quantity||0,10), price:o.price,
-        groupName:g.name, displayName:`${g.name}: ${o.name}`,
-      }))
+    patchAddOns(a =>
+      a.group_id === 'required'
+        ? {...a, quantity: a.addOn_id === addOn.addOn_id ? 1 : 0}
+        : a,
     );
-    addItem(index, item.menu_id, item.name, item.price, 1, table_id, selectedAddOns).then(()=>{});
+  };
+
+  // Optional = multi-select with qty stepper
+  const increaseOptional = addOn => {
+    setValidationError('');
+    patchAddOns(a => a.addOn_id === addOn.addOn_id ? {...a, quantity: qty(a) + 1} : a);
+  };
+
+  const decreaseOptional = addOn => {
+    setValidationError('');
+    patchAddOns(a => a.addOn_id === addOn.addOn_id ? {...a, quantity: Math.max(0, qty(a) - 1)} : a);
+  };
+
+  // ── Pricing ──────────────────────────────────────────────────
+  const calculateTotal = () => {
+    const sum = (item?.addOns ?? []).reduce(
+      (t, a) => t + parseFloat(String(a.price ?? 0)) * qty(a), 0,
+    );
+    return sum + Number(item?.price ?? 0);
+  };
+
+  // ── Validation & submit ───────────────────────────────────────
+  const onSubmit = () => {
+    if (hasRequired && !anyRequiredSelected) {
+      setValidationError('Please select a required option');
+      return;
+    }
+    const index = `${Date.now()}${Math.random().toString(36).slice(2, 8)}`;
+    const selectedAddOns = (item?.addOns ?? [])
+      .filter(a => qty(a) > 0)
+      .map(a => ({
+        addOnName:   a.addOnName,
+        quantity:    qty(a),
+        price:       a.price,
+        groupName:   a.group_id,
+        displayName: a.addOnName,
+      }));
+    addItem(index, item.menu_id, item.name, item.price, 1, table_id, selectedAddOns).then(() => {});
     onClose();
   };
 
-  const firstMissing     = groupedAddOns.find(g => g.type==='required-single' && !g.options.some(o=>parseInt(o.quantity||0,10)>0));
-  const addButtonDisabled = !!firstMissing;
-  const addButtonText     = addButtonDisabled ? `Select ${firstMissing?.name}` : `Add ${formatCurrency(shop?.currency||'£', calculateTotalAddOnsPrice())}`;
+  // ── Derived UI state ─────────────────────────────────────────
+  const addButtonDisabled = hasRequired && !anyRequiredSelected;
   const cur               = shop?.currency || '£';
+  const addButtonText     = addButtonDisabled
+    ? 'Select a required option'
+    : `Add ${formatCurrency(cur, calculateTotal())}`;
   const modalWidth        = width > 768 ? 660 : Math.round(width * 0.92);
   const modalMaxHeight    = Math.min(height * 0.82, 740);
 
-  // ── POLISHED: single-select row ──────────────────────────────
-  const renderSingleSelectRow = (option, group) => {
-    const isSelected = parseInt(option.quantity||0,10) > 0;
+  // ── Row renderers ─────────────────────────────────────────────
+
+  const renderRequiredRow = option => {
+    const isSelected = qty(option) > 0;
     return (
       <StyledPressable
         key={option.addOn_id}
-        onPress={() => toggleSingleSelect(option, group)}
+        onPress={() => toggleRequired(option)}
         flexDirection="row"
         alignItems="center"
         paddingHorizontal={16}
@@ -128,7 +113,7 @@ export default function AddOn({table_id, onClose, item, setItem}) {
         borderLeftWidth={4}
         borderLeftColor={isSelected ? theme.colors.blue[500] : 'transparent'}>
 
-        {/* Radio */}
+        {/* Radio dot */}
         <YStack
           width={22} height={22} borderRadius={11}
           borderWidth={2}
@@ -147,9 +132,9 @@ export default function AddOn({table_id, onClose, item, setItem}) {
             fontSize={theme.fontSize.normal}
             fontWeight={isSelected ? theme.fontWeight.semiBold : theme.fontWeight.normal}
             color={isSelected ? theme.colors.blue[700] : theme.colors.gray[800]}>
-            {option.optionName}
+            {option.addOnName}
           </StyledText>
-          {parseFloat(option.price) > 0 && (
+          {parseFloat(String(option.price)) > 0 && (
             <StyledText
               fontFamily={fontStyles.Roboto_Regular}
               fontSize={theme.fontSize.small}
@@ -167,114 +152,91 @@ export default function AddOn({table_id, onClose, item, setItem}) {
     );
   };
 
-  // ── POLISHED: multi-select row ───────────────────────────────
-const renderMultiSelectRow = option => {
-  const quantity = parseInt(option.quantity || 0, 10);
-  const isSelected = quantity > 0;
+  const renderOptionalRow = option => {
+    const quantity   = qty(option);
+    const isSelected = quantity > 0;
 
-  const handleAdd = () => {
-    increaseAddOnQuantity(option);
-  };
+    return (
+      <StyledPressable
+        key={option.addOn_id}
+        onPress={() => increaseOptional(option)}
+        paddingHorizontal={16}
+        paddingVertical={12}
+        minHeight={64}
+        borderBottomWidth={1}
+        borderBottomColor={theme.colors.gray[100]}
+        backgroundColor={isSelected ? theme.colors.green[50] : theme.colors.gray[1]}
+        borderLeftWidth={4}
+        borderLeftColor={isSelected ? theme.colors.green[500] : 'transparent'}
+        flexDirection="row"
+        alignItems="center">
 
-  const handleRemove = e => {
-    e?.stopPropagation?.();
-    decreaseAddOnQuantity(option);
-  };
-
-  return (
-    <StyledPressable
-      key={option.addOn_id}
-      onPress={handleAdd}
-      paddingHorizontal={16}
-      paddingVertical={12}
-      minHeight={64}
-      borderBottomWidth={1}
-      borderBottomColor={theme.colors.gray[100]}
-      backgroundColor={isSelected ? theme.colors.green[50] : theme.colors.gray[1]}
-      borderLeftWidth={4}
-      borderLeftColor={isSelected ? theme.colors.green[500] : 'transparent'}
-      flexDirection="row"
-      alignItems="center">
-
-      <YStack flex={1}>
-        <StyledText
-          fontFamily={fontStyles.Roboto_Regular}
-          fontSize={theme.fontSize.normal}
-          fontWeight={isSelected ? theme.fontWeight.semiBold : theme.fontWeight.normal}
-          color={isSelected ? theme.colors.green[800] : theme.colors.gray[800]}>
-          {option.optionName}
-        </StyledText>
-
-        {parseFloat(option.price || 0) > 0 && (
+        <YStack flex={1}>
           <StyledText
             fontFamily={fontStyles.Roboto_Regular}
-            fontSize={theme.fontSize.small}
-            color={theme.colors.gray[500]}
-            marginTop={2}>
-            +{formatCurrency(cur, option.price)}
+            fontSize={theme.fontSize.normal}
+            fontWeight={isSelected ? theme.fontWeight.semiBold : theme.fontWeight.normal}
+            color={isSelected ? theme.colors.green[800] : theme.colors.gray[800]}>
+            {option.addOnName}
           </StyledText>
-        )}
-      </YStack>
-
-      {isSelected ? (
-        <XStack gap={8} alignItems="center">
-          <YStack
-            paddingHorizontal={12}
-            paddingVertical={6}
-            borderRadius={20}
-            backgroundColor={theme.colors.green[100]}>
+          {parseFloat(String(option.price ?? 0)) > 0 && (
             <StyledText
               fontFamily={fontStyles.Roboto_Regular}
               fontSize={theme.fontSize.small}
-              fontWeight={theme.fontWeight.bold}
-              color={theme.colors.green[700]}>
-              ×{quantity}
+              color={theme.colors.gray[500]}
+              marginTop={2}>
+              +{formatCurrency(cur, option.price)}
+            </StyledText>
+          )}
+        </YStack>
+
+        {isSelected ? (
+          <XStack gap={8} alignItems="center">
+            <YStack
+              paddingHorizontal={12} paddingVertical={6}
+              borderRadius={20}
+              backgroundColor={theme.colors.green[100]}>
+              <StyledText
+                fontFamily={fontStyles.Roboto_Regular}
+                fontSize={theme.fontSize.small}
+                fontWeight={theme.fontWeight.bold}
+                color={theme.colors.green[700]}>
+                ×{quantity}
+              </StyledText>
+            </YStack>
+
+            <StyledPressable
+              paddingHorizontal={14} paddingVertical={8}
+              borderRadius={30}
+              backgroundColor={theme.colors.red[50]}
+              borderWidth={1} borderColor={theme.colors.red[200]}
+              onPress={e => { e?.stopPropagation?.(); decreaseOptional(option); }}>
+              <StyledText
+                fontFamily={fontStyles.Roboto_Regular}
+                fontSize={theme.fontSize.small}
+                color={theme.colors.red[600]}>
+                Remove
+              </StyledText>
+            </StyledPressable>
+          </XStack>
+        ) : (
+          <YStack
+            paddingHorizontal={18} paddingVertical={8}
+            borderRadius={30}
+            backgroundColor={theme.colors.yellow[500]}>
+            <StyledText
+              fontFamily={fontStyles.Roboto_Regular}
+              fontSize={theme.fontSize.small}
+              color={theme.colors.gray[1]}>
+              + Add
             </StyledText>
           </YStack>
-
-          <StyledPressable
-            paddingHorizontal={14}
-            paddingVertical={8}
-            borderRadius={30}
-            backgroundColor={theme.colors.red[50]}
-            borderWidth={1}
-            borderColor={theme.colors.red[200]}
-            onPress={handleRemove}>
-            <StyledText
-              fontFamily={fontStyles.Roboto_Regular}
-              fontSize={theme.fontSize.small}
-              fontWeight={theme.fontWeight.normal}
-              color={theme.colors.red[600]}>
-              Remove
-            </StyledText>
-          </StyledPressable>
-        </XStack>
-      ) : (
-        <YStack
-          paddingHorizontal={18}
-          paddingVertical={8}
-          borderRadius={30}
-          backgroundColor={theme.colors.yellow[500]}>
-          <StyledText
-            fontFamily={fontStyles.Roboto_Regular}
-            fontSize={theme.fontSize.small}
-            fontWeight={theme.fontWeight.normal}
-            color={theme.colors.gray[1]}>
-            + Add
-          </StyledText>
-        </YStack>
-      )}
-    </StyledPressable>
-  );
-};
-
-  const renderOptionRow = (option, group) => {
-    if (group.type==='required-single' || group.type==='optional-single') {
-      return renderSingleSelectRow(option, group);
-    }
-    return renderMultiSelectRow(option, group);
+        )}
+      </StyledPressable>
+    );
   };
 
+  // ── Render ────────────────────────────────────────────────────
   return (
     <YStack
       backgroundColor={theme.colors.transparent05}
@@ -287,12 +249,12 @@ const renderMultiSelectRow = option => {
         borderRadius={20}
         overflow="hidden"
         shadowColor="black"
-        shadowOffset={{width:0, height:12}}
+        shadowOffset={{width: 0, height: 12}}
         shadowOpacity={0.22}
         shadowRadius={24}
         elevation={16}>
 
-        {/* ── Header ─────────────────────────────── */}
+        {/* ── Header ───────────────────────────────────────────── */}
         <XStack
           paddingHorizontal={20} paddingVertical={16}
           borderBottomWidth={1} borderBottomColor={theme.colors.gray[200]}
@@ -323,65 +285,53 @@ const renderMultiSelectRow = option => {
           </StyledPressable>
         </XStack>
 
-        {/* ── CollapseGroup ───────────────────────── */}
+        {/* ── CollapseGroup ─────────────────────────────────────── */}
         <ScrollView
           showsVerticalScrollIndicator={false}
           nestedScrollEnabled
           style={{maxHeight: modalMaxHeight - 152}}
-          contentContainerStyle={{paddingHorizontal:12, paddingVertical:12, paddingBottom:16}}>
+          contentContainerStyle={{paddingHorizontal: 12, paddingVertical: 12, paddingBottom: 16}}>
 
-          {groupedAddOns.length > 0 ? (
+          {hasRequired || hasOptional ? (
             <CollapseGroup
               variant="bordered"
-              defaultActiveKey={groupedAddOns[0]?.name}
-              style={{gap:10}}>
+              defaultActiveKey={hasRequired ? 'required' : 'optional'}
+              style={{gap: 10}}>
 
-              {groupedAddOns.map(group => {
-                const selected = getSelectedOption(group);
-                const count    = getSelectedCount(group.name);
+              {hasRequired && (
+                <CollapseItem
+                  itemKey="required"
+                  title="Required"
+                  subtitle={anyRequiredSelected
+                    ? requiredAddOns.find(a => qty(a) > 0)?.addOnName
+                    : '⚠ Choose one'}
+                  activeHeader
+                  trailing={
+                    !anyRequiredSelected ? (
+                      <YStack
+                        paddingHorizontal={8} paddingVertical={3}
+                        borderRadius={6}
+                        backgroundColor={theme.colors.orange[100]}>
+                        <StyledText fontSize={10} fontWeight="700" color={theme.colors.orange[700]}>
+                          Required
+                        </StyledText>
+                      </YStack>
+                    ) : null
+                  }>
+                  {requiredAddOns.map(option => renderRequiredRow(option))}
+                </CollapseItem>
+              )}
 
-                const subtitle =
-                  group.type==='required-single' ? (selected ? selected.optionName : '⚠ Required')
-                  : group.type==='optional-single' ? (selected ? selected.optionName : 'Optional')
-                  : count > 0 ? `${count} selected` : 'Tap to add';
+              {hasOptional && (
+                <CollapseItem
+                  itemKey="optional"
+                  title="Optional"
+                  subtitle={selectedOptionalCount > 0 ? `${selectedOptionalCount} selected` : 'Tap to add'}
+                  activeHeader>
+                  {optionalAddOns.map(option => renderOptionalRow(option))}
+                </CollapseItem>
+              )}
 
-                return (
-                  <CollapseItem
-                    key={group.name}
-                    itemKey={group.name}
-                    title={group.name}
-                    subtitle={subtitle}
-                    activeHeader
-                    trailing={
-                      group.type==='optional-single' && selected ? (
-                        <StyledPressable
-                          paddingHorizontal={10} paddingVertical={4}
-                          borderRadius={8}
-                          backgroundColor={theme.colors.gray[100]}
-                          onPress={e => { e?.stopPropagation?.(); clearOptionalSingleSelect(group); }}>
-                          <StyledText
-                            fontFamily={fontStyles.Roboto_Regular}
-                            fontSize={theme.fontSize.small}
-                            fontWeight={theme.fontWeight.semiBold}
-                            color={theme.colors.blue[500]}>
-                            Clear
-                          </StyledText>
-                        </StyledPressable>
-                      ) : group.type==='required-single' && !selected ? (
-                        <YStack
-                          paddingHorizontal={8} paddingVertical={3}
-                          borderRadius={6}
-                          backgroundColor={theme.colors.orange[100]}>
-                          <StyledText fontSize={10} fontWeight="700" color={theme.colors.orange[700]}>
-                            Required
-                          </StyledText>
-                        </YStack>
-                      ) : null
-                    }>
-                    {group.options.map(option => renderOptionRow(option, group))}
-                  </CollapseItem>
-                );
-              })}
             </CollapseGroup>
           ) : (
             <YStack padding={32} alignItems="center" gap={8}>
@@ -395,7 +345,6 @@ const renderMultiSelectRow = option => {
             </YStack>
           )}
 
-          {/* Validation error */}
           {validationError ? (
             <XStack
               marginTop={8} paddingHorizontal={14} paddingVertical={10}
@@ -414,19 +363,18 @@ const renderMultiSelectRow = option => {
           ) : null}
         </ScrollView>
 
-        {/* ── Footer ─────────────────────────────── */}
+        {/* ── Footer ───────────────────────────────────────────── */}
         <XStack
           paddingHorizontal={16} paddingVertical={14}
           borderTopWidth={1} borderTopColor={theme.colors.gray[200]}
           backgroundColor={theme.colors.gray[50]}
           alignItems="center" gap={12}>
 
-          {/* Running total */}
           <YStack>
             <StyledText
               fontSize={10} fontWeight="700"
               color={theme.colors.gray[400]}
-              style={{letterSpacing:0.8}}>
+              style={{letterSpacing: 0.8}}>
               TOTAL
             </StyledText>
             <StyledText
@@ -434,12 +382,11 @@ const renderMultiSelectRow = option => {
               fontSize={theme.fontSize.large}
               fontWeight={theme.fontWeight.bold}
               color={theme.colors.gray[900]}>
-              {formatCurrency(cur, calculateTotalAddOnsPrice())}
+              {formatCurrency(cur, calculateTotal())}
             </StyledText>
           </YStack>
 
           <XStack flex={1} gap={10}>
-            {/* Close */}
             <StyledPressable
               flex={1} height={52} borderRadius={30}
               borderWidth={1} borderColor={theme.colors.gray[300]}
@@ -455,7 +402,6 @@ const renderMultiSelectRow = option => {
               </StyledText>
             </StyledPressable>
 
-            {/* Add */}
             <StyledPressable
               flex={2} height={52} borderRadius={30}
               backgroundColor={addButtonDisabled ? theme.colors.gray[200] : theme.colors.green[500]}
