@@ -1,15 +1,23 @@
 import React from 'react';
-import { StyledText, StyledSpacer, Stack, StyleShape, StyledSkeleton } from 'fluent-styles';
-import { theme } from '../../../utils/theme';
-import { StyledIcon } from '../../../components/package/icon';
-import { ScrollView } from 'react-native';
-import { useQueryPopularMenuItems } from '../../../hooks/useOrderItems';
+import {
+  StyledText,
+  StyledSpacer,
+  Stack,
+  StyleShape,
+  StyledEmptyState,
+} from 'fluent-styles';
+import {theme} from '../../../utils/theme';
+import {StyledIcon} from '../../../components/package/icon';
+import {ScrollView} from 'react-native';
+import {useQueryPopularMenuItems} from '../../../hooks/useOrderItems';
 import PosIcon from '../../pos-icon';
-import { useAppContext } from '../../../hooks/appContext';
+import {useAppContext} from '../../../hooks/appContext';
+import EmptyView from '@components/utils/empty';
+
 
 const PopularDishes = () => {
-  const { shop } = useAppContext();
-  const { data } = useQueryPopularMenuItems();
+  const {shop} = useAppContext();
+  const {data} = useQueryPopularMenuItems();
 
   return (
     <Stack
@@ -23,8 +31,12 @@ const PopularDishes = () => {
       paddingVertical={24}
       justifyContent="flex-start"
       alignItems="flex-start">
-
-      <Stack horizontal width="100%" justifyContent="space-between" alignItems="center" gap={8}>
+      <Stack
+        horizontal
+        width="100%"
+        justifyContent="space-between"
+        alignItems="center"
+        gap={8}>
         <StyledText
           color={theme.colors.gray[800]}
           fontSize={theme.fontSize.large}
@@ -44,11 +56,11 @@ const PopularDishes = () => {
       {data.length === 0 ? (
         <>
           <Stack width={'100%'} vertical gap={4}>
-            <StyledSkeleton
-              width="100%"
-              template="card"
-              height={100}
-              animation="shimmer"
+            <StyledEmptyState
+              variant="card"
+              illustration="📢"
+              title="Nothing here yet"
+              description="Popular dishes will appear here. "
             />
           </Stack>
         </>
@@ -65,7 +77,6 @@ const PopularDishes = () => {
                 alignItems="center"
                 gap={4}
                 marginBottom={16}>
-
                 {/* Icon box with color */}
                 <StyleShape
                   size={48}
@@ -88,7 +99,11 @@ const PopularDishes = () => {
                     marginLeft={2}>
                     {dish.menu_name}
                   </StyledText>
-                  <Stack horizontal justifyContent="flex-start" alignItems="center" gap={4}>
+                  <Stack
+                    horizontal
+                    justifyContent="flex-start"
+                    alignItems="center"
+                    gap={4}>
                     <StyledText
                       color={theme.colors.gray[400]}
                       fontSize={14}
@@ -108,7 +123,8 @@ const PopularDishes = () => {
               </Stack>
             ))}
           </ScrollView>
-        </>)}
+        </>
+      )}
     </Stack>
   );
 };

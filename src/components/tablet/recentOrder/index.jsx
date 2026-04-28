@@ -1,9 +1,9 @@
 import React from 'react';
-import {StyledText, StyledSpacer, StyledSkeleton} from 'fluent-styles';
+import {StyledText, StyledSpacer, StyledEmptyState} from 'fluent-styles';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {Stack} from '../../../components/package/stack';
+import {Stack} from '../../package/stack';
 import {theme} from '../../../utils/theme';
-import {StyledIcon} from '../../../components/package/icon';
+import {StyledIcon} from '../../package/icon';
 import {ScrollView} from 'react-native';
 import {
   backgroundColorHelper,
@@ -13,6 +13,7 @@ import {
   getLastChars,
 } from '../../../utils/help';
 import {useQueryRecentOrders} from '../../../hooks/useOrderItems';
+import EmptyView from '../../utils/empty';
 
 const RecentOrder = () => {
   const {data} = useQueryRecentOrders();
@@ -36,7 +37,7 @@ const RecentOrder = () => {
         <StyledText
           color={theme.colors.gray[800]}
           fontSize={theme.fontSize.large}
-          fontWeight={theme.fontWeight.normal as any}>
+          fontWeight={theme.fontWeight.normal}>
           Recent Orders
         </StyledText>
         <StyledIcon size={24} name="share" color={theme.colors.gray[300]} />
@@ -51,12 +52,11 @@ const RecentOrder = () => {
       {data.length === 0 ? (
         <>
           <Stack width={'100%'} vertical gap={4}>
-            <StyledSkeleton
-              width="100%"
-              template="card"
-              height={100}
-              animation="shimmer"
-            />
+             <EmptyView
+                      color={theme.colors.gray[400]}
+                      title="Your Recent Orders list is empty"
+                      description="Once you place an order, it will appear here. "
+                    />
           </Stack>
         </>
       ) : (
@@ -80,14 +80,14 @@ const RecentOrder = () => {
                     <StyledText
                       color={theme.colors.gray[800]}
                       fontSize={theme.fontSize.small}
-                      fontWeight={theme.fontWeight.medium as any}
+                      fontWeight={theme.fontWeight.medium }
                       marginLeft={2}>
                       #{getLastChars(dish.order?.order_id, 8)}
                     </StyledText>
                     <StyledText
                       color={theme.colors.gray[800]}
                       fontSize={theme.fontSize.small}
-                      fontWeight={theme.fontWeight.thin as any}
+                      fontWeight={theme.fontWeight.thin }
                       marginLeft={5}>
                       X {dish.item_count}
                     </StyledText>
@@ -121,7 +121,7 @@ const RecentOrder = () => {
                     fontSize={12}
                     paddingHorizontal={12}
                     paddingVertical={4}
-                    fontWeight={theme.fontWeight.normal as any}>
+                    fontWeight={theme.fontWeight.normal }>
                     {capitalize(dish.order.status)}
                   </StyledText>
                 </Stack>

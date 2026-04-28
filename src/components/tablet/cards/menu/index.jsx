@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {FlatList} from 'react-native';
-import {StyledSpacer, StyledText, StyledShape} from 'fluent-styles';
+import {StyledSpacer, StyledText, YStack, StyledShape} from 'fluent-styles';
 import {ScrollView} from '@gluestack-ui/themed';
 import {useQueryMenuByCategory} from '../../../../hooks/useMenu';
 import {useAppContext} from '../../../../hooks/appContext';
@@ -9,6 +9,7 @@ import {theme, fontStyles} from '../../../../utils/theme';
 import {StyledIcon} from '../../../package/icon';
 import {formatCurrency} from '../../../../utils/help';
 import PosIcon from '../../../pos-icon';
+import EmptyView from '../../../utils/empty';
 
 export default function ItemCard({onChangeItem, table_id}) {
   const {
@@ -46,6 +47,28 @@ export default function ItemCard({onChangeItem, table_id}) {
     updateSelectedItem(item);
     await handleAddItem(item);
   };
+
+   if (data.length === 0) {
+    return (
+      <YStack
+        flex={1}
+        px={16}
+        py={16}
+        space="lg"
+        backgroundColor={theme.colors.gray[1]}
+        borderRadius={16}
+        borderWidth={1}
+        borderColor={theme.colors.gray[200]}
+        justifyContent="center"
+        alignItems="center">
+        <EmptyView
+          color={theme.colors.gray[400]}
+          title="Your Item list is empty"
+          description="Select any of the categories to add items to your list."
+        />
+      </YStack>
+    );
+  }
 
   const Card = ({item}) => {
     return (

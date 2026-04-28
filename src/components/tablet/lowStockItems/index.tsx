@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyledText, StyledSkeleton, StyledSpacer} from 'fluent-styles';
+import {StyledText, StyledSkeleton, StyledSpacer, StyledEmptyState} from 'fluent-styles';
 import {Stack} from '../../../components/package/stack';
 import {theme} from '../../../utils/theme';
 import {StyledIcon} from '../../../components/package/icon';
@@ -47,11 +47,11 @@ const LowStockItems = () => {
       {data.length === 0 ? (
         <>
           <Stack width={'100%'} vertical gap={4}>
-            <StyledSkeleton
-              width="100%"
-              template="card"
-              height={100}
-              animation="shimmer"
+             <StyledEmptyState
+              variant="card"
+              illustration="🔔"
+              title="Nothing here yet"
+              description="Lower stock items will appear here. "
             />
           </Stack>
         </>

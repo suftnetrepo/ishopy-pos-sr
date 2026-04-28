@@ -117,16 +117,16 @@ export default function KeyCard({ onSubmit, onClose, table_name, table_id }) {
                                 justifyContent="space-between"
                                 px={16}
                                 py={16}
-                              
+                                
                                 borderTopWidth={1}
                                 borderColor={theme.colors.gray[800]}
                             >
                                 <Button variant="outline" borderColor={theme.colors.gray[600]} px={20} py={10} borderRadius={25} onPress={handleClose}>
                                     <ButtonText fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[1]}>Close</ButtonText>
                                 </Button>
-                                  <StyledSpacer marginHorizontal={16} />
-                                <Button bg={(pad.length > 0 && pad !=="0") ? theme.colors.gray[1] : theme.colors.gray[600]} px={30} py={10} borderRadius={25} onPress={()=> (pad.length > 0 && pad !=="0") && handleSubmit()}>
-                                    <ButtonText fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[800]}>Submit</ButtonText>
+                                  <StyledSpacer flex={1} />
+                                <Button m bg={(pad.length > 0 && pad !=="0") ? theme.colors.gray[1] : theme.colors.gray[600]} px={30} py={10} borderRadius={25} onPress={()=> (pad.length > 0 && pad !=="0") && handleSubmit()}>
+                                    <ButtonText fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[800]}>Open</ButtonText>
                                 </Button>
                             </HStack>
                         </VStack>
