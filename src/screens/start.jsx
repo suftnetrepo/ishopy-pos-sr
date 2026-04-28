@@ -10,7 +10,7 @@ const Start = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [hasOnboarded, setHasOnboarded] = useState(false);
 
-    // clearStore();
+    //clearStore();
 
     useEffect(() => {
         const checkOnboarding = async () => {

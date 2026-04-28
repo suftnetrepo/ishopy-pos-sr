@@ -294,9 +294,9 @@ export default function PrinterOptions() {
           </>
         )}
 
-        <Text fontWeight="$semibold">Printer Settings</Text>
+        {/* <Text fontWeight="$semibold">Printer Settings</Text> */}
 
-        <Box bg="$white" borderRadius="$xl">
+        {/* <Box bg="$white" borderRadius="$xl">
           <HStack alignItems="center" justifyContent="space-between" p="$4">
             <VStack>
               <Text>Auto-print receipts</Text>
@@ -325,7 +325,7 @@ export default function PrinterOptions() {
               </Pressable>
             </HStack>
           </HStack>
-        </Box>
+        </Box> */}
       </VStack>
     </ScrollView>
   );

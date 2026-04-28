@@ -1,15 +1,21 @@
 import React from 'react';
-import { StyledText, StyledSpacer } from 'fluent-styles';
+import {StyledText, StyledSpacer, StyledSkeleton} from 'fluent-styles';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import { Stack } from '../../../components/package/stack';
-import { theme } from '../../../utils/theme';
-import { StyledIcon } from '../../../components/package/icon';
-import { ScrollView } from 'react-native';
-import { backgroundColorHelper, formatDate, textColorHelper, capitalize, getLastChars } from '../../../utils/help';
-import { useQueryRecentOrders } from '../../../hooks/useOrderItems';
+import {Stack} from '../../../components/package/stack';
+import {theme} from '../../../utils/theme';
+import {StyledIcon} from '../../../components/package/icon';
+import {ScrollView} from 'react-native';
+import {
+  backgroundColorHelper,
+  formatDate,
+  textColorHelper,
+  capitalize,
+  getLastChars,
+} from '../../../utils/help';
+import {useQueryRecentOrders} from '../../../hooks/useOrderItems';
 
 const RecentOrder = () => {
-  const { data } = useQueryRecentOrders();
+  const {data} = useQueryRecentOrders();
 
   return (
     <Stack
@@ -30,72 +36,100 @@ const RecentOrder = () => {
         <StyledText
           color={theme.colors.gray[800]}
           fontSize={theme.fontSize.large}
-          fontWeight={theme.fontWeight.normal}>
+          fontWeight={theme.fontWeight.normal as any}>
           Recent Orders
         </StyledText>
-           <StyledIcon size={24} name='share' color={theme.colors.gray[300]} />
+        <StyledIcon size={24} name="share" color={theme.colors.gray[300]} />
       </Stack>
-          <StyledSpacer borderWidth={0.4} borderColor={theme.colors.gray[300]} width={'100%'} marginVertical={8} />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {data.map((dish, index) => (
-          <Stack
-            key={index}
-            flex={1}
-            horizontal
-            justifyContent="flex-start"
-            alignItems="center"
-            gap={8}
-            marginBottom={16}>
-            <Stack vertical>
+      <StyledSpacer
+        borderWidth={0.4}
+        borderColor={theme.colors.gray[300]}
+        width={'100%'}
+        marginVertical={8}
+      />
+
+      {data.length === 0 ? (
+        <>
+          <Stack width={'100%'} vertical gap={4}>
+            <StyledSkeleton
+              width="100%"
+              template="card"
+              height={100}
+              animation="shimmer"
+            />
+          </Stack>
+        </>
+      ) : (
+        <>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            {data.map((dish, index) => (
               <Stack
+                key={index}
+                flex={1}
                 horizontal
                 justifyContent="flex-start"
                 alignItems="center"
-                gap={4}>
-                <StyledText
-                  color={theme.colors.gray[800]}
-                  fontSize={theme.fontSize.small}
-                  fontWeight={theme.fontWeight.medium}
-                  marginLeft={2}>
-               
-                    #{getLastChars(dish.order?.order_id, 8)}
-                </StyledText>
-                <StyledText
-                  color={theme.colors.gray[800]}
-                  fontSize={theme.fontSize.small}
-                  fontWeight={theme.fontWeight.thin}
-                  marginLeft={5}>
-                  X {dish.item_count}
-                </StyledText>
-              </Stack>
-              <Stack
-                horizontal
-                justifyContent="flex-start"
-                alignItems="center"
-                gap={4}>
-                <Stack gap={4} horizontal alignItems="center">
-                  <MaterialIcon name="access-time" size={16} color={theme.colors.gray[600]} />
-                  <StyledText color={theme.colors.gray[600]} fontSize={theme.fontSize.small}>{formatDate(dish.order?.date)}</StyledText>
+                gap={8}
+                marginBottom={16}>
+                <Stack vertical>
+                  <Stack
+                    horizontal
+                    justifyContent="flex-start"
+                    alignItems="center"
+                    gap={4}>
+                    <StyledText
+                      color={theme.colors.gray[800]}
+                      fontSize={theme.fontSize.small}
+                      fontWeight={theme.fontWeight.medium as any}
+                      marginLeft={2}>
+                      #{getLastChars(dish.order?.order_id, 8)}
+                    </StyledText>
+                    <StyledText
+                      color={theme.colors.gray[800]}
+                      fontSize={theme.fontSize.small}
+                      fontWeight={theme.fontWeight.thin as any}
+                      marginLeft={5}>
+                      X {dish.item_count}
+                    </StyledText>
+                  </Stack>
+                  <Stack
+                    horizontal
+                    justifyContent="flex-start"
+                    alignItems="center"
+                    gap={4}>
+                    <Stack gap={4} horizontal alignItems="center">
+                      <MaterialIcon
+                        name="access-time"
+                        size={16}
+                        color={theme.colors.gray[600]}
+                      />
+                      <StyledText
+                        color={theme.colors.gray[600]}
+                        fontSize={theme.fontSize.small}>
+                        {formatDate(dish.order?.date)}
+                      </StyledText>
+                    </Stack>
+                  </Stack>
+                </Stack>
+                <StyledSpacer flex={1} />
+                <Stack
+                  borderColor={backgroundColorHelper(dish.order.status)}
+                  backgroundColor={backgroundColorHelper(dish.order.status)}
+                  borderRadius={30}>
+                  <StyledText
+                    color={textColorHelper(dish.order.status)}
+                    fontSize={12}
+                    paddingHorizontal={12}
+                    paddingVertical={4}
+                    fontWeight={theme.fontWeight.normal as any}>
+                    {capitalize(dish.order.status)}
+                  </StyledText>
                 </Stack>
               </Stack>
-            </Stack>
-            <StyledSpacer flex={1} />
-            <Stack
-              borderColor={backgroundColorHelper(dish.order.status)}
-              backgroundColor={backgroundColorHelper(dish.order.status)}
-              borderRadius={30}>
-              <StyledText
-                color={textColorHelper(dish.order.status)}
-                fontSize={12}
-                paddingHorizontal={12}
-                paddingVertical={4}
-                fontWeight={theme.fontWeight.normal}>
-                {capitalize(dish.order.status)}
-              </StyledText>
-            </Stack>
-          </Stack>
-        ))}
-      </ScrollView>
+            ))}
+          </ScrollView>
+        </>
+      )}
     </Stack>
   );
 };

@@ -1,14 +1,14 @@
 import React from 'react';
-import { StyledText, StyledSpacer } from 'fluent-styles';
-import { Stack } from '../../../components/package/stack';
-import { theme } from '../../../utils/theme';
-import { StyledIcon } from '../../../components/package/icon';
-import { ScrollView } from 'react-native';
-import { useQueryGetLowerStock } from '../../../hooks/useStock';
-import { Icon } from '../icon/icon';
+import {StyledText, StyledSkeleton, StyledSpacer} from 'fluent-styles';
+import {Stack} from '../../../components/package/stack';
+import {theme} from '../../../utils/theme';
+import {StyledIcon} from '../../../components/package/icon';
+import {ScrollView} from 'react-native';
+import {useQueryGetLowerStock} from '../../../hooks/useStock';
+import {Icon} from '../icon/icon';
 
 const LowStockItems = () => {
-  const { data } = useQueryGetLowerStock();
+  const {data} = useQueryGetLowerStock();
 
   return (
     <Stack
@@ -32,55 +32,76 @@ const LowStockItems = () => {
         <StyledText
           color={theme.colors.gray[800]}
           fontSize={theme.fontSize.large}
-          fontWeight={theme.fontWeight.normal}>
+          fontWeight={theme.fontWeight.normal as any}>
           Low Stock Items
         </StyledText>
-        <StyledIcon size={24} name='share' color={theme.colors.gray[300]} />
+        <StyledIcon size={24} name="share" color={theme.colors.gray[300]} />
       </Stack>
-      <StyledSpacer borderWidth={0.5} borderColor={theme.colors.gray[300]} width={'100%'} marginVertical={8} />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {data.map((dish, index) => (
-          <Stack
-            key={index}
-            horizontal
-            justifyContent="flex-start"
-            alignItems="center"
-            gap={4}
-            marginBottom={16}>
-            <Icon name={dish?.icon_name} isSelected={false} />
-            <Stack vertical>
-              <StyledText
-                color={theme.colors.gray[500]}
-                fontSize={16}
-                fontWeight={theme.fontWeight.medium}
-                marginLeft={2}>
-                {dish.menu_name}
-              </StyledText>
+      <StyledSpacer
+        borderWidth={0.5}
+        borderColor={theme.colors.gray[300]}
+        width={'100%'}
+        marginVertical={8}
+      />
+
+      {data.length === 0 ? (
+        <>
+          <Stack width={'100%'} vertical gap={4}>
+            <StyledSkeleton
+              width="100%"
+              template="card"
+              height={100}
+              animation="shimmer"
+            />
+          </Stack>
+        </>
+      ) : (
+        <>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            {data.map((dish, index) => (
               <Stack
+                key={index}
                 horizontal
                 justifyContent="flex-start"
                 alignItems="center"
-                gap={4}>
-                <StyledText
-                  color={theme.colors.gray[400]}
-                  fontSize={14}
-                  fontWeight={theme.fontWeight.normal}
-                  marginLeft={2}>
-                  Available:
-                </StyledText>
-                <StyledText
-                  color={theme.colors.green[800]}
-                  fontSize={14}
-                  fontWeight={theme.fontWeight.semiBold}
-                  marginLeft={5}>
-                  {dish.current_stock || 0}
-                </StyledText>
+                gap={4}
+                marginBottom={16}>
+                <Icon name={dish?.icon_name} isSelected={false} />
+                <Stack vertical>
+                  <StyledText
+                    color={theme.colors.gray[500]}
+                    fontSize={16}
+                    fontWeight={theme.fontWeight.medium as any}
+                    marginLeft={2}>
+                    {dish.menu_name}
+                  </StyledText>
+                  <Stack
+                    horizontal
+                    justifyContent="flex-start"
+                    alignItems="center"
+                    gap={4}>
+                    <StyledText
+                      color={theme.colors.gray[400]}
+                      fontSize={14}
+                      fontWeight={theme.fontWeight.normal as any}
+                      marginLeft={2}>
+                      Available:
+                    </StyledText>
+                    <StyledText
+                      color={theme.colors.green[800]}
+                      fontSize={14}
+                      fontWeight={theme.fontWeight.semiBold as any}
+                      marginLeft={5}>
+                      {dish.current_stock || 0}
+                    </StyledText>
+                  </Stack>
+                </Stack>
+                <StyledSpacer flex={1} />
               </Stack>
-            </Stack>
-            <StyledSpacer flex={1} />
-          </Stack>
-        ))}
-      </ScrollView>
+            ))}
+          </ScrollView>
+        </>
+      )}
     </Stack>
   );
 };
