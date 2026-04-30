@@ -18,6 +18,7 @@ import BigItem from '../screens/settings/item';
 import BigUser from '../screens/settings/user';
 import BigPayment from '../screens/settings/payment';
 import BigTableScreen from '../screens/settings/table';
+import BackupScreen from '../screens/settings/backup';
 import FAQ from '../screens/faq';
 import HelpCenter from '../screens/helpCenter';
 import Start from '../screens/start';
@@ -171,6 +172,13 @@ function Navigator() {
       />
 
 
+      <Stack.Screen
+        name="big-backup"
+        component={BackupScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 }
