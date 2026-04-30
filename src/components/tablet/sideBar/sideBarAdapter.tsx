@@ -1,22 +1,20 @@
 import React from 'react';
-import { StyledSpacer, StyledDialog } from 'fluent-styles';
-import { Stack } from '../../../components/package/stack';
-import { theme } from '../../../utils/theme';
+import {StyledSpacer} from 'fluent-styles';
+import {Stack} from '../../../components/package/stack';
+import {theme} from '../../../utils/theme';
 import SideBar from '../../../components/tablet/sideBar';
-import {useSelector} from '@legendapp/state/react';
-import { PurchaseButton } from '../licence/purchaseButton';
-import { PurchaseSuccess } from '../licence/purchaseSuccess';
-import { state} from '../../../store';
 
 interface SideBarAdapterProps {
   collapse: boolean;
   selectedMenu: number;
-  showMenu?: boolean;
-  showBuy?: boolean;
+  showMenu?: boolean | string;
 }
 
-const SideBarAdapter: React.FC<SideBarAdapterProps> = ({ collapse, selectedMenu, showMenu = '', showBuy = false }) => {
-    const {payment_status, purchase_status} = useSelector(() => state.get());
+const SideBarAdapter: React.FC<SideBarAdapterProps> = ({
+  collapse,
+  selectedMenu,
+  showMenu = '',
+}) => {
   return (
     <Stack
       paddingBottom={16}
@@ -32,16 +30,12 @@ const SideBarAdapter: React.FC<SideBarAdapterProps> = ({ collapse, selectedMenu,
       shadowRadius={8}
       backgroundColor={theme.colors.gray[1]}>
       <StyledSpacer marginVertical={7} />
-        <SideBar selectedMenu={selectedMenu} collapse={collapse} showMenu={showMenu} />
+      <SideBar
+        selectedMenu={selectedMenu}
+        collapse={collapse}
+        showMenu={showMenu}
+      />
       <StyledSpacer flex={1} />
-      {
-        (showBuy && !purchase_status) && <PurchaseButton collapse={showBuy} />
-      }
-      {payment_status && (
-        <StyledDialog visible>
-          <PurchaseSuccess />
-        </StyledDialog>
-      )}
     </Stack>
   );
 };

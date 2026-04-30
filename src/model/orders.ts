@@ -226,3 +226,75 @@ export {
   getOrderStatusAggregate,
   updateOrderStatus
 };
+
+export interface OrdersPageParams {
+  page: number;
+  pageSize: number;
+  sortKey?: string;
+  sortDir?: 'asc' | 'desc';
+  status?: string;
+  search?: string;
+  startDate?: Date;
+  endDate?: Date;
+}
+
+export interface OrdersPage {
+  data: Order[];
+  totalCount: number;
+}
+
+const queryOrdersPaginated = async (params: OrdersPageParams): Promise<OrdersPage> => {
+  const realm = await getRealmInstance();
+  return new Promise((resolve, reject) => {
+    try {
+      const {page, pageSize, sortKey, sortDir, status, search, startDate, endDate} = params;
+
+      let results = realm.objects<Order>('Order');
+
+      // Status filter
+      if (status && status !== 'All') {
+        results = results.filtered('status ==[c] $0', status) as any;
+      }
+
+      // Date range filter
+      if (startDate && endDate) {
+        results = results.filtered('date >= $0 && date <= $1', startDate, endDate) as any;
+      }
+
+      // Search by table name
+      if (search) {
+        results = results.filtered('table_name CONTAINS[c] $0', search) as any;
+      }
+
+      const totalCount = results.length;
+
+      // Sort
+      const key = (sortKey || 'date') as keyof Order;
+      const descending = sortDir === 'desc' || !sortDir;
+      const sorted = results.sorted(key as string, descending);
+
+      // Slice page
+      const data = sorted
+        .slice(page * pageSize, (page + 1) * pageSize)
+        .map(order => ({
+          order_id: order.order_id,
+          user_id: order.user_id,
+          table_id: order.table_id,
+          total_price: order.total_price,
+          total: order.total,
+          status: order.status,
+          date: order.date,
+          tax: order.tax,
+          discount: order.discount,
+          table_name: order.table_name,
+          id: order.order_id,
+        }));
+
+      resolve({data, totalCount});
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export {queryOrdersPaginated};

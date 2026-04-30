@@ -35,7 +35,16 @@ const useShop = () => {
 
 	async function load() {
 		try {
-			const shop = await queryAllShops();
+			let shop = await queryAllShops();
+
+			// Auto-assign a table_id for shop mode if missing.
+			// This handles the case where the user set mode to 'shop'
+			// during onboarding without saving through the shop form.
+			if (shop && shop.mode === 'shop' && !shop.table_id) {
+				const { table_id } = await getTableId();
+				shop = await updateShop({ ...shop, table_id });
+			}
+
 			setData({
 				data: shop,
 				error: null,

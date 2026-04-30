@@ -28,7 +28,7 @@ const Dashboard = () => {
          <RenderHeader showLogo={true} />
       </StyledPage.Header.Full>
       <Stack key={focused} flex={1.5} horizontal backgroundColor={theme.colors.gray[100]}>
-        <SideBarAdapter showBuy={true} selectedMenu={1} key={focused} collapse={false} />
+        <SideBarAdapter selectedMenu={1} key={focused} collapse={false} />
         <Stack flex={2} vertical backgroundColor={theme.colors.transparent}>
           <ScrollView vertical showsVerticalScrollIndicator={false}>
             <Tiles />

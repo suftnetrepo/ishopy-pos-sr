@@ -1,191 +1,226 @@
-import React, {useState, useEffect} from 'react';
-import {FlatList, Pressable} from 'react-native';
+/* eslint-disable prettier/prettier */
+import React, {useState} from 'react';
+import {Pressable} from 'react-native';
 import {
   StyledText,
-  StyledSpacer,
-  StyledCycle,
-  YStack,
-  StyledEmptyState,
+  StyledTable,
+  StyledChip,
+  Stack,
 } from 'fluent-styles';
-import {Box, Text, ScrollView} from '@gluestack-ui/themed';
-import {Stack} from '../../package/stack';
-import {theme, fontStyles} from '../../../utils/theme';
+import {theme} from '../../../utils/theme';
 import {
-  colorCodeStatus,
-  convertDateFilter,
-  getLastChars,
   formatDate,
+  formatCurrency,
+  getLastChars,
   statusOptions,
 } from '../../../utils/help';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {useOrders} from '../../../hooks/useOrder';
+import {StyledCycle} from 'fluent-styles';
 import {useAppContext} from '../../../hooks/appContext';
 import EmptyView from '../../utils/empty';
+import useOrderTable from '../../../hooks/useOrderTable';
 
+// ─── Status chip colours ──────────────────────────────────────────────────────
+const STATUS_STYLE = {
+  completed: {bg: theme.colors.green[50],  color: theme.colors.green[700]},
+  progress:  {bg: theme.colors.amber[50],  color: theme.colors.amber[700]},
+  pending:   {bg: theme.colors.blue[50],   color: theme.colors.blue[700]},
+  cancelled: {bg: theme.colors.red[50],    color: theme.colors.red[600]},
+};
+
+const getStatusStyle = status =>
+  STATUS_STYLE[(status || '').toLowerCase()] ||
+  {bg: theme.colors.gray[100], color: theme.colors.gray[600]};
+
+const formatStatus = status =>
+  status ? status.charAt(0).toUpperCase() + status.slice(1).toLowerCase() : '';
+
+// ─── Column builder ───────────────────────────────────────────────────────────
+const buildColumns = symbol => [
+  {
+    key: 'order_id',
+    title: 'Order ID',
+    width: 130,
+    render: v => (
+      <StyledText
+        fontSize={theme.fontSize.small}
+        fontWeight={theme.fontWeight.semiBold}
+        color={theme.colors.blue[600]}>
+        #{getLastChars(v, 8)}
+      </StyledText>
+    ),
+  },
+  {
+    key: 'table_name',
+    title: 'Table',
+    width: 90,
+    align: 'center',
+    render: v => (
+      <StyledText fontSize={theme.fontSize.small} color={theme.colors.gray[600]}>
+        {v || '—'}
+      </StyledText>
+    ),
+  },
+  {
+    key: 'total',
+    title: 'Subtotal',
+    width: 110,
+    align: 'right',
+    sortable: true,
+    render: v => (
+      <StyledText
+        fontSize={theme.fontSize.small}
+        fontWeight={theme.fontWeight.normal}
+        color={theme.colors.gray[600]}>
+        {formatCurrency(symbol, v)}
+      </StyledText>
+    ),
+  },
+  {
+    key: 'total_price',
+    title: 'Total',
+    width: 110,
+    align: 'right',
+    sortable: true,
+    render: v => (
+      <StyledText
+        fontSize={theme.fontSize.small}
+        fontWeight={theme.fontWeight.bold}
+        color={theme.colors.gray[800]}>
+        {formatCurrency(symbol, v)}
+      </StyledText>
+    ),
+  },
+  {
+    key: 'tax',
+    title: 'Tax',
+    width: 80,
+    align: 'right',
+    render: v => (
+      <StyledText fontSize={theme.fontSize.small} color={theme.colors.gray[500]}>
+        {v ? formatCurrency(symbol, v) : '—'}
+      </StyledText>
+    ),
+  },
+  {
+    key: 'discount',
+    title: 'Discount',
+    width: 90,
+    align: 'right',
+    render: v => (
+      <StyledText
+        fontSize={theme.fontSize.small}
+        color={v ? theme.colors.red[500] : theme.colors.gray[400]}>
+        {v ? `-${formatCurrency(symbol, v)}` : '—'}
+      </StyledText>
+    ),
+  },
+  {
+    key: 'date',
+    title: 'Date',
+    sortable: true,
+    render: v => (
+      <Stack horizontal alignItems="center" gap={4}>
+        <MaterialIcon name="access-time" size={14} color={theme.colors.gray[400]} />
+        <StyledText fontSize={theme.fontSize.small} color={theme.colors.gray[500]}>
+          {formatDate(v)}
+        </StyledText>
+      </Stack>
+    ),
+  },
+  {
+    key: 'status',
+    title: 'Status',
+    width: 130,
+    align: 'center',
+    render: v => {
+      const s = getStatusStyle(v);
+      return (
+        <Stack
+          paddingHorizontal={14}
+          paddingVertical={5}
+          borderRadius={20}
+          backgroundColor={s.bg}
+          alignItems="center"
+          justifyContent="center">
+          <StyledText
+            fontSize={theme.fontSize.small}
+            fontWeight={theme.fontWeight.semiBold}
+            color={s.color}>
+            {formatStatus(v)}
+          </StyledText>
+        </Stack>
+      );
+    },
+  },
+];
+
+// ─── Component ────────────────────────────────────────────────────────────────
 export default function OrderCard({onOrderChange, onHandleFilter}) {
-  const {updateSelectedOrder, date_filter, updateDateFilter} = useAppContext();
-  const [state, setState] = useState('All');
-  const {data, filterOrders, restoreOrders, loadOrdersByDateRange, loadOrders} =
-    useOrders(true);
+  const {updateSelectedOrder, date_filter, updateDateFilter, shop} = useAppContext();
+
+  // Active chip label — UI only, actual filtering done via setStatusFilter
+  const [activeChip, setActiveChip] = useState('All');
+
+  const symbol  = shop?.currency || '£';
+  const columns = buildColumns(symbol);
+
+  const {tableProps, setStatusFilter} = useOrderTable({
+    dateFilter: date_filter,
+  });
+
   const hasActiveFilter = date_filter?.startDate && date_filter?.endDate;
 
-  useEffect(() => {
-    if (date_filter?.startDate && date_filter?.endDate) {
-      try {
-        const {startDate, endDate} = convertDateFilter(
-          date_filter.startDate,
-          date_filter.endDate
-        );
-        loadOrdersByDateRange(startDate, endDate);
-      } catch (error) {
-        if (__DEV__) console.error('Error parsing dates:', error);
-      }
-    }
-  }, [date_filter?.startDate, date_filter?.endDate]);
-
-  const handleFilter = async status => {
-    setState(status);
-    if (status === 'All') {
-      restoreOrders();
-      return;
-    }
-
-    await filterOrders(status);
+  const handleFilter = status => {
+    setActiveChip(status);
+    setStatusFilter(status); // tells usePaginatedQuery to re-fetch with new filter
   };
 
-  const handleOrder = order => {
-    updateSelectedOrder(order);
-    onOrderChange('basket');
-  };
-
-  const handleClearDateFilter = async () => {
-    try {
-      await loadOrders();
-      updateDateFilter({startDate: '', endDate: ''});
-      setState('All');
-    } catch (error) {
-      if (__DEV__) console.error('Error clearing date filter:', error);
-    }
-  };
-
-  if (data?.length === 0) {
-    return (
-     <YStack
-        flex={1}
-        px={16}
-        py={16}
-        space="lg"
-        backgroundColor={theme.colors.gray[1]}
-        borderRadius={16}
-        borderWidth={1}
-        borderColor={theme.colors.gray[200]}
-        justifyContent="center"
-        alignItems="center">
-        <EmptyView
-          color={theme.colors.gray[400]}
-          title="Your Order list is empty"
-          description="Orders will appear here once added."
-        />
-      </YStack>
-    );
-  }
-
-  const Card = ({order}) => {
-    return (
-      <Stack
-        flex={1}
-        backgroundColor={theme.colors.gray[1]}
-        borderRadius={16}
-        paddingHorizontal={8}
-        paddingVertical={8}
-        marginVertical={4}
-        marginHorizontal={4}
-        shadowColor="black"
-        shadowOffset={{width: 0, height: 1}}
-        shadowOpacity={0.1}
-        shadowRadius={2}
-        elevation={3}
-        status={colorCodeStatus(order?.status)}
-        vertical
-        onTouchStart={() => handleOrder(order)}>
-        <Stack
-          horizontal
-          flex={1}
-          justifyContent="space-between"
-          alignItems="center">
-          <StyledText
-            fontFamily={fontStyles.Roboto_Regular}
-            fontSize={theme.fontSize.small}
-            fontWeight={theme.fontWeight.normal}
-            color={theme.colors.gray[600]}>
-            #{getLastChars(order?.order_id, 8)}
-          </StyledText>
-          <StyledCycle
-            borderWidth={1}
-            height={24}
-            width={24}
-            backgroundColor={theme.colors.gray[50]}
-            borderColor={theme.colors.gray[400]}>
-            <MaterialIcon
-              name="chevron-right"
-              size={12}
-              color={theme.colors.gray[500]}
-            />
-          </StyledCycle>
-        </Stack>
-        <Stack vertical>
-          <Stack gap={4} horizontal alignItems="center">
-            <MaterialIcon
-              name="access-time"
-              size={18}
-              color={theme.colors.gray[600]}
-            />
-            <StyledText
-              color={theme.colors.gray[400]}
-              fontSize={theme.fontSize.small}>
-              {formatDate(order?.date)}
-            </StyledText>
-          </Stack>
-        </Stack>
-      </Stack>
-    );
+  const handleClearDateFilter = () => {
+    updateDateFilter({startDate: '', endDate: ''});
+    setActiveChip('All');
+    setStatusFilter('All');
   };
 
   return (
-    <ScrollView flex={3} showsVerticalScrollIndicator={false}>
+    <Stack vertical flex={1}>
+      {/* Filter chips */}
       <Stack
-        marginBottom={8}
-        flex={1}
-        marginLeft={8}
-        marginRight={24}
         horizontal
         justifyContent="space-between"
-        alignItems="center">
-        <Stack gap={8} horizontal>
-          {statusOptions.map(status => {
-            const isActive = status === state;
-            return (
-              <Pressable
-                key={status}
-                onPress={async () => {
-                  await handleFilter(status);
-                }}>
-                <Box
-                  px="$4"
-                  py="$2"
-                  borderRadius="$full"
-                  bg={isActive ? '$green600' : '$gray200'}>
-                  <Text color={isActive ? '$white' : '$black'} fontWeight="300">
-                    {status}
-                  </Text>
-                </Box>
-              </Pressable>
-            );
-          })}
+        alignItems="center"
+        marginBottom={12}
+        marginLeft={8}
+        marginRight={8}>
+        <Stack horizontal gap={6} flexWrap="wrap" alignItems="center">
+          {statusOptions.map(status => (
+            <StyledChip
+              key={status}
+              label={status}
+              variant="ingredient"
+              size="md"
+              selected={status === activeChip}
+              showCheck={status === activeChip}
+              onPress={() => handleFilter(status)}
+            />
+          ))}
         </Stack>
-        <StyledSpacer flex={1} />
-        {hasActiveFilter && (
-          <Pressable onPress={handleClearDateFilter}>
+
+        <Stack horizontal gap={8} alignItems="center">
+          {hasActiveFilter && (
+            <Pressable onPress={handleClearDateFilter}>
+              <StyledCycle
+                paddingHorizontal={10}
+                borderWidth={1}
+                height={48}
+                width={48}
+                backgroundColor={theme.colors.gray[100]}
+                borderColor={theme.colors.gray[400]}>
+                <MaterialIcon size={24} name="close" color={theme.colors.gray[800]} />
+              </StyledCycle>
+            </Pressable>
+          )}
+          <Pressable onPress={() => onHandleFilter('filter')}>
             <StyledCycle
               paddingHorizontal={10}
               borderWidth={1}
@@ -193,42 +228,30 @@ export default function OrderCard({onOrderChange, onHandleFilter}) {
               width={48}
               backgroundColor={theme.colors.gray[100]}
               borderColor={theme.colors.gray[400]}>
-              <MaterialIcon
-                size={24}
-                name="close"
-                color={theme.colors.gray[800]}
-              />
+              <MaterialIcon size={24} name="filter-list" color={theme.colors.gray[800]} />
             </StyledCycle>
           </Pressable>
-        )}
-        <StyledSpacer marginHorizontal={4} />
-        <Pressable
-          onPress={() => {
-            onHandleFilter('filter');
-          }}>
-          <StyledCycle
-            paddingHorizontal={10}
-            borderWidth={1}
-            height={48}
-            width={48}
-            backgroundColor={theme.colors.gray[100]}
-            borderColor={theme.colors.gray[400]}>
-            <MaterialIcon
-              size={24}
-              name="filter-list"
-              color={theme.colors.gray[800]}
-            />
-          </StyledCycle>
-        </Pressable>
+        </Stack>
       </Stack>
-      <FlatList
-        data={data}
-        keyExtractor={item => item.order_id}
-        scrollEnabled={false}
-        numColumns={4}
-        showsVerticalScrollIndicator={false}
-        renderItem={({item}) => <Card key={item.order_id} order={item} />}
+
+      <StyledTable
+        columns={columns}
+        {...tableProps}
+        showDivider
+        bordered
+        forceTable
+        onRowPress={row => {
+          updateSelectedOrder(row);
+          onOrderChange('basket');
+        }}
+        emptyNode={
+          <EmptyView
+            color={theme.colors.gray[400]}
+            title="No orders found"
+            description="Try a different filter or date range."
+          />
+        }
       />
-    </ScrollView>
+    </Stack>
   );
 }
