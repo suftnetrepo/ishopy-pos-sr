@@ -16,6 +16,8 @@ import {useNavigation} from '@react-navigation/native';
 import {Backup} from '../../components/backup/backup';
 import {Restore} from '../../components/backup/restore';
 import Printer from './printer';
+import { capitalize } from '../../utils/help';
+
 
 const SETTINGS_CONFIG = {
   rows: [
@@ -206,7 +208,7 @@ const BigSettings = () => {
             : false
         }
         onClose={() => setShow({data: null, id: '', tag: ''})}
-        title={show.tag}
+        title={capitalize(show.tag)}
         width={'30%'}
         colors={{
           background: theme.colors.gray[100],

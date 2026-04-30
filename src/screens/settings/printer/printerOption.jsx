@@ -1,5 +1,5 @@
-import React, {useState,  useEffect} from 'react';
-import {Alert, ActivityIndicator, Switch, TextInput} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Alert, ActivityIndicator, TextInput, Platform} from 'react-native';
 import MIcon from 'react-native-vector-icons/MaterialIcons';
 
 import {
@@ -12,10 +12,11 @@ import {
   Button,
   ButtonText,
   Center,
-  Divider,
 } from '@gluestack-ui/themed';
-
 import {useBluetoothPrinterContext} from '../../../hooks/bluetoothPrinterProvider';
+
+const CONNECTION_TYPES =
+  Platform.OS === 'ios' ? ['wifi'] : ['wifi', 'bluetooth'];
 
 export default function PrinterOptions() {
   const {
@@ -32,12 +33,16 @@ export default function PrinterOptions() {
   const [connectionType, setConnectionType] = useState('wifi');
   const [scanning, setScanning] = useState(false);
   const [availablePrinters, setAvailablePrinters] = useState([]);
-  const [autoPrint, setAutoPrint] = useState(true);
-  const [printCopies, setPrintCopies] = useState(1);
 
   const [wifiName, setWifiName] = useState('');
   const [wifiHost, setWifiHost] = useState('');
   const [wifiPort, setWifiPort] = useState('9100');
+
+  useEffect(() => {
+    if (Platform.OS === 'ios') {
+      setConnectionType('wifi');
+    }
+  }, []);
 
   useEffect(() => {
     if (selectedPrinter?.type === 'wifi') {
@@ -48,6 +53,14 @@ export default function PrinterOptions() {
   }, [selectedPrinter]);
 
   const handleScan = async () => {
+    if (Platform.OS === 'ios') {
+      Alert.alert(
+        'Bluetooth not supported',
+        'Bluetooth printer setup is only available on Android. Please use WiFi printing on iPad.'
+      );
+      return;
+    }
+
     if (connectionType !== 'bluetooth') return;
 
     setScanning(true);
@@ -55,11 +68,14 @@ export default function PrinterOptions() {
 
     try {
       const scannedDevices = await enableBluetooth();
+
       const list = Array.isArray(scannedDevices)
         ? scannedDevices
         : devices || [];
+
       setAvailablePrinters(list);
     } catch (error) {
+      console.error('Bluetooth scan error:', error);
       Alert.alert(
         'Bluetooth Error',
         error?.message || 'Unable to scan devices'
@@ -100,6 +116,7 @@ export default function PrinterOptions() {
 
       Alert.alert('Success', 'WiFi printer connected. Please tap Test Print.');
     } catch (error) {
+      console.error('WiFi connection error:', error);
       Alert.alert('WiFi Error', error?.message || 'Unable to connect printer');
     }
   };
@@ -125,13 +142,16 @@ export default function PrinterOptions() {
     <ScrollView>
       <VStack space="lg" px="$5" pb="$10">
         <Text color="$coolGray500">
-          Connect your receipt printer via WiFi or Bluetooth
+          {Platform.OS === 'ios'
+            ? 'Connect your receipt printer via WiFi/LAN on iPad'
+            : 'Connect your receipt printer via WiFi or Bluetooth'}
         </Text>
 
         {selectedPrinter && (
           <Box bg="$green50" p="$4" borderRadius="$xl">
             <HStack alignItems="center" space="md">
               <MIcon name="print" size={28} color="green" />
+
               <VStack flex={1}>
                 <Text fontWeight="$bold">{selectedPrinter.name}</Text>
                 <Text fontSize="$sm" color="$coolGray500">
@@ -140,6 +160,7 @@ export default function PrinterOptions() {
                     : selectedPrinter.address}
                 </Text>
               </VStack>
+
               <MIcon name="check-circle" size={22} color="green" />
             </HStack>
 
@@ -158,7 +179,7 @@ export default function PrinterOptions() {
         <Text fontWeight="$semibold">Connection Type</Text>
 
         <HStack space="sm">
-          {['wifi', 'bluetooth'].map(type => (
+          {CONNECTION_TYPES.map(type => (
             <Pressable
               key={type}
               flex={1}
@@ -175,11 +196,21 @@ export default function PrinterOptions() {
                   name={type === 'wifi' ? 'wifi' : 'bluetooth'}
                   size={30}
                 />
+
                 <Text mt="$2">{type.toUpperCase()}</Text>
               </Box>
             </Pressable>
           ))}
         </HStack>
+
+        {Platform.OS === 'ios' && (
+          <Box bg="$blue50" p="$4" borderRadius="$xl">
+            <Text color="$blue700">
+              On iPad, please use a WiFi/LAN receipt printer. Bluetooth setup is
+              only available for Android.
+            </Text>
+          </Box>
+        )}
 
         {connectionType === 'wifi' && (
           <Box bg="$white" p="$4" borderRadius="$xl">
@@ -247,7 +278,7 @@ export default function PrinterOptions() {
           </Box>
         )}
 
-        {connectionType === 'bluetooth' && (
+        {Platform.OS === 'android' && connectionType === 'bluetooth' && (
           <>
             <Button
               borderRadius={30}
@@ -293,39 +324,6 @@ export default function PrinterOptions() {
             )}
           </>
         )}
-
-        {/* <Text fontWeight="$semibold">Printer Settings</Text> */}
-
-        {/* <Box bg="$white" borderRadius="$xl">
-          <HStack alignItems="center" justifyContent="space-between" p="$4">
-            <VStack>
-              <Text>Auto-print receipts</Text>
-              <Text fontSize="$sm" color="$coolGray500">
-                Print after payment
-              </Text>
-            </VStack>
-            <Switch value={autoPrint} onValueChange={setAutoPrint} />
-          </HStack>
-
-          <Divider />
-
-          <HStack alignItems="center" justifyContent="space-between" p="$4">
-            <Text>Copies</Text>
-            <HStack space="md" alignItems="center">
-              <Pressable
-                onPress={() => setPrintCopies(Math.max(1, printCopies - 1))}>
-                <MIcon name="remove-circle-outline" size={28} />
-              </Pressable>
-
-              <Text fontWeight="$bold">{printCopies}</Text>
-
-              <Pressable
-                onPress={() => setPrintCopies(Math.min(5, printCopies + 1))}>
-                <MIcon name="add-circle-outline" size={28} />
-              </Pressable>
-            </HStack>
-          </HStack>
-        </Box> */}
       </VStack>
     </ScrollView>
   );

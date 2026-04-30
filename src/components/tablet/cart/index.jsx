@@ -1,7 +1,16 @@
 /* eslint-disable prettier/prettier */
 import React, {Fragment, useState, useEffect} from 'react';
 import {ScrollView} from 'react-native';
-import {StyledSpacer, Drawer} from 'fluent-styles';
+import {
+  StyledSpacer,
+  Drawer,
+  StyledScrollView,
+  StyledCard,
+  StyledPressable,
+  StyledText,
+  XStack,
+  YStack,
+} from 'fluent-styles';
 import {
   Box,
   Text,
@@ -10,17 +19,18 @@ import {
   Pressable,
   Button,
   ButtonText,
-  Icon,
 } from '@gluestack-ui/themed';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Icons from 'react-native-vector-icons/MaterialIcons';
 import {useAppContext} from '../../../hooks/appContext';
 import {formatCurrency, paymentOptions} from '../../../utils/help';
 import {theme} from '../../../utils/theme';
 import Payment from '../payment/cash';
 import {useInsertOrder, updataStatusHandler} from '../../../hooks/useOrder';
 import EmptyView from '../../../components/utils/empty';
+import {useNavigation} from '@react-navigation/native';
 
 export default function Cart({table_id, table_name}) {
+  const navigation = useNavigation();
   const {
     updateOrderId,
     getItems,
@@ -102,36 +112,41 @@ export default function Cart({table_id, table_name}) {
             <Box
               borderRadius={8}
               px={12}
-              py={10}
+              py={4}
               backgroundColor={theme.colors.gray[50]}
               borderWidth={1}
               borderColor={theme.colors.gray[200]}>
-              <HStack flex={1} justifyContent="space-between" alignItems="center">
+              <HStack
+                flex={1}
+                justifyContent="space-between"
+                alignItems="center">
                 <Text
                   flex={1}
                   color={theme.colors.gray[900]}
-                  fontSize={theme.fontSize.normal}
+                  fontSize={theme.fontSize.small}
                   fontWeight={theme.fontWeight.normal}>
                   {item.name}
                 </Text>
                 <HStack space="md" alignItems="center">
                   <Text
-                    fontSize={theme.fontSize.normal}
+                    fontSize={theme.fontSize.small}
                     color={theme.colors.gray[700]}
                     fontWeight={theme.fontWeight.normal}>
-                    {formatCurrency(shop?.currency || '£', calculateItemPrice(item))}
+                    {formatCurrency(
+                      shop?.currency || '£',
+                      calculateItemPrice(item)
+                    )}
                   </Text>
                   <Box
-                    w={30}
+                    w={20}
                     h={30}
                     borderRadius={15}
                     backgroundColor={theme.colors.gray[100]}
                     justifyContent="center"
                     alignItems="center">
-                    <Icon
-                      as={MaterialIcons}
+                    <Icons
                       name="cancel"
-                      size={22}
+                      size={24}
                       color={theme.colors.gray[400]}
                       onPress={() => removeItem(item.index, table_id)}
                     />
@@ -194,7 +209,7 @@ export default function Cart({table_id, table_name}) {
 
   // ── Payment methods ───────────────────────────────────────────
   const renderPaymentMethods = () => (
-    <HStack mt={16} space="md">
+    <XStack marginTop={16} gap={16}>
       {paymentOptions.map(option => (
         <Pressable
           key={option.key}
@@ -214,18 +229,17 @@ export default function Cart({table_id, table_name}) {
                 ? theme.colors.gray[900]
                 : theme.colors.gray[200],
           }}>
-          <Icon
-            as={MaterialIcons}
+          <Icons
             name={option.icon}
-            size="xl"
+            size={24}
             color={
               paymentMethod === option.key
                 ? theme.colors.gray[1]
                 : theme.colors.gray[600]
             }
           />
-          <Text
-            mt={4}
+          <StyledText
+            marginTop={4}
             color={
               paymentMethod === option.key
                 ? theme.colors.gray[1]
@@ -233,10 +247,10 @@ export default function Cart({table_id, table_name}) {
             }
             fontSize={14}>
             {option.label}
-          </Text>
+          </StyledText>
         </Pressable>
       ))}
-    </HStack>
+    </XStack>
   );
 
   // ── Action buttons ────────────────────────────────────────────
@@ -279,21 +293,7 @@ export default function Cart({table_id, table_name}) {
       }
 
       return (
-        <>
-          <Button
-            flex={1}
-            size="lg"
-            bg={theme.colors.pink[700]}
-            borderColor={theme.colors.pink[700]}
-            borderRadius={12}
-            onPress={handleVoid}>
-            <ButtonText
-              color={theme.colors.gray[1]}
-              fontSize={theme.fontSize.normal}
-              fontWeight={theme.fontWeight.normal}>
-              Void
-            </ButtonText>
-          </Button>
+        <StyledScrollView horizontal showsHorizontalScrollIndicator={false}>
           <Button
             flex={1}
             size="lg"
@@ -304,11 +304,27 @@ export default function Cart({table_id, table_name}) {
             onPress={handlePrint}>
             <ButtonText
               color={theme.colors.gray[800]}
-              fontSize={theme.fontSize.normal}
+              fontSize={theme.fontSize.small}
               fontWeight={theme.fontWeight.normal}>
               Print
             </ButtonText>
           </Button>
+          <StyledSpacer marginHorizontal={8} />
+          <Button
+            flex={1}
+            size="lg"
+            bg={theme.colors.orange[500]}
+            borderColor={theme.colors.orange[600]}
+            borderRadius={12}
+            onPress={() => navigation.navigate('big-table')}>
+            <ButtonText
+              color={theme.colors.gray[1]}
+              fontSize={theme.fontSize.small}
+              fontWeight={theme.fontWeight.normal}>
+              Send
+            </ButtonText>
+          </Button>
+          <StyledSpacer marginHorizontal={8} />
           <Button
             flex={1}
             size="lg"
@@ -319,12 +335,28 @@ export default function Cart({table_id, table_name}) {
             disabled={!paymentMethod}>
             <ButtonText
               color={theme.colors.gray[1]}
-              fontSize={theme.fontSize.normal}
+              fontSize={theme.fontSize.small}
               fontWeight={theme.fontWeight.normal}>
               Pay
             </ButtonText>
           </Button>
-        </>
+          <StyledSpacer marginHorizontal={8} />
+          <Button
+            flex={1}
+            size="lg"
+            bg={theme.colors.pink[700]}
+            borderColor={theme.colors.pink[700]}
+            borderRadius={12}
+            onPress={handleVoid}>
+            <ButtonText
+              color={theme.colors.gray[1]}
+              fontSize={theme.fontSize.small}
+              fontWeight={theme.fontWeight.normal}>
+              Void
+            </ButtonText>
+          </Button>
+          <StyledSpacer marginHorizontal={8} />
+        </StyledScrollView>
       );
     }
 
@@ -365,17 +397,15 @@ export default function Cart({table_id, table_name}) {
       borderRadius={16}
       borderWidth={1}
       borderColor={theme.colors.gray[200]}>
-
       <VStack flex={1} space="md" mb="lg">
         {renderCartItems()}
       </VStack>
 
-      <VStack flex={1} mb="lg">
+      <VStack flex={1}>
         {items?.items?.length > 0 ? renderOrderSummary() : null}
         {hasOrderId && renderPaymentMethods()}
         <HStack
           flex={1}
-          mt={16}
           gap={8}
           justifyContent="space-between"
           alignItems="center">

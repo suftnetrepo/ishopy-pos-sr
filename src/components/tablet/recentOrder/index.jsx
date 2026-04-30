@@ -52,11 +52,11 @@ const RecentOrder = () => {
       {data.length === 0 ? (
         <>
           <Stack width={'100%'} vertical gap={4}>
-             <EmptyView
-                      color={theme.colors.gray[400]}
-                      title="Your Recent Orders list is empty"
-                      description="Once you place an order, it will appear here. "
-                    />
+            <EmptyView
+              color={theme.colors.gray[400]}
+              title="Your Recent Orders list is empty"
+              description="Once you place an order, it will appear here. "
+            />
           </Stack>
         </>
       ) : (
@@ -80,14 +80,14 @@ const RecentOrder = () => {
                     <StyledText
                       color={theme.colors.gray[800]}
                       fontSize={theme.fontSize.small}
-                      fontWeight={theme.fontWeight.medium }
+                      fontWeight={theme.fontWeight.medium}
                       marginLeft={2}>
                       #{getLastChars(dish.order?.order_id, 8)}
                     </StyledText>
                     <StyledText
                       color={theme.colors.gray[800]}
                       fontSize={theme.fontSize.small}
-                      fontWeight={theme.fontWeight.thin }
+                      fontWeight={theme.fontWeight.thin}
                       marginLeft={5}>
                       X {dish.item_count}
                     </StyledText>
@@ -121,7 +121,7 @@ const RecentOrder = () => {
                     fontSize={12}
                     paddingHorizontal={12}
                     paddingVertical={4}
-                    fontWeight={theme.fontWeight.normal }>
+                    fontWeight={theme.fontWeight.normal}>
                     {capitalize(dish.order.status)}
                   </StyledText>
                 </Stack>

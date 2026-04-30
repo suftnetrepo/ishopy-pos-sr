@@ -88,7 +88,7 @@ export default function ItemCard({onChangeItem, table_id}) {
         status={item?.color_code}
         vertical
         onTouchStart={() => handleTouchStart(item)}>
-        <StyledShape
+        {/* <StyledShape
           size={48}
           backgroundColor={theme.colors.gray[100]}
           justifyContent="center"
@@ -101,7 +101,7 @@ export default function ItemCard({onChangeItem, table_id}) {
             size={32}
             color={item?.color_code || theme.colors.gray[500]}
           />
-        </StyledShape>
+        </StyledShape> */}
 
         {selectedItem?.menu_id === item.menu_id && (
           <StyledIcon
