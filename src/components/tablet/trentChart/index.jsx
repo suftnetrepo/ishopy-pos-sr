@@ -235,7 +235,7 @@ const DailyTransactionChart = () => {
         </Stack>
         <StyledText
           fontFamily={fontStyles.Roboto_Regular}
-          fontSize={theme.fontSize.large}
+          fontSize={theme.fontSize.small}
           fontWeight={theme.fontWeight.normal}
           color={theme.colors.gray[800]}>
           {activeTitle}
