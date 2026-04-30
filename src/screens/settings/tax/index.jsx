@@ -18,8 +18,7 @@ const BigTax = () => {
   const navigationFocus = useFocus();
   const dialogue = useDialogue();
   const { deleteTax } = useDeleteTax();
-  const { data, error, loading, resetHandler, loadTaxes } = useTaxes(isFocused);
-    useLoaderAndError(loading, error, resetHandler);
+  const { data, error, loading, resetHandler, loadTaxes } = useTaxes(true);
   const [state, setState] = useState({
     data: null,
     tag: '',
@@ -27,6 +26,10 @@ const BigTax = () => {
   const [screenFocus, setScreenFocus] = useState(true);
   const shouldOpen = state.tag === 'Edit' || state.tag === 'Add';
   const isFocused = navigationFocus && screenFocus;
+
+  console.log('tax error', error);
+
+    useLoaderAndError(loading, error, resetHandler);
 
   useEffect(() => {
     if (state.tag) {

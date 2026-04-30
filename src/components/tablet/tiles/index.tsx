@@ -70,7 +70,7 @@ const Tile = ({label, barColor, bgColor, numColor, lblColor, dotBg, dotColor, va
       paddingHorizontal={16}
       paddingVertical={14}>
       <Stack vertical gap={4}>
-        <StyledText fontSize={32} fontWeight={theme.fontWeight.semiBold} color={numColor}>
+        <StyledText fontSize={32} fontWeight={theme.fontWeight.semiBold as any} color={numColor}>
           {value}
         </StyledText>
         <StyledText fontSize={theme.fontSize.small} color={lblColor}>
