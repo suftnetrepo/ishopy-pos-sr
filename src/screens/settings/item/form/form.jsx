@@ -116,6 +116,9 @@ const ItemForm = ({item, onClose}) => {
               returnKeyType="next"
               maxLength={50}
               fontSize={theme.fontSize.small}
+              backgroundColor={t.bgInput}
+              color={t.textPrimary}
+              borderColor={t.borderDefault}
               value={fields.name}
               placeholderTextColor={t.textMuted}
               onChangeText={text => setFields({...fields, name: text})}
@@ -129,6 +132,9 @@ const ItemForm = ({item, onClose}) => {
               returnKeyType="next"
               maxLength={50}
               fontSize={theme.fontSize.small}
+              backgroundColor={t.bgInput}
+              color={t.textPrimary}
+              borderColor={t.borderDefault}
               value={fields.price?.toString() || ''}
               placeholderTextColor={t.textMuted}
               onChangeText={text => setFields({...fields, price: text})}
@@ -148,6 +154,9 @@ const ItemForm = ({item, onClose}) => {
               returnKeyType="next"
               maxLength={50}
               fontSize={theme.fontSize.small}
+              backgroundColor={t.bgInput}
+              color={t.textPrimary}
+              borderColor={t.borderDefault}
               value={fields.cost?.toString() || ''}
               placeholderTextColor={t.textMuted}
               onChangeText={text => setFields({...fields, cost: text})}
@@ -170,6 +179,9 @@ const ItemForm = ({item, onClose}) => {
               returnKeyType="next"
               maxLength={50}
               fontSize={theme.fontSize.normal}
+              backgroundColor={t.bgInput}
+              color={t.textPrimary}
+              borderColor={t.borderDefault}
               value={fields.stock.toString()}
               placeholderTextColor={t.textMuted}
               onChangeText={text => setFields({...fields, stock: text})}

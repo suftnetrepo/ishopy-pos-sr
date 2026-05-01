@@ -122,11 +122,13 @@ export default function KeyCard({onSubmit, onClose, table_name, table_id}) {
                   margin="1.5%"
                   height={70}
                   borderRadius={10}
-                  backgroundColor="#2E2E2E"
+                  backgroundColor={t.bgCard}
+                  borderWidth={1}
+                  borderColor={t.borderDefault}
                   alignItems="center"
                   justifyContent="center">
                   <StyledText
-                    color={t.textInverse}
+                    color={t.textPrimary}
                     fontFamily={fontStyles.Roboto_Regular}
                     fontSize={theme.fontSize.large}
                     fontWeight={theme.fontWeight.medium}>

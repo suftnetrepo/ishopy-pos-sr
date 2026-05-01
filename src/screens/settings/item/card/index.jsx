@@ -147,11 +147,11 @@ const ItemCard = forwardRef(({onItemChange, onItemDelete, onAddonChange, flag = 
                 gap={4}
                 borderWidth={1}
                 borderColor={t.borderFocus}
-                backgroundColor={t.colors?.purple[50] || '#faf5ff'}
+                backgroundColor={t.brandPrimaryBg}
                 borderRadius={8}
                 paddingVertical={7}>
-                <MIcon size={14} name="bowl-mix" color={t.colors?.purple[600] || '#9333ea'} />
-                <StyledText fontSize={theme.fontSize.small} color={t.colors?.purple[600] || '#9333ea'}>Add-ons</StyledText>
+                <MIcon size={14} name="bowl-mix" color={t.brandPrimary} />
+                <StyledText fontSize={theme.fontSize.small} color={t.brandPrimary}>Add-ons</StyledText>
               </StyledPressable>
             )}
           </Stack>

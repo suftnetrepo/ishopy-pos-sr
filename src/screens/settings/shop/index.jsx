@@ -91,7 +91,8 @@ const Shop = ({onClose}) => {
   const inputProps = {
     fontSize: theme.fontSize.normal,
     borderColor: t.borderDefault,
-    backgroundColor: t.bgCard,
+    backgroundColor: t.bgInput,
+    color: t.textPrimary,
     borderRadius: 12,
     paddingHorizontal: 12,
     placeholderTextColor: t.textMuted,

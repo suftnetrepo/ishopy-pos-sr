@@ -109,6 +109,9 @@ const CategoryForm = ({category, onClose}) => {
             returnKeyType="next"
             maxLength={50}
             fontSize={theme.fontSize.small}
+            backgroundColor={t.bgInput}
+            color={t.textPrimary}
+            borderColor={t.borderDefault}
             value={fields.name}
             placeholderTextColor={t.textMuted}
             onChangeText={text => setFields({...fields, name: text})}

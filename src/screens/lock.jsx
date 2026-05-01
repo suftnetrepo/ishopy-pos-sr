@@ -68,7 +68,7 @@ const Keypad = () => {
                 <Icon
                     name={'lock-clock'}
                     size={64}
-                    color={t.textPrimary}
+                    color={t.brandPrimary}
                 />
             </XStack>
         )
@@ -87,8 +87,8 @@ const Keypad = () => {
                 <StyledSpacer marginVertical={16} />
                 <XStack marginBottom={20}>
                     {[0, 1, 2, 3].map((_, index) => (
-                        <YStack key={index} width={60} height={60} borderWidth={1} borderRadius={10} margin={5} borderColor={t.textSecondary} justifyContent='center' alignItems='center'>
-                            <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.bold} >
+                        <YStack key={index} width={60} height={60} borderWidth={2} borderRadius={10} margin={5} borderColor={pin[index] ? t.brandPrimary : t.borderStrong} justifyContent='center' alignItems='center'>
+                            <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.bold} color={t.textPrimary}>
                                 {pin[index]}
                             </StyledText>
                         </YStack>
@@ -109,12 +109,12 @@ const Keypad = () => {
                                 <StyledButton
                                     key={num}
                                     width={70} height={70}
-                                    borderWidth={1} borderRadius={35}
+                                    borderWidth={2} borderRadius={35}
                                     backgroundColor={t.bgCard}
-                                    borderColor={t.textSecondary}
+                                    borderColor={t.borderStrong}
                                     onPress={() => handlePress(num.toString())}
                                 >
-                                    <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.xxlarge} fontWeight={theme.fontWeight.bold} >
+                                    <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.xxlarge} fontWeight={theme.fontWeight.bold} color={t.textPrimary}>
                                         {num}
                                     </StyledText>
                                 </StyledButton>))}
@@ -124,12 +124,12 @@ const Keypad = () => {
                     <StyledSpacer marginVertical={8} />
                     <StyledButton
                         width={70} height={70}
-                        borderWidth={1} borderRadius={35}
+                        borderWidth={2} borderRadius={35}
                         backgroundColor={t.bgCard}
-                        borderColor={t.textMuted}
+                        borderColor={t.dangerColor}
                         onPress={handleDelete}
                     >
-                        <StyledText fontSize={theme.fontSize.xxlarge} fontWeight={theme.fontWeight.bold} >
+                        <StyledText color={t.dangerColor} fontSize={theme.fontSize.xxlarge} fontWeight={theme.fontWeight.bold} >
                             ⌫
                         </StyledText>
                     </StyledButton>

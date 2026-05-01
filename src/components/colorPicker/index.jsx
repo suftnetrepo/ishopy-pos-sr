@@ -41,15 +41,17 @@ const ColorPicker = React.memo(({ color, onPress }) => {
             marginVertical={10}
             marginHorizontal={5}
             backgroundColor={item.color}
+            borderColor={item.color === selectedColor ? t.brandPrimary : t.borderDefault}
+            borderWidth={item.color === selectedColor ? 3 : 1}
             onPress={() => handleClick(item.color)}
         />
     );
 
     return (
-        <YStack padding={10} justifyContent='center' alignItems='center'>
+        <YStack padding={10} backgroundColor={t.bgCard} borderRadius={12} justifyContent='center' alignItems='center'>
             {selectedColor && (
-                <XStack flex={1} justifyContent='center' alignItems='center' height={100} width={100} marginTop={20} borderRadius={10} backgroundColor={selectedColor}>
-                    <StyledText fontSize={theme.fontSize.small} color={t.bgCard}>
+                <XStack flex={1} justifyContent='center' alignItems='center' height={100} width={100} marginTop={20} borderRadius={10} backgroundColor={selectedColor} borderColor={t.borderDefault} borderWidth={1}>
+                    <StyledText fontSize={theme.fontSize.small} color={selectedColor === '#ffffff' || selectedColor === '#fff' ? t.textPrimary : '#ffffff'}>
                         {selectedColor}
                     </StyledText>
                 </XStack>

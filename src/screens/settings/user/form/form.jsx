@@ -28,7 +28,8 @@ const UserForm = ({user, onClose}) => {
   const inputProps = {
     fontSize: theme.fontSize.small,
     borderColor: t.borderDefault,
-    backgroundColor: t.bgCard,
+    backgroundColor: t.bgInput,
+    color: t.textPrimary,
     paddingHorizontal: 8,
     placeholderTextColor: t.textMuted,
   };

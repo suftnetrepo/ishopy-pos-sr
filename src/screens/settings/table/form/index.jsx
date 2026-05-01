@@ -113,8 +113,9 @@ const TableForm = ({table, onClose}) => {
           returnKeyType="next"
           maxLength={50}
           fontSize={theme.fontSize.small}
-          borderColor={t.brandPrimaryDark}
-          backgroundColor={t.bgCard}
+          backgroundColor={t.bgInput}
+          color={t.textPrimary}
+          borderColor={t.borderDefault}
           borderRadius={32}
           paddingHorizontal={8}
           value={fields.tableName}
@@ -131,8 +132,9 @@ const TableForm = ({table, onClose}) => {
           returnKeyType="next"
           maxLength={3}
           fontSize={theme.fontSize.small}
-          borderColor={t.brandPrimaryDark}
-          backgroundColor={t.bgCard}
+          backgroundColor={t.bgInput}
+          color={t.textPrimary}
+          borderColor={t.borderDefault}
           borderRadius={32}
           paddingHorizontal={8}
           value={fields.size?.toString()}

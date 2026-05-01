@@ -175,6 +175,9 @@ const ItemAddOn = ({menu_id}) => {
             returnKeyType="next"
             maxLength={50}
             fontSize={theme.fontSize.small}
+            backgroundColor={t.bgInput}
+            color={t.textPrimary}
+            borderColor={t.borderDefault}
             paddingHorizontal={8}
             value={fields.addOnName}
             placeholderTextColor={t.textMuted}
@@ -189,6 +192,9 @@ const ItemAddOn = ({menu_id}) => {
             returnKeyType="next"
             maxLength={9}
             fontSize={theme.fontSize.small}
+            backgroundColor={t.bgInput}
+            color={t.textPrimary}
+            borderColor={t.borderDefault}
             paddingHorizontal={8}
             value={fields.price.toString()}
             placeholderTextColor={t.textMuted}
