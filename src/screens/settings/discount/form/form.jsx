@@ -9,7 +9,7 @@ import {
   StyledSpacer,
   StyledInput,
   StyledText,
-  StyledButton,
+  StyledTextInput,
   toastService,
   Switch,
 } from 'fluent-styles';
@@ -97,7 +97,7 @@ const DiscountForm = ({discount, onClose}) => {
         marginHorizontal={16}
         marginTop={16}
         paddingVertical={16}>
-        <StyledInput
+        <StyledTextInput
           label={'Name'}
           keyboardType="default"
           placeholder="Enter discount name"
@@ -110,7 +110,7 @@ const DiscountForm = ({discount, onClose}) => {
           errorMessage={errorMessages.name?.message}
           {...inputProps}
         />
-        <StyledInput
+        <StyledTextInput
           label={'Rate'}
           keyboardType="number-pad"
           placeholder="Enter discount rate"
@@ -126,9 +126,6 @@ const DiscountForm = ({discount, onClose}) => {
           error={!!errorMessages.rate}
           errorMessage={errorMessages.rate?.message}
           {...inputProps}
-          onChangeText={text => setFields({...fields, rate: text})}
-          error={!!errorMessages.rate}
-          errorMessage={errorMessages.rate?.message}
         />
         <XStack
           justifyContent="flex-start"
