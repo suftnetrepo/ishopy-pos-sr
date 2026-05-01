@@ -2,20 +2,19 @@
 import React from 'react';
 import {ScrollView, Linking} from 'react-native';
 import {
-  StyledPage,
   StyledText,
   StyledSpacer,
   StyledPressable,
   StyledSpinner,
+  StyledDivider,
   Stack,
-  theme,
-  toastService,
-  StyledShape,
 } from 'fluent-styles';
 import {useNavigation} from '@react-navigation/native';
 import {useInAppPurchase} from '../../hooks/useInAppPurchase';
 import {StyledIcon} from '../../components/package/icon';
+import {useAppTheme, fonts} from '../../theme';
 import Logo from '../../components/tablet/logo';
+import {toastService} from 'fluent-styles';
 
 const FEATURES = [
   'Unlimited items, categories & menus',
@@ -28,37 +27,34 @@ const FEATURES = [
   'Works fully offline — no internet needed',
 ];
 
-const Feature = ({text}) => (
+// ─── Feature row ──────────────────────────────────────────────────────────────
+const Feature = ({text, t}) => (
   <Stack horizontal alignItems="center" gap={12} paddingVertical={7}>
     <Stack
-      width={22}
-      height={22}
-      borderRadius={11}
-      backgroundColor={theme.colors.green[50]}
-      alignItems="center"
-      justifyContent="center"
+      width={22} height={22} borderRadius={11}
+      backgroundColor={t.successBg}
+      alignItems="center" justifyContent="center"
       flexShrink={0}>
-      <StyledIcon name="check" size={14} color={theme.colors.green[600]} />
+      <StyledIcon name="check" size={14} color={t.successColor} />
     </Stack>
     <StyledText
-      fontSize={theme.fontSize.normal}
-      color={theme.colors.gray[800]}
+      fontSize={15}
+      fontFamily={fonts.bodyRegular}
+      color={t.textPrimary}
       flex={1}>
       {text}
     </StyledText>
   </Stack>
 );
 
+// ─── Main screen ──────────────────────────────────────────────────────────────
 const PaywallScreen = ({onDismiss}) => {
   const navigation = useNavigation();
-  const {
-    purchaseHandler,
-    restorePurchases,
-    isLoading,
-    isActive,
-    error,
-    product,
-  } = useInAppPurchase();
+  const {t, isDark} = useAppTheme();
+  const {purchaseHandler, restorePurchases, isLoading, isActive, error, product} =
+    useInAppPurchase();
+
+  const dismiss = () => onDismiss ? onDismiss() : navigation.goBack();
 
   React.useEffect(() => {
     if (isActive) {
@@ -69,7 +65,7 @@ const PaywallScreen = ({onDismiss}) => {
         duration: 3000,
         theme: 'light',
       });
-      onDismiss ? onDismiss() : navigation.goBack();
+      dismiss();
     }
   }, [isActive]);
 
@@ -88,83 +84,76 @@ const PaywallScreen = ({onDismiss}) => {
   const price = product?.localizedPrice || '£39.99';
 
   return (
-    <Stack flex={1} width="100%" backgroundColor={theme.colors.gray[1]}>
+    <Stack flex={1} backgroundColor={t.bgPage}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         bounces={false}
         contentContainerStyle={{paddingBottom: 40}}>
+
         {/* ── Dark hero ── */}
         <Stack
-          backgroundColor="#1c1917"
+          backgroundColor={t.bgHero}
           paddingTop={16}
           paddingBottom={28}
           paddingHorizontal={24}
           alignItems="center">
+
           {/* Drag handle + close row */}
           <Stack
-            horizontal
-            width="100%"
+            horizontal width="100%"
             alignItems="center"
             justifyContent="space-between"
             marginBottom={20}>
-            {/* Spacer left */}
             <Stack width={36} />
-            {/* Drag handle centre */}
             <Stack
-              width={36}
-              height={4}
-              borderRadius={2}
+              width={36} height={4} borderRadius={2}
               backgroundColor="rgba(255,255,255,0.2)"
             />
-            {/* Close right */}
             <StyledPressable
-              onPress={() => (onDismiss ? onDismiss() : navigation.goBack())}
-              width={48}
-              height={48}
-              borderRadius={24}
-              backgroundColor={theme.colors.gray[100]}
-              alignItems="center"
-              justifyContent="center">
-              <StyledIcon
-                pointerEvents="none"
-                name="close"
-                size={18}
-                color={theme.colors.gray[800]}
-              />
+              onPress={dismiss}
+              width={36} height={36} borderRadius={18}
+              backgroundColor="rgba(255,255,255,0.1)"
+              alignItems="center" justifyContent="center">
+              <StyledIcon name="close" size={18} color="rgba(255,255,255,0.6)" />
             </StyledPressable>
           </Stack>
 
-          <StyledShape cycle>
-            <Logo />
-          </StyledShape>
-
+          <Logo />
           <StyledSpacer marginVertical={8} />
 
           <StyledText
+            fontFamily={fonts.displayBold}
             fontSize={24}
-            fontWeight={theme.fontWeight.semiBold}
+            fontWeight="700"
             color="#fafafa"
             letterSpacing={-0.5}>
             Kursa Premium
           </StyledText>
+
           <StyledSpacer marginVertical={4} />
-          <StyledText fontSize={13} color="#a1a1aa" textAlign="center">
+
+          <StyledText
+            fontFamily={fonts.bodyRegular}
+            fontSize={13}
+            color="rgba(255,255,255,0.55)"
+            textAlign="center">
             The complete POS for restaurants & shops
           </StyledText>
+
           <StyledSpacer marginVertical={12} />
 
           {/* Trial badge */}
           <Stack
-            paddingHorizontal={16}
-            paddingVertical={6}
+            paddingHorizontal={16} paddingVertical={6}
             borderRadius={20}
             borderWidth={0.5}
-            borderColor="rgba(245,158,11,0.4)"
+            borderColor="rgba(245,158,11,0.45)"
             backgroundColor="rgba(245,158,11,0.12)">
             <StyledText
+              fontFamily={fonts.displaySemi}
               fontSize={12}
-              fontWeight={theme.fontWeight.medium}
-              color="#f59e0b">
+              fontWeight="600"
+              color={t.brandPrimary}>
               7 days free — no credit card needed
             </StyledText>
           </Stack>
@@ -172,55 +161,54 @@ const PaywallScreen = ({onDismiss}) => {
 
         {/* ── Body ── */}
         <Stack paddingHorizontal={24} paddingTop={24}>
+
           {/* Price */}
           <Stack horizontal alignItems="baseline" gap={8} marginBottom={4}>
             <StyledText
+              fontFamily={fonts.displayBold}
               fontSize={34}
-              fontWeight={theme.fontWeight.semiBold}
-              color={theme.colors.gray[900]}>
+              fontWeight="700"
+              color={t.textPrimary}>
               {price}
             </StyledText>
-            <StyledText fontSize={14} color={theme.colors.gray[500]}>
+            <StyledText
+              fontFamily={fonts.bodyRegular}
+              fontSize={14}
+              color={t.textSecondary}>
               one-time
             </StyledText>
           </Stack>
+
           <StyledText
+            fontFamily={fonts.bodyRegular}
             fontSize={13}
-            color={theme.colors.gray[400]}
+            color={t.textMuted}
             marginBottom={20}>
             Pay once, own it forever. No subscriptions.
           </StyledText>
 
           {/* Features */}
           <Stack vertical marginBottom={20}>
-            {FEATURES.map((f, i) => (
-              <Feature key={i} text={f} />
-            ))}
+            {FEATURES.map((f, i) => <Feature key={i} text={f} t={t} />)}
           </Stack>
 
-          {/* Divider */}
-          <Stack
-            height={0.5}
-            backgroundColor={theme.colors.gray[200]}
-            marginBottom={20}
-          />
+          <StyledDivider marginBottom={20} />
 
           {/* CTA */}
           <StyledPressable
             onPress={purchaseHandler}
             disabled={isLoading}
-            backgroundColor={
-              isLoading ? theme.colors.gray[200] : theme.colors.amber[500]
-            }
+            backgroundColor={isLoading ? t.borderDefault : t.brandPrimary}
             borderRadius={12}
             paddingVertical={16}
             alignItems="center"
             justifyContent="center"
             marginBottom={12}>
             <StyledText
-              fontSize={theme.fontSize.large}
-              fontWeight={theme.fontWeight.semiBold}
-              color={isLoading ? theme.colors.gray[400] : '#1c1917'}>
+              fontFamily={fonts.displaySemi}
+              fontSize={16}
+              fontWeight="600"
+              color={isLoading ? t.textMuted : t.textOnAmber}>
               {isLoading ? 'Processing...' : 'Start 7-day free trial'}
             </StyledText>
           </StyledPressable>
@@ -231,37 +219,40 @@ const PaywallScreen = ({onDismiss}) => {
             disabled={isLoading}
             paddingVertical={10}
             alignItems="center">
-            <StyledText fontSize={13} color={theme.colors.gray[400]}>
+            <StyledText
+              fontFamily={fonts.bodyRegular}
+              fontSize={13}
+              color={t.textMuted}>
               Restore purchase
             </StyledText>
           </StyledPressable>
 
           {/* Legal */}
-          <StyledText
-            fontSize={11}
-            color={theme.colors.gray[400]}
-            textAlign="center"
-            lineHeight={18}
-            marginTop={8}>
-            After the 7-day trial, {price} is charged as a one-time payment.
-            {'\n'}
-            Managed in your App Store settings.{' '}
+          <Stack paddingTop={8}>
             <StyledText
+              fontFamily={fonts.bodyRegular}
               fontSize={11}
-              color={theme.colors.gray[400]}
-              textDecorationLine="underline"
-              onPress={() => Linking.openURL('https://kursa.app/privacy')}>
-              Privacy
+              color={t.textMuted}
+              textAlign="center"
+              lineHeight={18}>
+              After the 7-day trial, {price} is charged as a one-time payment.{'\n'}
+              Managed in your App Store settings.{' '}
             </StyledText>
-            {' · '}
-            <StyledText
-              fontSize={11}
-              color={theme.colors.gray[400]}
-              textDecorationLine="underline"
-              onPress={() => Linking.openURL('https://kursa.app/terms')}>
-              Terms
-            </StyledText>
-          </StyledText>
+            <Stack horizontal justifyContent="center" gap={4}>
+              <StyledPressable onPress={() => Linking.openURL('https://kursa.app/privacy')}>
+                <StyledText fontSize={11} color={t.textMuted} textDecorationLine="underline">
+                  Privacy
+                </StyledText>
+              </StyledPressable>
+              <StyledText fontSize={11} color={t.textMuted}>·</StyledText>
+              <StyledPressable onPress={() => Linking.openURL('https://kursa.app/terms')}>
+                <StyledText fontSize={11} color={t.textMuted} textDecorationLine="underline">
+                  Terms
+                </StyledText>
+              </StyledPressable>
+            </Stack>
+          </Stack>
+
         </Stack>
       </ScrollView>
 

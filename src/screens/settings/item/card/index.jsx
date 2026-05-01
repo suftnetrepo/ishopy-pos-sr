@@ -17,9 +17,11 @@ import {formatCurrency, toWordCase} from '../../../../utils/help';
 import {useCategories} from '../../../../hooks/useCategory';
 import {useAppContext} from '../../../../hooks/appContext';
 import usePremium from '../../../../hooks/usePremium';
+import {useAppTheme} from '../../../../theme';
 
 const ItemCard = forwardRef(({onItemChange, onItemDelete, onAddonChange, flag = false, shop, onRequestAdd}, ref) => {
   const {menuQuery} = useAppContext();
+  const {t} = useAppTheme();
   const {checkLimit} = usePremium();
 
   const handleRequestAdd = () => {
@@ -59,19 +61,19 @@ const ItemCard = forwardRef(({onItemChange, onItemDelete, onAddonChange, flag = 
       paddingBottom={8}>
       <StyledPressable
         onPress={() => onItemDelete(item.menu_id)}
-        backgroundColor={theme.colors.red[500]}
+        backgroundColor={t.dangerColor}
         borderRadius={10}
         padding={14}
         alignItems="center"
         justifyContent="center">
-        <StyledMIcon size={22} name="delete-outline" color={theme.colors.gray[1]} />
+        <StyledMIcon size={22} name="delete-outline" color={t.bgCard} />
       </StyledPressable>
     </Stack>
   );
 
-  const RenderCard = ({item}) => {
+  const RenderCard = ({item, t}) => {
     const isActive = item.status === 1;
-    const borderColor = isActive ? theme.colors.green[400] : theme.colors.red[300];
+    const borderColor = isActive ? t.successColor : t.dangerBg;
 
     return (
       <Swipeable
@@ -81,7 +83,7 @@ const ItemCard = forwardRef(({onItemChange, onItemDelete, onAddonChange, flag = 
           flex={1}
           vertical
           borderRadius={12}
-          backgroundColor={theme.colors.gray[1]}
+          backgroundColor={t.bgCard}
           marginHorizontal={4}
           marginBottom={8}
           paddingHorizontal={14}
@@ -92,7 +94,7 @@ const ItemCard = forwardRef(({onItemChange, onItemDelete, onAddonChange, flag = 
             <StyledText
               fontSize={theme.fontSize.small}
               fontWeight={theme.fontWeight.normal}
-              color={theme.colors.gray[800]}
+              color={t.textPrimary}
               flex={1}
               numberOfLines={1}>
               {toWordCase(item.name)}
@@ -100,9 +102,9 @@ const ItemCard = forwardRef(({onItemChange, onItemDelete, onAddonChange, flag = 
             <Stack horizontal alignItems="center" gap={4}>
               <Stack
                 width={6} height={6} borderRadius={3}
-                backgroundColor={isActive ? theme.colors.green[500] : theme.colors.red[400]}
+                backgroundColor={isActive ? t.successColor : t.dangerColor}
               />
-              <StyledText fontSize={10} color={isActive ? theme.colors.green[600] : theme.colors.red[500]}>
+              <StyledText fontSize={10} color={isActive ? t.successColor : t.dangerColor}>
                 {isActive ? 'Active' : 'Off'}
               </StyledText>
             </Stack>
@@ -112,7 +114,7 @@ const ItemCard = forwardRef(({onItemChange, onItemDelete, onAddonChange, flag = 
           <StyledText
             fontSize={theme.fontSize.small}
             fontWeight={theme.fontWeight.normal}
-            color={theme.colors.gray[700]}
+            color={t.textSecondary}
             marginBottom={12}>
             {formatCurrency(shop?.currency || '£', item.price)}
           </StyledText>
@@ -127,12 +129,12 @@ const ItemCard = forwardRef(({onItemChange, onItemDelete, onAddonChange, flag = 
               justifyContent="center"
               gap={4}
               borderWidth={1}
-              borderColor={theme.colors.gray[200]}
-              backgroundColor={theme.colors.gray[50]}
+              borderColor={t.borderDefault}
+              backgroundColor={t.bgPage}
               borderRadius={8}
               paddingVertical={7}>
-              <StyledIcon name="edit" size={14} color={theme.colors.gray[500]} />
-              <StyledText fontSize={theme.fontSize.small} color={theme.colors.gray[500]}>Edit</StyledText>
+              <StyledIcon name="edit" size={14} color={t.textSecondary} />
+              <StyledText fontSize={theme.fontSize.small} color={t.textSecondary}>Edit</StyledText>
             </StyledPressable>
 
             {shop?.mode === 'restaurant' && (
@@ -186,7 +188,8 @@ const ItemCard = forwardRef(({onItemChange, onItemDelete, onAddonChange, flag = 
         showsVerticalScrollIndicator={false}
         keyExtractor={item => item.menu_id}
         numColumns={3}
-        renderItem={({item, index}) => <RenderCard item={item} key={index} />}
+        renderItem={({item, index}) => <RenderCard item={item} key={index} 
+                        t={t}/>}
       />
 
       

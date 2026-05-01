@@ -1,305 +1,224 @@
-import React, { useState } from 'react';
-import { ScrollView, Image } from 'react-native';
-import {
-  Box,
-  Text,
-  VStack,
-  HStack,
-  Pressable,
-} from '@gluestack-ui/themed';
-import {
-  StyledText,
-  StyledSpacer,
-  StyledButton,
-} from 'fluent-styles';
+/* eslint-disable prettier/prettier */
+import React, {useState} from 'react';
+import {ScrollView, Image} from 'react-native';
+import {StyledText, StyledSpacer, StyledButton, StyledPressable, Stack} from 'fluent-styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { fontStyles, theme } from '../../utils/theme';
-import { usePin } from '../../hooks/useUser';
-import { ShowToast } from '../../components/toast';
+import {fontStyles, theme} from '../../utils/theme';
+import {usePin} from '../../hooks/useUser';
+import {ShowToast} from '../../components/toast';
+import {useAppTheme} from '../../theme';
 
-export default function HelpScreen({ onClose }) {
-  const { recoveryHandler } = usePin();
+export default function HelpScreen({onClose}) {
+  const {recoveryHandler} = usePin();
   const [expandedFAQ, setExpandedFAQ] = useState(null);
+  const {t} = useAppTheme();
 
-  const toggleFAQ = (index) =>
-    setExpandedFAQ(expandedFAQ === index ? null : index);
+  const toggleFAQ = index => setExpandedFAQ(expandedFAQ === index ? null : index);
 
   const faqs = [
     {
       question: 'How do I switch between Restaurant and Retail modes?',
-      answer:
-        'To switch modes, open the Settings menu and navigate to Shop Settings. You\'ll find the mode toggle switch at the bottom of the form. Select either "Restaurant" mode for food service businesses or "Shop" mode for retail stores. The app will restart with your selected mode.',
+      answer: 'Open Settings → Shop. The mode selector is at the top of the form. Choose Restaurant for food service or Shop for retail.',
       options: [],
       isReset: false,
     },
     {
       question: 'How do I reset my pin?',
-      answer:
-        'To reset your PIN',
-      options: ['Click the "Reset" button. This creates a default user with the PIN 1234.', 'Log in using this default PIN.', 'Navigate to Settings > User', 'Create a new user with a strong, secure PIN.', 'Locate and delete the "Default" user .'],
+      answer: 'To reset your PIN:',
+      options: [
+        'Click the "Reset" button below — creates a default user with PIN 1234.',
+        'Log in using PIN 1234.',
+        'Navigate to Settings → Users.',
+        'Create a new user with a secure PIN.',
+        'Delete the "Default" user.',
+      ],
       isReset: true,
     },
   ];
 
   const guides = [
-    {
-      id: 'getting-started',
-      title: 'Getting Started',
-      icon: 'book-open-page-variant',
-      description: 'Learn the basics of setting up your POS',
-      topics: [],
-    },
-    {
-      id: 'products',
-      title: 'Product Management',
-      icon: 'package-variant-closed',
-      description: 'Manage products and inventory',
-      topics: [],
-    },
-    {
-      id: 'sales',
-      title: 'Sales & Checkout',
-      icon: 'cart-outline',
-      description: 'Process sales quickly',
-      topics: [],
-    },
-    {
-      id: 'reports',
-      title: 'Reports & Analytics',
-      icon: 'chart-line',
-      description: 'Track performance',
-      topics: [],
-    },
-    {
-      id: 'settings',
-      title: 'Settings',
-      icon: 'cog-outline',
-      description: 'Configure your system',
-      topics: [],
-    },
+    {id: 'getting-started', title: 'Getting Started',     icon: 'book-open-page-variant',  description: 'Learn the basics of setting up your POS'},
+    {id: 'products',        title: 'Product Management',  icon: 'package-variant-closed',  description: 'Manage products and inventory'},
+    {id: 'sales',           title: 'Sales & Checkout',    icon: 'cart-outline',            description: 'Process sales quickly'},
+    {id: 'reports',         title: 'Reports & Analytics', icon: 'chart-line',              description: 'Track performance'},
+    {id: 'settings',        title: 'Settings',            icon: 'cog-outline',             description: 'Configure your system'},
   ];
 
   const handleReset = () => {
     recoveryHandler().then(() => {
-      ShowToast("Success", "Pin has been reset to default user with PIN 1234")
+      ShowToast('Success', 'Pin has been reset to default user with PIN 1234');
     });
   };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40, flex:1, paddingTop: 20, backgroundColor: theme.colors.gray[50] }}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{paddingBottom: 40, paddingTop: 20, backgroundColor: t.bgPage}}>
+
       {/* Header */}
-      <HStack px="$6" py="$4" alignItems="center">
-        <Pressable
-          w={40}
-          h={40}
-          rounded="$full"
-          bg="$muted"
-          alignItems="center"
-          justifyContent="center"
-          onPress={() => onClose()}
-        >
-          <Icon name="arrow-left" size={20} />
-        </Pressable>
-
-        <VStack ml="$4">
-          <Text fontSize="$2xl" fontWeight="$bold">
+      <Stack horizontal paddingHorizontal={24} paddingVertical={16} alignItems="center">
+        <StyledPressable
+          width={40} height={40} borderRadius={20}
+          backgroundColor={t.bgPage}
+          alignItems="center" justifyContent="center"
+          onPress={() => onClose()}>
+          <Icon name="arrow-left" size={20} color={t.textPrimary} />
+        </StyledPressable>
+        <Stack vertical marginLeft={16}>
+          <StyledText fontSize={theme.fontSize.xxlarge} fontWeight={theme.fontWeight.bold}>
             Help Center
-          </Text>
-          <Text fontSize="$sm" color="$mutedForeground">
+          </StyledText>
+          <StyledText fontSize={theme.fontSize.small} color={t.textSecondary}>
             Get support and learn more
-          </Text>
-        </VStack>
-      </HStack>
+          </StyledText>
+        </Stack>
+      </Stack>
 
-      {/* Hero */}
-      <VStack px="$6" py="$2" alignItems="center">
-        <Box rounded="$3xl" overflow="hidden" mb="$6" width="100%">
+      {/* Hero image */}
+      <Stack paddingHorizontal={24} paddingVertical={8} alignItems="center">
+        <Stack borderRadius={24} overflow="hidden" marginBottom={24} width="100%">
           <Image
-            source={{
-              uri:
-                'https://images.unsplash.com/photo-1503676260728-1c00da094a0b',
-            }}
-            style={{ width: '100%', height: 200 }}
+            source={{uri: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b'}}
+            style={{width: '100%', height: 200}}
             resizeMode="cover"
           />
-        </Box>
-
-        <Text fontSize="$xl" mb="$2">
+        </Stack>
+        <StyledText fontSize={theme.fontSize.large} marginBottom={8}>
           How can we help you today?
-        </Text>
-        <Text color="$mutedForeground" textAlign="center">
-          Browse FAQs, or contact support
-        </Text>
-      </VStack>
-      <StyledSpacer marginVertical={4} />
-      {/* User Guides */}
-      {/* <Box px="$6" mb="$8">
-        <Text fontSize="$lg" fontWeight="$semibold" mb="$4">
-          User Guides
-        </Text>
+        </StyledText>
+        <StyledText color={t.textSecondary} textAlign="center">
+          Browse our guides or search for specific topics
+        </StyledText>
+      </Stack>
 
-        <VStack space="md">
-          {guides.map(guide => (
-            <Box
-              key={guide.id}
-              bg="$card"
-              rounded="$2xl"
-              paddingHorizontal={16}
-              paddingVertical={16}
-              borderWidth={1}
-              borderColor={theme.colors.gray[400]}
-            >
-              <HStack space="md" justifyContent="space-between"
-                alignItems="center">
-                <Box
-                  w={48}
-                  h={48}
-                  rounded="$xl"
-                  bg="$primary100"
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  <Icon name={guide.icon} size={22} color="#3b82f6" />
-                </Box>
-                <VStack flex={1}>
-                  <Text fontWeight="$semibold" mb="$1">
-                    {guide.title}
-                  </Text>
-                  <Text fontSize="$sm" color={theme.colors.gray[500]} mb="$3">
-                    {guide.description}
-                  </Text>
-                </VStack>
-              </HStack>
-            </Box>
-          ))}
-        </VStack>
-      </Box> */}
+      {/* Quick guides */}
+      <Stack paddingHorizontal={24} marginBottom={16} vertical>
+        <StyledText fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.bold} marginBottom={12}>
+          Quick Guides
+        </StyledText>
+        {guides.map(g => (
+          <Stack
+            key={g.id}
+            horizontal alignItems="center" gap={12}
+            backgroundColor={t.bgCard}
+            borderRadius={12} padding={16} marginBottom={8}
+            borderWidth={0.5} borderColor={t.borderDefault}>
+            <Stack
+              width={40} height={40} borderRadius={20}
+              backgroundColor={t.brandPrimaryBg}
+              alignItems="center" justifyContent="center">
+              <Icon name={g.icon} size={20} color={t.brandPrimaryDark} />
+            </Stack>
+            <Stack vertical flex={1}>
+              <StyledText fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.medium}>
+                {g.title}
+              </StyledText>
+              <StyledText fontSize={theme.fontSize.small} color={t.textSecondary}>
+                {g.description}
+              </StyledText>
+            </Stack>
+            <Icon name="chevron-right" size={20} color={t.textMuted} />
+          </Stack>
+        ))}
+      </Stack>
 
-      {/* FAQ */}
-      <Box px="$6" mb="$8">
-        {/* <Text fontSize="$lg" fontWeight="$semibold" mb="$4">
+      {/* FAQs */}
+      <Stack paddingHorizontal={24} marginBottom={16} vertical>
+        <StyledText fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.bold} marginBottom={12}>
           Frequently Asked Questions
-        </Text> */}
+        </StyledText>
+        {faqs.map((faq, index) => (
+          <Stack
+            key={index}
+            backgroundColor={t.bgCard}
+            borderRadius={12} marginBottom={8}
+            borderWidth={0.5} borderColor={t.borderDefault}
+            overflow="hidden">
+            <StyledPressable
+              horizontal justifyContent="space-between" alignItems="center"
+              paddingHorizontal={20} paddingVertical={16}
+              onPress={() => toggleFAQ(index)}>
+              <StyledText
+                flex={1} fontSize={theme.fontSize.normal}
+                fontWeight={theme.fontWeight.medium}
+                color={t.textPrimary}>
+                {faq.question}
+              </StyledText>
+              <Icon
+                name={expandedFAQ === index ? 'chevron-up' : 'chevron-down'}
+                size={20}
+                color={expandedFAQ === index ? theme.colors.blue[500] : t.textSecondary}
+              />
+            </StyledPressable>
+            {expandedFAQ === index && (
+              <Stack
+                paddingHorizontal={20} paddingBottom={20} paddingTop={12}
+                borderTopWidth={0.5} borderColor={t.borderDefault} vertical>
+                <StyledText fontSize={theme.fontSize.normal} color={t.textSecondary}>
+                  {faq.answer}
+                </StyledText>
+                <StyledSpacer marginVertical={4} />
+                {faq.options.map((t, i) => (
+                  <StyledText key={i} fontSize={theme.fontSize.normal} color={t.textSecondary}>
+                    • {t}
+                  </StyledText>
+                ))}
+                {faq.isReset && (
+                  <>
+                    <StyledSpacer marginVertical={8} />
+                    <StyledButton backgroundColor={t.borderDefault} onPress={handleReset}>
+                      <StyledText
+                        fontFamily={fontStyles.Roboto_Regular}
+                        fontSize={theme.fontSize.normal}
+                        fontWeight={theme.fontWeight.normal}
+                        paddingHorizontal={8} paddingVertical={4}
+                        color={t.textPrimary}>
+                        Reset
+                      </StyledText>
+                    </StyledButton>
+                  </>
+                )}
+              </Stack>
+            )}
+          </Stack>
+        ))}
+      </Stack>
 
-        <VStack space="md">
-          {faqs.map((faq, index) => (
-            <Box
-              key={index}
-              bg="$card"
-              rounded="$2xl"
-              borderWidth={1}
-              borderColor={theme.colors.gray[300]}
-              overflow="hidden"
-            >
-              <Pressable onPress={() => toggleFAQ(index)} p="$5">
-                <HStack justifyContent="space-between">
-                  <Text flex={1} pr="$4">
-                    {faq.question}
-                  </Text>
-                  <Icon
-                    name={
-                      expandedFAQ === index
-                        ? 'chevron-up'
-                        : 'chevron-down'
-                    }
-                    size={18}
-                    color={expandedFAQ === index ? '#3b82f6' : '#6b7280'}
-                  />
-                </HStack>
-              </Pressable>
-
-              {expandedFAQ === index && (
-                <Box
-                  px="$5"
-                  pb="$5"
-                  pt="$3"
-                  borderTopWidth={0.5}
-                  borderColor={theme.colors.gray[300]}
-                >
-                  <Text fontSize={theme.fontSize.normal} color={theme.colors.gray[600]}>
-                    {faq.answer}
-                  </Text>
-                  <StyledSpacer marginVertical={4} />
-                  {faq?.options.map((t, i) => (
-                    <Text key={i} fontSize={theme.fontSize.normal} color={theme.colors.gray[600]}>
-                      • {t}
-                    </Text>
-                  ))}
-                  {
-                    faq.isReset && (
-                      <>
-                        <StyledSpacer marginVertical={8} />
-                        <StyledButton backgroundColor={theme.colors.gray[200]} onPress={() => handleReset()}>
-                          <StyledText
-                            fontFamily={fontStyles.Roboto_Regular}
-                            fontSize={theme.fontSize.normal}
-                            fontWeight={theme.fontWeight.normal}
-                            paddingHorizontal={8}
-                            paddingVertical={4}
-                            color={theme.colors.gray[800]}>
-                            Reset
-                          </StyledText>
-                        </StyledButton>
-                      </>
-
-                    )
-                  }
-
-                </Box>
-              )}
-            </Box>
-          ))}
-        </VStack>
-      </Box>
-
-      <Box px="$6" mb="$8">
-        <Box
-          bg="$primary50"
-          rounded="$3xl"
-          p="$6"
-          borderWidth={1}
-          borderColor="$primary200"
-        >
-          <Text fontSize="$xl" fontWeight="$bold" mb="$2">
+      {/* Support */}
+      <Stack paddingHorizontal={24} marginBottom={32}>
+        <Stack
+          backgroundColor={t.brandPrimaryBg}
+          borderRadius={24} padding={24}
+          borderWidth={1} borderColor={theme.colors.amber[200]} vertical>
+          <StyledText fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.bold} marginBottom={8}>
             Still need help?
-          </Text>
+          </StyledText>
+          <StyledText color={t.textSecondary} marginBottom={24}>
+            Our support team is here to assist you.
+          </StyledText>
+          <StyledPressable
+            horizontal
+            backgroundColor={t.bgCard}
+            borderRadius={12} padding={16}
+            alignItems="center" justifyContent="center" gap={8}
+            borderWidth={1} borderColor={t.borderDefault}>
+            <Icon name="email-outline" size={20} color={t.textPrimary} />
+            <StyledText fontWeight={theme.fontWeight.semiBold} color={t.textPrimary}>
+              support@kursa.app
+            </StyledText>
+          </StyledPressable>
+        </Stack>
+      </Stack>
 
-          <Text color="$mutedForeground" mb="$6">
-            Our support team is here to assist you with any questions or issues.
-          </Text>
-
-          <VStack space="md">
-           
-
-            {/* Email */}
-            <Pressable>
-              <HStack
-                bg="$card"
-                rounded="$xl"
-                p="$4"
-                alignItems="center"
-                justifyContent="center"
-                space="sm"
-                borderWidth={1}
-                borderColor="$border"
-              >
-                <Icon name="email-outline" size={20} color="#111827" />
-                <Text fontWeight="$semibold">
-                  support@suftnet.com
-                </Text>
-              </HStack>
-            </Pressable>
-          </VStack>
-        </Box>
-      </Box>
-      <VStack px="$6" alignItems="center">
-        <Text fontSize="$xs" color="$mutedForeground">
-          iShopy v1.0.0
-        </Text>
-        <Text fontSize="$xs" color="$mutedForeground">
-          © 2024 All rights reserved
-        </Text>
-      </VStack>
+      {/* Footer */}
+      <Stack paddingHorizontal={24} alignItems="center" vertical>
+        <StyledText fontSize={theme.fontSize.micro} color={t.textMuted}>
+          Kursa v1.0.0
+        </StyledText>
+        <StyledText fontSize={theme.fontSize.micro} color={t.textMuted}>
+          © 2025 All rights reserved
+        </StyledText>
+      </Stack>
     </ScrollView>
   );
 }

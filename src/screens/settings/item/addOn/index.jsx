@@ -28,6 +28,7 @@ import {
 } from '../../../../hooks/useAddon';
 import {useAppContext} from '../../../../hooks/appContext';
 import {addOnRules} from './validatorRules';
+import {useAppTheme} from '../../../../theme';
 
 const ItemAddOn = ({menu_id}) => {
   const {deleteAddOn} = useDeleteAddOn();
@@ -35,13 +36,14 @@ const ItemAddOn = ({menu_id}) => {
   const {insert} = useInsertAddon();
   const {update} = useUpdateAddOn();
   const {shop} = useAppContext();
+  const {t} = useAppTheme();
   const [errorMessages, setErrorMessages] = useState({});
   const [fields, setFields] = useState(addOnRules.fields);
   const [groupId, setGroupId] = useState('optional');
 
   useLoaderAndError(loading, error, resetHandler);
 
-  const onNotify = ({status, isDeleted}) => {
+  const onNotify = ({status, isDeleted, t}) => {
     toastService.show({
       message: `Addon ${status}`,
       description: isDeleted
@@ -97,18 +99,18 @@ const ItemAddOn = ({menu_id}) => {
     });
   };
 
-  const RenderCard = ({item, index}) => {
+  const RenderCard = ({item, index, t}) => {
     return (
       <XStack
         flexDirection="row"
         marginHorizontal={8}
         flex={1}
         paddingHorizontal={8}
-        backgroundColor={theme.colors.gray[1]}
+        backgroundColor={t.bgCard}
         justifyContent="flex-start"
         borderBottomWidth={1}
         borderBottomColor={
-          index === data.length - 1 ? 'transparent' : theme.colors.gray[200]
+          index === data.length - 1 ? 'transparent' : t.borderDefault
         }
         paddingBottom={index === data.length - 1 ? 0 : 8}
         alignItems="center">
@@ -118,7 +120,7 @@ const ItemAddOn = ({menu_id}) => {
             fontFamily={fontStyles.Roboto_Regular}
             fontWeight={theme.fontWeight.normal}
             fontSize={theme.fontSize.small}
-            color={theme.colors.gray[700]}>
+            color={t.textSecondary}>
             {toWordCase(item.addOnName)}
           </StyledText>
           <StyledSpacer marginVertical={1} />
@@ -127,25 +129,25 @@ const ItemAddOn = ({menu_id}) => {
             fontFamily={fontStyles.Roboto_Regular}
             fontSize={theme.fontSize.small}
             fontWeight={theme.fontWeight.medium}
-            color={theme.colors.gray[500]}>
+            color={t.textSecondary}>
             {formatCurrency(shop?.currency || '£', item.price)}
           </StyledText>
         </YStack>
         <XStack flex={1} justifyContent="flex-end" alignItems="center">
-          <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]}>
+          <StyledCycle borderWidth={1} borderColor={t.textMuted}>
             <StyledMIcon
               size={24}
               name="edit"
-              color={theme.colors.gray[600]}
+              color={t.textSecondary}
               onPress={() => setFields({...fields, ...item})}
             />
           </StyledCycle>
           <StyledSpacer marginHorizontal={8} />
-          <StyledCycle borderWidth={1} borderColor={theme.colors.gray[400]}>
+          <StyledCycle borderWidth={1} borderColor={t.textMuted}>
             <StyledMIcon
               size={32}
               name="delete-outline"
-              color={theme.colors.gray[600]}
+              color={t.textSecondary}
               onPress={() => onDelete(item.addOn_id)}
             />
           </StyledCycle>
@@ -160,7 +162,7 @@ const ItemAddOn = ({menu_id}) => {
         gap={8}
         paddingHorizontal={16}
         horizontal
-        backgroundColor={theme.colors.gray[1]}
+        backgroundColor={t.bgCard}
         borderRadius={16}
         marginHorizontal={16}
         marginTop={16}
@@ -175,7 +177,7 @@ const ItemAddOn = ({menu_id}) => {
             fontSize={theme.fontSize.small}
             paddingHorizontal={8}
             value={fields.addOnName}
-            placeholderTextColor={theme.colors.gray[300]}
+            placeholderTextColor={t.textMuted}
             onChangeText={text => setFields({...fields, addOnName: text})}
             error={!!errorMessages?.addOnName}
             errorMessage={errorMessages?.addOnName?.message}
@@ -189,7 +191,7 @@ const ItemAddOn = ({menu_id}) => {
             fontSize={theme.fontSize.small}
             paddingHorizontal={8}
             value={fields.price.toString()}
-            placeholderTextColor={theme.colors.gray[300]}
+            placeholderTextColor={t.textMuted}
             onChangeText={text => setFields({...fields, price: text})}
             error={!!errorMessages?.price}
             errorMessage={errorMessages?.price?.message}
@@ -220,14 +222,14 @@ const ItemAddOn = ({menu_id}) => {
             colors={{
               activeThumb: theme.colors.white,
               inactiveThumb: theme.colors.white,
-              activeTrack: theme.colors.green[600],
-              inactiveTrack: theme.colors.red[400],
+              activeTrack: t.successColor,
+              inactiveTrack: t.dangerColor,
             }}
             onChange={v => setFields({...fields, status: v})}
           />
           <StyledPressable
             onPress={onSubmit}
-            backgroundColor={theme.colors.yellow[500]}
+            backgroundColor={t.brandPrimary}
             borderRadius={32}
             paddingVertical={12}
             alignItems="center">
@@ -245,12 +247,13 @@ const ItemAddOn = ({menu_id}) => {
         <StyledCard
           gap={8}
           horizontal
-          backgroundColor={theme.colors.gray[1]}
+          backgroundColor={t.bgCard}
           borderRadius={16}
           marginHorizontal={16}
           paddingVertical={16}>
           {data.map((item, index) => (
-            <RenderCard item={item} key={index} index={index} />
+            <RenderCard item={item} key={index} index={index} 
+                        t={t}/>
           ))}
         </StyledCard>
       </StyledScrollView>

@@ -21,8 +21,9 @@ import {shopRules} from './validatorRules';
 import {useUpdateShop} from '../../../hooks/useShop';
 import {useAppContext} from '../../../hooks/appContext';
 import {StyledIcon} from '../../../components/package/icon';
+import ThemeToggle from '../../../components/ThemeToggle';
 import {fontStyles} from '../../../configs/theme';
-import { useLoaderAndError } from '../../../hooks/useLoaderAndError';
+import {useAppTheme} from '../../../theme';
 
 // ─── Business mode options ────────────────────────────────────────────────────
 const MODES = [
@@ -41,12 +42,12 @@ const MODES = [
 ];
 
 // ─── Section label ────────────────────────────────────────────────────────────
-const SectionLabel = ({label}) => (
+const SectionLabel = ({label, t}) => (
   <StyledText
     fontFamily={fontStyles.Roboto_Regular}
     fontSize={theme.fontSize.small}
     fontWeight={theme.fontWeight.semiBold}
-    color={theme.colors.gray[500]}
+    color={t.textSecondary}
     marginBottom={8}
     letterSpacing={0.5}>
     {label.toUpperCase()}
@@ -55,16 +56,15 @@ const SectionLabel = ({label}) => (
 
 // ─── Main component ───────────────────────────────────────────────────────────
 const Shop = ({onClose}) => {
+  const {t} = useAppTheme();
   const {updateCurrentShop, shop} = useAppContext();
   const [errorMessages, setErrorMessages] = useState({});
   const [fields, setFields] = useState(shopRules.fields);
   const {updateHandler, error, loading, resetHandler} = useUpdateShop();
 
-  useLoaderAndError(loading, error, resetHandler);
-
   useEffect(() => {
     setFields(prev => ({...prev, ...shop}));
-  }, [shop]);
+  }, []);
 
   const onSubmit = async () => {
     setErrorMessages({});
@@ -90,17 +90,17 @@ const Shop = ({onClose}) => {
 
   const inputProps = {
     fontSize: theme.fontSize.normal,
-    borderColor: theme.colors.gray[200],
-    backgroundColor: theme.colors.gray[1],
+    borderColor: t.borderDefault,
+    backgroundColor: t.bgCard,
     borderRadius: 12,
     paddingHorizontal: 12,
-    placeholderTextColor: theme.colors.gray[300],
+    placeholderTextColor: t.textMuted,
     marginBottom: 12,
   };
 
   return (
     <>
-      <YStack flex={1} backgroundColor={theme.colors.gray[100]}>
+      <YStack flex={1} backgroundColor={t.bgPage}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
@@ -111,11 +111,12 @@ const Shop = ({onClose}) => {
 
           {/* ── Business type ── */}
           <Stack
-            backgroundColor={theme.colors.gray[1]}
+            backgroundColor={t.bgCard}
             borderRadius={14}
             padding={16}
             marginBottom={12}>
-        
+            <SectionLabel label="Business type" 
+                        t={t}/>
             <Stack horizontal gap={10}>
               {MODES.map(mode => {
                 const active = fields.mode === mode.key;
@@ -128,11 +129,11 @@ const Shop = ({onClose}) => {
                     borderWidth={active ? 2 : 1}
                     borderColor={
                       active
-                        ? theme.colors.amber[500]
-                        : theme.colors.gray[200]
+                        ? t.brandPrimary
+                        : t.borderDefault
                     }
                     backgroundColor={
-                      active ? theme.colors.amber[50] : theme.colors.gray[50]
+                      active ? t.brandPrimaryBg : t.bgPage
                     }
                     paddingVertical={14}
                     paddingHorizontal={12}>
@@ -144,7 +145,7 @@ const Shop = ({onClose}) => {
                         backgroundColor={
                           active
                             ? theme.colors.amber[100]
-                            : theme.colors.gray[100]
+                            : t.bgPage
                         }
                         alignItems="center"
                         justifyContent="center">
@@ -153,8 +154,8 @@ const Shop = ({onClose}) => {
                           size={22}
                           color={
                             active
-                              ? theme.colors.amber[700]
-                              : theme.colors.gray[400]
+                              ? t.brandPrimaryText
+                              : t.textMuted
                           }
                         />
                       </Stack>
@@ -168,7 +169,7 @@ const Shop = ({onClose}) => {
                         color={
                           active
                             ? theme.colors.amber[800]
-                            : theme.colors.gray[600]
+                            : t.textSecondary
                         }>
                         {mode.label}
                       </StyledText>
@@ -176,8 +177,8 @@ const Shop = ({onClose}) => {
                         fontSize={10}
                         color={
                           active
-                            ? theme.colors.amber[600]
-                            : theme.colors.gray[400]
+                            ? t.brandPrimaryDark
+                            : t.textMuted
                         }>
                         {mode.description}
                       </StyledText>
@@ -187,7 +188,7 @@ const Shop = ({onClose}) => {
                         <StyledIcon
                           name="check-circle"
                           size={18}
-                          color={theme.colors.green[500]}
+                          color={t.successColor}
                         />
                       </Stack>
                     )}
@@ -199,11 +200,12 @@ const Shop = ({onClose}) => {
 
           {/* ── Contact details ── */}
           <Stack
-            backgroundColor={theme.colors.gray[1]}
+            backgroundColor={t.bgCard}
             borderRadius={14}
             padding={16}
             marginBottom={12}>
-
+            <SectionLabel label="Contact details" 
+                        t={t}/>
             <StyledInput
               label="Shop name"
               placeholder="Enter your shop name"
@@ -244,11 +246,12 @@ const Shop = ({onClose}) => {
 
           {/* ── Localisation ── */}
           <Stack
-            backgroundColor={theme.colors.gray[1]}
+            backgroundColor={t.bgCard}
             borderRadius={14}
             padding={16}
             marginBottom={12}>
-       
+            <SectionLabel label="Localisation" 
+                        t={t}/>
             <StyledInput
               label="Currency symbol"
               placeholder="£  $  €  ₦"
@@ -265,11 +268,12 @@ const Shop = ({onClose}) => {
 
           {/* ── Address & description ── */}
           <Stack
-            backgroundColor={theme.colors.gray[1]}
+            backgroundColor={t.bgCard}
             borderRadius={14}
             padding={16}
             marginBottom={24}>
-  
+            <SectionLabel label="About" 
+                        t={t}/>
             <StyledTextInput
               label="Address"
               placeholder="Enter your address"
@@ -298,10 +302,28 @@ const Shop = ({onClose}) => {
             />
           </Stack>
 
+          {/* ── Appearance ── */}
+          <Stack
+            backgroundColor={t.bgCard}
+            borderRadius={14}
+            padding={16}
+            marginBottom={24}>
+            <SectionLabel label="Appearance" 
+                        t={t}/>
+            <StyledText
+              fontFamily={fontStyles.Roboto_Regular}
+              fontSize={theme.fontSize.small}
+              color={t.textSecondary}
+              marginBottom={10}>
+              Choose light, dark or follow your device setting
+            </StyledText>
+            <ThemeToggle />
+          </Stack>
+
           {/* ── Save button ── */}
           <StyledPressable
             onPress={onSubmit}
-            backgroundColor={theme.colors.amber[500]}
+            backgroundColor={t.brandPrimary}
             borderRadius={12}
             paddingVertical={14}
             alignItems="center"
@@ -309,7 +331,7 @@ const Shop = ({onClose}) => {
             <StyledText
               fontSize={theme.fontSize.normal}
               fontWeight={theme.fontWeight.semiBold}
-              color={theme.colors.gray[900]}>
+              color={t.textPrimary}>
               Save changes
             </StyledText>
           </StyledPressable>

@@ -6,10 +6,12 @@ import PaywallScreen from './paywall';
 import { getStore, clearStore } from '../utils/asyncStorage';
 import { theme } from '../utils/theme';
 import { STORAGE_KEYS } from '../utils/asyncStorage';
+import {useAppTheme} from '../theme';
 
 const { PURCHASED_STATUS } = STORAGE_KEYS;
 
 const Start = () => {
+  const {t} = useAppTheme();
     const [isLoading, setIsLoading]           = useState(true);
     const [hasOnboarded, setHasOnboarded]     = useState(false);
     const [showPaywall, setShowPaywall]       = useState(false);

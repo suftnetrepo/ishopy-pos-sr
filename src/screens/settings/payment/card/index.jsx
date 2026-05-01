@@ -13,17 +13,18 @@ import {useAppContext} from '../../../../hooks/appContext';
 import {DownloadButton} from './downloadButton';
 import EmptyView from '../../../../components/utils/empty';
 import usePaymentTable from '../../../../hooks/usePaymentTable';
+import {useAppTheme} from '../../../../theme';
 
 // ─── Method chip colours ──────────────────────────────────────────────────────
 const METHOD_STYLE = {
   cash:   {bg: theme.colors.green[50],  color: theme.colors.green[700]},
-  card:   {bg: theme.colors.blue[50],   color: theme.colors.blue[700]},
+  card:   {bg: theme.colors.blue[50],   color: theme.colors.blue[600]},
   online: {bg: theme.colors.indigo[50], color: theme.colors.indigo[700]},
 };
 
 const getMethodStyle = method =>
   METHOD_STYLE[(method || '').toLowerCase()] ||
-  {bg: theme.colors.gray[100], color: theme.colors.gray[600]};
+  {bg: theme.colors.gray[100], color: theme.colors.gray[500]};
 
 const formatMethod = method =>
   method ? method.charAt(0).toUpperCase() + method.slice(1).toLowerCase() : '—';
@@ -57,7 +58,7 @@ const buildColumns = symbol => [
           fontFamily={fontStyles.Roboto_Regular}
           fontWeight={theme.fontWeight.bold}
           fontSize={theme.fontSize.normal}
-          color={theme.colors.gray[800]}>
+          color={theme.colors.gray[900]}>
           {formatCurrency(symbol, v)}
         </StyledText>
       </Stack>
@@ -109,6 +110,7 @@ const buildColumns = symbol => [
 // ─── Component ────────────────────────────────────────────────────────────────
 const PaymentCard = () => {
   const {shop, date_filter} = useAppContext();
+  const {t} = useAppTheme();
   const symbol  = shop?.currency || '£';
   const columns = buildColumns(symbol);
 

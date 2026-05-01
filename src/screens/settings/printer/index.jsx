@@ -1,20 +1,16 @@
 
 import React, { useEffect } from 'react';
 import { YStack,theme, StyledSpacer } from 'fluent-styles';
-
-import { useRadioContext } from '../../../hooks/radioContext';
 import PrinterOptions from './printerOption';
+import {useAppTheme} from '../../../theme';
 
 const Printer = () => {
-    const { onValueChange } = useRadioContext()
-
-    useEffect(() => {
-        onValueChange('bluetooth')
-    }, [])
+  const {t} = useAppTheme();
+ 
 
     return (
         <>
-            <YStack paddingHorizontal={8} flex={1} backgroundColor={theme.colors.gray[100]}>
+            <YStack paddingHorizontal={8} flex={1} backgroundColor={t.bgPage}>
                 <StyledSpacer marginVertical={8} />
                 <PrinterOptions />
             </YStack>

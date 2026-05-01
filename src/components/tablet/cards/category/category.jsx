@@ -6,17 +6,18 @@ import {Pressable} from 'react-native';
 import {useAppContext} from '../../../../hooks/appContext';
 import {StyledIcon} from '../../../package/icon';
 import PosIcon from '../../../pos-icon';
+import {useAppTheme} from '../../../../theme';
 
-const CategoryCard = ({
-  name,
+const CategoryCard = ({name,
   category_id,
   status,
   icon_name,
   total_menu = 0,
   onPress,
-  color_code,
-}) => {
+  color_code}) => {
+  const {t} = useAppTheme();
   const {category_id: selected_category_id} = useAppContext();
+
   const menuText = total_menu === 1 ? 'item' : 'items';
 
   return (
@@ -32,8 +33,8 @@ const CategoryCard = ({
         marginHorizontal={4}
         borderRadius={8}
         borderWidth={0}
-        borderColor={theme.colors.gray[1]}
-        backgroundColor={theme.colors.gray[1]}
+        borderColor={t.bgCard}
+        backgroundColor={t.bgCard}
         shadowColor="black"
         shadowOffset={{width: 0, height: 1}}
         shadowOpacity={0.1}
@@ -41,7 +42,7 @@ const CategoryCard = ({
         elevation={3}>
         <StyledShape
           size={48}
-          backgroundColor={ theme.colors.gray[100]}
+          backgroundColor={ t.bgPage}
           justifyContent="center"
           alignItems="center"
           cycle
@@ -50,7 +51,7 @@ const CategoryCard = ({
           <PosIcon
             name={icon_name}
             size={32}
-            color={color_code || theme.colors.gray[500]}
+            color={color_code || t.textSecondary}
           />
         </StyledShape>
 
@@ -68,7 +69,7 @@ const CategoryCard = ({
               fontFamily={fontStyles.Roboto_Regular}
               fontSize={theme.fontSize.small}
               fontWeight={theme.fontWeight.normal}
-              color={theme.colors.gray[500]}
+              color={t.textSecondary}
               marginTop={2}>
               {total_menu} {menuText}
             </StyledText>

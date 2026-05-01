@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { styled, theme, StyledSpacer, isValidColor, StyledCycle, isValidNumber, StyledInput } from 'fluent-styles';
 import { StyledMIcon } from "../icon";
 import { View } from "react-native";
+import {useAppTheme} from '../../theme';
 
 const SearchBar = styled(View, {
     base: {
@@ -39,7 +40,7 @@ const SearchBar = styled(View, {
     }
 })
 
-const StyledSearchBar = ({ size = 24, name = 'search', placeholder = 'Search item by name', showSearchIcon = false, onTextChange, onPress, ...rest }) => {
+const StyledSearchBar = ({size = 24, name = 'search', placeholder = 'Search item by name', showSearchIcon = false, onTextChange, onPress, t, ...rest}) => {
     const [searchQuery, setSearchQuery] = useState('');
 
     const handleSubmit = () => {
@@ -65,7 +66,7 @@ const StyledSearchBar = ({ size = 24, name = 'search', placeholder = 'Search ite
                 showSearchIcon && (
                     <StyledCycle borderWidth={1} borderColor={theme.colors.cyan[400]} backgroundColor={theme.colors.cyan[500]}>
                         {
-                            <StyledMIcon size={size} name={name} color={theme.colors.gray[1]} onPress={() => handleSubmit()} />
+                            <StyledMIcon size={size} name={name} color={t.bgCard} onPress={() => handleSubmit()} />
                         }
                     </StyledCycle>
                 )

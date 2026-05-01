@@ -15,15 +15,17 @@ import { StyledSearchBar } from '../../components/searchBar';
 import { useAppContext } from '../../hooks/appContext';
 import AddOn from '../../components/tablet/cards/menu/addOn';
 import { useRoute } from '@react-navigation/native';
+import {useAppTheme} from '../../theme';
 
 const BigMenu = () => {
   const { updateMenuQuery, shop } = useAppContext();
+  const {t} = useAppTheme();
   const [item, setItem] = useState(null)
   const route = useRoute();
   const params  = route.params;
 
   return (
-      <StyledPage backgroundColor={theme.colors.gray[100]}>
+      <StyledPage backgroundColor={t.bgPage}>
       <StyledPage.Header.Full>
          <RenderHeader showBackButton={true} showLogo={false} showTitle={true} title={`${params?.table_name || "Items"}`}  >
             <StyledSearchBar placeholder="Search menu items..." flex={1} onTextChange={(query) => updateMenuQuery(query)} />

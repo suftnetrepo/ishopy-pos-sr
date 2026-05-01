@@ -13,20 +13,22 @@ import {useQueryPopularMenuItems} from '../../../hooks/useOrderItems';
 import PosIcon from '../../pos-icon';
 import {useAppContext} from '../../../hooks/appContext';
 import EmptyView from '@components/utils/empty';
+import {useAppTheme} from '../../../theme';
 
 
 const PopularDishes = () => {
   const {shop} = useAppContext();
+  const {t} = useAppTheme();
   const {data} = useQueryPopularMenuItems();
 
   return (
     <Stack
       vertical
       shadowOpacity={0.9}
-      shadowColor={theme.colors.gray[200]}
+      shadowColor={t.borderDefault}
       shadowRadius={8}
       borderRadius={8}
-      backgroundColor={theme.colors.gray[1]}
+      backgroundColor={t.bgCard}
       paddingHorizontal={24}
       paddingVertical={24}
       justifyContent="flex-start"
@@ -38,17 +40,17 @@ const PopularDishes = () => {
         alignItems="center"
         gap={8}>
         <StyledText
-          color={theme.colors.gray[800]}
+          color={t.textPrimary}
           fontSize={theme.fontSize.large}
           fontWeight={theme.fontWeight.normal as any}>
           {shop?.mode === 'shop' ? 'Popular Items ' : 'Popular Dishes '}
         </StyledText>
-        <StyledIcon size={24} name="share" color={theme.colors.gray[300]} />
+        <StyledIcon size={24} name="share" color={t.textMuted} />
       </Stack>
 
       <StyledSpacer
         borderWidth={0.4}
-        borderColor={theme.colors.gray[300]}
+        borderColor={t.textMuted}
         width={'100%'}
         marginVertical={8}
       />
@@ -81,19 +83,19 @@ const PopularDishes = () => {
                 <StyleShape
                   size={48}
                   borderRadius={10}
-                  backgroundColor={theme.colors.gray[100]}
+                  backgroundColor={t.bgPage}
                   alignItems="center"
                   justifyContent="center">
                   <PosIcon
                     name={dish?.menu_icon_name}
                     size={24}
-                    color={theme.colors.gray[600]}
+                    color={t.textSecondary}
                   />
                 </StyleShape>
 
                 <Stack vertical>
                   <StyledText
-                    color={theme.colors.gray[500]}
+                    color={t.textSecondary}
                     fontSize={16}
                     fontWeight={theme.fontWeight.normal as any}
                     marginLeft={2}>
@@ -105,7 +107,7 @@ const PopularDishes = () => {
                     alignItems="center"
                     gap={4}>
                     <StyledText
-                      color={theme.colors.gray[400]}
+                      color={t.textMuted}
                       fontSize={14}
                       fontWeight={theme.fontWeight.normal as any}
                       marginLeft={2}>

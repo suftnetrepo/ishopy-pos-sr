@@ -23,6 +23,7 @@ import {Stack} from '../../../components/package/stack';
 import {formatReceiptData} from '../../../utils/receiptFormatter';
 import {printerStore} from '../../../store/printerStore';
 import {printReceipt} from '../../../utils/printReceipt';
+import {useAppTheme} from '../../../theme';
 
 interface AddOn {
   addOnName: string;
@@ -58,6 +59,7 @@ interface OrderCartProps {
 
 const OrderCart: FC<OrderCartProps> = ({onClose}) => {
   const {shop, order, user} = useAppContext();
+  const {t} = useAppTheme();
   const {data} = useQueryOrderItemByOrder(order?.order_id || '');
 
   const handlePrint = async () => {
@@ -105,7 +107,7 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
       <Stack
         vertical
         width={'100%'}
-        backgroundColor={theme.colors.gray[1]}
+        backgroundColor={t.bgCard}
         borderRadius={8}
         paddingHorizontal={16}
         paddingVertical={16}
@@ -115,7 +117,7 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
         shadowRadius={2}
         elevation={3}
         borderWidth={1}
-        borderColor={theme.colors.gray[800]}
+        borderColor={t.textPrimary}
         status={colorCodeStatus(order?.status) as any}>
         <XStack
           marginBottom={2}
@@ -123,7 +125,7 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
           alignItems="center">
           <XStack gap={4} alignItems="center">
             <StyledText
-              color={theme.colors.gray[800]}
+              color={t.textPrimary}
               fontSize={theme.fontSize.normal}>
               {order?.table_name}
             </StyledText>
@@ -132,7 +134,7 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
             fontFamily={fontStyles.Roboto_Regular}
             fontSize={theme.fontSize.small}
             fontWeight={theme.fontWeight.normal as any}
-            color={theme.colors.gray[700]}>
+            color={t.textSecondary}>
             #{getLastChars(order?.order_id, 3)}
           </StyledText>
         </XStack>
@@ -142,10 +144,10 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
             <StyledMIcon
               {...({name: 'access-time'} as any)}
               size={18}
-              color={theme.colors.gray[600]}
+              color={t.textSecondary}
             />
             <StyledText
-              color={theme.colors.gray[600]}
+              color={t.textSecondary}
               fontSize={theme.fontSize.small}>
               {formatDate(order?.date)}
             </StyledText>
@@ -164,17 +166,17 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
           paddingVertical={8}
           paddingHorizontal={16}
           alignItems="center"
-          backgroundColor={theme.colors.gray[1]}>
+          backgroundColor={t.bgCard}>
           <StyledText
             flex={2.5}
-            color={theme.colors.gray[800]}
+            color={t.textPrimary}
             fontWeight={theme.fontWeight.normal as any}
             fontSize={theme.fontSize.normal}>
             {addOn.addOnName}
           </StyledText>
           <StyledBadge
-            color={theme.colors.gray[800]}
-            backgroundColor={theme.colors.gray[1]}
+            color={t.textPrimary}
+            backgroundColor={t.bgCard}
             fontWeight={theme.fontWeight.normal as any}
             fontSize={theme.fontSize.normal}
             paddingHorizontal={10}
@@ -186,13 +188,13 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
           <StyledText
             textAlign={'right'}
             flex={1}
-            color={theme.colors.gray[800]}
+            color={t.textPrimary}
             fontWeight={theme.fontWeight.normal as any}
             fontSize={theme.fontSize.normal}>
             {formatCurrency(shop?.currency || '£', addOn?.price || 0)}
           </StyledText>
         </XStack>
-        <StyledDivider borderColor={theme.colors.gray[200]} />
+        <StyledDivider borderColor={t.borderDefault} />
       </>
     );
   };
@@ -209,13 +211,13 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
           alignItems="center">
           <StyledText
             flex={2.5}
-            color={theme.colors.gray[800]}
+            color={t.textPrimary}
             fontWeight={theme.fontWeight.normal as any}
             fontSize={theme.fontSize.normal}>
             {item.menu_name}
           </StyledText>
           <StyledBadge
-            color={theme.colors.gray[800]}
+            color={t.textPrimary}
             backgroundColor={theme.colors.blueGray[100]}
             fontWeight={theme.fontWeight.normal as any}
             fontSize={theme.fontSize.normal}
@@ -227,13 +229,13 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
           <StyledText
             textAlign={'right'}
             flex={1}
-            color={theme.colors.gray[800]}
+            color={t.textPrimary}
             fontWeight={theme.fontWeight.normal as any}
             fontSize={theme.fontSize.normal}>
             {formatCurrency(shop?.currency || '£', item?.price || 0)}
           </StyledText>
         </XStack>
-        <StyledDivider borderColor={theme.colors.gray[200]} />
+        <StyledDivider borderColor={t.borderDefault} />
       </>
     );
   };
@@ -242,15 +244,15 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
     return (
       <StyledCard
         shadow="dark"
-        borderColor={theme.colors.gray[200]}
+        borderColor={t.borderDefault}
         borderRadius={8}
         borderWidth={1}
-        backgroundColor={theme.colors.gray[1]}>
+        backgroundColor={t.bgCard}>
         {(Array.isArray(data) ? (data as OrderItem[]) : []).map(
           (item: OrderItem, index: number) => (
             <React.Fragment key={index}>
               <RenderItem item={item} />
-              <StyledDivider borderColor={theme.colors.gray[200]} />
+              <StyledDivider borderColor={t.borderDefault} />
               {(item?.addOns ? JSON.parse(item.addOns) : []).map(
                 (addOn: AddOn, addOnIndex: number) => (
                   <RenderAddOn addOn={addOn} key={`${index}-${addOnIndex}`} />
@@ -270,7 +272,7 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
       borderRadius={8}
       justifyContent="flex-start"
       alignItems="flex-start"
-      backgroundColor={theme.colors.gray[50]}
+      backgroundColor={t.bgPage}
       paddingHorizontal={16}
       paddingVertical={8}>
    
@@ -285,16 +287,16 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
               paddingVertical={8}
               paddingHorizontal={16}
               alignItems="center"
-              backgroundColor={theme.colors.gray[100]}>
+              backgroundColor={t.bgPage}>
               <StyledText
-                color={theme.colors.gray[800]}
+                color={t.textPrimary}
                 fontWeight={theme.fontWeight.bold as any}
                 paddingHorizontal={16}
                 fontSize={theme.fontSize.normal}>
                 Subtotal
               </StyledText>
               <StyledText
-                color={theme.colors.gray[800]}
+                color={t.textPrimary}
                 fontWeight={theme.fontWeight.normal as any}
                 fontSize={theme.fontSize.normal}>
                 {formatCurrency(shop?.currency || '£', order?.total || 0)}
@@ -306,9 +308,9 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
               paddingVertical={8}
               paddingHorizontal={16}
               alignItems="center"
-              backgroundColor={theme.colors.gray[100]}>
+              backgroundColor={t.bgPage}>
               <StyledText
-                color={theme.colors.gray[800]}
+                color={t.textPrimary}
                 fontWeight={theme.fontWeight.normal as any}
                 paddingHorizontal={16}
                 fontSize={theme.fontSize.normal}>
@@ -317,7 +319,7 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
               <StyledSpacer marginHorizontal={16} />
               <XStack justifyContent="flex-end" alignItems="center">
                 <StyledText
-                  color={theme.colors.gray[800]}
+                  color={t.textPrimary}
                   fontWeight={theme.fontWeight.normal as any}
                   fontSize={theme.fontSize.normal}>
                   {formatCurrency(shop?.currency || '£', order?.discount || 0)}
@@ -330,9 +332,9 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
               paddingVertical={8}
               paddingHorizontal={16}
               alignItems="center"
-              backgroundColor={theme.colors.gray[100]}>
+              backgroundColor={t.bgPage}>
               <StyledText
-                color={theme.colors.gray[800]}
+                color={t.textPrimary}
                 paddingHorizontal={16}
                 fontWeight={theme.fontWeight.normal as any}
                 fontSize={theme.fontSize.normal}>
@@ -341,7 +343,7 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
               <StyledSpacer marginHorizontal={8} />
               <XStack justifyContent="flex-end" alignItems="center">
                 <StyledText
-                  color={theme.colors.gray[800]}
+                  color={t.textPrimary}
                   fontWeight={theme.fontWeight.normal as any}
                   fontSize={theme.fontSize.normal}>
                   {formatCurrency(shop?.currency || '£', order?.tax || 0)}
@@ -354,9 +356,9 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
               paddingVertical={8}
               paddingHorizontal={16}
               alignItems="center"
-              backgroundColor={theme.colors.gray[1]}>
+              backgroundColor={t.bgCard}>
               <StyledText
-                color={theme.colors.gray[800]}
+                color={t.textPrimary}
                 fontWeight={theme.fontWeight.bold as any}
                 paddingHorizontal={16}
                 fontSize={theme.fontSize.large}>
@@ -364,7 +366,7 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
               </StyledText>
               <StyledSpacer marginHorizontal={8} />
               <StyledText
-                color={theme.colors.gray[800]}
+                color={t.textPrimary}
                 fontWeight={theme.fontWeight.bold as any}
                 fontSize={theme.fontSize.large}>
                 {formatCurrency(shop?.currency || '£', order?.total_price || 0)}

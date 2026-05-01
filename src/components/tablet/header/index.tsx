@@ -13,6 +13,7 @@ import {StyledImage} from '../../../components/package/image';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Logo from '../../../components/tablet/logo';
 import {useAppContext} from '../../../hooks/appContext';
+import {useAppTheme} from '../../../theme';
 
 type Props = {
   showLogo?: boolean;
@@ -33,13 +34,14 @@ const RenderHeader = ({
 }: Props) => {
   const navigation = useNavigation();
   const {user} = useAppContext();
+  const {t} = useAppTheme();
 
   console.log('User Info:', user);
 
   return (
     <Stack
       horizontal
-      backgroundColor={theme.colors.gray[1]}
+      backgroundColor={t.bgCard}
       justifyContent="flex-start"
       alignItems="center"
       paddingVertical={8}
@@ -48,7 +50,7 @@ const RenderHeader = ({
       marginHorizontal={16}
       borderRadius={16}
       shadowOpacity={0.1}
-      shadowColor={theme.colors.gray[600]}
+      shadowColor={t.textSecondary}
       shadowRadius={30}
       paddingHorizontal={8}>
       {showBackButton && (
@@ -61,12 +63,12 @@ const RenderHeader = ({
             borderWidth={1}
             height={48}
             width={48}
-            borderColor={theme.colors.gray[400]}>
+            borderColor={t.textMuted}>
             <Icon
               style={{pointerEvents: 'none'}}
               size={24}
               name="arrow-back"
-              color={theme.colors.gray[800]}
+              color={t.textPrimary}
             />
           </StyledCycle>
         </StyledPressable>
@@ -78,7 +80,7 @@ const RenderHeader = ({
           fontSize={theme.fontSize.normal}
           fontWeight={theme.fontWeight.normal as any}
           paddingHorizontal={8}
-          color={theme.colors.gray[600]}>
+          color={t.textSecondary}>
           {title || 'Dashboard'}
         </StyledText>
       )}
@@ -109,13 +111,13 @@ const RenderHeader = ({
               justifyContent="flex-start"
               alignItems="flex-start">
               <StyledText
-                color={theme.colors.gray[900]}
+                color={t.textPrimary}
                 fontSize={theme.fontSize.small}
                 fontWeight={theme.fontWeight.semiBold as any}>
                 {user?.first_name} {user?.last_name}
               </StyledText>
               <StyledText
-                color={theme.colors.gray[400]}
+                color={t.textMuted}
                 fontSize={theme.fontSize.small}
                 fontWeight={theme.fontWeight.medium as any}>
                 {user?.role}
@@ -138,13 +140,13 @@ const RenderHeader = ({
                 borderWidth={1}
                 height={48}
                 width={48}
-                backgroundColor={theme.colors.gray[1]}
-                borderColor={theme.colors.gray[400]}>
+                backgroundColor={t.bgCard}
+                borderColor={t.textMuted}>
                 <Icon
                 style={{pointerEvents: 'none'}}
                   size={24}
                   name="exit-to-app"
-                  color={theme.colors.gray[800]}
+                  color={t.textPrimary}
                 />
               </StyledCycle>
             </StyledPressable>

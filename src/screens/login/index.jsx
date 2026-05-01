@@ -11,8 +11,10 @@ import { FEATURE_FLAG } from "../../feature-flags";
 import { state } from "../../store";
 import { useSelector } from "@legendapp/state/react";
 import { StyledMIcon } from "../../components/icon";
+import {useAppTheme} from '../../theme';
 
 const Login = () => {
+  const {t} = useAppTheme();
   const navigator = useNavigation()
   const { login } = useAppContext()
   const purchase_status = useSelector(() => state.purchase_status.get());
@@ -72,8 +74,8 @@ const Login = () => {
 
               <StyledButton onPress={async () => clearSeedData()}>
                 <StyledBadge
-                  color={theme.colors.gray[800]}
-                  backgroundColor={theme.colors.gray[100]}
+                  color={t.textPrimary}
+                  backgroundColor={t.bgPage}
                   fontWeight={theme.fontWeight.normal}
                   fontSize={theme.fontSize.normal}
                   paddingHorizontal={10}
@@ -95,11 +97,11 @@ const Login = () => {
 
         <XStack justifyContent='flex-start' alignItems='center'>
           <StyledMIcon size={32} name='info' color={theme.colors.cyan[500]} />
-          <StyledText paddingHorizontal={8} fontFamily={fontStyles.Roboto_Regular} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.large} color={theme.colors.gray[800]}>
+          <StyledText paddingHorizontal={8} fontFamily={fontStyles.Roboto_Regular} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.large} color={t.textPrimary}>
             Welcome to iRit
           </StyledText>
         </XStack>
-        <StyledText fontFamily={fontStyles.Roboto_Regular} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.medium} color={theme.colors.gray[800]}>
+        <StyledText fontFamily={fontStyles.Roboto_Regular} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.medium} color={t.textPrimary}>
           Get started quickly! Tap Sample Restaurant to generate dummy Data to see a sample of what the app can do. Feel free to explore the features!.
         </StyledText>
       </YStack>
@@ -107,7 +109,7 @@ const Login = () => {
   }
 
   return (
-    <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
+    <StyledSafeAreaView backgroundColor={t.bgCard}>
       <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
         <StyledHeader.Full>
           <RenderHeader />
@@ -132,10 +134,10 @@ const Login = () => {
                 justifyContent='flex-start' alignItems='center' marginVertical={24}
               >
                 <StyledSpacer marginVertical={16} />
-                <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.xlarge} color={theme.colors.gray[800]}>
+                <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.xlarge} color={t.textPrimary}>
                   Welcome to iRit
                 </StyledText>
-                <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.medium} color={theme.colors.gray[600]}>
+                <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.medium} color={t.textSecondary}>
                   Sign in to continue.
                 </StyledText>
               </YStack>
@@ -149,12 +151,12 @@ const Login = () => {
           returnKeyType='next'
           maxLength={50}
           fontSize={theme.fontSize.normal}
-          borderColor={theme.colors.yellow[800]}
-          backgroundColor={theme.colors.gray[1]}
+          borderColor={t.brandPrimaryDark}
+          backgroundColor={t.bgCard}
           borderRadius={32}
           paddingHorizontal={8}
           value={fields.user_name}
-          placeholderTextColor={theme.colors.gray[300]}
+          placeholderTextColor={t.textMuted}
           onChangeText={(text) => setFields({ ...fields, user_name: text })}
           error={!!errorMessages?.user_name}
           errorMessage={errorMessages?.user_name?.message}
@@ -167,12 +169,12 @@ const Login = () => {
           returnKeyType='done'
           maxLength={20}
           fontSize={theme.fontSize.normal}
-          borderColor={theme.colors.yellow[800]}
-          backgroundColor={theme.colors.gray[1]}
+          borderColor={t.brandPrimaryDark}
+          backgroundColor={t.bgCard}
           borderRadius={32}
           paddingHorizontal={8}
           value={fields.password}
-          placeholderTextColor={theme.colors.gray[300]}
+          placeholderTextColor={t.textMuted}
           onChangeText={(text) => setFields({ ...fields, password: text })}
           error={!!errorMessages?.password}
           errorMessage={errorMessages?.password?.message}
@@ -181,7 +183,7 @@ const Login = () => {
         <StyledButton width='100%' backgroundColor={theme.colors.cyan[500]} onPress={() => onSubmit()} >
           <StyledText fontFamily={fontStyles.Roboto_Regular}
             fontSize={theme.fontSize.normal}
-            fontWeight={theme.fontWeight.normal} paddingHorizontal={20} paddingVertical={10} color={theme.colors.gray[1]}>
+            fontWeight={theme.fontWeight.normal} paddingHorizontal={20} paddingVertical={10} color={t.bgCard}>
             Sign in
           </StyledText>
         </StyledButton>
@@ -194,7 +196,7 @@ const Login = () => {
               })} >
                 <StyledText paddingHorizontal={20} fontFamily={fontStyles.Roboto_Regular}
                   fontSize={theme.fontSize.normal}
-                  fontWeight={theme.fontWeight.normal} color={theme.colors.gray[400]}>
+                  fontWeight={theme.fontWeight.normal} color={t.textMuted}>
                   Forgot password
                 </StyledText>
               </StyledButton>

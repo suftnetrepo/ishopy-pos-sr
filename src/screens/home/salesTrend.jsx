@@ -19,9 +19,11 @@ import {
 } from '../../hooks/useDashboard';
 import { useAppContext } from '../../hooks/appContext';
 import { formatCurrency } from '../../utils/help';
+import {useAppTheme} from '../../theme';
 
 const SalesTrend = () => {
     const { shop } = useAppContext();
+  const {t} = useAppTheme();
     const { data: monthlySales } = useMonthlySales();
     const { data: weeklySales } = useWeeklySales()
 
@@ -35,7 +37,7 @@ const SalesTrend = () => {
                 flex={1}
             >
                 <YStack justifyContent='flex-start' alignItems='flex-start' paddingHorizontal={8} paddingVertical={16}>
-                    <StyledMIcon size={24} name={'weekend'} color={theme.colors.orange[500]} />
+                    <StyledMIcon size={24} name={'weekend'} color={t.brandPrimary} />
                     <StyledSpacer marginVertical={8} />
                     <StyledText
                         fontFamily={fontStyles.Roboto_Regular}
@@ -47,7 +49,7 @@ const SalesTrend = () => {
                     <StyledText fontFamily={fontStyles.Roboto_Regular}
                         fontSize={theme.fontSize.small}
                         fontWeight={theme.fontWeight.normal}
-                        color={theme.colors.gray[700]}>
+                        color={t.textSecondary}>
                         Weekly sales
                     </StyledText>
                 </YStack>
@@ -60,19 +62,19 @@ const SalesTrend = () => {
                 flex={1}
             >
                 <YStack justifyContent='flex-start' alignItems='flex-start' paddingHorizontal={8} paddingVertical={16}>
-                    <StyledMIcon size={24} name={'view-day'} color={theme.colors.yellow[500]} />
+                    <StyledMIcon size={24} name={'view-day'} color={t.brandPrimary} />
                     <StyledSpacer marginVertical={8} />
                     <StyledText
                         fontFamily={fontStyles.Roboto_Regular}
                         fontSize={theme.fontSize.normal}
                         fontWeight={theme.fontWeight.bold}
-                        color={theme.colors.yellow[800]}>
+                        color={t.brandPrimaryDark}>
                         {formatCurrency(shop.currency || '£', monthlySales)}
                     </StyledText>
                     <StyledText fontFamily={fontStyles.Roboto_Regular}
                         fontSize={theme.fontSize.small}
                         fontWeight={theme.fontWeight.normal}
-                        color={theme.colors.gray[700]}>
+                        color={t.textSecondary}>
                         Monthly sales
                     </StyledText>
                 </YStack>

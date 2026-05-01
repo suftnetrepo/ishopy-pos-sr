@@ -6,15 +6,16 @@ import { YStack, StyledSpacer, StyledText } from 'fluent-styles';
 import DropDownPicker from "react-native-dropdown-picker";
 import { styled } from "../../utils/styled";
 import { theme } from "../../configs/theme";
+import {useAppTheme} from '../../theme';
 
 const Dropdown = styled(DropDownPicker, {
     base: {
-        borderColor: theme.colors.gray[800],
+        borderColor: theme.colors.gray[900],
         borderWidth: 1,
         borderRadius: 30,
         backgroundColor: theme.colors.gray[1],
         width: '100%',
-        color: theme.colors.gray[800],
+        color: theme.colors.gray[900],
         paddingHorizontal: 16,
      
     },
@@ -25,20 +26,21 @@ const Dropdown = styled(DropDownPicker, {
                 borderWidth: 1,
             },
             false: {
-                borderColor: theme.colors.gray[800],
+                borderColor: theme.colors.gray[900],
             }
         },
     }
 })
 
-const StyledDropdown = ({ items, label, errorMessage, error, labelStyles, ...rest }) => {
+const StyledDropdown = ({items, label, errorMessage, error, labelStyles, ...rest}) => {
+    const {t} = useAppTheme();
     const [open, setOpen] = useState(false)
     return (
         <>
             {
                 label && (
                     <>                       
-                        <StyledText paddingHorizontal={8} color={theme.colors.gray[600]} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.normal} {...labelStyles}>
+                        <StyledText paddingHorizontal={8} color={t.textSecondary} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.normal} {...labelStyles}>
                             {label}
                         </StyledText>
                         <StyledSpacer marginVertical={4} />
@@ -62,7 +64,8 @@ const StyledDropdown = ({ items, label, errorMessage, error, labelStyles, ...res
     )
 }
 
-const StyledMultiDropdown = ({ items, label, errorMessage, labelStyles, onSelected, ...rest }) => {
+const StyledMultiDropdown = ({items, label, errorMessage, labelStyles, onSelected, ...rest}) => {
+    const {t} = useAppTheme();
     const [selected, setSelected] = useState([])
     const [open, setOpen] = useState(false)
 
@@ -76,7 +79,7 @@ const StyledMultiDropdown = ({ items, label, errorMessage, labelStyles, onSelect
                 label && (
                     <>
                         <StyledSpacer marginVertical={4} />
-                        <StyledText paddingHorizontal={8} color={theme.colors.gray[600]} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.normal} {...labelStyles}>
+                        <StyledText paddingHorizontal={8} color={t.textSecondary} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.normal} {...labelStyles}>
                             {label}
                         </StyledText>
                         <StyledSpacer marginVertical={4} />

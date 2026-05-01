@@ -12,6 +12,7 @@ import {StyledMIcon} from '../../../../components/icon';
 import {fontStyles} from '../../../../configs/theme';
 import {convertJsonToCsv} from '../../../../utils/convertJsonToCsv';
 import {formatCurrency} from '../../../../utils/help';
+import {useAppTheme} from '../../../../theme';
 
 /**
  * DownloadButton
@@ -20,6 +21,7 @@ import {formatCurrency} from '../../../../utils/help';
  * currency — currency symbol
  */
 const DownloadButton = ({data = [], grandTotal = 0, currency}) => {
+  const {t} = useAppTheme();
   return (
     <Stack
       justifyContent="flex-end"
@@ -32,7 +34,7 @@ const DownloadButton = ({data = [], grandTotal = 0, currency}) => {
         height={40}
         position="absolute"
         borderRadius={50}
-        backgroundColor={theme.colors.orange[500]}
+        backgroundColor={t.brandPrimary}
         horizontal
         justifyContent="flex-end"
         alignItems="center"
@@ -45,13 +47,13 @@ const DownloadButton = ({data = [], grandTotal = 0, currency}) => {
           cycle
           size={30}
           borderWidth={1}
-          borderColor={theme.colors.gray[1]}
+          borderColor={t.bgCard}
           backgroundColor={theme.colors.orange[800]}>
           <StyledMIcon size={16} name="share" color={theme.colors.orange[100]} />
         </StyledShape>
         <StyledSpacer marginHorizontal={2} />
         <StyledText
-          color={theme.colors.gray[1]}
+          color={t.bgCard}
           fontFamily={fontStyles.Roboto_Regular}
           fontWeight={theme.fontWeight.bold}
           fontSize={theme.fontSize.large}>

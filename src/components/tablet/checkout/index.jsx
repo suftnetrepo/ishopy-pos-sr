@@ -7,8 +7,10 @@ import { useAppContext } from '../../../hooks/appContext';
 import { fontStyles } from '../../../utils/fontStyles';
 import { theme } from '../../../utils/theme';
 import { updateOccupancy } from '../../../hooks/useTable';
+import {useAppTheme} from '../../../theme';
 
-const CheckOut = ({ table_id, table_name, order, printHandler, shareReceipt, onClose }) => {
+const CheckOut = ({table_id, table_name, order, printHandler, shareReceipt, onClose}) => {
+    const {t} = useAppTheme();
     const { clearItem, shop } = useAppContext()
     const navigator = useNavigation()
 
@@ -33,13 +35,13 @@ const CheckOut = ({ table_id, table_name, order, printHandler, shareReceipt, onC
 
     return (
         <YStack justifyContent='center' alignItems='center' flex={1} transparent>
-            <YStack borderRadius={16} justifyContent='center' alignItems='center' width='45%' backgroundColor={theme.colors.gray[1]} paddingHorizontal={16} paddingVertical={8}>
+            <YStack borderRadius={16} justifyContent='center' alignItems='center' width='45%' backgroundColor={t.bgCard} paddingHorizontal={16} paddingVertical={8}>
                 <XStack justifyContent='flex-end' alignItems='center' >
                     <StyledSpacer flex={1}></StyledSpacer>
                     <StyledMIcon
                         name="cancel"
                         size={48}
-                        color={theme.colors.gray[600]}
+                        color={t.textSecondary}
                         onPress={() => close()}
                     />
                 </XStack>
@@ -47,12 +49,12 @@ const CheckOut = ({ table_id, table_name, order, printHandler, shareReceipt, onC
                 <StyledMIcon
                     name="check-circle"
                     size={120}
-                    color={theme.colors.green[600]}
+                    color={t.successColor}
                 />
                 <StyledSpacer marginVertical={8}></StyledSpacer>
                 <StyledText
                     fontFamily={fontStyles.Roboto_Regular}
-                    color={theme.colors.gray[800]}
+                    color={t.textPrimary}
                     fontWeight={theme.fontWeight.normal}
                     fontSize={theme.fontSize.large}
                     textAlign="center"
@@ -61,7 +63,7 @@ const CheckOut = ({ table_id, table_name, order, printHandler, shareReceipt, onC
                 </StyledText>
                 <StyledSpacer marginVertical={48}></StyledSpacer>
                 <XStack justifyContent='flex-end' alignItems='flex-end'>
-                    <StyledButton secondary borderRadius={8} color={theme.colors.cyan[500]} borderColor={theme.colors.cyan[500]} backgroundColor={theme.colors.gray[1]} flex={1} onPress={() => {
+                    <StyledButton secondary borderRadius={8} color={theme.colors.cyan[500]} borderColor={theme.colors.cyan[500]} backgroundColor={t.bgCard} flex={1} onPress={() => {
                         share()
                     }} >
                         <XStack justifyContent='flex-end' alignItems='center' gap={4}>
@@ -70,11 +72,11 @@ const CheckOut = ({ table_id, table_name, order, printHandler, shareReceipt, onC
                                 size={32}
                                 color={theme.colors.cyan[100]}
                             />
-                            <StyledText fontFamily={fontStyles.Roboto_Regular} paddingVertical={8} fontWeight={theme.fontWeight.normal} color={theme.colors.gray[1]} fontSize={theme.fontSize.normal}>Email Receipt</StyledText>
+                            <StyledText fontFamily={fontStyles.Roboto_Regular} paddingVertical={8} fontWeight={theme.fontWeight.normal} color={t.bgCard} fontSize={theme.fontSize.normal}>Email Receipt</StyledText>
                         </XStack>
                     </StyledButton>
                     <StyledSpacer marginHorizontal={8}></StyledSpacer>
-                    <StyledButton primary borderRadius={8} color={theme.colors.green[500]} borderColor={theme.colors.green[500]} backgroundColor={theme.colors.gray[1]} flex={1} onPress={() => {
+                    <StyledButton primary borderRadius={8} color={t.successColor} borderColor={t.successColor} backgroundColor={t.bgCard} flex={1} onPress={() => {
                         print();
                     }} >
                         <XStack justifyContent='flex-end' alignItems='center' gap={4}>
@@ -83,7 +85,7 @@ const CheckOut = ({ table_id, table_name, order, printHandler, shareReceipt, onC
                                 size={32}
                                 color={theme.colors.green[100]}
                             />
-                            <StyledText fontFamily={fontStyles.Roboto_Regular} paddingVertical={8} fontWeight={theme.fontWeight.normal} color={theme.colors.gray[1]} fontSize={theme.fontSize.normal}>Print Receipt</StyledText>
+                            <StyledText fontFamily={fontStyles.Roboto_Regular} paddingVertical={8} fontWeight={theme.fontWeight.normal} color={t.bgCard} fontSize={theme.fontSize.normal}>Print Receipt</StyledText>
                         </XStack>
                     </StyledButton>
                 </XStack>

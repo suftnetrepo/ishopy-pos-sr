@@ -4,8 +4,9 @@ import { YStack, StyledText, StyledButton, StyledSpacer } from 'fluent-styles';
 import { StyledMIcon } from "../icon";
 import { fontStyles, theme } from "../../configs/theme";
 import { useNavigation } from "@react-navigation/native";
+import {useAppTheme} from '../../theme';
 
-const EmptyView = ({ button, icon = "notifications-active", title, description, screen, color=theme.colors.gray[1] }) => {
+const EmptyView = ({button, icon = "notifications-active", title, description, screen, color=t.bgCard, t}) => {
     const navigator = useNavigation()
 
     return (
@@ -53,7 +54,7 @@ const EmptyView = ({ button, icon = "notifications-active", title, description, 
                     <>
                         <StyledSpacer marginVertical={4} />
                         <StyledButton backgroundColor={theme.colors.cyan[500]} onPress={() => screen && navigator.navigate(screen)} >
-                            <StyledText color={theme.colors.gray[1]} paddingHorizontal={16} paddingVertical={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.normal} >
+                            <StyledText color={t.bgCard} paddingHorizontal={16} paddingVertical={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.normal} >
                                 {button}
                             </StyledText>
                         </StyledButton>

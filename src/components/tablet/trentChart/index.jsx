@@ -19,6 +19,7 @@ import {
 import {StyledIcon} from '../../package/icon';
 import SvgTrendLine from '../trentChart/SvgTrendLine';
 import {useAppContext} from '../../../hooks/appContext';
+import {useAppTheme} from '../../../theme';
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 const PERIODS = [
@@ -52,7 +53,7 @@ const barChartConfig = {
 };
 
 // ─── Period chip ──────────────────────────────────────────────────────────────
-const PeriodChip = ({label, periodKey, active, onPress}) => {
+const PeriodChip = ({label, periodKey, active, onPress, t}) => {
   const c = ACTIVE_COLORS[periodKey];
   return (
     <StyledPressable
@@ -61,8 +62,8 @@ const PeriodChip = ({label, periodKey, active, onPress}) => {
       paddingVertical={5}
       borderRadius={999}
       borderWidth={1}
-      borderColor={active ? c.border : theme.colors.gray[300]}
-      backgroundColor={active ? c.bg : theme.colors.gray[1]}>
+      borderColor={active ? c.border : t.textMuted}
+      backgroundColor={active ? c.bg : t.bgCard}>
       <Stack horizontal alignItems="center" gap={4}>
         {active && (
           <StyledText fontSize={theme.fontSize.small} color={c.text}>✓</StyledText>
@@ -70,7 +71,7 @@ const PeriodChip = ({label, periodKey, active, onPress}) => {
         <StyledText
           fontSize={theme.fontSize.small}
           fontWeight={active ? theme.fontWeight.medium : theme.fontWeight.normal}
-          color={active ? c.text : theme.colors.gray[500]}>
+          color={active ? c.text : t.textSecondary}>
           {label}
         </StyledText>
       </Stack>
@@ -79,7 +80,7 @@ const PeriodChip = ({label, periodKey, active, onPress}) => {
 };
 
 // ─── Day panel ────────────────────────────────────────────────────────────────
-const DayPanel = ({containerWidth, symbol}) => {
+const DayPanel = ({containerWidth, symbol, t}) => {
   const {data} = useWeeklyTransactions();
   const {trend, dailyTransaction} = useTransactionTrend();
 
@@ -91,7 +92,7 @@ const DayPanel = ({containerWidth, symbol}) => {
           fontSize={theme.fontSize.xxxlarge}
           fontWeight={theme.fontWeight.bold}
           paddingHorizontal={8}
-          color={theme.colors.gray[800]}>
+          color={t.textPrimary}>
           {formatCurrency(symbol, dailyTransaction)}
         </StyledText>
         <Stack
@@ -99,12 +100,12 @@ const DayPanel = ({containerWidth, symbol}) => {
           borderRadius={16}
           paddingHorizontal={20}
           paddingVertical={5}
-          backgroundColor={trend === 'up' ? theme.colors.green[500] : theme.colors.red[400]}>
+          backgroundColor={trend === 'up' ? t.successColor : t.dangerColor}>
           <Stack horizontal justifyContent="center" paddingVertical={1} alignItems="center">
             <StyledIcon
               size={16}
               name={trend === 'up' ? 'arrow-upward' : 'arrow-downward'}
-              color={theme.colors.gray[1]}
+              color={t.bgCard}
             />
           </Stack>
         </Stack>
@@ -125,7 +126,7 @@ const DayPanel = ({containerWidth, symbol}) => {
 };
 
 // ─── Trend panel — Week / Month / Year ───────────────────────────────────────
-const TrendPanel = ({period, containerWidth, symbol, data, labels, total, loading, error}) => {
+const TrendPanel = ({period, containerWidth, symbol, data, labels, total, loading, error, t}) => {
   const style = TREND_STYLE[period];
 
   const formatYLabel = v =>
@@ -150,7 +151,7 @@ const TrendPanel = ({period, containerWidth, symbol, data, labels, total, loadin
   if (error) {
     return (
       <Stack vertical alignItems="center" justifyContent="center" height={250}>
-        <StyledText fontSize={theme.fontSize.small} color={theme.colors.gray[400]}>
+        <StyledText fontSize={theme.fontSize.small} color={t.textMuted}>
           Unable to load data
         </StyledText>
       </Stack>
@@ -160,7 +161,7 @@ const TrendPanel = ({period, containerWidth, symbol, data, labels, total, loadin
   return (
     <Stack vertical>
       <Stack horizontal justifyContent="space-between" alignItems="center" paddingHorizontal={8}>
-        <StyledText fontSize={theme.fontSize.small} color={theme.colors.gray[500]}>
+        <StyledText fontSize={theme.fontSize.small} color={t.textSecondary}>
           {periodLabel}
         </StyledText>
         <StyledText
@@ -182,8 +183,8 @@ const TrendPanel = ({period, containerWidth, symbol, data, labels, total, loadin
           gradientTo={style.gradTo}
           dotColor={style.line}
           showDots={data.length <= 14}
-          labelColor={theme.colors.gray[400]}
-          gridColor={theme.colors.gray[200]}
+          labelColor={t.textMuted}
+          gridColor={t.borderDefault}
           gridLines={4}
           formatLabel={formatYLabel}
         />
@@ -193,17 +194,18 @@ const TrendPanel = ({period, containerWidth, symbol, data, labels, total, loadin
 };
 
 // Each panel owns its hook — only the active one mounts
-const WeekPanel  = props => { const s = useWeekTrend();  return <TrendPanel period="week"  {...s} {...props} />; };
-const MonthPanel = props => { const s = useMonthTrend(); return <TrendPanel period="month" {...s} {...props} />; };
-const YearPanel  = props => { const s = useYearTrend();  return <TrendPanel period="year"  {...s} {...props} />; };
+const WeekPanel  = ({t, ...props}) => { const s = useWeekTrend();  return <TrendPanel period="week"  {...s} {...props} t={t} />; };
+const MonthPanel = ({t, ...props}) => { const s = useMonthTrend(); return <TrendPanel period="month" {...s} {...props} t={t} />; };
+const YearPanel  = ({t, ...props}) => { const s = useYearTrend();  return <TrendPanel period="year"  {...s} {...props} t={t} />; };
 
 // ─── Main component ───────────────────────────────────────────────────────────
 const DailyTransactionChart = () => {
   const [activePeriod, setActivePeriod] = useState('day');
   const [containerWidth, setContainerWidth] = useState(0);
   const {shop} = useAppContext();
+  const {t} = useAppTheme();
   const symbol = shop?.currency || '£';
-  const sharedProps = {containerWidth, symbol};
+  const sharedProps = {containerWidth, symbol, t};
 
   const activeTitle = PERIODS.find(p => p.key === activePeriod)?.title;
 
@@ -211,11 +213,11 @@ const DailyTransactionChart = () => {
     <Stack
       vertical
       shadowOpacity={0.9}
-      shadowColor={theme.colors.gray[200]}
+      shadowColor={t.borderDefault}
       shadowRadius={8}
       marginVertical={16}
       marginLeft={16}
-      backgroundColor={theme.colors.gray[1]}
+      backgroundColor={t.bgCard}
       borderRadius={8}
       paddingHorizontal={8}
       paddingVertical={16}>
@@ -230,6 +232,7 @@ const DailyTransactionChart = () => {
               periodKey={p.key}
               active={activePeriod === p.key}
               onPress={() => setActivePeriod(p.key)}
+              t={t}
             />
           ))}
         </Stack>
@@ -237,7 +240,7 @@ const DailyTransactionChart = () => {
           fontFamily={fontStyles.Roboto_Regular}
           fontSize={theme.fontSize.small}
           fontWeight={theme.fontWeight.normal}
-          color={theme.colors.gray[800]}>
+          color={t.textPrimary}>
           {activeTitle}
         </StyledText>
       </Stack>

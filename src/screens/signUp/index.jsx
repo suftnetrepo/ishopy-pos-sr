@@ -11,8 +11,10 @@ import { generateRandomData } from "../../utils/help";
 import { useInsertShop } from "../../hooks/useShop";
 import { useAppContext } from "../../hooks/appContext";
 import { FEATURE_FLAG } from "../../feature-flags";
+import {useAppTheme} from '../../theme';
 
 const SignUp = () => {
+  const {t} = useAppTheme();
   const navigator = useNavigation()
   const { login } = useAppContext()
   const [errorMessages, setErrorMessages] = useState({})
@@ -35,10 +37,10 @@ const SignUp = () => {
   }
 
   return (
-    <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
+    <StyledSafeAreaView backgroundColor={t.bgCard}>
       <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
-        <StyledHeader.Header backgroundColor={theme.colors.gray[1]} onPress={() => navigator.goBack()} icon cycleProps={{
-          borderColor: theme.colors.gray[300],
+        <StyledHeader.Header backgroundColor={t.bgCard} onPress={() => navigator.goBack()} icon cycleProps={{
+          borderColor: t.textMuted,
           marginRight: 8
         }} rightIcon={
           FEATURE_FLAG && (
@@ -58,8 +60,8 @@ const SignUp = () => {
               <StyledSpacer marginHorizontal={4} />
               <StyledButton onPress={async () => await clearSeedData()}>
                 <StyledBadge
-                  color={theme.colors.gray[800]}
-                  backgroundColor={theme.colors.gray[100]}
+                  color={t.textPrimary}
+                  backgroundColor={t.bgPage}
                   fontWeight={theme.fontWeight.normal}
                   fontSize={theme.fontSize.normal}
                   paddingHorizontal={10}
@@ -81,10 +83,10 @@ const SignUp = () => {
           justifyContent='flex-start' alignItems='center'
         >
           <StyledSpacer marginVertical={16} />
-          <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.xlarge} color={theme.colors.gray[800]}>
+          <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.xlarge} color={t.textPrimary}>
             Welcome to iShopy
           </StyledText>
-          <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.medium} color={theme.colors.gray[600]}>
+          <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.medium} color={t.textSecondary}>
             Sign Up to continue.
           </StyledText>
         </YStack>
@@ -97,12 +99,12 @@ const SignUp = () => {
             returnKeyType='next'
             maxLength={50}
             fontSize={theme.fontSize.normal}
-            borderColor={theme.colors.yellow[800]}
-            backgroundColor={theme.colors.gray[1]}
+            borderColor={t.brandPrimaryDark}
+            backgroundColor={t.bgCard}
             borderRadius={32}
             paddingHorizontal={8}
             value={fields.name}
-            placeholderTextColor={theme.colors.gray[300]}
+            placeholderTextColor={t.textMuted}
             onChangeText={(text) => setFields({ ...fields, name: text })}
             error={!!errorMessages?.name}
             errorMessage={errorMessages?.name?.message}
@@ -114,12 +116,12 @@ const SignUp = () => {
             returnKeyType='next'
             maxLength={50}
             fontSize={theme.fontSize.normal}
-            borderColor={theme.colors.yellow[800]}
-            backgroundColor={theme.colors.gray[1]}
+            borderColor={t.brandPrimaryDark}
+            backgroundColor={t.bgCard}
             borderRadius={32}
             paddingHorizontal={8}
             value={fields.first_name}
-            placeholderTextColor={theme.colors.gray[300]}
+            placeholderTextColor={t.textMuted}
             onChangeText={(text) => setFields({ ...fields, first_name: text })}
             error={!!errorMessages?.first_name}
             errorMessage={errorMessages?.first_name?.message}
@@ -131,12 +133,12 @@ const SignUp = () => {
             returnKeyType='next'
             maxLength={50}
             fontSize={theme.fontSize.normal}
-            borderColor={theme.colors.yellow[800]}
-            backgroundColor={theme.colors.gray[1]}
+            borderColor={t.brandPrimaryDark}
+            backgroundColor={t.bgCard}
             borderRadius={32}
             paddingHorizontal={8}
             value={fields.last_name}
-            placeholderTextColor={theme.colors.gray[300]}
+            placeholderTextColor={t.textMuted}
             onChangeText={(text) => setFields({ ...fields, last_name: text })}
             error={!!errorMessages?.last_name}
             errorMessage={errorMessages?.last_name?.message}
@@ -148,12 +150,12 @@ const SignUp = () => {
             returnKeyType='next'
             maxLength={50}
             fontSize={theme.fontSize.normal}
-            borderColor={theme.colors.yellow[800]}
-            backgroundColor={theme.colors.gray[1]}
+            borderColor={t.brandPrimaryDark}
+            backgroundColor={t.bgCard}
             borderRadius={32}
             paddingHorizontal={8}
             value={fields.email}
-            placeholderTextColor={theme.colors.gray[300]}
+            placeholderTextColor={t.textMuted}
             onChangeText={(text) => setFields({ ...fields, email: text })}
             error={!!errorMessages?.email}
             errorMessage={errorMessages?.email?.message}
@@ -165,12 +167,12 @@ const SignUp = () => {
             returnKeyType='next'
             maxLength={50}
             fontSize={theme.fontSize.normal}
-            borderColor={theme.colors.yellow[800]}
-            backgroundColor={theme.colors.gray[1]}
+            borderColor={t.brandPrimaryDark}
+            backgroundColor={t.bgCard}
             borderRadius={32}
             paddingHorizontal={8}
             value={fields.mobile}
-            placeholderTextColor={theme.colors.gray[300]}
+            placeholderTextColor={t.textMuted}
             onChangeText={(text) => setFields({ ...fields, mobile: text })}
             error={!!errorMessages?.mobile}
             errorMessage={errorMessages?.mobile?.message}
@@ -182,12 +184,12 @@ const SignUp = () => {
             returnKeyType='next'
             maxLength={100}
             fontSize={theme.fontSize.normal}
-            borderColor={theme.colors.yellow[800]}
-            backgroundColor={theme.colors.gray[1]}
+            borderColor={t.brandPrimaryDark}
+            backgroundColor={t.bgCard}
             borderRadius={32}
             paddingHorizontal={8}
             value={fields.address}
-            placeholderTextColor={theme.colors.gray[300]}
+            placeholderTextColor={t.textMuted}
             onChangeText={(text) => setFields({ ...fields, address: text })}
             error={!!errorMessages?.address}
             errorMessage={errorMessages?.address?.message}
@@ -199,12 +201,12 @@ const SignUp = () => {
             returnKeyType='next'
             maxLength={50}
             fontSize={theme.fontSize.normal}
-            borderColor={theme.colors.yellow[800]}
-            backgroundColor={theme.colors.gray[1]}
+            borderColor={t.brandPrimaryDark}
+            backgroundColor={t.bgCard}
             borderRadius={32}
             paddingHorizontal={8}
             value={fields.user_name}
-            placeholderTextColor={theme.colors.gray[300]}
+            placeholderTextColor={t.textMuted}
             onChangeText={(text) => setFields({ ...fields, user_name: text })}
             error={!!errorMessages?.user_name}
             errorMessage={errorMessages?.user_name?.message}
@@ -217,19 +219,19 @@ const SignUp = () => {
             returnKeyType='done'
             maxLength={20}
             fontSize={theme.fontSize.normal}
-            borderColor={theme.colors.yellow[800]}
-            backgroundColor={theme.colors.gray[1]}
+            borderColor={t.brandPrimaryDark}
+            backgroundColor={t.bgCard}
             borderRadius={32}
             paddingHorizontal={8}
             value={fields.password}
-            placeholderTextColor={theme.colors.gray[300]}
+            placeholderTextColor={t.textMuted}
             onChangeText={(text) => setFields({ ...fields, password: text })}
             error={!!errorMessages?.password}
             errorMessage={errorMessages?.password?.message}
           />
           <StyledSpacer marginVertical={8} />
           <StyledButton flex={1} backgroundColor={theme.colors.cyan[500]} onPress={() => onSubmit()} >
-            <StyledText paddingHorizontal={20} paddingVertical={10} color={theme.colors.gray[1]}>
+            <StyledText paddingHorizontal={20} paddingVertical={10} color={t.bgCard}>
               Sign up
             </StyledText>
           </StyledButton>

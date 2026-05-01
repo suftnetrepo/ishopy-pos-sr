@@ -10,6 +10,7 @@ import {
   theme,
 } from 'fluent-styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useAppTheme} from '../../theme';
 
 const CURRENCIES = [
   {symbol: '£', code: 'GBP', name: 'British Pound', flag: '🇬🇧'},
@@ -37,6 +38,7 @@ interface Props {
 
 const CurrencySelect: React.FC<Props> = ({selected, onSelect}) => {
   const [search, setSearch] = useState('');
+  const {t} = useAppTheme();
 
   const filtered = CURRENCIES.filter(
     c =>
@@ -51,12 +53,12 @@ const CurrencySelect: React.FC<Props> = ({selected, onSelect}) => {
         <StyledText
           fontSize={theme.fontSize.large}
           fontWeight={theme.fontWeight.bold}
-          color={theme.colors.gray[900]}>
+          color={t.textPrimary}>
           Select your currency
         </StyledText>
         <StyledText
           fontSize={theme.fontSize.normal}
-          color={theme.colors.gray[500]}>
+          color={t.textSecondary}>
           Used on receipts, menus and reports. You can change this later in
           Settings.
         </StyledText>
@@ -73,7 +75,7 @@ const CurrencySelect: React.FC<Props> = ({selected, onSelect}) => {
           onChangeText={setSearch}
           clearable
           leftIcon={
-            <Icon name="magnify" size={18} color={theme.colors.gray[400]} />
+            <Icon name="magnify" size={18} color={t.textMuted} />
           }
         />
         {filtered.map(c => {
@@ -88,7 +90,7 @@ const CurrencySelect: React.FC<Props> = ({selected, onSelect}) => {
                 }
                 borderWidth={2}
                 borderColor={
-                  active ? theme.colors.teal[500] : theme.colors.gray[200]
+                  active ? theme.colors.teal[500] : t.borderDefault
                 }>
                 <Stack horizontal alignItems="center" gap={12}>
                   {/* Flag + symbol */}
@@ -97,7 +99,7 @@ const CurrencySelect: React.FC<Props> = ({selected, onSelect}) => {
                     height={48}
                     borderRadius={12}
                     backgroundColor={
-                      active ? theme.colors.teal[100] : theme.colors.gray[100]
+                      active ? theme.colors.teal[100] : t.bgPage
                     }
                     alignItems="center"
                     justifyContent="center">
@@ -107,12 +109,12 @@ const CurrencySelect: React.FC<Props> = ({selected, onSelect}) => {
                     <StyledText
                       fontSize={theme.fontSize.normal}
                       fontWeight={theme.fontWeight.semiBold}
-                      color={theme.colors.gray[900]}>
+                      color={t.textPrimary}>
                       {c.name}
                     </StyledText>
                     <StyledText
                       fontSize={theme.fontSize.small}
-                      color={theme.colors.gray[400]}>
+                      color={t.textMuted}>
                       {c.code} · {c.symbol}
                     </StyledText>
                   </Stack>

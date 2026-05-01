@@ -20,15 +20,17 @@ import {tableRules} from './validatorRules';
 import {useUpdateTable, useInsertTable} from '../../../../hooks/useTable';
 import ColorPicker from '../../../../components/colorPicker';
 import {useLoaderAndError} from '../../../../hooks/useLoaderAndError';
+import {useAppTheme} from '../../../../theme';
 
 // ─── Location options ─────────────────────────────────────────────────────────
 const LOCATION_OPTIONS = [
-  {key: 'Dine In',  label: 'Dine In',  icon: 'table-restaurant', color: theme.colors.gray[600]},
+  {key: 'Dine In',  label: 'Dine In',  icon: 'table-restaurant', color: theme.colors.gray[500]},
   {key: 'Bar',      label: 'Bar',      icon: 'local-bar',        color: theme.colors.purple[600]},
   {key: 'Takeaway', label: 'Takeaway', icon: 'takeout-dining',   color: theme.colors.amber[600]},
 ];
 
 const TableForm = ({table, onClose}) => {
+  const {t} = useAppTheme();
   const [errorMessages, setErrorMessages] = useState({});
   const [fields, setFields] = useState(tableRules.fields);
   const {updateTable, error, loading, resetHandler} = useUpdateTable();
@@ -40,7 +42,7 @@ const TableForm = ({table, onClose}) => {
 
   useLoaderAndError(loading, error, resetHandler);
 
-  const onNotify = ({status}) => {
+  const onNotify = ({status, t}) => {
     toastService.show({
       message: `Table ${status}`,
       description: `Your table was ${status} successfully.`,
@@ -88,12 +90,12 @@ const TableForm = ({table, onClose}) => {
   };
 
   return (
-    <YStack flex={1} backgroundColor={theme.colors.gray[100]}>
+    <YStack flex={1} backgroundColor={t.bgPage}>
       <StyledCard
         gap={8}
         paddingHorizontal={16}
         horizontal
-        backgroundColor={theme.colors.gray[1]}
+        backgroundColor={t.bgCard}
         borderRadius={16}
         marginHorizontal={16}
         marginTop={16}
@@ -111,12 +113,12 @@ const TableForm = ({table, onClose}) => {
           returnKeyType="next"
           maxLength={50}
           fontSize={theme.fontSize.small}
-          borderColor={theme.colors.yellow[800]}
-          backgroundColor={theme.colors.gray[1]}
+          borderColor={t.brandPrimaryDark}
+          backgroundColor={t.bgCard}
           borderRadius={32}
           paddingHorizontal={8}
           value={fields.tableName}
-          placeholderTextColor={theme.colors.gray[400]}
+          placeholderTextColor={t.textMuted}
           onChangeText={text => setFields({...fields, tableName: text})}
           error={!!errorMessages?.tableName}
           errorMessage={errorMessages?.tableName?.message}
@@ -129,12 +131,12 @@ const TableForm = ({table, onClose}) => {
           returnKeyType="next"
           maxLength={3}
           fontSize={theme.fontSize.small}
-          borderColor={theme.colors.yellow[800]}
-          backgroundColor={theme.colors.gray[1]}
+          borderColor={t.brandPrimaryDark}
+          backgroundColor={t.bgCard}
           borderRadius={32}
           paddingHorizontal={8}
           value={fields.size?.toString()}
-          placeholderTextColor={theme.colors.gray[400]}
+          placeholderTextColor={t.textMuted}
           onChangeText={text => setFields({...fields, size: parseInt(text) || 0})}
           error={!!errorMessages?.size}
           errorMessage={errorMessages?.size?.message}
@@ -144,7 +146,7 @@ const TableForm = ({table, onClose}) => {
         <StyledSpacer marginVertical={2} />
         <StyledText
           fontWeight={theme.fontWeight.normal}
-          color={theme.colors.gray[600]}
+          color={t.textSecondary}
           fontSize={theme.fontSize.small}
           fontFamily={fontStyles.Roboto_Regular}
           marginBottom={6}>
@@ -184,13 +186,13 @@ const TableForm = ({table, onClose}) => {
             colors={{
               activeThumb:  theme.colors.white,
               inactiveThumb: theme.colors.white,
-              activeTrack:  theme.colors.green[600],
-              inactiveTrack: theme.colors.red[400],
+              activeTrack:  t.successColor,
+              inactiveTrack: t.dangerColor,
             }}
           />
           <StyledText
             fontWeight={theme.fontWeight.normal}
-            color={theme.colors.gray[600]}
+            color={t.textSecondary}
             fontSize={theme.fontSize.normal}
             fontFamily={fontStyles.Roboto_Regular}>
             Active
@@ -199,7 +201,7 @@ const TableForm = ({table, onClose}) => {
 
         <StyledPressable
           onPress={onSubmit}
-          backgroundColor={theme.colors.yellow[500]}
+          backgroundColor={t.brandPrimary}
           borderRadius={32}
           paddingVertical={12}
           alignItems="center">

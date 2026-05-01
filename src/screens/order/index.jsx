@@ -16,15 +16,17 @@ import OrderCart from '../../components/tablet/order/orderCart';
 import OrderDateFilter from './orderDateFilter';
 import {useFocus} from '../../hooks/useFocus';
 import {StyledMIcon} from '../../components/icon';
+import {useAppTheme} from '../../theme';
 
 const BigOrder = () => {
   const focus = useFocus();
   const {updateMenuQuery} = useAppContext();
+  const {t} = useAppTheme();
   const [show, setShow] = useState(null);
   const [showCalendar, setCalendarShow] = useState(null);
 
   return (
-    <StyledPage backgroundColor={theme.colors.gray[100]}>
+    <StyledPage backgroundColor={t.bgPage}>
       <StyledPage.Header.Full>
         <RenderHeader
           showBackButton={true}
@@ -58,7 +60,7 @@ const BigOrder = () => {
           <StyledMIcon
               name="print"
               size={32}
-              color={theme.colors.gray[800]}
+              color={t.textPrimary}
               onPress={() => {}}
             />
         }

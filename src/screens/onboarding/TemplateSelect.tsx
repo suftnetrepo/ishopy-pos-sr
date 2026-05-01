@@ -5,6 +5,7 @@ import {
 } from 'fluent-styles';
 import { restaurantTemplates } from '../../data/seeds/restaurant';
 import { retailTemplates } from '../../data/seeds/retail';
+import {useAppTheme} from '../../theme';
 
 interface Props {
   mode: string;
@@ -19,10 +20,10 @@ const TemplateSelect: React.FC<Props> = ({ mode, selected, onSelect }) => {
     <Stack gap={16} flex={1}>
       <Stack gap={4} marginBottom={8}>
         <StyledText fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.bold}
-          color={theme.colors.gray[900]}>
+          color={t.textPrimary}>
           Choose your template
         </StyledText>
-        <StyledText fontSize={theme.fontSize.normal} color={theme.colors.gray[500]}>
+        <StyledText fontSize={theme.fontSize.normal} color={t.textSecondary}>
           Pre-loaded with real menu items and categories. You can edit everything after.
         </StyledText>
       </Stack>
@@ -37,37 +38,37 @@ const TemplateSelect: React.FC<Props> = ({ mode, selected, onSelect }) => {
                 padding={16} borderRadius={14}
                 backgroundColor={active ? theme.colors.violet[50] : theme.colors.white}
                 borderWidth={2}
-                borderColor={active ? theme.colors.violet[500] : theme.colors.gray[200]}
+                borderColor={active ? theme.colors.violet[500] : t.borderDefault}
                 shadow={active ? 'light' : undefined}>
                 <Stack horizontal alignItems="center" gap={14}>
                   {/* Emoji badge */}
                   <Stack width={48} height={48} borderRadius={14}
-                    backgroundColor={active ? theme.colors.violet[100] : theme.colors.gray[100]}
+                    backgroundColor={active ? theme.colors.violet[100] : t.bgPage}
                     alignItems="center" justifyContent="center">
                     <StyledText fontSize={24}>{t.emoji}</StyledText>
                   </Stack>
 
                   <Stack flex={1}>
                     <StyledText fontSize={theme.fontSize.medium} fontWeight={theme.fontWeight.semiBold}
-                      color={theme.colors.gray[900]}>
+                      color={t.textPrimary}>
                       {t.label}
                     </StyledText>
-                    <StyledText fontSize={theme.fontSize.small} color={theme.colors.gray[500]}
+                    <StyledText fontSize={theme.fontSize.small} color={t.textSecondary}
                       marginTop={2}>
                       {t.description}
                     </StyledText>
                     {/* Item count pill */}
                     <Stack horizontal gap={8} marginTop={6}>
                       <Stack paddingHorizontal={8} paddingVertical={3} borderRadius={99}
-                        backgroundColor={active ? theme.colors.violet[100] : theme.colors.gray[100]}>
-                        <StyledText fontSize={11} color={active ? theme.colors.violet[700] : theme.colors.gray[500]}
+                        backgroundColor={active ? theme.colors.violet[100] : t.bgPage}>
+                        <StyledText fontSize={11} color={active ? theme.colors.violet[700] : t.textSecondary}
                           fontWeight={theme.fontWeight.semiBold}>
                           {t.categories.length} categories
                         </StyledText>
                       </Stack>
                       <Stack paddingHorizontal={8} paddingVertical={3} borderRadius={99}
-                        backgroundColor={active ? theme.colors.violet[100] : theme.colors.gray[100]}>
-                        <StyledText fontSize={11} color={active ? theme.colors.violet[700] : theme.colors.gray[500]}
+                        backgroundColor={active ? theme.colors.violet[100] : t.bgPage}>
+                        <StyledText fontSize={11} color={active ? theme.colors.violet[700] : t.textSecondary}
                           fontWeight={theme.fontWeight.semiBold}>
                           {t.items.length} items
                         </StyledText>
@@ -78,7 +79,7 @@ const TemplateSelect: React.FC<Props> = ({ mode, selected, onSelect }) => {
                   {/* Radio dot */}
                   <Stack width={22} height={22} borderRadius={11}
                     borderWidth={2}
-                    borderColor={active ? theme.colors.violet[500] : theme.colors.gray[300]}
+                    borderColor={active ? theme.colors.violet[500] : t.textMuted}
                     backgroundColor={active ? theme.colors.violet[500] : 'transparent'}
                     alignItems="center" justifyContent="center">
                     {active && (

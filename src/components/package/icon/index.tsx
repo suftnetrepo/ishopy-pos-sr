@@ -3,6 +3,7 @@ import MIcon from 'react-native-vector-icons/MaterialIcons';
 import type {ComponentProps} from 'react';
 import {styled} from '../../../utils/styled';
 import {theme} from '../../../utils/theme';
+import {useAppTheme} from '../../../theme';
 
 type MaterialIconProps = ComponentProps<typeof MIcon>;
 
@@ -32,6 +33,7 @@ const StyledIcon = ({
   onPress,
   ...rest
 }: IconProps) => {
+  const {t} = useAppTheme();
   return (
     <Icon
       {...rest}

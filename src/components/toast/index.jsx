@@ -6,6 +6,7 @@ import { View } from "react-native";
 import { Toast } from "react-native-toast-notifications";
 import {styled, StyledSpacer, StyledText } from 'fluent-styles';
 import { theme } from "../../configs/theme";
+import {useAppTheme} from '../../theme';
 
 const ToastView = styled(View, {
     base: {
@@ -22,28 +23,29 @@ const ToastView = styled(View, {
         type: {
             'error': {
                 borderLeftColor: theme.colors.red[500],
-                backgroundColor: theme.colors.gray[800],
+                backgroundColor: theme.colors.gray[900],
             },
             'success': {
-                borderLeftColor: theme.colors.green[500],
+                borderLeftColor: theme.colors.green[600],
                 backgroundColor: theme.colors.gray[100],
             }
         }
     }
 })
 
-const StyledToast = ({ toast }) => {
+const StyledToast = ({toast}) => {
+    const {t} = useAppTheme();
     return (
         <ToastView
             type={toast.data.message_type}
         >
             <StyledText
-                fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.large} color={toast.data.message_type ==="error" ? theme.colors.gray[1]: theme.colors.gray[800]}
+                fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.large} color={toast.data.message_type ==="error" ? t.bgCard: t.textPrimary}
             >
                 {toast.data.title}
             </StyledText>
             <StyledSpacer marginVertical={1} />
-            <StyledText  fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.large} color={toast.data.message_type ==="error" ? theme.colors.gray[1]: theme.colors.gray[800]}>{toast.message}</StyledText>
+            <StyledText  fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.large} color={toast.data.message_type ==="error" ? t.bgCard: t.textPrimary}>{toast.message}</StyledText>
         </ToastView>
     )
 }

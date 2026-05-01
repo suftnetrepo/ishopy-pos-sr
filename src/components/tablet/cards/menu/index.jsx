@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {FlatList} from 'react-native';
 import {StyledSpacer, StyledText, YStack, StyledShape} from 'fluent-styles';
-import {ScrollView} from '@gluestack-ui/themed';
+import {ScrollView} from 'react-native';
 import {useQueryMenuByCategory} from '../../../../hooks/useMenu';
 import {useAppContext} from '../../../../hooks/appContext';
 import {Stack} from '../../../package/stack';
@@ -10,6 +10,7 @@ import {StyledIcon} from '../../../package/icon';
 import {formatCurrency} from '../../../../utils/help';
 import PosIcon from '../../../pos-icon';
 import EmptyView from '../../../utils/empty';
+import {useAppTheme} from '../../../../theme';
 
 export default function ItemCard({onChangeItem, table_id}) {
   const {
@@ -20,6 +21,7 @@ export default function ItemCard({onChangeItem, table_id}) {
     addItem,
     menuQuery,
   } = useAppContext();
+  const {t} = useAppTheme();
   const {data, handleQueryMemu} = useQueryMenuByCategory(category_id);
 
   useEffect(() => {
@@ -55,14 +57,14 @@ export default function ItemCard({onChangeItem, table_id}) {
         px={16}
         py={16}
         space="lg"
-        backgroundColor={theme.colors.gray[1]}
+        backgroundColor={t.bgCard}
         borderRadius={16}
         borderWidth={1}
-        borderColor={theme.colors.gray[200]}
+        borderColor={t.borderDefault}
         justifyContent="center"
         alignItems="center">
         <EmptyView
-          color={theme.colors.gray[400]}
+          color={t.textMuted}
           title="Your Item list is empty"
           description="Select any of the categories to add items to your list."
         />
@@ -70,7 +72,7 @@ export default function ItemCard({onChangeItem, table_id}) {
     );
   }
 
-  const Card = ({item}) => {
+  const Card = ({item, t}) => {
     return (
       <Stack
         blue={selectedItem?.menu_id === item.menu_id}
@@ -90,7 +92,7 @@ export default function ItemCard({onChangeItem, table_id}) {
         onTouchStart={() => handleTouchStart(item)}>
         {/* <StyledShape
           size={48}
-          backgroundColor={theme.colors.gray[100]}
+          backgroundColor={t.bgPage}
           justifyContent="center"
           alignItems="center"
           cycle
@@ -99,7 +101,7 @@ export default function ItemCard({onChangeItem, table_id}) {
           <PosIcon
             name={item?.icon_name}
             size={32}
-            color={item?.color_code || theme.colors.gray[500]}
+            color={item?.color_code || t.textSecondary}
           />
         </StyledShape> */}
 
@@ -118,7 +120,7 @@ export default function ItemCard({onChangeItem, table_id}) {
           fontFamily={fontStyles.Roboto_Regular}
           fontSize={theme.fontSize.medium}
           fontWeight={theme.fontWeight.medium}
-          color={theme.colors.gray[800]}>
+          color={t.textPrimary}>
           {item.name}
         </StyledText>
         <StyledSpacer marginVertical={2} />
@@ -126,7 +128,7 @@ export default function ItemCard({onChangeItem, table_id}) {
           fontFamily={fontStyles.Roboto_Regular}
           fontSize={theme.fontSize.normal}
           fontWeight={theme.fontWeight.medium}
-          color={theme.colors.gray[800]}>
+          color={t.textPrimary}>
           {formatCurrency(shop?.currency || '£', item.price)}
         </StyledText>
       </Stack>
@@ -141,7 +143,8 @@ export default function ItemCard({onChangeItem, table_id}) {
         scrollEnabled={false}
         numColumns={3}
         showsVerticalScrollIndicator={false}
-        renderItem={({item}) => <Card key={item.menu_id} item={item} />}
+        renderItem={({item}) => <Card key={item.menu_id} item={item} 
+                        t={t}/>}
       />
     </ScrollView>
   );

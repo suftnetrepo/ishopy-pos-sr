@@ -13,8 +13,10 @@ import { fontStyles, palettes, theme } from '../../../configs/theme';
 import { prepareSeedData } from '../../../model/seed';
 import { useNavigation } from '@react-navigation/native';
 import { useUtil } from '../../../store';
+import {useAppTheme} from '../../../theme';
 
 const PurchaseSuccess = () => {
+  const {t} = useAppTheme();
     const { setPaymentStatus } = useUtil()
     const navigator = useNavigation()
     const [clearSeed, setClearSeed] = useState(false)
@@ -34,7 +36,7 @@ const PurchaseSuccess = () => {
         >
             <YStack
                 width={'90%'}
-                backgroundColor={theme.colors.gray[1]}
+                backgroundColor={t.bgCard}
                 borderRadius={16}
                 paddingHorizontal={16}
                 paddingVertical={16}
@@ -44,12 +46,12 @@ const PurchaseSuccess = () => {
                 <StyledMIcon
                     name="check-circle"
                     size={120}
-                    color={theme.colors.green[600]}
+                    color={t.successColor}
                 />
                 <StyledSpacer marginVertical={8} />
                 <StyledText
                     fontFamily={fontStyles.Roboto_Regular}
-                    color={theme.colors.gray[800]}
+                    color={t.textPrimary}
                     fontWeight={theme.fontWeight.normal}
                     fontSize={theme.fontSize.xlarge}
                     paddingVertical={1}
@@ -61,7 +63,7 @@ const PurchaseSuccess = () => {
                 <StyledSpacer marginVertical={8} />
                 <StyledText
                     fontFamily={fontStyles.Roboto_Regular}
-                    color={theme.colors.gray[800]}
+                    color={t.textPrimary}
                     fontWeight={theme.fontWeight.normal}
                     fontSize={theme.fontSize.normal}
                     textAlign='center'
@@ -75,7 +77,7 @@ const PurchaseSuccess = () => {
                     alignItems='center'
                     paddingVertical={8}
                     paddingHorizontal={16}
-                    backgroundColor={theme.colors.gray[1]}
+                    backgroundColor={t.bgCard}
                 >
                     <StyledCheckBox
                         height={25}
@@ -87,7 +89,7 @@ const PurchaseSuccess = () => {
                     <StyledText
                         fontFamily={fontStyles.Roboto_Regular}
                         fontWeight={theme.fontWeight.normal}
-                        color={theme.colors.gray[600]}
+                        color={t.textSecondary}
                         fontSize={theme.fontSize.normal}
                     >
                         Do you want to clear sample data
@@ -103,7 +105,7 @@ const PurchaseSuccess = () => {
                 >
                     <StyledText
                         fontFamily={fontStyles.OpenSansRegular}
-                        color={theme.colors.gray[1]}
+                        color={t.bgCard}
                         fontWeight={theme.fontWeight.normal}
                         fontSize={theme.fontSize.normal}
                         paddingHorizontal={16}

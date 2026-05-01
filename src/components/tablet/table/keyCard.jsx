@@ -1,139 +1,133 @@
-import React, { useState } from "react";
-import {
-    Box,
-    Text,
-    VStack,
-    HStack,
-    Pressable,
-    Button,
-    ButtonText,
-} from "@gluestack-ui/themed";
-import { YStack, StyledSpacer } from 'fluent-styles';
-import { StyledIcon } from "../../package/icon";
-import { fontStyles, theme } from "../../../utils/theme";
-import { Stack } from "../../../components/package/stack";
+/* eslint-disable prettier/prettier */
+import React, {useState} from 'react';
+import {YStack, StyledSpacer, StyledText, StyledPressable, Stack} from 'fluent-styles';
+import {StyledIcon} from '../../package/icon';
+import {fontStyles, theme} from '../../../utils/theme';
+import {useAppTheme} from '../../../theme';
 
-export default function KeyCard({ onSubmit, onClose, table_name, table_id }) {
-    const [pad, setPad] = useState("");
-    const keypad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "<"];
+export default function KeyCard({onSubmit, onClose, table_name, table_id}) {
+  const [pad, setPad] = useState('');
+  const {t} = useAppTheme();
+  const keypad = ['1','2','3','4','5','6','7','8','9','0','<'];
 
-    const handleKeyPress = (key) => {
-        setPad((prev) => {
+  const handleKeyPress = key => {
+    setPad(prev => {
+      if (key === '<') return prev.slice(0, -1);
+      if (prev === '0') return key;
+      return prev + key;
+    });
+  };
 
-            if (key === "<") {
-                return prev.slice(0, -1);
-            }
+  const handleSubmit = () => {
+    onSubmit({
+      table_id,
+      guest_count: pad,
+      guest_name: 'Guest',
+      isOccupied: 1,
+      start_time: new Date().toTimeString().split(' ')[0],
+    });
+    onClose();
+  };
 
-            if (prev === "0") return key;
-            return prev + key;
-        });
-    };
+  const handleClose = () => { setPad(''); onClose(); };
+  const canSubmit = pad.length > 0 && pad !== '0';
 
-    const handleSubmit = () => {
+  return (
+    <YStack
+      backgroundColor={theme.colors.transparent05}
+      flex={1} justifyContent="center" alignItems="center">
+      <YStack
+        width="30%" backgroundColor={theme.colors.transparent05}
+        borderRadius={16} justifyContent="center" alignItems="center">
+        <Stack borderRadius={16} backgroundColor={t.textPrimary}>
 
-      const table ={
-        table_id: table_id,
-        guest_count: pad,
-        guest_name: "Guest",
-        isOccupied: 1,
-        start_time: new Date().toTimeString().split(' ')[0],
-      }
-      onSubmit(table);
-           onClose();
-    }
+          {/* Header */}
+          <Stack horizontal justifyContent="space-between"
+            alignItems="center" paddingHorizontal={24} paddingVertical={16}>
+            <Stack horizontal flex={1} justifyContent="flex-start" alignItems="center" gap={8}>
+              <StyledIcon name="attach-money" size={24} color={t.bgCard} />
+              <StyledText
+                fontFamily={fontStyles.Roboto_Regular}
+                color={t.bgCard}
+                fontSize={theme.fontSize.large}
+                fontWeight={theme.fontWeight.medium}>
+                {table_name}
+              </StyledText>
+            </Stack>
+            <StyledIcon name="cancel" size={48} color={t.bgCard} onPress={handleClose} />
+          </Stack>
 
-    const handleClose = () => {
-        setPad("");
-        onClose();
-    }
+          {/* Body */}
+          <Stack paddingHorizontal={16} paddingVertical={16}
+            justifyContent="center" alignItems="center" vertical>
+            <StyledText
+              marginBottom={24}
+              fontFamily={fontStyles.Roboto_Regular}
+              color={t.textMuted}
+              fontSize={theme.fontSize.normal}
+              fontWeight={theme.fontWeight.thin}>
+              Enter number of guests
+            </StyledText>
+            <StyledText
+              fontFamily={fontStyles.Roboto_Regular}
+              color={t.bgCard}
+              fontSize={theme.fontSize.large}
+              fontWeight={theme.fontWeight.medium}>
+              {pad}
+            </StyledText>
+            <StyledSpacer marginVertical={16} />
 
-    return (
-        <YStack
-            backgroundColor={theme.colors.transparent05}
-            flex={1}
-            justifyContent='center'
-            alignItems='center'
-        >
-            <YStack
-                width={'30%'}
-                height={'80%'}
-                backgroundColor={theme.colors.transparent05}
-                borderRadius={16}
-                justifyContent='center'
-                alignItems='center'
-            >
+            {/* Keypad */}
+            <Stack horizontal flexWrap="wrap" justifyContent="center" paddingHorizontal={8}>
+              {keypad.map((num, i) => (
+                <StyledPressable
+                  key={i}
+                  onPress={() => handleKeyPress(num)}
+                  width="30%"
+                  margin="1.5%"
+                  height={70}
+                  borderRadius={10}
+                  backgroundColor="#2E2E2E"
+                  alignItems="center"
+                  justifyContent="center">
+                  <StyledText
+                    color={t.bgCard}
+                    fontFamily={fontStyles.Roboto_Regular}
+                    fontSize={theme.fontSize.large}
+                    fontWeight={theme.fontWeight.medium}>
+                    {num}
+                  </StyledText>
+                </StyledPressable>
+              ))}
+            </Stack>
 
-                <Box borderRadius={16}  backgroundColor={theme.colors.gray[900]}>
-                    <HStack justifyContent="space-between" alignItems="center" px={24} py={16}>
-                        <Stack horizontal flex={1} justifyContent="flex-start" alignItems="center">
-                            <StyledIcon
-                                name="attach-money"
-                                size={24}
-                                color={theme.colors.gray[1]}
-                            />
-                            <Text fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[1]} fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.medium}>
-                                {table_name}
-                            </Text>
-                        </Stack>
-                        <StyledIcon
-                            name="cancel"
-                            size={48}
-                            color={theme.colors.gray[1]}
-                            onPress={handleClose}
-                        />
-                    </HStack>
+            {/* Actions */}
+            <Stack horizontal justifyContent="space-between"
+              paddingHorizontal={16} paddingVertical={16}
+              borderTopWidth={1} borderColor={t.textPrimary}>
+              <StyledPressable
+                borderWidth={1} borderColor={t.textSecondary}
+                paddingHorizontal={20} paddingVertical={10}
+                borderRadius={25} onPress={handleClose}>
+                <StyledText fontFamily={fontStyles.Roboto_Regular} color={t.bgCard}>
+                  Close
+                </StyledText>
+              </StyledPressable>
+              <StyledSpacer flex={1} />
+              <StyledPressable
+                backgroundColor={canSubmit ? t.bgCard : t.textSecondary}
+                paddingHorizontal={30} paddingVertical={10}
+                borderRadius={25}
+                onPress={() => canSubmit && handleSubmit()}>
+                <StyledText fontFamily={fontStyles.Roboto_Regular} color={t.textPrimary}>
+                  Open
+                </StyledText>
+              </StyledPressable>
+            </Stack>
+          </Stack>
 
-                    <HStack flex={1}>
-                        <VStack px={16} py={16} justifyContent="center" alignItems="center" >
-                              <Text marginBottom={24} fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[300]} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.thin}>
-                                Enter number of guests
-                            </Text>
-                              <Text fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[1]} fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.medium}>
-                                {pad}
-                            </Text>
-                            <StyledSpacer marginVertical={16} />
-                            <HStack flex={1} paddingHorizontal={8} flexWrap="wrap" justifyContent="center">
-                                {keypad.map((num, i) => (
-                                    <Pressable
-                                        key={i}
-                                        onPress={() => handleKeyPress(num)}
-                                        style={{
-                                            width: "30%",
-                                            margin: "1.5%",
-                                            height: 70,
-                                            borderRadius: 10,
-                                            backgroundColor: "#2E2E2E",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                        }}
-                                    >
-                                        <Text color={theme.colors.gray[1]} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.medium}>
-                                            {num}
-                                        </Text>
-                                    </Pressable>
-                                ))}
-                            </HStack>
-                            <HStack
-                                justifyContent="space-between"
-                                px={16}
-                                py={16}
-                                
-                                borderTopWidth={1}
-                                borderColor={theme.colors.gray[800]}
-                            >
-                                <Button variant="outline" borderColor={theme.colors.gray[600]} px={20} py={10} borderRadius={25} onPress={handleClose}>
-                                    <ButtonText fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[1]}>Close</ButtonText>
-                                </Button>
-                                  <StyledSpacer flex={1} />
-                                <Button m bg={(pad.length > 0 && pad !=="0") ? theme.colors.gray[1] : theme.colors.gray[600]} px={30} py={10} borderRadius={25} onPress={()=> (pad.length > 0 && pad !=="0") && handleSubmit()}>
-                                    <ButtonText fontFamily={fontStyles.Roboto_Regular} color={theme.colors.gray[800]}>Open</ButtonText>
-                                </Button>
-                            </HStack>
-                        </VStack>
-                    </HStack>
-                </Box>
-            </YStack>
-        </YStack>
-
-    );
+        </Stack>
+      </YStack>
+    </YStack>
+  );
 }

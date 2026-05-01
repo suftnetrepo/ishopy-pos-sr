@@ -5,6 +5,7 @@ import {StyledText, StyledSpacer, StyledPressable, Stack} from 'fluent-styles';
 import {theme} from '../../../../configs/theme';
 import {StyledIcon} from '../../../../components/package/icon';
 import {toWordCase} from '../../../../utils/help';
+import {useAppTheme} from '../../../../theme';
 
 // ─── Location pill config ─────────────────────────────────────────────────────
 const LOCATION_STYLE = {
@@ -18,18 +19,19 @@ const getLocationStyle = loc =>
 
 // ─── Table card ───────────────────────────────────────────────────────────────
 const TableCard = ({onTableChange, onTableDelete, data}) => {
-  const RenderCard = ({item}) => {
+  const {t} = useAppTheme();
+  const RenderCard = ({item, t}) => {
     const isActive    = item.status === 1;
     const location    = item.location || 'Dine In';
     const locStyle    = getLocationStyle(location);
-    const borderColor = isActive ? theme.colors.green[400] : theme.colors.red[300];
+    const borderColor = isActive ? t.successColor : t.dangerBg;
 
     return (
       <Stack
         flex={1}
         vertical
         borderRadius={12}
-        backgroundColor={theme.colors.gray[1]}
+        backgroundColor={t.bgCard}
         marginHorizontal={4}
         marginBottom={8}
         paddingHorizontal={14}
@@ -40,7 +42,7 @@ const TableCard = ({onTableChange, onTableDelete, data}) => {
           <StyledText
             fontSize={theme.fontSize.normal}
             fontWeight={theme.fontWeight.normal}
-            color={theme.colors.gray[800]}
+            color={t.textPrimary}
             flex={1}
             numberOfLines={1}>
             {toWordCase(item.tableName)}
@@ -59,18 +61,18 @@ const TableCard = ({onTableChange, onTableDelete, data}) => {
 
         {/* Size + status */}
         <Stack horizontal alignItems="center" gap={8} marginBottom={12}>
-          <StyledText fontSize={theme.fontSize.small} color={theme.colors.gray[400]}>
+          <StyledText fontSize={theme.fontSize.small} color={t.textMuted}>
             Size {item.size}
           </StyledText>
-          <Stack width={4} height={4} borderRadius={2} backgroundColor={theme.colors.gray[300]} />
+          <Stack width={4} height={4} borderRadius={2} backgroundColor={t.textMuted} />
           <Stack horizontal alignItems="center" gap={4}>
             <Stack
               width={6} height={6} borderRadius={3}
-              backgroundColor={isActive ? theme.colors.green[500] : theme.colors.red[400]}
+              backgroundColor={isActive ? t.successColor : t.dangerColor}
             />
             <StyledText
               fontSize={theme.fontSize.small}
-              color={isActive ? theme.colors.green[600] : theme.colors.red[500]}>
+              color={isActive ? t.successColor : t.dangerColor}>
               {isActive ? 'Active' : 'Inactive'}
             </StyledText>
           </Stack>
@@ -86,12 +88,12 @@ const TableCard = ({onTableChange, onTableDelete, data}) => {
             justifyContent="center"
             gap={4}
             borderWidth={1}
-            borderColor={theme.colors.gray[200]}
-            backgroundColor={theme.colors.gray[50]}
+            borderColor={t.borderDefault}
+            backgroundColor={t.bgPage}
             borderRadius={8}
             paddingVertical={7}>
-            <StyledIcon name="edit" size={14} color={theme.colors.gray[500]} />
-            <StyledText fontSize={theme.fontSize.small} color={theme.colors.gray[500]}>
+            <StyledIcon name="edit" size={14} color={t.textSecondary} />
+            <StyledText fontSize={theme.fontSize.small} color={t.textSecondary}>
               Edit
             </StyledText>
           </StyledPressable>
@@ -104,12 +106,12 @@ const TableCard = ({onTableChange, onTableDelete, data}) => {
             justifyContent="center"
             gap={4}
             borderWidth={1}
-            borderColor={theme.colors.red[200]}
-            backgroundColor={theme.colors.red[50]}
+            borderColor={t.dangerBg}
+            backgroundColor={t.dangerBg}
             borderRadius={8}
             paddingVertical={7}>
-            <StyledIcon name="delete-outline" size={14} color={theme.colors.red[500]} />
-            <StyledText fontSize={theme.fontSize.small} color={theme.colors.red[500]}>
+            <StyledIcon name="delete-outline" size={14} color={t.dangerColor} />
+            <StyledText fontSize={theme.fontSize.small} color={t.dangerColor}>
               Delete
             </StyledText>
           </StyledPressable>
@@ -125,7 +127,8 @@ const TableCard = ({onTableChange, onTableDelete, data}) => {
       showsVerticalScrollIndicator={false}
       keyExtractor={item => item.table_id}
       numColumns={3}
-      renderItem={({item, index}) => <RenderCard item={item} key={index} />}
+      renderItem={({item, index}) => <RenderCard item={item} key={index} 
+                        t={t}/>}
     />
   );
 };

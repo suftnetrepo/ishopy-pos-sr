@@ -5,8 +5,10 @@ import { YStack, StyledImage, XStack, StyledHeader, StyledCycle, StyledSafeAreaV
 import { fontStyles } from "../../configs/theme";
 import { StyledMIcon } from "../../components/icon";
 import { Linking } from "react-native";
+import {useAppTheme} from '../../theme';
 
 const HelpCenter = () => {
+  const {t} = useAppTheme();
     const navigator = useNavigation()
 
     const handleEmailPress = () => {
@@ -18,15 +20,15 @@ const HelpCenter = () => {
     };
 
     return (
-        <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
+        <StyledSafeAreaView backgroundColor={t.bgCard}>
             <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
-                <StyledHeader.Header backgroundColor={theme.colors.gray[1]} onPress={() => navigator.goBack()} title='Help Center' icon cycleProps={{
-                    borderColor: theme.colors.gray[300],
+                <StyledHeader.Header backgroundColor={t.bgCard} onPress={() => navigator.goBack()} title='Help Center' icon cycleProps={{
+                    borderColor: t.textMuted,
                     marginRight: 8
                 }} />
             </StyledHeader>
-            <YStack flex={1} justifyContent='center' alignItems='center' backgroundColor={theme.colors.gray[50]}>
-                <YStack width={'80%'} backgroundColor={theme.colors.gray[1]} borderRadius={8} paddingHorizontal={16} paddingVertical={16} >
+            <YStack flex={1} justifyContent='center' alignItems='center' backgroundColor={t.bgPage}>
+                <YStack width={'80%'} backgroundColor={t.bgCard} borderRadius={8} paddingHorizontal={16} paddingVertical={16} >
                     <StyledSpacer marginVertical={8} />
                     <StyledImage source={require("../../../assets/img/logo.png")} ></StyledImage>
                     <StyledSpacer marginVertical={8} />
@@ -54,14 +56,14 @@ const HelpCenter = () => {
                             <StyledText
                                 fontFamily={fontStyles.Roboto_Regular}
                                 fontSize={theme.fontSize.medium}
-                                color={theme.colors.gray[800]}
+                                color={t.textPrimary}
                             >
                                 info@suftnet.com
                             </StyledText>
                             <StyledText
                                 fontFamily={fontStyles.Roboto_Regular}
                                 fontSize={theme.fontSize.medium}
-                                color={theme.colors.gray[800]}
+                                color={t.textPrimary}
                             >
                                 +44 7407 022723
                             </StyledText>
@@ -75,7 +77,7 @@ const HelpCenter = () => {
                                 <StyledMIcon                                  
                                     name="mail"
                                     size={20}
-                                    color={theme.colors.gray[1]}
+                                    color={t.bgCard}
                                     onPress={handleEmailPress}
                                 />
                             </StyledCycle>                            
@@ -85,7 +87,7 @@ const HelpCenter = () => {
                                 <StyledMIcon
                                     name="phone"
                                     size={20}
-                                    color={theme.colors.gray[1]}
+                                    color={t.bgCard}
                                     onPress={handleDialPress}
                                 />
                             </StyledCycle>                           
@@ -95,7 +97,7 @@ const HelpCenter = () => {
                     <XStack justifyContent='flex-end' alignItems='center' >
                         <StyledSpacer flex={1} />
                         <StyledText
-                            color={theme.colors.gray[400]}
+                            color={t.textMuted}
                             fontSize={theme.fontSize.normal}
                         >
                             Version 0.0.1

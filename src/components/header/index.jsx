@@ -5,6 +5,7 @@ import { StatusBar } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { YStack, styled, XStack, StyledText, isValidNumber, getStatusBarHeight, StyledCycle, StyledSpacer } from 'fluent-styles';
 import { theme } from '../../configs/theme';
+import {useAppTheme} from '../../theme';
 
 const Headers = styled(View, {
   base: {
@@ -26,12 +27,13 @@ const Headers = styled(View, {
   }
 })
 
-const StyledHeader = ({ statusProps, skipAndroid = false, ...rest }) => {
+const StyledHeader = ({statusProps, skipAndroid = false, ...rest}) => {
+  const {t} = useAppTheme();
   return (
     <YStack>
       <StatusBar
         translucent={true}
-        backgroundColor={theme.colors.gray[1]}
+        backgroundColor={t.bgCard}
         barStyle={'dark-content'}
         {...statusProps}
       />
@@ -40,7 +42,8 @@ const StyledHeader = ({ statusProps, skipAndroid = false, ...rest }) => {
   )
 }
 
-const Header = ({ navigator, fontWeight = theme.fontWeight.normal, fontSize = theme.fontSize.normal, color = theme.colors.gray[800], textProps, title, icon = false, cycleProps, rightIcon, rightIconProps, onPress, ...rest }) => {
+const Header = ({navigator, fontWeight = theme.fontWeight.normal, fontSize = theme.fontSize.normal, color, textProps, title, icon = false, cycleProps, rightIcon, rightIconProps, onPress, ...rest}) => {
+  const {t} = useAppTheme();
 
   return (
     <XStack justifyContent='flex-start' alignItems='center' flex={1} paddingHorizontal={8}
@@ -52,7 +55,7 @@ const Header = ({ navigator, fontWeight = theme.fontWeight.normal, fontSize = th
               <Icon
                 name={'arrow-back'}
                 size={30}
-                color={theme.colors.gray[700]}
+                color={t.textSecondary}
                 onPress={() => onPress && onPress()}
               />
               <StyledSpacer marginHorizontal={4} />
@@ -62,7 +65,7 @@ const Header = ({ navigator, fontWeight = theme.fontWeight.normal, fontSize = th
       }
       {title &&
         <StyledText
-          color={color}
+          color={color ?? t.textPrimary}
           fontWeight={fontWeight}
           fontSize={fontSize}
         >

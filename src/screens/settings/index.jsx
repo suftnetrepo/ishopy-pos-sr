@@ -15,8 +15,8 @@ import Shop from './shop';
 import {useNavigation} from '@react-navigation/native';
 import Printer from './printer';
 import {capitalize} from '../../utils/help';
+import {useAppTheme} from '../../theme';
 
-// ─── Settings config ──────────────────────────────────────────────────────────
 const SETTINGS = [
   {
     section: 'Menu & Products',
@@ -30,9 +30,9 @@ const SETTINGS = [
   {
     section: 'Business',
     items: [
-      {id: 'shop',  icon: 'email',         iconBg: '#fef3c7', iconColor: '#b45309', name: 'Shop',   sub: 'Name, currency, mode'},
-      {id: 'user',  icon: 'person',        iconBg: '#dbeafe', iconColor: '#1d4ed8', name: 'Users',  sub: 'Staff & access'},
-      {id: 'table', icon: 'date-range',    iconBg: '#ede9fe', iconColor: '#7c3aed', name: 'Tables', sub: 'Dine in, bar, takeaway'},
+      {id: 'shop',  icon: 'email',      iconBg: '#fef3c7', iconColor: '#b45309', name: 'Shop',   sub: 'Name, currency, mode'},
+      {id: 'user',  icon: 'person',     iconBg: '#dbeafe', iconColor: '#1d4ed8', name: 'Users',  sub: 'Staff & access'},
+      {id: 'table', icon: 'date-range', iconBg: '#ede9fe', iconColor: '#7c3aed', name: 'Tables', sub: 'Dine in, bar, takeaway'},
     ],
   },
   {
@@ -44,21 +44,20 @@ const SETTINGS = [
   },
 ];
 
-// ─── Card ─────────────────────────────────────────────────────────────────────
-const SettingsCard = ({icon, iconBg, iconColor, name, sub, onPress}) => (
+// ─── Card — receives t as prop so it works outside the main component ─────────
+const SettingsCard = ({icon, iconBg, iconColor, name, sub, onPress, t}) => (
   <StyledPressable
     onPress={onPress}
     flexDirection="row"
     alignItems="center"
     gap={14}
-    backgroundColor={theme.colors.gray[1]}
+    backgroundColor={t.bgCard}
     borderRadius={12}
     borderWidth={0.5}
-    borderColor={theme.colors.gray[200]}
+    borderColor={t.borderDefault}
     paddingHorizontal={16}
     paddingVertical={14}
     flex={1}>
-    {/* Icon circle */}
     <Stack
       width={44} height={44} borderRadius={22}
       backgroundColor={iconBg}
@@ -66,26 +65,24 @@ const SettingsCard = ({icon, iconBg, iconColor, name, sub, onPress}) => (
       flexShrink={0}>
       <StyledIcon name={icon} size={22} color={iconColor} />
     </Stack>
-    {/* Text */}
     <Stack vertical gap={2} flex={1}>
       <StyledText
         fontSize={theme.fontSize.normal}
         fontWeight={theme.fontWeight.medium}
-        color={theme.colors.gray[800]}>
+        color={t.textPrimary}>
         {name}
       </StyledText>
-      <StyledText fontSize={theme.fontSize.small} color={theme.colors.gray[400]}>
+      <StyledText fontSize={theme.fontSize.small} color={t.textMuted}>
         {sub}
       </StyledText>
     </Stack>
-    {/* Chevron */}
-    <StyledIcon name="chevron-right" size={20} color={theme.colors.gray[300]} />
+    <StyledIcon name="chevron-right" size={20} color={t.textMuted} />
   </StyledPressable>
 );
 
-// ─── Main ─────────────────────────────────────────────────────────────────────
 const BigSettings = () => {
   const navigation = useNavigation();
+  const {t} = useAppTheme();
   const [show, setShow] = useState({data: null, id: '', tag: ''});
 
   const handlePress = useCallback((id) => {
@@ -105,7 +102,7 @@ const BigSettings = () => {
   const close = () => setShow({data: null, id: '', tag: ''});
 
   return (
-    <StyledPage backgroundColor={theme.colors.gray[100]}>
+    <StyledPage backgroundColor={t.bgPage}>
       <StyledPage.Header.Full>
         <RenderHeader showBackButton showLogo={false} showTitle title="Settings" />
       </StyledPage.Header.Full>
@@ -116,23 +113,22 @@ const BigSettings = () => {
 
           {SETTINGS.map(section => (
             <Stack key={section.section} vertical marginBottom={16}>
-              {/* Section label */}
               <StyledText
                 fontSize={10}
                 fontWeight={theme.fontWeight.semiBold}
-                color={theme.colors.gray[400]}
+                color={t.textMuted}
                 letterSpacing={0.8}
                 marginBottom={8}
                 marginLeft={4}>
                 {section.section.toUpperCase()}
               </StyledText>
-              {/* Cards grid — 2 per row */}
               <Stack vertical gap={8}>
                 {Array.from({length: Math.ceil(section.items.length / 2)}, (_, i) => (
                   <Stack key={i} horizontal gap={8}>
                     {section.items.slice(i * 2, i * 2 + 2).map(item => (
                       <SettingsCard
                         key={item.id}
+                        t={t}
                         icon={item.icon}
                         iconBg={item.iconBg}
                         iconColor={item.iconColor}
@@ -141,7 +137,6 @@ const BigSettings = () => {
                         onPress={() => handlePress(item.id)}
                       />
                     ))}
-                    {/* Fill empty slot if odd number */}
                     {section.items.slice(i * 2, i * 2 + 2).length === 1 && (
                       <Stack marginHorizontal={16} horizontal flex={1} />
                     )}
@@ -159,7 +154,7 @@ const BigSettings = () => {
         onClose={close}
         title={capitalize(show.tag)}
         width="30%"
-        colors={{background: theme.colors.gray[100]}}
+        colors={{background: t.bgPage}}
         side="right">
         {show.tag === 'shop'    && <Shop onClose={close} />}
         {show.tag === 'printer' && <Printer onClose={close} />}

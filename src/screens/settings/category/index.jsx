@@ -17,6 +17,7 @@ import {StyledIcon} from '../../../components/package/icon';
 import {Pressable} from 'react-native';
 import {useCategory, useDeleteCategory} from '../../../hooks/useCategory';
 import {useLoaderAndError} from '../../../hooks/useLoaderAndError';
+import {useAppTheme} from '../../../theme';
 
 const BigCategory = () => {
   const dialogue = useDialogue();
@@ -26,6 +27,7 @@ const BigCategory = () => {
     data: null,
     tag: '',
   });
+  const {t} = useAppTheme();
   const [screenFocus, setScreenFocus] = useState(true);
   const shouldOpen = state.tag === 'Edit' || state.tag === 'Add';
   const isFocused = navigationFocus && screenFocus;
@@ -69,7 +71,7 @@ const BigCategory = () => {
     });
   };
 
-  const onNotify = ({status}) => {
+  const onNotify = ({status, t}) => {
     toastService.show({
       message: `Category ${status}`,
       description: `Your category was ${status} successfully.`,
@@ -88,7 +90,7 @@ const BigCategory = () => {
   };
 
   return (
-    <StyledPage backgroundColor={theme.colors.gray[100]}>
+    <StyledPage backgroundColor={t.bgPage}>
       <StyledPage.Header.Full>
         <RenderHeader
           showBackButton={true}
@@ -101,12 +103,12 @@ const BigCategory = () => {
                 width={48}
                 height={48}
                 borderWidth={1}
-                backgroundColor={theme.colors.yellow[500]}
-                borderColor={theme.colors.yellow[500]}>
+                backgroundColor={t.brandPrimary}
+                borderColor={t.brandPrimary}>
                 <StyledIcon
                   size={24}
                   name="add"
-                  color={theme.colors.gray[800]}
+                  color={t.textPrimary}
                 />
               </StyledCycle>
             </Pressable>
@@ -132,7 +134,7 @@ const BigCategory = () => {
         title={`${state.tag === 'Edit' ? 'Edit' : 'Add'} Category `}
         width={'30%'}
         colors={{
-          background: theme.colors.gray[100],
+          background: t.bgPage,
         }}
         side="right">
         <CategoryForm category={state?.data} onClose={() => reset()} />

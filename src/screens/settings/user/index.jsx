@@ -19,10 +19,12 @@ import {useAppContext} from '../../../hooks/appContext';
 import {useDeleteUser, useUsers} from '../../../hooks/useUser';
 import {useLoaderAndError} from '../../../hooks/useLoaderAndError';
 import usePremium from '../../../hooks/usePremium';
+import {useAppTheme} from '../../../theme';
 
 const BigUser = () => {
   const dialogue = useDialogue();
   const {user} = useAppContext();
+  const {t} = useAppTheme();
   const navigationFocus = useFocus();
   const [state, setState] = useState({
     data: null,
@@ -89,7 +91,7 @@ const BigUser = () => {
   };
 
   return (
-    <StyledPage backgroundColor={theme.colors.gray[100]}>
+    <StyledPage backgroundColor={t.bgPage}>
       <StyledPage.Header.Full>
         <RenderHeader
           showBackButton={true}
@@ -102,12 +104,12 @@ const BigUser = () => {
                 width={48}
                 height={48}
                 borderWidth={1}
-                backgroundColor={theme.colors.yellow[500]}
-                borderColor={theme.colors.yellow[500]}>
+                backgroundColor={t.brandPrimary}
+                borderColor={t.brandPrimary}>
                 <StyledIcon
                   size={24}
                   name="add"
-                  color={theme.colors.gray[800]}
+                  color={t.textPrimary}
                 />
               </StyledCycle>
             </Pressable>
@@ -134,7 +136,7 @@ const BigUser = () => {
         title={`${state.tag === 'Edit' ? 'Edit' : 'Add'} User `}
         width={'30%'}
         colors={{
-          background: theme.colors.gray[100],
+          background: t.bgPage,
         }}
         side="right">
         <UserForm user={state?.data} onClose={() => reset()} />

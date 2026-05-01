@@ -14,18 +14,20 @@ import {
 } from '../../../utils/help';
 import {useQueryRecentOrders} from '../../../hooks/useOrderItems';
 import EmptyView from '../../utils/empty';
+import {useAppTheme} from '../../../theme';
 
 const RecentOrder = () => {
+  const {t} = useAppTheme();
   const {data} = useQueryRecentOrders();
 
   return (
     <Stack
       vertical
       shadowOpacity={0.9}
-      shadowColor={theme.colors.gray[200]}
+      shadowColor={t.borderDefault}
       shadowRadius={8}
       borderRadius={8}
-      backgroundColor={theme.colors.gray[1]}
+      backgroundColor={t.bgCard}
       paddingHorizontal={24}
       paddingVertical={24}
       marginLeft={16}>
@@ -35,16 +37,16 @@ const RecentOrder = () => {
         alignItems="center"
         gap={8}>
         <StyledText
-          color={theme.colors.gray[800]}
+          color={t.textPrimary}
           fontSize={theme.fontSize.large}
           fontWeight={theme.fontWeight.normal}>
           Recent Orders
         </StyledText>
-        <StyledIcon size={24} name="share" color={theme.colors.gray[300]} />
+        <StyledIcon size={24} name="share" color={t.textMuted} />
       </Stack>
       <StyledSpacer
         borderWidth={0.4}
-        borderColor={theme.colors.gray[300]}
+        borderColor={t.textMuted}
         width={'100%'}
         marginVertical={8}
       />
@@ -53,7 +55,7 @@ const RecentOrder = () => {
         <>
           <Stack width={'100%'} vertical gap={4}>
             <EmptyView
-              color={theme.colors.gray[400]}
+              color={t.textMuted}
               title="Your Recent Orders list is empty"
               description="Once you place an order, it will appear here. "
             />
@@ -78,14 +80,14 @@ const RecentOrder = () => {
                     alignItems="center"
                     gap={4}>
                     <StyledText
-                      color={theme.colors.gray[800]}
+                      color={t.textPrimary}
                       fontSize={theme.fontSize.small}
                       fontWeight={theme.fontWeight.medium}
                       marginLeft={2}>
                       #{getLastChars(dish.order?.order_id, 8)}
                     </StyledText>
                     <StyledText
-                      color={theme.colors.gray[800]}
+                      color={t.textPrimary}
                       fontSize={theme.fontSize.small}
                       fontWeight={theme.fontWeight.thin}
                       marginLeft={5}>
@@ -101,10 +103,10 @@ const RecentOrder = () => {
                       <MaterialIcon
                         name="access-time"
                         size={16}
-                        color={theme.colors.gray[600]}
+                        color={t.textSecondary}
                       />
                       <StyledText
-                        color={theme.colors.gray[600]}
+                        color={t.textSecondary}
                         fontSize={theme.fontSize.small}>
                         {formatDate(dish.order?.date)}
                       </StyledText>

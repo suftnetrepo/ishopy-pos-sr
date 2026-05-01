@@ -7,8 +7,9 @@ import { fontStyles, theme } from "../../configs/theme";
 import { useAppContext } from "../../hooks/appContext";
 import { formatCurrency } from "../../utils/help";
 import EmptyView from "../utils/empty";
+import {useAppTheme} from '../../theme';
 
-const MenuScrollView = ({ table, onChange, searchString, category_id }) => {
+const MenuScrollView = ({table, onChange, searchString, category_id, t}) => {
     const { shop, addItem } = useAppContext()
     const { data, loading, loadMenuByCategory, loadMenuByName } = useQueryMenuByStatus(1);
 
@@ -41,15 +42,15 @@ const MenuScrollView = ({ table, onChange, searchString, category_id }) => {
                     borderRadius={16}
                     height={100}
                     borderWidth={1}
-                    borderColor={item.color_code || theme.colors.gray[600]}
-                    backgroundColor={item.color_code || theme.colors.gray[600]}
+                    borderColor={item.color_code || t.textSecondary}
+                    backgroundColor={item.color_code || t.textSecondary}
                     onPress={() => handleAddItem(item)}
                 >
                     <YStack justifyContent='center' alignItems='center' paddingHorizontal={8} paddingVertical={8}>
                         <StyledText
                             fontFamily={fontStyles.Roboto_Regular}
                             fontSize={theme.fontSize.small}
-                            color={theme.colors.gray[50]}
+                            color={t.bgPage}
                             textAlign='center'
                         >
                             {item.name}
@@ -58,7 +59,7 @@ const MenuScrollView = ({ table, onChange, searchString, category_id }) => {
                             fontFamily={fontStyles.Roboto_Regular}
                             fontSize={theme.fontSize.small}
                             fontWeight={theme.fontWeight.bold}
-                            color={theme.colors.gray[50]}
+                            color={t.bgPage}
                         >
                             {formatCurrency(shop.currency || '£', item.price)}
                         </StyledText>
@@ -69,7 +70,7 @@ const MenuScrollView = ({ table, onChange, searchString, category_id }) => {
     });
 
     return (
-        <YStack flex={1} paddingHorizontal={4} backgroundColor={theme.colors.gray[800]}>
+        <YStack flex={1} paddingHorizontal={4} backgroundColor={t.textPrimary}>
             <FlatList
                 data={data}
                 keyExtractor={(item) => item.menu_id}

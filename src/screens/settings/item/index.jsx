@@ -19,10 +19,12 @@ import {Pressable} from 'react-native';
 import {useAppContext} from '../../../hooks/appContext';
 import ItemAddOn from './addOn';
 import { useDeleteMenu } from '../../../hooks/useMenu';
+import {useAppTheme} from '../../../theme';
 
 const BigItem = () => {
   const dialogue = useDialogue();
   const {shop, updateMenuQuery} = useAppContext();
+  const {t} = useAppTheme();
   const {deleteMenu} = useDeleteMenu();
   const navigationFocus = useFocus();
   const itemCardRef = useRef(null);
@@ -78,7 +80,7 @@ const BigItem = () => {
     });
   };
 
-   const onNotify = ({status}) => {
+   const onNotify = ({status, t}) => {
     toastService.show({
       message: `Item ${status}`,
       description: `Your item was deleted successfully.`,
@@ -89,7 +91,7 @@ const BigItem = () => {
   };
 
   return (
-    <StyledPage backgroundColor={theme.colors.gray[100]}>
+    <StyledPage backgroundColor={t.bgPage}>
       <StyledPage.Header.Full>
         <RenderHeader
           showBackButton={true}
@@ -102,12 +104,12 @@ const BigItem = () => {
                 width={48}
                 height={48}
                 borderWidth={1}
-                backgroundColor={theme.colors.yellow[500]}
-                borderColor={theme.colors.yellow[500]}>
+                backgroundColor={t.brandPrimary}
+                borderColor={t.brandPrimary}>
                 <StyledIcon
                   size={24}
                   name="add"
-                  color={theme.colors.gray[800]}
+                  color={t.textPrimary}
                 />
               </StyledCycle>
             </Pressable>
@@ -150,7 +152,7 @@ const BigItem = () => {
         width={'30%'}
         side="right"
         colors={{
-          background: theme.colors.gray[100],
+          background: t.bgPage,
         }}>
         <ItemAddOn
           menu_id={showAddOn?.menu_id}

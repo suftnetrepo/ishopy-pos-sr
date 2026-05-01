@@ -4,26 +4,28 @@ import { YStack, theme, XStack, StyledButton, StyledImage, StyledBadge, StyledSp
 import { fontStyles } from '../../../../configs/theme';
 import { StyledMIcon } from '../../../components/icon';
 import { useBluetoothPrinterContext } from '../../../hooks/bluetoothPrinterProvider';
+import {useAppTheme} from '../../../theme';
 
 const BluetoothPrinter = () => {
+  const {t} = useAppTheme();
     const { isEnabled, devices, enableBluetooth, selectedPrinter, connectDevice, setError, error, testPrint, loading } = useBluetoothPrinterContext();
       
-    const RenderRow = ({ title, onPress }) => {
+    const RenderRow = ({title, onPress, t}) => {
         return (
-            <XStack borderRadius={8} marginHorizontal={2} marginBottom={8} borderWidth={1} borderColor={theme.colors.gray[300]} backgroundColor={theme.colors.gray[1]} justifyContent='flex-start' alignItems='center' paddingVertical={2} paddingHorizontal={2}>
+            <XStack borderRadius={8} marginHorizontal={2} marginBottom={8} borderWidth={1} borderColor={t.textMuted} backgroundColor={t.bgCard} justifyContent='flex-start' alignItems='center' paddingVertical={2} paddingHorizontal={2}>
                 <StyledSpacer marginHorizontal={2} />
-                <StyledMIcon size={32} name='bluetooth-disabled' color={theme.colors.red[600]} />
-                <StyledText fontFamily={fontStyles.FontAwesome5_Regular} paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.normal} color={theme.colors.gray[800]}>
+                <StyledMIcon size={32} name='bluetooth-disabled' color={t.dangerColor} />
+                <StyledText fontFamily={fontStyles.FontAwesome5_Regular} paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.normal} color={t.textPrimary}>
                     {title}
                 </StyledText>
                 <StyledSpacer flex={1} />
-                <StyledMIcon size={32} name='chevron-right' color={theme.colors.gray[600]} onPress={() => onPress && onPress()} />
+                <StyledMIcon size={32} name='chevron-right' color={t.textSecondary} onPress={() => onPress && onPress()} />
             </XStack>
         )
     }
 
     return (
-        <YStack width={'100%'} paddingHorizontal={16} backgroundColor={theme.colors.gray[1]}>       
+        <YStack width={'100%'} paddingHorizontal={16} backgroundColor={t.bgCard}>       
           <YStack
                 justifyContent='center'
                 alignItems='center'
@@ -42,21 +44,21 @@ const BluetoothPrinter = () => {
                 <StyledText
                     fontFamily={fontStyles.Roboto_Regular}
                     fontWeight={theme.fontWeight.normal}
-                    color={theme.colors.gray[800]}
+                    color={t.textPrimary}
                     fontSize={theme.fontSize.medium}
                 >
                     Make sure your Bluetooth printer is in pairing mode. Once it’s ready, use the button below to scan for available Bluetooth devices.
                     `
                 </StyledText>
                 <StyledSpacer marginVertical={16} />
-                <StyledButton backgroundColor={isEnabled ? theme.colors.green[600] : theme.colors.pink[600]} onPress={enableBluetooth}>
+                <StyledButton backgroundColor={isEnabled ? t.successColor : theme.colors.pink[600]} onPress={enableBluetooth}>
                     <XStack paddingHorizontal={8} justifyContent='flex-start' alignItems='center'>
                         <StyledSpacer marginHorizontal={2} />
-                        <StyledMIcon size={32} name='search' color={theme.colors.gray[1]} />
+                        <StyledMIcon size={32} name='search' color={t.bgCard} />
                         <StyledText
                             fontFamily={fontStyles.Roboto_Regular}
                             fontWeight={theme.fontWeight.normal}
-                            color={theme.colors.gray[1]}
+                            color={t.bgCard}
                             fontSize={theme.fontSize.medium}
                             paddingVertical={8}
                             paddingHorizontal={2}
@@ -74,14 +76,14 @@ const BluetoothPrinter = () => {
                 selectedPrinter && (
                     <>
                         <XStack justifyContent='flex-start' alignItems='center' paddingHorizontal={2}>
-                            <StyledText fontFamily={fontStyles.FontAwesome5_Regular} paddingHorizontal={8} paddingBottom={8} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.small} color={theme.colors.gray[800]}>
+                            <StyledText fontFamily={fontStyles.FontAwesome5_Regular} paddingHorizontal={8} paddingBottom={8} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.small} color={t.textPrimary}>
                                 Paired printer
                             </StyledText>
                         </XStack>
-                        <XStack borderRadius={8} marginHorizontal={2} marginBottom={8} borderWidth={1} borderColor={theme.colors.gray[300]} backgroundColor={theme.colors.gray[1]} justifyContent='flex-start' alignItems='center' paddingVertical={4} paddingHorizontal={4}>
+                        <XStack borderRadius={8} marginHorizontal={2} marginBottom={8} borderWidth={1} borderColor={t.textMuted} backgroundColor={t.bgCard} justifyContent='flex-start' alignItems='center' paddingVertical={4} paddingHorizontal={4}>
                             <StyledSpacer marginHorizontal={2} />
-                            <StyledMIcon size={32} name='bluetooth-connected' color={theme.colors.green[600]} />
-                            <StyledText fontFamily={fontStyles.FontAwesome5_Regular} paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.normal} color={theme.colors.gray[800]}>
+                            <StyledMIcon size={32} name='bluetooth-connected' color={t.successColor} />
+                            <StyledText fontFamily={fontStyles.FontAwesome5_Regular} paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.normal} color={t.textPrimary}>
                                 {selectedPrinter.name}
                             </StyledText>
                             <StyledSpacer flex={1} />
@@ -104,14 +106,14 @@ const BluetoothPrinter = () => {
                 )
             }
             <XStack justifyContent='flex-start' alignItems='center' paddingHorizontal={2}>
-                <StyledText fontFamily={fontStyles.FontAwesome5_Regular} paddingHorizontal={8} paddingBottom={8} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.small} color={theme.colors.gray[800]}>
+                <StyledText fontFamily={fontStyles.FontAwesome5_Regular} paddingHorizontal={8} paddingBottom={8} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.small} color={t.textPrimary}>
                     Available devices
                 </StyledText>
             </XStack>
             {
                 devices.filter((device) => device.name !== selectedPrinter?.name).map((item, index) => {
                     return (
-                        <RenderRow key={index} title={item.name} onPress={() => connectDevice(item)} />
+                        <RenderRow key={index} title={item.name} onPress={() => connectDevice(item)} t={t} />
                     )
                 })
             }

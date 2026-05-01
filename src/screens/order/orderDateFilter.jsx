@@ -1,50 +1,30 @@
-import React, { useState } from 'react';
-import { Calendar } from 'react-native-calendars';
-import {
-  Box,
-  Text,
-  Modal,
-  ModalBackdrop,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  Button,
-  HStack,
-  VStack,
-  Divider,
-} from '@gluestack-ui/themed';
-import { useAppContext } from '../../hooks/appContext';
+/* eslint-disable prettier/prettier */
+import React, {useState} from 'react';
+import {Modal} from 'react-native';
+import {Calendar} from 'react-native-calendars';
+import {StyledText, StyledPressable, StyledDivider, Stack} from 'fluent-styles';
+import {useAppContext} from '../../hooks/appContext';
+import {theme} from '../../utils/theme';
+import {useAppTheme} from '../../theme';
 
-const OrderDateFilter = ({ visible, setVisible }) => {
-  const { updateDateFilter } = useAppContext()
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+const OrderDateFilter = ({visible, setVisible}) => {
+  const {updateDateFilter} = useAppContext();
+  const {t} = useAppTheme();
+  const [startDate,   setStartDate]   = useState(null);
+  const [endDate,     setEndDate]     = useState(null);
   const [markedDates, setMarkedDates] = useState({});
 
-  const formatDate = (dateString) => {
+  const formatDate = dateString => {
     if (!dateString) return 'Select';
-    return new Date(dateString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    });
+    return new Date(dateString).toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'});
   };
 
-  const onDayPress = (day) => {
+  const onDayPress = day => {
     const selected = day.dateString;
-
     if (!startDate || (startDate && endDate)) {
       setStartDate(selected);
       setEndDate(null);
-      setMarkedDates({
-        [selected]: {
-          startingDay: true,
-          color: '#3b82f6',
-          textColor: 'white',
-        },
-      });
+      setMarkedDates({[selected]: {startingDay: true, color: '#3b82f6', textColor: 'white'}});
     } else if (startDate && !endDate) {
       if (new Date(selected) < new Date(startDate)) {
         setEndDate(startDate);
@@ -59,127 +39,96 @@ const OrderDateFilter = ({ visible, setVisible }) => {
 
   const createMarkedDates = (start, end) => {
     const marked = {};
-    const startD = new Date(start);
-    const endD = new Date(end);
-
-    for (let d = new Date(startD); d <= endD; d.setDate(d.getDate() + 1)) {
+    for (let d = new Date(start); d <= new Date(end); d.setDate(d.getDate() + 1)) {
       const dateStr = d.toISOString().split('T')[0];
-
-      if (dateStr === start) {
-        marked[dateStr] = {
-          startingDay: true,
-          color: '#3b82f6',
-          textColor: 'white',
-        };
-      } else if (dateStr === end) {
-        marked[dateStr] = {
-          endingDay: true,
-          color: '#3b82f6',
-          textColor: 'white',
-        };
-      } else {
-        marked[dateStr] = {
-          color: '#bfdbfe',
-          textColor: '#1e40af',
-        };
-      }
+      if (dateStr === start)     marked[dateStr] = {startingDay: true, color: '#3b82f6', textColor: 'white'};
+      else if (dateStr === end)  marked[dateStr] = {endingDay:   true, color: '#3b82f6', textColor: 'white'};
+      else                       marked[dateStr] = {color: '#bfdbfe', textColor: '#1e40af'};
     }
-
     setMarkedDates(marked);
   };
 
-  const clearDates = () => {
-    setStartDate(null);
-    setEndDate(null);
-    setMarkedDates({});
-  };
-
-  const applyFilter = () => {
-    setVisible(false);
-    updateDateFilter({ startDate, endDate })
-  };
+  const clearDates = () => { setStartDate(null); setEndDate(null); setMarkedDates({}); };
+  const applyFilter = () => { setVisible(false); updateDateFilter({startDate, endDate}); };
 
   return (
-    <Box>
-      {/* Modal */}
-      <Modal isOpen={visible} onClose={() => setVisible(false)}>
-        <ModalBackdrop />
+    <Modal visible={visible} transparent animationType="fade" onRequestClose={() => setVisible(false)}>
+      <Stack
+        flex={1} alignItems="center" justifyContent="center"
+        backgroundColor="rgba(0,0,0,0.5)">
+        <Stack
+          width="90%" maxWidth={400}
+          backgroundColor={t.bgCard}
+          borderRadius={16} overflow="hidden">
 
-        <ModalContent w="90%" maxWidth={400} bg="white" rounded="$xl">
-          <ModalHeader>
-            <Text fontSize="$lg" fontWeight="$bold" color="$black">
-          
-            </Text>
+          {/* Header */}
+          <Stack horizontal justifyContent="space-between" alignItems="center"
+            paddingHorizontal={20} paddingVertical={16}>
+            <StyledText fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.bold}>
+              Filter by date
+            </StyledText>
+            <StyledPressable onPress={() => setVisible(false)} padding={4}>
+              <StyledText fontSize={20} color={t.textSecondary}>✕</StyledText>
+            </StyledPressable>
+          </Stack>
 
-            <ModalCloseButton onPress={() => setVisible(false)}>
-              <Text fontSize="$2xl" color="$trueGray500">✕</Text>
-            </ModalCloseButton>
-          </ModalHeader>
+          {/* Date display */}
+          <Stack horizontal justifyContent="space-around" alignItems="center"
+            paddingHorizontal={20} paddingBottom={16}>
+            <Stack vertical alignItems="center">
+              <StyledText fontSize={theme.fontSize.micro} color={t.textSecondary}>Start Date</StyledText>
+              <StyledText fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.semiBold}>
+                {formatDate(startDate)}
+              </StyledText>
+            </Stack>
+            <StyledText fontSize={theme.fontSize.large} color={t.textMuted}>→</StyledText>
+            <Stack vertical alignItems="center">
+              <StyledText fontSize={theme.fontSize.micro} color={t.textSecondary}>End Date</StyledText>
+              <StyledText fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.semiBold}>
+                {formatDate(endDate)}
+              </StyledText>
+            </Stack>
+          </Stack>
 
-          <ModalBody>
-            {/* Date Display */}
-            <HStack justifyContent="space-around" alignItems="center" mb="$4">
-              <VStack alignItems="center">
-                <Text fontSize="$xs" color="$trueGray500">Start Date</Text>
-                <Text fontSize="$sm" fontWeight="$semibold">
-                  {formatDate(startDate)}
-                </Text>
-              </VStack>
+          {/* Calendar */}
+          <Calendar
+            onDayPress={onDayPress}
+            markingType="period"
+            markedDates={markedDates}
+            theme={{
+              selectedDayBackgroundColor: '#3b82f6',
+              todayTextColor: '#3b82f6',
+              arrowColor: '#3b82f6',
+            }}
+          />
 
-              <Text fontSize="$lg" color="$trueGray400">→</Text>
+          <StyledDivider />
 
-              <VStack alignItems="center">
-                <Text fontSize="$xs" color="$trueGray500">End Date</Text>
-                <Text fontSize="$sm" fontWeight="$semibold">
-                  {formatDate(endDate)}
-                </Text>
-              </VStack>
-            </HStack>
-
-            {/* Calendar */}
-            <Calendar
-              onDayPress={onDayPress}
-              markingType="period"
-              markedDates={markedDates}
-              theme={{
-                selectedDayBackgroundColor: '#3b82f6',
-                todayTextColor: '#3b82f6',
-                arrowColor: '#3b82f6',
-              }}
-            />
-          </ModalBody>
-
-          <Divider />
-
-          <ModalFooter gap="$3">
-            <Button
-              action="secondary"
-              variant="outline"
-                  borderRadius={8}
-              flex={1}
-              onPress={clearDates}
-            >
-              <Text color="$trueGray600" fontWeight="$semibold">
+          {/* Footer */}
+          <Stack horizontal gap={12} paddingHorizontal={20} paddingVertical={16}>
+            <StyledPressable
+              flex={1} borderRadius={8} paddingVertical={12} alignItems="center"
+              borderWidth={1} borderColor={t.textMuted}
+              backgroundColor={t.bgCard}
+              onPress={clearDates}>
+              <StyledText color={t.textSecondary} fontWeight={theme.fontWeight.semiBold}>
                 Clear
-              </Text>
-            </Button>
-
-            <Button
-              flex={1}
-              borderRadius={8}
-              bg={startDate && endDate ? "$yellow400" : "$trueGray200"}
+              </StyledText>
+            </StyledPressable>
+            <StyledPressable
+              flex={1} borderRadius={8} paddingVertical={12} alignItems="center"
+              backgroundColor={startDate && endDate ? t.brandPrimary : t.borderDefault}
               disabled={!startDate || !endDate}
-              onPress={applyFilter}
-            >
-              <Text color="black" fontWeight="$semibold">
+              onPress={applyFilter}>
+              <StyledText color={t.textPrimary} fontWeight={theme.fontWeight.semiBold}>
                 Apply Filter
-              </Text>
-            </Button>
-          </ModalFooter>
+              </StyledText>
+            </StyledPressable>
+          </Stack>
 
-        </ModalContent>
-      </Modal>
-    </Box>
+        </Stack>
+      </Stack>
+    </Modal>
   );
 };
 

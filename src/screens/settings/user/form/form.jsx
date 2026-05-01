@@ -5,8 +5,10 @@ import { fontStyles } from "../../../../configs/theme";
 import { userRules } from "./validatorRules";
 import { useUpdateUser, useInsertUser } from "../../../../hooks/useUser";
 import { useLoaderAndError } from "../../../../hooks/useLoaderAndError";
+import {useAppTheme} from '../../../../theme';
 
-const UserForm = ({ user, onClose }) => {
+const UserForm = ({user, onClose}) => {
+  const {t} = useAppTheme();
   const [errorMessages, setErrorMessages] = useState({})
   const [fields, setFields] = useState(userRules.fields)
   const { updateUser, error, loading, resetHandler } = useUpdateUser()
@@ -23,7 +25,7 @@ const UserForm = ({ user, onClose }) => {
     })
   }, [user])
 
-  const onNotify = ({ status }) => {
+  const onNotify = ({status, t}) => {
     toastService.show({
       message: `User ${status}`,
       description: `Your user was ${status} successfully.`,
@@ -57,12 +59,12 @@ const UserForm = ({ user, onClose }) => {
   };
 
   return (
-    <YStack flex={1} backgroundColor={theme.colors.gray[100]}>
+    <YStack flex={1} backgroundColor={t.bgPage}>
       <StyledCard
         gap={8}
         paddingHorizontal={16}
         horizontal
-        backgroundColor={theme.colors.gray[1]}
+        backgroundColor={t.bgCard}
         borderRadius={16}
         marginHorizontal={16}
         marginTop={16}
@@ -81,7 +83,7 @@ const UserForm = ({ user, onClose }) => {
             fontSize={theme.fontSize.small}
             paddingHorizontal={8}
             value={fields.first_name}
-            placeholderTextColor={theme.colors.gray[400]}
+            placeholderTextColor={t.textMuted}
             onChangeText={(text) => setFields({ ...fields, first_name: text })}
             error={!!errorMessages?.first_name}
             errorMessage={errorMessages?.first_name?.message}
@@ -96,7 +98,7 @@ const UserForm = ({ user, onClose }) => {
             fontSize={theme.fontSize.small}
             paddingHorizontal={8}
             value={fields.last_name}
-            placeholderTextColor={theme.colors.gray[400]}
+            placeholderTextColor={t.textMuted}
             onChangeText={(text) => setFields({ ...fields, last_name: text })}
             error={!!errorMessages?.last_name}
             errorMessage={errorMessages?.last_name?.message}
@@ -111,7 +113,7 @@ const UserForm = ({ user, onClose }) => {
             fontSize={theme.fontSize.small}
             paddingHorizontal={8}
             value={fields.username}
-            placeholderTextColor={theme.colors.gray[400]}
+            placeholderTextColor={t.textMuted}
             onChangeText={(text) => setFields({ ...fields, username: text })}
             error={!!errorMessages?.username}
             errorMessage={errorMessages?.username?.message}
@@ -127,7 +129,7 @@ const UserForm = ({ user, onClose }) => {
             fontSize={theme.fontSize.small}
             paddingHorizontal={8}
             value={fields.password}
-            placeholderTextColor={theme.colors.gray[400]}
+            placeholderTextColor={t.textMuted}
             onChangeText={(text) => setFields({ ...fields, password: text })}
             error={!!errorMessages?.password}
             errorMessage={errorMessages?.password?.message}
@@ -142,7 +144,7 @@ const UserForm = ({ user, onClose }) => {
             fontSize={theme.fontSize.small}
             paddingHorizontal={8}
             value={fields.pass_code}
-            placeholderTextColor={theme.colors.gray[400]}
+            placeholderTextColor={t.textMuted}
             onChangeText={(text) => setFields({ ...fields, pass_code: text })}
             error={!!errorMessages?.pass_code}
             errorMessage={errorMessages?.pass_code?.message}
@@ -161,13 +163,13 @@ const UserForm = ({ user, onClose }) => {
               colors={{
                 activeThumb: theme.colors.white,
                 inactiveThumb: theme.colors.white,
-                activeTrack: theme.colors.green[600],
-                inactiveTrack: theme.colors.red[400],
+                activeTrack: t.successColor,
+                inactiveTrack: t.dangerColor,
               }}
             />
             <StyledText
               fontWeight={theme.fontWeight.normal}
-              color={theme.colors.gray[600]}
+              color={t.textSecondary}
               fontSize={theme.fontSize.normal}
               fontFamily={fontStyles.Roboto_Regular}>
               Status
@@ -176,7 +178,7 @@ const UserForm = ({ user, onClose }) => {
 
           <StyledPressable
             onPress={onSubmit}
-            backgroundColor={theme.colors.yellow[500]}
+            backgroundColor={t.brandPrimary}
             borderRadius={32}
             paddingVertical={12}
             alignItems="center">

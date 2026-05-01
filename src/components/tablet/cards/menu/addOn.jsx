@@ -8,9 +8,11 @@ import {fontStyles, theme} from '../../../../utils/theme';
 import {useAppContext} from '../../../../hooks/appContext';
 import {formatCurrency} from '../../../../utils/help';
 import {StyledMIcon} from '../../../../components/icon';
+import {useAppTheme} from '../../../../theme';
 
 export default function AddOn({table_id, onClose, item, setItem}) {
   const {shop, addItem} = useAppContext();
+  const {t} = useAppTheme();
   const {height, width} = useWindowDimensions();
   const [validationError, setValidationError] = useState('');
 
@@ -108,8 +110,8 @@ export default function AddOn({table_id, onClose, item, setItem}) {
         paddingVertical={14}
         minHeight={56}
         borderBottomWidth={1}
-        borderBottomColor={theme.colors.gray[100]}
-        backgroundColor={isSelected ? theme.colors.blue[50] : theme.colors.gray[1]}
+        borderBottomColor={t.bgPage}
+        backgroundColor={isSelected ? t.infoBg : t.bgCard}
         borderLeftWidth={4}
         borderLeftColor={isSelected ? theme.colors.blue[500] : 'transparent'}>
 
@@ -117,12 +119,12 @@ export default function AddOn({table_id, onClose, item, setItem}) {
         <YStack
           width={22} height={22} borderRadius={11}
           borderWidth={2}
-          borderColor={isSelected ? theme.colors.blue[500] : theme.colors.gray[300]}
+          borderColor={isSelected ? theme.colors.blue[500] : t.textMuted}
           backgroundColor={isSelected ? theme.colors.blue[500] : 'transparent'}
           alignItems="center" justifyContent="center"
           marginRight={14}>
           {isSelected && (
-            <YStack width={8} height={8} borderRadius={4} backgroundColor={theme.colors.gray[1]} />
+            <YStack width={8} height={8} borderRadius={4} backgroundColor={t.bgCard} />
           )}
         </YStack>
 
@@ -131,14 +133,14 @@ export default function AddOn({table_id, onClose, item, setItem}) {
             fontFamily={fontStyles.Roboto_Regular}
             fontSize={theme.fontSize.normal}
             fontWeight={isSelected ? theme.fontWeight.semiBold : theme.fontWeight.normal}
-            color={isSelected ? theme.colors.blue[700] : theme.colors.gray[800]}>
+            color={isSelected ? t.infoColor : t.textPrimary}>
             {option.addOnName}
           </StyledText>
           {parseFloat(String(option.price)) > 0 && (
             <StyledText
               fontFamily={fontStyles.Roboto_Regular}
               fontSize={theme.fontSize.small}
-              color={theme.colors.gray[500]}
+              color={t.textSecondary}
               marginTop={2}>
               +{formatCurrency(cur, option.price)}
             </StyledText>
@@ -164,10 +166,10 @@ export default function AddOn({table_id, onClose, item, setItem}) {
         paddingVertical={12}
         minHeight={64}
         borderBottomWidth={1}
-        borderBottomColor={theme.colors.gray[100]}
-        backgroundColor={isSelected ? theme.colors.green[50] : theme.colors.gray[1]}
+        borderBottomColor={t.bgPage}
+        backgroundColor={isSelected ? t.successBg : t.bgCard}
         borderLeftWidth={4}
-        borderLeftColor={isSelected ? theme.colors.green[500] : 'transparent'}
+        borderLeftColor={isSelected ? t.successColor : 'transparent'}
         flexDirection="row"
         alignItems="center">
 
@@ -176,14 +178,14 @@ export default function AddOn({table_id, onClose, item, setItem}) {
             fontFamily={fontStyles.Roboto_Regular}
             fontSize={theme.fontSize.normal}
             fontWeight={isSelected ? theme.fontWeight.semiBold : theme.fontWeight.normal}
-            color={isSelected ? theme.colors.green[800] : theme.colors.gray[800]}>
+            color={isSelected ? theme.colors.green[800] : t.textPrimary}>
             {option.addOnName}
           </StyledText>
           {parseFloat(String(option.price ?? 0)) > 0 && (
             <StyledText
               fontFamily={fontStyles.Roboto_Regular}
               fontSize={theme.fontSize.small}
-              color={theme.colors.gray[500]}
+              color={t.textSecondary}
               marginTop={2}>
               +{formatCurrency(cur, option.price)}
             </StyledText>
@@ -208,13 +210,13 @@ export default function AddOn({table_id, onClose, item, setItem}) {
             <StyledPressable
               paddingHorizontal={14} paddingVertical={8}
               borderRadius={30}
-              backgroundColor={theme.colors.red[50]}
-              borderWidth={1} borderColor={theme.colors.red[200]}
+              backgroundColor={t.dangerBg}
+              borderWidth={1} borderColor={t.dangerBg}
               onPress={e => { e?.stopPropagation?.(); decreaseOptional(option); }}>
               <StyledText
                 fontFamily={fontStyles.Roboto_Regular}
                 fontSize={theme.fontSize.small}
-                color={theme.colors.red[600]}>
+                color={t.dangerColor}>
                 Remove
               </StyledText>
             </StyledPressable>
@@ -223,11 +225,11 @@ export default function AddOn({table_id, onClose, item, setItem}) {
           <YStack
             paddingHorizontal={18} paddingVertical={8}
             borderRadius={30}
-            backgroundColor={theme.colors.yellow[500]}>
+            backgroundColor={t.brandPrimary}>
             <StyledText
               fontFamily={fontStyles.Roboto_Regular}
               fontSize={theme.fontSize.small}
-              color={theme.colors.gray[1]}>
+              color={t.bgCard}>
               + Add
             </StyledText>
           </YStack>
@@ -245,7 +247,7 @@ export default function AddOn({table_id, onClose, item, setItem}) {
       <YStack
         width={modalWidth}
         maxHeight={modalMaxHeight}
-        backgroundColor={theme.colors.gray[1]}
+        backgroundColor={t.bgCard}
         borderRadius={20}
         overflow="hidden"
         shadowColor="black"
@@ -257,31 +259,31 @@ export default function AddOn({table_id, onClose, item, setItem}) {
         {/* ── Header ───────────────────────────────────────────── */}
         <XStack
           paddingHorizontal={20} paddingVertical={16}
-          borderBottomWidth={1} borderBottomColor={theme.colors.gray[200]}
-          backgroundColor={theme.colors.gray[50]}
+          borderBottomWidth={1} borderBottomColor={t.borderDefault}
+          backgroundColor={t.bgPage}
           alignItems="center">
           <YStack flex={1}>
             <StyledText
               fontFamily={fontStyles.Roboto_Regular}
               fontSize={theme.fontSize.large}
               fontWeight={theme.fontWeight.bold}
-              color={theme.colors.gray[900]}>
+              color={t.textPrimary}>
               {item.name}
             </StyledText>
             <StyledText
               fontFamily={fontStyles.Roboto_Regular}
               fontSize={theme.fontSize.normal}
-              color={theme.colors.gray[500]}
+              color={t.textSecondary}
               marginTop={2}>
               Base price: {formatCurrency(cur, item.price)}
             </StyledText>
           </YStack>
           <StyledPressable
             width={36} height={36} borderRadius={18}
-            backgroundColor={theme.colors.gray[200]}
+            backgroundColor={t.borderDefault}
             alignItems="center" justifyContent="center"
             onPress={onClose}>
-            <StyledMIcon name="close" size={20} color={theme.colors.gray[600]} />
+            <StyledMIcon name="close" size={20} color={t.textSecondary} />
           </StyledPressable>
         </XStack>
 
@@ -335,11 +337,11 @@ export default function AddOn({table_id, onClose, item, setItem}) {
             </CollapseGroup>
           ) : (
             <YStack padding={32} alignItems="center" gap={8}>
-              <StyledMIcon name="info-outline" size={32} color={theme.colors.gray[300]} />
+              <StyledMIcon name="info-outline" size={32} color={t.textMuted} />
               <StyledText
                 fontFamily={fontStyles.Roboto_Regular}
                 fontSize={theme.fontSize.normal}
-                color={theme.colors.gray[400]}>
+                color={t.textMuted}>
                 No add-ons available
               </StyledText>
             </YStack>
@@ -349,14 +351,14 @@ export default function AddOn({table_id, onClose, item, setItem}) {
             <XStack
               marginTop={8} paddingHorizontal={14} paddingVertical={10}
               borderRadius={10}
-              backgroundColor={theme.colors.red[50]}
-              borderWidth={1} borderColor={theme.colors.red[200]}
+              backgroundColor={t.dangerBg}
+              borderWidth={1} borderColor={t.dangerBg}
               alignItems="center" gap={8}>
-              <StyledMIcon name="error-outline" size={18} color={theme.colors.red[600]} />
+              <StyledMIcon name="error-outline" size={18} color={t.dangerColor} />
               <StyledText
                 fontFamily={fontStyles.Roboto_Regular}
                 fontSize={theme.fontSize.small}
-                color={theme.colors.red[600]} flex={1}>
+                color={t.dangerColor} flex={1}>
                 {validationError}
               </StyledText>
             </XStack>
@@ -366,14 +368,14 @@ export default function AddOn({table_id, onClose, item, setItem}) {
         {/* ── Footer ───────────────────────────────────────────── */}
         <XStack
           paddingHorizontal={16} paddingVertical={14}
-          borderTopWidth={1} borderTopColor={theme.colors.gray[200]}
-          backgroundColor={theme.colors.gray[50]}
+          borderTopWidth={1} borderTopColor={t.borderDefault}
+          backgroundColor={t.bgPage}
           alignItems="center" gap={12}>
 
           <YStack>
             <StyledText
               fontSize={10} fontWeight="700"
-              color={theme.colors.gray[400]}
+              color={t.textMuted}
               style={{letterSpacing: 0.8}}>
               TOTAL
             </StyledText>
@@ -381,7 +383,7 @@ export default function AddOn({table_id, onClose, item, setItem}) {
               fontFamily={fontStyles.Roboto_Regular}
               fontSize={theme.fontSize.large}
               fontWeight={theme.fontWeight.bold}
-              color={theme.colors.gray[900]}>
+              color={t.textPrimary}>
               {formatCurrency(cur, calculateTotal())}
             </StyledText>
           </YStack>
@@ -389,22 +391,22 @@ export default function AddOn({table_id, onClose, item, setItem}) {
           <XStack flex={1} gap={10}>
             <StyledPressable
               flex={1} height={52} borderRadius={30}
-              borderWidth={1} borderColor={theme.colors.gray[300]}
-              backgroundColor={theme.colors.gray[100]}
+              borderWidth={1} borderColor={t.textMuted}
+              backgroundColor={t.bgPage}
               justifyContent="center" alignItems="center"
               onPress={onClose}>
               <StyledText
                 fontFamily={fontStyles.Roboto_Regular}
                 fontSize={theme.fontSize.normal}
                 fontWeight={theme.fontWeight.semiBold}
-                color={theme.colors.gray[700]}>
+                color={t.textSecondary}>
                 Cancel
               </StyledText>
             </StyledPressable>
 
             <StyledPressable
               flex={2} height={52} borderRadius={30}
-              backgroundColor={addButtonDisabled ? theme.colors.gray[200] : theme.colors.green[500]}
+              backgroundColor={addButtonDisabled ? t.borderDefault : t.successColor}
               justifyContent="center" alignItems="center"
               flexDirection="row" gap={8}
               onPress={addButtonDisabled ? undefined : onSubmit}
@@ -413,13 +415,13 @@ export default function AddOn({table_id, onClose, item, setItem}) {
                 pointerEvents={'none'}
                 name="add-shopping-cart"
                 size={20}
-                color={addButtonDisabled ? theme.colors.gray[400] : theme.colors.gray[1]}
+                color={addButtonDisabled ? t.textMuted : t.bgCard}
               />
               <StyledText
                 fontFamily={fontStyles.Roboto_Regular}
                 fontSize={theme.fontSize.normal}
                 fontWeight={theme.fontWeight.bold}
-                color={addButtonDisabled ? theme.colors.gray[400] : theme.colors.gray[1]}>
+                color={addButtonDisabled ? t.textMuted : t.bgCard}>
                 {addButtonText}
               </StyledText>
             </StyledPressable>

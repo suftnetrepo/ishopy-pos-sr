@@ -15,11 +15,13 @@ import PaymentCard from './card';
 import OrderDateFilter from '../../order/orderDateFilter';
 import {useAppContext} from '../../../hooks/appContext';
 import {useFocus} from '../../../hooks/useFocus';
+import {useAppTheme} from '../../../theme';
 
 const BigPayment = () => {
   const focus = useFocus();
   const [showCalendar, setCalendarShow] = useState(false);
   const {date_filter, updateDateFilter} = useAppContext();
+  const {t} = useAppTheme();
   const hasActiveFilter = date_filter?.startDate && date_filter?.endDate;
 
   const handleClearDateFilter = () => {
@@ -27,7 +29,7 @@ const BigPayment = () => {
   };
 
   return (
-    <StyledPage backgroundColor={theme.colors.gray[100]}>
+    <StyledPage backgroundColor={t.bgPage}>
       <StyledPage.Header.Full>
         <RenderHeader
           showBackButton={true}
@@ -42,9 +44,9 @@ const BigPayment = () => {
                     width={48}
                     height={48}
                     borderWidth={1}
-                    backgroundColor={theme.colors.gray[50]}
-                    borderColor={theme.colors.gray[400]}>
-                    <StyledIcon size={24} name="close" color={theme.colors.gray[800]} />
+                    backgroundColor={t.bgPage}
+                    borderColor={t.textMuted}>
+                    <StyledIcon size={24} name="close" color={t.textPrimary} />
                   </StyledCycle>
                 </Pressable>
               )}
@@ -54,9 +56,9 @@ const BigPayment = () => {
                   width={48}
                   height={48}
                   borderWidth={1}
-                  backgroundColor={theme.colors.gray[100]}
-                  borderColor={theme.colors.gray[400]}>
-                  <StyledIcon size={24} name="filter-list" color={theme.colors.gray[800]} />
+                  backgroundColor={t.bgPage}
+                  borderColor={t.textMuted}>
+                  <StyledIcon size={24} name="filter-list" color={t.textPrimary} />
                 </StyledCycle>
               </Pressable>
             </>

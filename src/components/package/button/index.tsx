@@ -2,6 +2,7 @@ import {ViewStyle, TouchableOpacity, TouchableOpacityProps} from 'react-native';
 import {styled} from '../../../utils/styled';
 import {theme} from '../../../utils/theme';
 import { viewStyleStringVariants, viewStyleVariants } from '../../../utils/viewStyleVariants';
+import {useAppTheme} from '../../../theme';
 
 type StyledProps = TouchableOpacityProps & ViewStyle & {
   square?: boolean;

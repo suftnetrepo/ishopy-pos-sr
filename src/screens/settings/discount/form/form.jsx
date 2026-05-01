@@ -13,7 +13,7 @@ import {
   toastService,
   Switch,
 } from 'fluent-styles';
-import {Text, HStack} from '@gluestack-ui/themed';
+
 import {fontStyles} from '../../../../configs/theme';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {discountRules} from './validatorRules';
@@ -23,8 +23,10 @@ import {
 } from '../../../../hooks/useDiscount';
 
 import {StyledIcon} from '../../../../components/package/icon';
+import {useAppTheme} from '../../../../theme';
 
 const DiscountForm = ({discount, onClose}) => {
+  const {t} = useAppTheme();
   const [errorMessages, setErrorMessages] = useState({});
   const [fields, setFields] = useState(discountRules.fields);
   const {update, error, loading, resetHandler} = useUpdateDiscount();
@@ -39,7 +41,7 @@ const DiscountForm = ({discount, onClose}) => {
     });
   }, [discount]);
 
-  const onNotify = ({status}) => {
+  const onNotify = ({status, t}) => {
     toastService.show({
       message: `Discount ${status}`,
       description: `Your discount was ${status} successfully.`,
@@ -76,12 +78,12 @@ const DiscountForm = ({discount, onClose}) => {
   };
 
   return (
-    <YStack flex={1} backgroundColor={theme.colors.gray[100]}>
+    <YStack flex={1} backgroundColor={t.bgPage}>
       <StyledCard
         gap={8}
         paddingHorizontal={16}
         horizontal
-        backgroundColor={theme.colors.gray[1]}
+        backgroundColor={t.bgCard}
         borderRadius={16}
         marginHorizontal={16}
         marginTop={16}
@@ -96,7 +98,7 @@ const DiscountForm = ({discount, onClose}) => {
           fontSize={theme.fontSize.small}
           paddingHorizontal={8}
           value={fields.name}
-          placeholderTextColor={theme.colors.gray[400]}
+          placeholderTextColor={t.textMuted}
           onChangeText={text => setFields({...fields, name: text})}
           error={!!errorMessages.name}
           errorMessage={errorMessages.name?.message}
@@ -115,7 +117,7 @@ const DiscountForm = ({discount, onClose}) => {
               ? String(fields.rate)
               : ''
           }
-          placeholderTextColor={theme.colors.gray[400]}
+          placeholderTextColor={t.textMuted}
           onChangeText={text => setFields({...fields, rate: text})}
           error={!!errorMessages.rate}
           errorMessage={errorMessages.rate?.message}
@@ -136,13 +138,13 @@ const DiscountForm = ({discount, onClose}) => {
             colors={{
               activeThumb: theme.colors.white,
               inactiveThumb: theme.colors.white,
-              activeTrack: theme.colors.green[600],
-              inactiveTrack: theme.colors.red[400],
+              activeTrack: t.successColor,
+              inactiveTrack: t.dangerColor,
             }}
           />
           <StyledText
             fontWeight={theme.fontWeight.normal}
-            color={theme.colors.gray[600]}
+            color={t.textSecondary}
             fontSize={theme.fontSize.normal}
             fontFamily={fontStyles.Roboto_Regular}>
             Status
@@ -150,7 +152,7 @@ const DiscountForm = ({discount, onClose}) => {
         </XStack>
         <StyledPressable
           onPress={onSubmit}
-          backgroundColor={theme.colors.yellow[500]}
+          backgroundColor={t.brandPrimary}
           borderRadius={32}
           paddingVertical={12}
           alignItems="center">

@@ -14,10 +14,12 @@ import KeyCard from '../../components/tablet/table/keyCard';
 import {useFocus} from '../../hooks/useFocus';
 import {Stack} from '../../components/package/stack';
 import { useLoaderAndError } from '../../hooks/useLoaderAndError';
+import {useAppTheme} from '../../theme';
 
 const BigTable = () => {
   const focused = useFocus();
   const {updateMenuQuery} = useAppContext();
+  const {t} = useAppTheme();
   const [table, setTable] = useState(null);
   const {data, error, loading, resetHandler, handleOccupancy} =
     useQueryTablesByStatus(focused);
@@ -29,7 +31,7 @@ const BigTable = () => {
   };
 
   return (
-    <StyledPage backgroundColor={theme.colors.gray[100]}>
+    <StyledPage backgroundColor={t.bgPage}>
       <StyledPage.Header.Full>
         <RenderHeader
           showBackButton={true}

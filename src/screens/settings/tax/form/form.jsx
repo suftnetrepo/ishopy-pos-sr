@@ -17,8 +17,10 @@ import {fontStyles} from '../../../../configs/theme';
 import {taxRules} from './validatorRules';
 import {useUpdateTax, useInsertTax} from '../../../../hooks/useTax';
 import {useLoaderAndError} from '../../../../hooks/useLoaderAndError';
+import {useAppTheme} from '../../../../theme';
 
 const TaxForm = ({tax, onClose}) => {
+  const {t} = useAppTheme();
   const [errorMessages, setErrorMessages] = useState({});
   const [fields, setFields] = useState(taxRules.fields);
   const {update, error, loading, resetHandler} = useUpdateTax();
@@ -33,7 +35,7 @@ const TaxForm = ({tax, onClose}) => {
     }));
   }, [tax]);
 
-  const onNotify = ({status}) => {
+  const onNotify = ({status, t}) => {
     toastService.show({
       message: `Tax ${status}`,
       description: `Your tax was ${status} successfully.`,
@@ -70,12 +72,12 @@ const TaxForm = ({tax, onClose}) => {
   };
 
   return (
-    <YStack flex={1} backgroundColor={theme.colors.gray[100]}>
+    <YStack flex={1} backgroundColor={t.bgPage}>
       <StyledCard
         gap={8}
         paddingHorizontal={16}
         horizontal
-        backgroundColor={theme.colors.gray[1]}
+        backgroundColor={t.bgCard}
         borderRadius={16}
         marginHorizontal={16}
         marginTop={16}
@@ -90,7 +92,7 @@ const TaxForm = ({tax, onClose}) => {
           fontSize={theme.fontSize.small}
           paddingHorizontal={8}
           value={fields.name}
-          placeholderTextColor={theme.colors.gray[400]}
+          placeholderTextColor={t.textMuted}
           onChangeText={text => setFields({...fields, name: text})}
           error={!!errorMessages.name}
           errorMessage={errorMessages.name?.message}
@@ -109,7 +111,7 @@ const TaxForm = ({tax, onClose}) => {
               ? String(fields.rate)
               : ''
           }
-          placeholderTextColor={theme.colors.gray[400]}
+          placeholderTextColor={t.textMuted}
           onChangeText={text => setFields({...fields, rate: text})}
           error={!!errorMessages.rate}
           errorMessage={errorMessages.rate?.message}
@@ -126,13 +128,13 @@ const TaxForm = ({tax, onClose}) => {
             colors={{
               activeThumb: theme.colors.white,
               inactiveThumb: theme.colors.white,
-              activeTrack: theme.colors.green[600],
-              inactiveTrack: theme.colors.red[400],
+              activeTrack: t.successColor,
+              inactiveTrack: t.dangerColor,
             }}
           />
           <StyledText
             fontWeight={theme.fontWeight.normal}
-            color={theme.colors.gray[600]}
+            color={t.textSecondary}
             fontSize={theme.fontSize.normal}
             fontFamily={fontStyles.Roboto_Regular}>
             Status
@@ -140,7 +142,7 @@ const TaxForm = ({tax, onClose}) => {
         </XStack>
         <StyledPressable
           onPress={onSubmit}
-          backgroundColor={theme.colors.yellow[500]}
+          backgroundColor={t.brandPrimary}
           borderRadius={32}
           paddingVertical={12}
           alignItems="center">

@@ -2,7 +2,7 @@
 import React, {useEffect, useState, useMemo} from 'react';
 import {FlatList} from 'react-native';
 import {StyledSpacer, StyledText, StyledChip} from 'fluent-styles';
-import {ScrollView} from '@gluestack-ui/themed';
+import {ScrollView} from 'react-native';
 import {useAppContext} from '../../../hooks/appContext';
 import {Stack} from '../../package/stack';
 import {theme, fontStyles} from '../../../utils/theme';
@@ -10,11 +10,12 @@ import {StyledIcon} from '../../package/icon';
 import {useNavigation} from '@react-navigation/native';
 import {useFocus} from '../../../hooks/useFocus';
 import {guid} from '../../../utils/help';
+import {useAppTheme} from '../../../theme';
 
 // ─── Status config ────────────────────────────────────────────────────────────
 const STATUS = {
   occupied: {
-    borderColor: theme.colors.green[500],
+    borderColor: theme.colors.green[600],
     badgeBg:     theme.colors.green[50],
     badgeColor:  theme.colors.green[700],
     iconColor:   theme.colors.green[600],
@@ -32,7 +33,7 @@ const STATUS = {
   reserved: {
     borderColor: theme.colors.blue[400],
     badgeBg:     theme.colors.blue[50],
-    badgeColor:  theme.colors.blue[700],
+    badgeColor:  theme.colors.blue[600],
     iconColor:   theme.colors.blue[500],
     label:       'Reserved',
     icon:        'event-seat',
@@ -61,12 +62,12 @@ const LOCATION_ICON = {
 
 const LOCATION_STYLE = {
   'Bar':      {bg: theme.colors.purple[50], color: theme.colors.purple[700]},
-  'Takeaway': {bg: theme.colors.amber[50],  color: theme.colors.amber[700]},
+  'Takeaway': {bg: theme.colors.amber[500],  color: theme.colors.amber[700]},
   'Dine In':  null,
 };
 
 // ─── Individual card ──────────────────────────────────────────────────────────
-const Card = ({table, onPress}) => {
+const Card = ({table, onPress, t}) => {
   const s = getStatus(table);
   const location = table?.location || 'Dine In';
   const locStyle = LOCATION_STYLE[location];
@@ -75,7 +76,7 @@ const Card = ({table, onPress}) => {
   return (
     <Stack
       flex={1}
-      backgroundColor={theme.colors.gray[1]}
+      backgroundColor={t.bgCard}
       borderRadius={12}
       paddingVertical={10}
       paddingHorizontal={12}
@@ -86,10 +87,10 @@ const Card = ({table, onPress}) => {
       borderTopWidth={0.5}
       borderRightWidth={0.5}
       borderBottomWidth={0.5}
-      borderTopColor={theme.colors.gray[200]}
-      borderRightColor={theme.colors.gray[200]}
-      borderBottomColor={theme.colors.gray[200]}
-      shadowColor={theme.colors.gray[300]}
+      borderTopColor={t.borderDefault}
+      borderRightColor={t.borderDefault}
+      borderBottomColor={t.borderDefault}
+      shadowColor={t.textMuted}
       shadowOffset={{width: 0, height: 1}}
       shadowOpacity={0.12}
       shadowRadius={3}
@@ -107,7 +108,7 @@ const Card = ({table, onPress}) => {
             fontFamily={fontStyles.Roboto_Regular}
             fontSize={theme.fontSize.medium}
             fontWeight={theme.fontWeight.semiBold}
-            color={theme.colors.gray[800]}>
+            color={t.textPrimary}>
             {table.tableName}
           </StyledText>
 
@@ -132,20 +133,20 @@ const Card = ({table, onPress}) => {
         {/* Guest count + time */}
         <Stack horizontal alignItems="center" gap={10}>
           <Stack horizontal alignItems="center" gap={3}>
-            <StyledIcon name="person" size={14} color={theme.colors.gray[400]} />
+            <StyledIcon name="person" size={14} color={t.textMuted} />
             <StyledText
               fontFamily={fontStyles.Roboto_Regular}
               fontSize={theme.fontSize.small}
-              color={theme.colors.gray[500]}>
+              color={t.textSecondary}>
               {table.guest_count || 0}
             </StyledText>
           </Stack>
           <Stack horizontal alignItems="center" gap={3}>
-            <StyledIcon name="access-time" size={14} color={theme.colors.gray[400]} />
+            <StyledIcon name="access-time" size={14} color={t.textMuted} />
             <StyledText
               fontFamily={fontStyles.Roboto_Regular}
               fontSize={theme.fontSize.small}
-              color={theme.colors.gray[500]}>
+              color={t.textSecondary}>
               {table.start_time || '--:--'}
             </StyledText>
           </Stack>
@@ -173,8 +174,8 @@ const Card = ({table, onPress}) => {
         height={40}
         borderRadius={20}
         borderWidth={1}
-        borderColor={locStyle ? locStyle.bg : theme.colors.gray[200]}
-        backgroundColor={locStyle ? locStyle.bg : theme.colors.gray[50]}
+        borderColor={locStyle ? locStyle.bg : t.borderDefault}
+        backgroundColor={locStyle ? locStyle.bg : t.bgPage}
         alignItems="center"
         justifyContent="center">
         <StyledIcon
@@ -191,6 +192,7 @@ const Card = ({table, onPress}) => {
 export default function TableCard({data, onTableSelect}) {
   const focused = useFocus();
   const {updateCurrentMenu} = useAppContext();
+  const {t} = useAppTheme();
   const navigation = useNavigation();
   const [activeLocation, setActiveLocation] = useState('All');
 
@@ -260,12 +262,12 @@ export default function TableCard({data, onTableSelect}) {
       {/* Summary counts */}
       <Stack horizontal gap={16} marginBottom={10} marginHorizontal={4}>
         {[
-          {label: 'Occupied',  count: filteredData.filter(t => t.isOccupied === 1).length, color: theme.colors.green[600]},
-          {label: 'Available', count: filteredData.filter(t => t.isOccupied !== 1).length, color: theme.colors.gray[500]},
+          {label: 'Occupied',  count: filteredData.filter(t => t.isOccupied === 1).length, color: t.successColor},
+          {label: 'Available', count: filteredData.filter(t => t.isOccupied !== 1).length, color: t.textSecondary},
         ].map(item => (
           <Stack key={item.label} horizontal alignItems="center" gap={4}>
             <Stack width={8} height={8} borderRadius={4} backgroundColor={item.color} />
-            <StyledText fontSize={theme.fontSize.small} color={theme.colors.gray[500]}>
+            <StyledText fontSize={theme.fontSize.small} color={t.textSecondary}>
               {item.count} {item.label}
             </StyledText>
           </Stack>
@@ -281,7 +283,8 @@ export default function TableCard({data, onTableSelect}) {
           numColumns={4}
           showsVerticalScrollIndicator={false}
           renderItem={({item}) => (
-            <Card key={item.table_id} table={item} onPress={handlePress} />
+            <Card key={item.table_id} table={item} onPress={handlePress} 
+                        t={t}/>
           )}
         />
       </ScrollView>

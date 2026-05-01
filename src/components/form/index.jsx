@@ -9,16 +9,17 @@ import { YStack, StyledSpacer, StyledText } from 'fluent-styles';
 import { isValidColor, isValidNumber, isValidString } from '../../utils/help';
 import { styled } from '../../utils/styled';
 import { theme } from '../../configs/theme';
+import {useAppTheme} from '../../theme';
 
 
 const StyledInputText = styled(TextInput, {
     base: {
-        borderColor: theme.colors.gray[800],
+        borderColor: theme.colors.gray[900],
         borderWidth: 1,
         borderRadius: 30,
         backgroundColor: theme.colors.gray[1],
         width: '100%',
-        color: theme.colors.gray[800],
+        color: theme.colors.gray[900],
         paddingHorizontal: 16,
         paddingVertical: 8,
         fontSize: theme.fontSize.normal,
@@ -31,7 +32,7 @@ const StyledInputText = styled(TextInput, {
             }
             return { fontWeight: size };
         },
-        color: (color = theme.colors.gray[800]) => {
+        color: (color = theme.colors.gray[900]) => {
             if (!isValidColor(color)) {
                 throw new Error('Invalid color value');
             }
@@ -77,7 +78,7 @@ const StyledInputText = styled(TextInput, {
         noBorder: {
             true: { borderWidth: 0 }
         },
-        placeholderTextColor: (value = theme.colors.gray[800]) => {
+        placeholderTextColor: (value = theme.colors.gray[900]) => {
             if (!isValidColor(value)) {
                 throw new Error('Invalid placeholderTextColor value');
             }
@@ -92,14 +93,14 @@ const StyledInput = forwardRef(({ label, containerProps, borderColor, errorMessa
             {
                 label && (
                     <YStack width={'100%'} justifyContent='flex-start' alignItems='flex-start' {...containerProps} >
-                        <StyledText paddingHorizontal={8} color={theme.colors.gray[800]} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.normal} {...labelProps}>
+                        <StyledText paddingHorizontal={8} color={t.textPrimary} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.normal} {...labelProps}>
                             {label}
                         </StyledText>
                         <StyledSpacer marginVertical={4} />
                     </YStack>
                 )
             }
-            <StyledInputText placeholderTextColor={theme.colors.gray[400]} ref={ref} {...rest} borderColor={error ? theme.colors.pink[500] : borderColor} />
+            <StyledInputText placeholderTextColor={t.textMuted} ref={ref} {...rest} borderColor={error ? theme.colors.pink[500] : borderColor} />
             {
                 errorMessage && (
                     <YStack width={'100%'} justifyContent='flex-start' alignItems='flex-start' {...containerProps} >
@@ -114,14 +115,15 @@ const StyledInput = forwardRef(({ label, containerProps, borderColor, errorMessa
     )
 })
 
-const StyledMultiInput = ({ label, errorMessage, borderColor, error, errorProps, labelProps, ...rest }) => {
+const StyledMultiInput = ({label, errorMessage, borderColor, error, errorProps, labelProps, ...rest}) => {
+    const {t} = useAppTheme();
     return (
         <YStack width={'100%'} justifyContent='flex-start' alignItems='flex-start'>
             {
                 label && (
                     <>
                         <StyledSpacer marginVertical={4} />
-                        <StyledText paddingHorizontal={8} color={theme.colors.gray[800]} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.normal} {...labelProps}>
+                        <StyledText paddingHorizontal={8} color={t.textPrimary} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.normal} {...labelProps}>
                             {label}
                         </StyledText>
                         <StyledSpacer marginVertical={4} />

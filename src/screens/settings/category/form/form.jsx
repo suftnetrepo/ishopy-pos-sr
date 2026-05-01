@@ -22,8 +22,10 @@ import {
 import ColorPicker from '../../../../components/colorPicker';
 import PosIconPicker from '../../../../components/pos-icon-picker';
 import {useLoaderAndError} from '../../../../hooks/useLoaderAndError';
+import {useAppTheme} from '../../../../theme';
 
 const CategoryForm = ({category, onClose}) => {
+  const {t} = useAppTheme();
   const [errorMessages, setErrorMessages] = useState({});
   const [fields, setFields] = useState(categoryRules.fields);
   const {updateCategory, error, loading, resetHandler} = useUpdateCategory();
@@ -40,7 +42,7 @@ const CategoryForm = ({category, onClose}) => {
 
   useLoaderAndError(loading, error, resetHandler);
 
-  const onNotify = ({status}) => {
+  const onNotify = ({status, t}) => {
     toastService.show({
       message: `Category ${status}`,
       description: `Your category was ${status} successfully.`,
@@ -85,12 +87,12 @@ const CategoryForm = ({category, onClose}) => {
 
   return (
     <>
-      <YStack flex={1} backgroundColor={theme.colors.gray[100]}>
+      <YStack flex={1} backgroundColor={t.bgPage}>
         <StyledCard
           gap={8}
           paddingHorizontal={16}
           horizontal
-          backgroundColor={theme.colors.gray[1]}
+          backgroundColor={t.bgCard}
           borderRadius={16}
           marginHorizontal={16}
           marginTop={16}
@@ -108,7 +110,7 @@ const CategoryForm = ({category, onClose}) => {
             maxLength={50}
             fontSize={theme.fontSize.small}
             value={fields.name}
-            placeholderTextColor={theme.colors.gray[400]}
+            placeholderTextColor={t.textMuted}
             onChangeText={text => setFields({...fields, name: text})}
             error={!!errorMessages?.name}
             errorMessage={errorMessages?.name?.message}
@@ -117,13 +119,13 @@ const CategoryForm = ({category, onClose}) => {
           <Stack>
             <StyledText
               fontWeight={theme.fontWeight.normal}
-              color={theme.colors.gray[800]}
+              color={t.textPrimary}
               fontSize={theme.fontSize.large}>
               Icon
             </StyledText>
             <StyledSpacer marginVertical={4} />
             <PosIconPicker
-              color={fields?.color_code || theme.colors.gray[500]}
+              color={fields?.color_code || t.textSecondary}
               size={18}
               selected={fields?.icon_name}
               onSelect={icon => setFields({...fields, icon_name: icon})}
@@ -146,13 +148,13 @@ const CategoryForm = ({category, onClose}) => {
               colors={{
                 activeThumb: theme.colors.white,
                 inactiveThumb: theme.colors.white,
-                activeTrack: theme.colors.green[600],
-                inactiveTrack: theme.colors.red[400],
+                activeTrack: t.successColor,
+                inactiveTrack: t.dangerColor,
               }}
             />
             <StyledText
               fontWeight={theme.fontWeight.normal}
-              color={theme.colors.gray[600]}
+              color={t.textSecondary}
               fontSize={theme.fontSize.normal}
               fontFamily={fontStyles.Roboto_Regular}>
               Status
@@ -160,7 +162,7 @@ const CategoryForm = ({category, onClose}) => {
           </XStack>
           <StyledPressable
             onPress={onSubmit}
-            backgroundColor={theme.colors.yellow[500]}
+            backgroundColor={t.brandPrimary}
             borderRadius={32}
             paddingVertical={12}
             alignItems="center">

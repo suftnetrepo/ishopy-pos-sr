@@ -2,6 +2,7 @@
 import { styled } from 'fluent-styles';
 import { theme } from "../../configs/theme";
 import { View } from 'react-native';
+import {useAppTheme} from '../../theme';
 
 const StyledStack = styled(View, {
     base: {
@@ -10,11 +11,11 @@ const StyledStack = styled(View, {
     variants: {
         status: {
             '0': {
-                borderLeftColor: theme.colors.red[400],
+                borderLeftColor: t.dangerColor,
                 borderLeftWidth: 4,
-                borderTopColor: theme.colors.gray[300],
-                borderRightColor: theme.colors.gray[300],
-                borderBottomColor: theme.colors.gray[300],
+                borderTopColor: t.textMuted,
+                borderRightColor: t.textMuted,
+                borderBottomColor: t.textMuted,
                 borderTopWidth: 1,
                 borderRightWidth: 1,
                 borderBottomWidth: 1,
@@ -22,9 +23,9 @@ const StyledStack = styled(View, {
             '1': {
                 borderLeftColor: theme.colors.teal[500],
                 borderLeftWidth: 4,
-                borderTopColor: theme.colors.gray[300],
-                borderRightColor: theme.colors.gray[300],
-                borderBottomColor: theme.colors.gray[300],
+                borderTopColor: t.textMuted,
+                borderRightColor: t.textMuted,
+                borderBottomColor: t.textMuted,
                 borderTopWidth: 1,
                 borderRightWidth: 1,
                 borderBottomWidth: 1,
@@ -35,9 +36,9 @@ const StyledStack = styled(View, {
             '0': {
                 borderLeftColor: theme.colors.orange[700],
                 borderLeftWidth: 4,
-                borderTopColor: theme.colors.gray[300],
-                borderRightColor: theme.colors.gray[300],
-                borderBottomColor: theme.colors.gray[300],
+                borderTopColor: t.textMuted,
+                borderRightColor: t.textMuted,
+                borderBottomColor: t.textMuted,
                 borderTopWidth: 1,
                 borderRightWidth: 1,
                 borderBottomWidth: 1,
@@ -45,9 +46,9 @@ const StyledStack = styled(View, {
             '1': {
                 borderLeftColor: theme.colors.teal[700],
                 borderLeftWidth: 4,
-                borderTopColor: theme.colors.gray[300],
-                borderRightColor: theme.colors.gray[300],
-                borderBottomColor: theme.colors.gray[300],
+                borderTopColor: t.textMuted,
+                borderRightColor: t.textMuted,
+                borderBottomColor: t.textMuted,
                 borderTopWidth: 1,
                 borderRightWidth: 1,
                 borderBottomWidth: 1,

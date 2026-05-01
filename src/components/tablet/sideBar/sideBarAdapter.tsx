@@ -1,8 +1,9 @@
 import React from 'react';
 import {StyledSpacer} from 'fluent-styles';
 import {Stack} from '../../../components/package/stack';
-import {theme} from '../../../utils/theme';
+
 import SideBar from '../../../components/tablet/sideBar';
+import {useAppTheme} from '../../../theme';
 
 interface SideBarAdapterProps {
   collapse: boolean;
@@ -15,6 +16,7 @@ const SideBarAdapter: React.FC<SideBarAdapterProps> = ({
   selectedMenu,
   showMenu = '',
 }) => {
+  const {t} = useAppTheme();
   return (
     <Stack
       paddingBottom={16}
@@ -26,9 +28,9 @@ const SideBarAdapter: React.FC<SideBarAdapterProps> = ({
       marginLeft={16}
       paddingHorizontal={16}
       shadowOpacity={0.9}
-      shadowColor={theme.colors.gray[200]}
+      shadowColor={t.borderDefault}
       shadowRadius={8}
-      backgroundColor={theme.colors.gray[1]}>
+      backgroundColor={t.bgCard}>
       <StyledSpacer marginVertical={7} />
       <SideBar
         selectedMenu={selectedMenu}

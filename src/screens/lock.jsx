@@ -12,6 +12,7 @@ import { StyledMIcon } from '../components/icon';
 import { useAppContext } from '../hooks/appContext';
 import Drawer from '../components/package/drawer';
 import HelpScreen from '../components/help';
+import {useAppTheme} from '../theme';
 
 const Keypad = () => {
     const navigator = useNavigation()
@@ -19,6 +20,7 @@ const Keypad = () => {
     const { purchase_status } = useSelector(() => state.get());
     const { error, loading, loginByPin, resetHandler, recoveryHandler } = usePin()
     const [pin, setPin] = useState('');
+  const {t} = useAppTheme();
     const [recovery_password, setRecovery_password] = useState(false);
     const [showPayment, setShowPayment] = useState(false);
 
@@ -66,14 +68,14 @@ const Keypad = () => {
                 <Icon
                     name={'lock-clock'}
                     size={64}
-                    color={theme.colors.gray[800]}
+                    color={t.textPrimary}
                 />
             </XStack>
         )
     }
 
     return (
-        <StyledSafeAreaView backgroundColor={theme.colors.gray[1]}>
+        <StyledSafeAreaView backgroundColor={t.bgCard}>
             <StyledHeader marginHorizontal={8} statusProps={{ translucent: true }} >
                 <StyledHeader.Full>
                     <RenderHeader />
@@ -85,7 +87,7 @@ const Keypad = () => {
                 <StyledSpacer marginVertical={16} />
                 <XStack marginBottom={20}>
                     {[0, 1, 2, 3].map((_, index) => (
-                        <YStack key={index} width={60} height={60} borderWidth={1} borderRadius={10} margin={5} borderColor={theme.colors.gray[600]} justifyContent='center' alignItems='center'>
+                        <YStack key={index} width={60} height={60} borderWidth={1} borderRadius={10} margin={5} borderColor={t.textSecondary} justifyContent='center' alignItems='center'>
                             <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.bold} >
                                 {pin[index]}
                             </StyledText>
@@ -94,7 +96,7 @@ const Keypad = () => {
                 </XStack>
                 {
                     (!purchase_status || recovery_password) && (
-                        <StyledText color={theme.colors.gray[400]} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.normal} >
+                        <StyledText color={t.textMuted} fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.normal} >
                             1234
                         </StyledText>
                     )
@@ -108,8 +110,8 @@ const Keypad = () => {
                                     key={num}
                                     width={70} height={70}
                                     borderWidth={1} borderRadius={35}
-                                    backgroundColor={theme.colors.gray[1]}
-                                    borderColor={theme.colors.gray[600]}
+                                    backgroundColor={t.bgCard}
+                                    borderColor={t.textSecondary}
                                     onPress={() => handlePress(num.toString())}
                                 >
                                     <StyledText fontFamily={fontStyles.Roboto_Regular} fontSize={theme.fontSize.xxlarge} fontWeight={theme.fontWeight.bold} >
@@ -123,8 +125,8 @@ const Keypad = () => {
                     <StyledButton
                         width={70} height={70}
                         borderWidth={1} borderRadius={35}
-                        backgroundColor={theme.colors.gray[1]}
-                        borderColor={theme.colors.gray[400]}
+                        backgroundColor={t.bgCard}
+                        borderColor={t.textMuted}
                         onPress={handleDelete}
                     >
                         <StyledText fontSize={theme.fontSize.xxlarge} fontWeight={theme.fontWeight.bold} >

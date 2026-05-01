@@ -24,9 +24,11 @@ import {useCategories} from '../../../../hooks/useCategory';
 import {Stack} from '../../../../components/package/stack';
 import PosIconPicker from '../../../../components/pos-icon-picker';
 import {useLoaderAndError} from '../../../../hooks/useLoaderAndError';
+import {useAppTheme} from '../../../../theme';
 
 const ItemForm = ({item, onClose}) => {
   const [errorMessages, setErrorMessages] = useState({});
+  const {t} = useAppTheme();
   const [fields, setFields] = useState(menuRules.fields);
   const {update, error, loading, resetHandler} = useUpdateMenu();
   const {insert} = useInsertMenu();
@@ -44,7 +46,7 @@ const ItemForm = ({item, onClose}) => {
     }));
   }, [item]);
 
-  const onNotify = ({status, isDeleted}) => {
+  const onNotify = ({status, isDeleted, t}) => {
     toastService.show({
       message: `Item ${status}`,
       description: isDeleted
@@ -92,12 +94,12 @@ const ItemForm = ({item, onClose}) => {
 
   return (
     <>
-      <YStack flex={1} backgroundColor={theme.colors.gray[100]}>
+      <YStack flex={1} backgroundColor={t.bgPage}>
         <StyledCard
           gap={8}
           paddingHorizontal={16}
           horizontal
-          backgroundColor={theme.colors.gray[1]}
+          backgroundColor={t.bgCard}
           borderRadius={16}
           marginHorizontal={16}
           marginTop={16}
@@ -115,7 +117,7 @@ const ItemForm = ({item, onClose}) => {
               maxLength={50}
               fontSize={theme.fontSize.small}
               value={fields.name}
-              placeholderTextColor={theme.colors.gray[400]}
+              placeholderTextColor={t.textMuted}
               onChangeText={text => setFields({...fields, name: text})}
               error={!!errorMessages?.name}
               errorMessage={errorMessages?.name?.message}
@@ -128,7 +130,7 @@ const ItemForm = ({item, onClose}) => {
               maxLength={50}
               fontSize={theme.fontSize.small}
               value={fields.price?.toString() || ''}
-              placeholderTextColor={theme.colors.gray[400]}
+              placeholderTextColor={t.textMuted}
               onChangeText={text => setFields({...fields, price: text})}
               onBlur={() =>
                 setFields(f => ({
@@ -147,7 +149,7 @@ const ItemForm = ({item, onClose}) => {
               maxLength={50}
               fontSize={theme.fontSize.small}
               value={fields.cost?.toString() || ''}
-              placeholderTextColor={theme.colors.gray[400]}
+              placeholderTextColor={t.textMuted}
               onChangeText={text => setFields({...fields, cost: text})}
               onBlur={() =>
                 setFields(f => ({
@@ -169,14 +171,14 @@ const ItemForm = ({item, onClose}) => {
               maxLength={50}
               fontSize={theme.fontSize.normal}
               value={fields.stock.toString()}
-              placeholderTextColor={theme.colors.gray[400]}
+              placeholderTextColor={t.textMuted}
               onChangeText={text => setFields({...fields, stock: text})}
               error={!!errorMessages?.stock}
               errorMessage={errorMessages?.stock?.message}
             />
             <StyledText
               fontWeight={theme.fontWeight.semiBold}
-              color={theme.colors.gray[600]}
+              color={t.textSecondary}
               fontSize={theme.fontSize.small}
               fontFamily={fontStyles.Roboto_Regular}>
               Category
@@ -198,13 +200,13 @@ const ItemForm = ({item, onClose}) => {
               <StyledText
                 fontFamily={fontStyles.Roboto_Regular}
                 fontWeight={theme.fontWeight.normal}
-                color={theme.colors.gray[800]}
+                color={t.textPrimary}
                 fontSize={theme.fontSize.normal}>
                 Icon
               </StyledText>
               <StyledSpacer marginVertical={4} />
               <PosIconPicker
-                color={fields?.color_code || theme.colors.gray[500]}
+                color={fields?.color_code || t.textSecondary}
                 size={18}
                 selected={fields?.icon_name}
                 onSelect={icon => setFields({...fields, icon_name: icon})}
@@ -227,13 +229,13 @@ const ItemForm = ({item, onClose}) => {
                 colors={{
                   activeThumb: theme.colors.white,
                   inactiveThumb: theme.colors.white,
-                  activeTrack: theme.colors.green[600],
-                  inactiveTrack: theme.colors.red[400],
+                  activeTrack: t.successColor,
+                  inactiveTrack: t.dangerColor,
                 }}
               />
               <StyledText
                 fontWeight={theme.fontWeight.normal}
-                color={theme.colors.gray[600]}
+                color={t.textSecondary}
                 fontSize={theme.fontSize.normal}
                 fontFamily={fontStyles.Roboto_Regular}>
                 Status
@@ -241,7 +243,7 @@ const ItemForm = ({item, onClose}) => {
             </XStack>
             <StyledPressable
               onPress={onSubmit}
-              backgroundColor={theme.colors.yellow[500]}
+              backgroundColor={t.brandPrimary}
               borderRadius={32}
               paddingVertical={12}
               alignItems="center">

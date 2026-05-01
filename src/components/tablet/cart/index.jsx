@@ -2,24 +2,9 @@
 import React, {Fragment, useState, useEffect} from 'react';
 import {ScrollView} from 'react-native';
 import {
-  StyledSpacer,
-  Drawer,
-  StyledScrollView,
-  StyledCard,
-  StyledPressable,
-  StyledText,
-  XStack,
-  YStack,
+  StyledSpacer, Drawer, StyledScrollView, StyledPressable,
+  StyledText, XStack, YStack, Stack,
 } from 'fluent-styles';
-import {
-  Box,
-  Text,
-  HStack,
-  VStack,
-  Pressable,
-  Button,
-  ButtonText,
-} from '@gluestack-ui/themed';
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import {useAppContext} from '../../../hooks/appContext';
 import {formatCurrency, paymentOptions} from '../../../utils/help';
@@ -28,52 +13,30 @@ import Payment from '../payment/cash';
 import {useInsertOrder, updataStatusHandler} from '../../../hooks/useOrder';
 import EmptyView from '../../../components/utils/empty';
 import {useNavigation} from '@react-navigation/native';
+import {useAppTheme} from '../../../theme';
 
 export default function Cart({table_id, table_name}) {
   const navigation = useNavigation();
-  const {
-    updateOrderId,
-    getItems,
-    shop,
-    removeItem,
-    getTotalTax,
-    clearItem,
-    getTotal,
-    getTotalPrice,
-  } = useAppContext();
-
-  const {
-    orderHandler,
-    printHandler,
-    shareReceipt,
-    deleteHandler,
-    queryOrderByIdhandler,
-    data,
-  } = useInsertOrder(table_id, table_name);
+  const {updateOrderId, getItems, shop, removeItem, getTotalTax, clearItem, getTotal, getTotalPrice} = useAppContext();
+  const {t} = useAppTheme();
+  const {orderHandler, printHandler, shareReceipt, deleteHandler, queryOrderByIdhandler, data} = useInsertOrder(table_id, table_name);
 
   const [paymentMethod, setPaymentMethod] = useState('');
-  const [showPayment, setShowPayment] = useState(false);
+  const [showPayment,   setShowPayment]   = useState(false);
 
-  const items = getItems(table_id);
-  const totalPrice = getTotalPrice(table_id);
-  const hasOrderId = !!items?.order_id;
-  const isCartChanged =
-    parseFloat(totalPrice) > parseFloat(data?.total_price || 0) && hasOrderId;
-  const hasItems = items?.items?.length > 0;
+  const items        = getItems(table_id);
+  const totalPrice   = getTotalPrice(table_id);
+  const hasOrderId   = !!items?.order_id;
+  const isCartChanged = parseFloat(totalPrice) > parseFloat(data?.total_price || 0) && hasOrderId;
+  const hasItems     = items?.items?.length > 0;
 
   useEffect(() => {
-    if (items?.order_id) {
-      queryOrderByIdhandler(items.order_id);
-    }
+    if (items?.order_id) queryOrderByIdhandler(items.order_id);
   }, [items?.order_id]);
 
   const calculateItemPrice = item => {
-    const addOnsTotal =
-      [item?.addOns || []].reduce((total, addOn) => {
-        return (
-          total + parseFloat(addOn.price || 0) * parseInt(addOn.quantity || 0)
-        );
-      }, 0) || 0;
+    const addOnsTotal = [item?.addOns || []].reduce((total, addOn) =>
+      total + parseFloat(addOn.price || 0) * parseInt(addOn.quantity || 0), 0) || 0;
     return addOnsTotal + (item?.price || 0);
   };
 
@@ -85,9 +48,7 @@ export default function Cart({table_id, table_name}) {
 
   const handleVoid = async () => {
     if (!hasOrderId) return;
-    updataStatusHandler(items?.order_id, 'Cancelled').then(() => {
-      clearItem(table_id);
-    });
+    updataStatusHandler(items?.order_id, 'Cancelled').then(() => clearItem(table_id));
   };
 
   const handleUpdateOrder = () => {
@@ -95,341 +56,176 @@ export default function Cart({table_id, table_name}) {
     deleteHandler(items?.order_id).then(() => handleOrder());
   };
 
-  const handlePaymentPress = () => {
-    if (paymentMethod === 'cash') setShowPayment(true);
-  };
+  const handlePaymentPress = () => { if (paymentMethod === 'cash') setShowPayment(true); };
+  const handlePrint = () => { if (data && table_name) printHandler(table_name, data); };
 
-  const handlePrint = () => {
-    if (data && table_name) printHandler(table_name, data);
-  };
-
-  // ── Cart items ────────────────────────────────────────────────
+  // ── Cart items ────────────────────────────────────────────────────────────
   const renderCartItems = () => (
     <ScrollView showsVerticalScrollIndicator={false}>
       {items?.items?.map((item, index) => (
         <Fragment key={`${item.id}-${index}`}>
-          <Pressable onPress={() => {}}>
-            <Box
-              borderRadius={8}
-              px={12}
-              py={4}
-              backgroundColor={theme.colors.gray[50]}
-              borderWidth={1}
-              borderColor={theme.colors.gray[200]}>
-              <HStack
-                flex={1}
-                justifyContent="space-between"
-                alignItems="center">
-                <Text
-                  flex={1}
-                  color={theme.colors.gray[900]}
-                  fontSize={theme.fontSize.small}
-                  fontWeight={theme.fontWeight.normal}>
-                  {item.name}
-                </Text>
-                <HStack space="md" alignItems="center">
-                  <Text
-                    fontSize={theme.fontSize.small}
-                    color={theme.colors.gray[700]}
-                    fontWeight={theme.fontWeight.normal}>
-                    {formatCurrency(
-                      shop?.currency || '£',
-                      calculateItemPrice(item)
-                    )}
-                  </Text>
-                  <Box
-                    w={20}
-                    h={30}
-                    borderRadius={15}
-                    backgroundColor={theme.colors.gray[100]}
-                    justifyContent="center"
-                    alignItems="center">
-                    <Icons
-                      name="cancel"
-                      size={24}
-                      color={theme.colors.gray[400]}
-                      onPress={() => removeItem(item.index, table_id)}
-                    />
-                  </Box>
-                </HStack>
-              </HStack>
-            </Box>
-          </Pressable>
+          <Stack
+            borderRadius={8} paddingHorizontal={12} paddingVertical={4}
+            backgroundColor={t.bgPage}
+            borderWidth={1} borderColor={t.borderDefault}
+            horizontal flex={1} justifyContent="space-between" alignItems="center">
+            <StyledText
+              flex={1} color={t.textPrimary}
+              fontSize={theme.fontSize.small}>
+              {item.name}
+            </StyledText>
+            <Stack horizontal alignItems="center" gap={12}>
+              <StyledText fontSize={theme.fontSize.small} color={t.textSecondary}>
+                {formatCurrency(shop?.currency || '£', calculateItemPrice(item))}
+              </StyledText>
+              <Stack
+                width={20} height={30} borderRadius={15}
+                backgroundColor={t.bgPage}
+                justifyContent="center" alignItems="center">
+                <Icons
+                  name="cancel" size={24} color={t.textMuted}
+                  onPress={() => removeItem(item.index, table_id)}
+                />
+              </Stack>
+            </Stack>
+          </Stack>
           <StyledSpacer marginVertical={1} />
         </Fragment>
       ))}
     </ScrollView>
   );
 
-  // ── Order summary ─────────────────────────────────────────────
+  // ── Order summary ─────────────────────────────────────────────────────────
   const renderOrderSummary = () => (
-    <Box
-      backgroundColor={theme.colors.gray[50]}
-      borderWidth={1}
-      borderColor={theme.colors.gray[200]}
-      px={16}
-      py={16}
-      borderRadius={12}>
-      <HStack justifyContent="space-between" mb={8}>
-        <Text color={theme.colors.gray[500]} fontSize={theme.fontSize.normal}>
-          Subtotal
-        </Text>
-        <Text color={theme.colors.gray[700]} fontSize={theme.fontSize.normal}>
+    <Stack
+      backgroundColor={t.bgPage}
+      borderWidth={1} borderColor={t.borderDefault}
+      paddingHorizontal={16} paddingVertical={16} borderRadius={12} vertical>
+      <Stack horizontal justifyContent="space-between" marginBottom={8}>
+        <StyledText color={t.textSecondary} fontSize={theme.fontSize.normal}>Subtotal</StyledText>
+        <StyledText color={t.textSecondary} fontSize={theme.fontSize.normal}>
           {formatCurrency(shop?.currency || '£', getTotal(table_id))}
-        </Text>
-      </HStack>
-
-      <HStack justifyContent="space-between" mb={8}>
-        <Text color={theme.colors.gray[500]} fontSize={theme.fontSize.normal}>
-          Tax%
-        </Text>
-        <Text color={theme.colors.gray[700]} fontSize={theme.fontSize.normal}>
+        </StyledText>
+      </Stack>
+      <Stack horizontal justifyContent="space-between" marginBottom={8}>
+        <StyledText color={t.textSecondary} fontSize={theme.fontSize.normal}>Tax%</StyledText>
+        <StyledText color={t.textSecondary} fontSize={theme.fontSize.normal}>
           {formatCurrency(shop?.currency || '£', getTotalTax(table_id))}
-        </Text>
-      </HStack>
-
-      <Box height={1} backgroundColor={theme.colors.gray[200]} my={10} />
-
-      <HStack justifyContent="space-between">
-        <Text
-          color={theme.colors.gray[900]}
-          fontWeight={theme.fontWeight.semiBold}
-          fontSize={theme.fontSize.normal}>
-          Total
-        </Text>
-        <Text
-          color={theme.colors.gray[900]}
-          fontWeight={theme.fontWeight.semiBold}
-          fontSize={theme.fontSize.normal}>
+        </StyledText>
+      </Stack>
+      <Stack height={1} backgroundColor={t.borderDefault} marginVertical={10} />
+      <Stack horizontal justifyContent="space-between">
+        <StyledText color={t.textPrimary} fontWeight={theme.fontWeight.semiBold} fontSize={theme.fontSize.normal}>Total</StyledText>
+        <StyledText color={t.textPrimary} fontWeight={theme.fontWeight.semiBold} fontSize={theme.fontSize.normal}>
           {formatCurrency(shop?.currency || '£', totalPrice)}
-        </Text>
-      </HStack>
-    </Box>
+        </StyledText>
+      </Stack>
+    </Stack>
   );
 
-  // ── Payment methods ───────────────────────────────────────────
+  // ── Payment methods ───────────────────────────────────────────────────────
   const renderPaymentMethods = () => (
     <XStack marginTop={16} gap={16}>
       {paymentOptions.map(option => (
-        <Pressable
+        <StyledPressable
           key={option.key}
           onPress={() => setPaymentMethod(option.key)}
-          style={{
-            flex: 1,
-            padding: 14,
-            borderRadius: 12,
-            backgroundColor:
-              paymentMethod === option.key
-                ? theme.colors.gray[900]
-                : theme.colors.gray[1],
-            alignItems: 'center',
-            borderWidth: 1,
-            borderColor:
-              paymentMethod === option.key
-                ? theme.colors.gray[900]
-                : theme.colors.gray[200],
-          }}>
+          flex={1} padding={14} borderRadius={12}
+          alignItems="center"
+          backgroundColor={paymentMethod === option.key ? t.textPrimary : t.bgCard}
+          borderWidth={1}
+          borderColor={paymentMethod === option.key ? t.textPrimary : t.borderDefault}>
           <Icons
-            name={option.icon}
-            size={24}
-            color={
-              paymentMethod === option.key
-                ? theme.colors.gray[1]
-                : theme.colors.gray[600]
-            }
+            name={option.icon} size={24}
+            color={paymentMethod === option.key ? t.bgCard : t.textSecondary}
           />
           <StyledText
             marginTop={4}
-            color={
-              paymentMethod === option.key
-                ? theme.colors.gray[1]
-                : theme.colors.gray[700]
-            }
+            color={paymentMethod === option.key ? t.bgCard : t.textSecondary}
             fontSize={14}>
             {option.label}
           </StyledText>
-        </Pressable>
+        </StyledPressable>
       ))}
     </XStack>
   );
 
-  // ── Action buttons ────────────────────────────────────────────
+  // ── Action buttons ────────────────────────────────────────────────────────
+  const ActionBtn = ({onPress, bg, border, label, disabled, t}) => (
+    <StyledPressable
+      flex={1} paddingVertical={14} paddingHorizontal={12}
+      borderRadius={12} alignItems="center" justifyContent="center"
+      backgroundColor={bg} borderWidth={border ? 1 : 0} borderColor={border}
+      onPress={onPress} disabled={disabled}>
+      <StyledText color={t.bgCard} fontSize={theme.fontSize.small}
+        fontWeight={theme.fontWeight.semiBold}>{label}</StyledText>
+    </StyledPressable>
+  );
+
   const renderActionButtons = () => {
-    if (isCartChanged && hasOrderId) {
-      return (
-        <Button
-          flex={1}
-          size="lg"
-          bg={theme.colors.gray[900]}
-          borderRadius={12}
-          onPress={handleUpdateOrder}>
-          <ButtonText
-            color={theme.colors.gray[1]}
-            fontSize={theme.fontSize.normal}
-            fontWeight={theme.fontWeight.semiBold}>
-            + Order
-          </ButtonText>
-        </Button>
-      );
-    }
+    if (isCartChanged && hasOrderId)
+      return <ActionBtn onPress={handleUpdateOrder} bg={t.textPrimary} label="+ Order" 
+                        t={t}/>;
 
     if (!isCartChanged && hasItems) {
-      if (!hasOrderId) {
-        return (
-          <Button
-            flex={1}
-            size="lg"
-            bg={theme.colors.gray[900]}
-            borderRadius={12}
-            onPress={handleOrder}>
-            <ButtonText
-              color={theme.colors.gray[1]}
-              fontSize={theme.fontSize.normal}
-              fontWeight={theme.fontWeight.semiBold}>
-              Place Order
-            </ButtonText>
-          </Button>
-        );
-      }
+      if (!hasOrderId)
+        return <ActionBtn onPress={handleOrder} bg={t.textPrimary} label="Place Order" 
+                        t={t}/>;
 
       return (
         <StyledScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <Button
-            flex={1}
-            size="lg"
-            borderWidth={1}
-            bg={theme.colors.gray[1]}
-            borderColor={theme.colors.gray[300]}
-            borderRadius={12}
-            onPress={handlePrint}>
-            <ButtonText
-              color={theme.colors.gray[800]}
-              fontSize={theme.fontSize.small}
-              fontWeight={theme.fontWeight.normal}>
-              Print
-            </ButtonText>
-          </Button>
+          <ActionBtn onPress={handlePrint}                     bg={t.bgCard}   border={t.textMuted} label="Print" 
+                        t={t}/>
           <StyledSpacer marginHorizontal={8} />
-          <Button
-            flex={1}
-            size="lg"
-            bg={theme.colors.orange[500]}
-            borderColor={theme.colors.orange[600]}
-            borderRadius={12}
-            onPress={() => navigation.navigate('big-table')}>
-            <ButtonText
-              color={theme.colors.gray[1]}
-              fontSize={theme.fontSize.small}
-              fontWeight={theme.fontWeight.normal}>
-              Send
-            </ButtonText>
-          </Button>
+          <ActionBtn onPress={() => navigation.navigate('big-table')} bg={t.brandPrimary} label="Send" t={t} />
           <StyledSpacer marginHorizontal={8} />
-          <Button
-            flex={1}
-            size="lg"
-            bg={theme.colors.green[600]}
-            borderColor={theme.colors.green[600]}
-            borderRadius={12}
-            onPress={handlePaymentPress}
-            disabled={!paymentMethod}>
-            <ButtonText
-              color={theme.colors.gray[1]}
-              fontSize={theme.fontSize.small}
-              fontWeight={theme.fontWeight.normal}>
-              Pay
-            </ButtonText>
-          </Button>
+          <ActionBtn onPress={handlePaymentPress} disabled={!paymentMethod} bg={t.successColor} label="Pay" 
+                        t={t}/>
           <StyledSpacer marginHorizontal={8} />
-          <Button
-            flex={1}
-            size="lg"
-            bg={theme.colors.pink[700]}
-            borderColor={theme.colors.pink[700]}
-            borderRadius={12}
-            onPress={handleVoid}>
-            <ButtonText
-              color={theme.colors.gray[1]}
-              fontSize={theme.fontSize.small}
-              fontWeight={theme.fontWeight.normal}>
-              Void
-            </ButtonText>
-          </Button>
+          <ActionBtn onPress={handleVoid}         bg={theme.colors.pink[700]}  label="Void" 
+                        t={t}/>
           <StyledSpacer marginHorizontal={8} />
         </StyledScrollView>
       );
     }
-
     return null;
   };
 
-  // ── Empty state ───────────────────────────────────────────────
-  if (items?.items?.length === 0) {
+  if (!hasItems) {
     return (
-      <VStack
-        flex={1}
-        px={16}
-        py={16}
-        space="lg"
-        backgroundColor={theme.colors.gray[1]}
-        borderRadius={16}
-        borderWidth={1}
-        borderColor={theme.colors.gray[200]}
-        justifyContent="center"
-        alignItems="center">
-        <EmptyView
-          color={theme.colors.gray[400]}
-          title="Your cart is empty"
-          description="Add items to your cart to see them here."
-        />
-      </VStack>
+      <Stack flex={1} paddingHorizontal={16} paddingVertical={16}
+        backgroundColor={t.bgCard} borderRadius={16}
+        borderWidth={1} borderColor={t.borderDefault}
+        justifyContent="center" alignItems="center">
+        <EmptyView color={t.textMuted} title="Your cart is empty"
+          description="Add items to your cart to see them here." />
+      </Stack>
     );
   }
 
-  // ── Main render ───────────────────────────────────────────────
   return (
-    <VStack
-      flex={1}
-      px={16}
-      py={16}
-      space="lg"
-      backgroundColor={theme.colors.gray[1]}
-      borderRadius={16}
-      borderWidth={1}
-      borderColor={theme.colors.gray[200]}>
-      <VStack flex={1} space="md" mb="lg">
-        {renderCartItems()}
-      </VStack>
-
-      <VStack flex={1}>
-        {items?.items?.length > 0 ? renderOrderSummary() : null}
+    <Stack flex={1} paddingHorizontal={16} paddingVertical={16} vertical
+      backgroundColor={t.bgCard} borderRadius={16}
+      borderWidth={1} borderColor={t.borderDefault}>
+      <Stack flex={1} vertical marginBottom={16}>{renderCartItems()}</Stack>
+      <Stack flex={1} vertical>
+        {hasItems && renderOrderSummary()}
         {hasOrderId && renderPaymentMethods()}
-        <HStack
-          flex={1}
-          gap={8}
-          justifyContent="space-between"
-          alignItems="center">
+        <Stack flex={1} gap={8} justifyContent="space-between" alignItems="center" horizontal>
           {renderActionButtons()}
-        </HStack>
-      </VStack>
-
+        </Stack>
+      </Stack>
       <Drawer
         visible={showPayment}
-        bodyStyle={{backgroundColor: theme.colors.gray[50]}}
+        bodyStyle={{backgroundColor: t.bgPage}}
         onClose={() => setShowPayment(false)}
-        title="Cash Payment"
-        width="30%"
-        side="right">
+        title="Cash Payment" width="30%" side="right">
         <Payment
-          order_id={items?.order_id}
-          payment_method={paymentMethod}
-          table_name={table_name}
-          table_id={table_id}
-          printHandler={printHandler}
-          shareReceipt={shareReceipt}
-          onClose={() => setShowPayment(false)}
-        />
+          order_id={items?.order_id} payment_method={paymentMethod}
+          table_name={table_name} table_id={table_id}
+          printHandler={printHandler} shareReceipt={shareReceipt}
+          onClose={() => setShowPayment(false)} />
       </Drawer>
-    </VStack>
+    </Stack>
   );
 }

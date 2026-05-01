@@ -19,18 +19,19 @@ import {StyledCycle} from 'fluent-styles';
 import {useAppContext} from '../../../hooks/appContext';
 import EmptyView from '../../utils/empty';
 import useOrderTable from '../../../hooks/useOrderTable';
+import {useAppTheme} from '../../../theme';
 
 // ─── Status chip colours ──────────────────────────────────────────────────────
 const STATUS_STYLE = {
   completed: {bg: theme.colors.green[50],  color: theme.colors.green[700]},
-  progress:  {bg: theme.colors.amber[50],  color: theme.colors.amber[700]},
-  pending:   {bg: theme.colors.blue[50],   color: theme.colors.blue[700]},
-  cancelled: {bg: theme.colors.red[50],    color: theme.colors.red[600]},
+  progress:  {bg: theme.colors.amber[500],  color: theme.colors.amber[700]},
+  pending:   {bg: theme.colors.blue[50],   color: theme.colors.blue[600]},
+  cancelled: {bg: theme.colors.red[50],    color: theme.colors.red[500]},
 };
 
 const getStatusStyle = status =>
   STATUS_STYLE[(status || '').toLowerCase()] ||
-  {bg: theme.colors.gray[100], color: theme.colors.gray[600]};
+  {bg: theme.colors.gray[100], color: theme.colors.gray[500]};
 
 const formatStatus = status =>
   status ? status.charAt(0).toUpperCase() + status.slice(1).toLowerCase() : '';
@@ -56,7 +57,7 @@ const buildColumns = symbol => [
     width: 90,
     align: 'center',
     render: v => (
-      <StyledText fontSize={theme.fontSize.small} color={theme.colors.gray[600]}>
+      <StyledText fontSize={theme.fontSize.small} color={theme.colors.gray[500]}>
         {v || '—'}
       </StyledText>
     ),
@@ -71,7 +72,7 @@ const buildColumns = symbol => [
       <StyledText
         fontSize={theme.fontSize.small}
         fontWeight={theme.fontWeight.normal}
-        color={theme.colors.gray[600]}>
+        color={theme.colors.gray[500]}>
         {formatCurrency(symbol, v)}
       </StyledText>
     ),
@@ -86,7 +87,7 @@ const buildColumns = symbol => [
       <StyledText
         fontSize={theme.fontSize.small}
         fontWeight={theme.fontWeight.bold}
-        color={theme.colors.gray[800]}>
+        color={theme.colors.gray[900]}>
         {formatCurrency(symbol, v)}
       </StyledText>
     ),
@@ -158,6 +159,7 @@ const buildColumns = symbol => [
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function OrderCard({onOrderChange, onHandleFilter}) {
   const {updateSelectedOrder, date_filter, updateDateFilter, shop} = useAppContext();
+  const {t} = useAppTheme();
 
   // Active chip label — UI only, actual filtering done via setStatusFilter
   const [activeChip, setActiveChip] = useState('All');
@@ -214,9 +216,9 @@ export default function OrderCard({onOrderChange, onHandleFilter}) {
                 borderWidth={1}
                 height={48}
                 width={48}
-                backgroundColor={theme.colors.gray[100]}
-                borderColor={theme.colors.gray[400]}>
-                <MaterialIcon size={24} name="close" color={theme.colors.gray[800]} />
+                backgroundColor={t.bgPage}
+                borderColor={t.textMuted}>
+                <MaterialIcon size={24} name="close" color={t.textPrimary} />
               </StyledCycle>
             </Pressable>
           )}
@@ -226,9 +228,9 @@ export default function OrderCard({onOrderChange, onHandleFilter}) {
               borderWidth={1}
               height={48}
               width={48}
-              backgroundColor={theme.colors.gray[100]}
-              borderColor={theme.colors.gray[400]}>
-              <MaterialIcon size={24} name="filter-list" color={theme.colors.gray[800]} />
+              backgroundColor={t.bgPage}
+              borderColor={t.textMuted}>
+              <MaterialIcon size={24} name="filter-list" color={t.textPrimary} />
             </StyledCycle>
           </Pressable>
         </Stack>

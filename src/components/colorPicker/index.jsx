@@ -6,9 +6,11 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { FlatList } from 'react-native';
 import { palettes, theme } from '../../configs/theme';
 import { YStack, XStack, StyledSpacer, StyledText, StyledButton } from 'fluent-styles';
+import {useAppTheme} from '../../theme';
 
 const ColorPicker = React.memo(({ color, onPress }) => {
     const [selectedColor, setSelectedColor] = useState(color);
+  const {t} = useAppTheme();
 
     useEffect(() => {
         setSelectedColor(color);
@@ -31,7 +33,7 @@ const ColorPicker = React.memo(({ color, onPress }) => {
         }, []);
     }, [palettes]);
 
-    const renderItem = ({ item }) => (
+    const renderItem = ({item, t}) => (
         <StyledButton
             height={48}
             width={48}
@@ -47,7 +49,7 @@ const ColorPicker = React.memo(({ color, onPress }) => {
         <YStack padding={10} justifyContent='center' alignItems='center'>
             {selectedColor && (
                 <XStack flex={1} justifyContent='center' alignItems='center' height={100} width={100} marginTop={20} borderRadius={10} backgroundColor={selectedColor}>
-                    <StyledText fontSize={theme.fontSize.small} color={theme.colors.gray[1]}>
+                    <StyledText fontSize={theme.fontSize.small} color={t.bgCard}>
                         {selectedColor}
                     </StyledText>
                 </XStack>

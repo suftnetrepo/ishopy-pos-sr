@@ -6,19 +6,21 @@ import {StyledIcon} from '../../../components/package/icon';
 import {ScrollView} from 'react-native';
 import {useQueryGetLowerStock} from '../../../hooks/useStock';
 import {Icon} from '../icon/icon';
+import {useAppTheme} from '../../../theme';
 
 const LowStockItems = () => {
+  const {t} = useAppTheme();
   const {data} = useQueryGetLowerStock();
 
   return (
     <Stack
       vertical
       shadowOpacity={0.9}
-      shadowColor={theme.colors.gray[200]}
+      shadowColor={t.borderDefault}
       shadowRadius={8}
       width={'100%'}
       borderRadius={8}
-      backgroundColor={theme.colors.gray[1]}
+      backgroundColor={t.bgCard}
       paddingHorizontal={24}
       paddingVertical={24}
       justifyContent="flex-start"
@@ -30,16 +32,16 @@ const LowStockItems = () => {
         alignItems="center"
         gap={8}>
         <StyledText
-          color={theme.colors.gray[800]}
+          color={t.textPrimary}
           fontSize={theme.fontSize.large}
           fontWeight={theme.fontWeight.normal as any}>
           Low Stock Items
         </StyledText>
-        <StyledIcon size={24} name="share" color={theme.colors.gray[300]} />
+        <StyledIcon size={24} name="share" color={t.textMuted} />
       </Stack>
       <StyledSpacer
         borderWidth={0.5}
-        borderColor={theme.colors.gray[300]}
+        borderColor={t.textMuted}
         width={'100%'}
         marginVertical={8}
       />
@@ -69,7 +71,7 @@ const LowStockItems = () => {
                 <Icon name={dish?.icon_name} isSelected={false} />
                 <Stack vertical>
                   <StyledText
-                    color={theme.colors.gray[500]}
+                    color={t.textSecondary}
                     fontSize={16}
                     fontWeight={theme.fontWeight.medium as any}
                     marginLeft={2}>
@@ -81,7 +83,7 @@ const LowStockItems = () => {
                     alignItems="center"
                     gap={4}>
                     <StyledText
-                      color={theme.colors.gray[400]}
+                      color={t.textMuted}
                       fontSize={14}
                       fontWeight={theme.fontWeight.normal as any}
                       marginLeft={2}>
