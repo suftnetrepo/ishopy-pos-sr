@@ -77,7 +77,7 @@ export default function ItemCard({onChangeItem, table_id}) {
       <Stack
         blue={selectedItem?.menu_id === item.menu_id}
         flex={1}
-        backgroundColor={item?.color_code}
+        backgroundColor={item?.color_code || t.bgCard}
         borderRadius={16}
         padding={12}
         marginVertical={4}

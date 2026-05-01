@@ -6,18 +6,20 @@ import { fontStyles, theme } from "../../configs/theme";
 import { useNavigation } from "@react-navigation/native";
 import {useAppTheme} from '../../theme';
 
-const EmptyView = ({button, icon = "notifications-active", title, description, screen, color=t.bgCard, t}) => {
-    const navigator = useNavigation()
+const EmptyView = ({button, icon = "notifications-active", title, description, screen, color}) => {
+    const {t} = useAppTheme();
+    const navigator = useNavigation();
+    const iconColor = color ?? t.textMuted;
 
     return (
         <YStack flex={1} justifyContent="center" paddingHorizontal={32} paddingVertical={1}
-            alignItems="center">
+            alignItems="center" backgroundColor={t.bgCard}>
             {
                 icon && (
                     <StyledMIcon
                         size={60}
                         name={icon}
-                        color={color}
+                        color={iconColor}
                     />
                 )
             }
@@ -29,7 +31,7 @@ const EmptyView = ({button, icon = "notifications-active", title, description, s
                         fontWeight={theme.fontWeight.bold}
                         paddingHorizontal={8}
                         textAlign="center"
-                        color={color}>
+                        color={t.textPrimary}>
                         {title}
                     </StyledText>
                 )
@@ -43,7 +45,7 @@ const EmptyView = ({button, icon = "notifications-active", title, description, s
                         paddingHorizontal={8}
                         paddingVertical={8}
                           textAlign="center"
-                        color={color}>
+                        color={t.textSecondary}>
                         {description}
                     </StyledText>
                 )

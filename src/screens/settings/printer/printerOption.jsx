@@ -9,22 +9,25 @@ import {useAppTheme} from '../../../theme';
 
 const CONNECTION_TYPES = Platform.OS === 'ios' ? ['wifi'] : ['wifi', 'bluetooth'];
 
-const inputStyle = {
-  borderWidth: 1, borderColor: '#d4d4d8', borderRadius: 12,
-  paddingHorizontal: 12, paddingVertical: 12,
-};
-
 export default function PrinterOptions() {
   const {devices, selectedPrinter, loading, enableBluetooth, connectDevice,
          connectWifiPrinter, disconnectPrinter, testPrint} = useBluetoothPrinterContext();
+  const {t} = useAppTheme();
 
   const [connectionType,    setConnectionType]    = useState('wifi');
   const [scanning,          setScanning]          = useState(false);
   const [availablePrinters, setAvailablePrinters] = useState([]);
-  const {t} = useAppTheme();
   const [wifiName,          setWifiName]          = useState('');
   const [wifiHost,          setWifiHost]          = useState('');
   const [wifiPort,          setWifiPort]          = useState('9100');
+
+  const inputStyle = {
+    borderWidth: 1,
+    borderColor: t.borderDefault,
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+  };
 
   useEffect(() => { if (Platform.OS === 'ios') setConnectionType('wifi'); }, []);
 

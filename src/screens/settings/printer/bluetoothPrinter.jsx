@@ -51,7 +51,7 @@ const BluetoothPrinter = () => {
                     `
                 </StyledText>
                 <StyledSpacer marginVertical={16} />
-                <StyledButton backgroundColor={isEnabled ? t.successColor : theme.colors.pink[600]} onPress={enableBluetooth}>
+                <StyledButton backgroundColor={isEnabled ? t.successColor : t.dangerColor} onPress={enableBluetooth}>
                     <XStack paddingHorizontal={8} justifyContent='flex-start' alignItems='center'>
                         <StyledSpacer marginHorizontal={2} />
                         <StyledMIcon size={32} name='search' color={t.bgCard} />

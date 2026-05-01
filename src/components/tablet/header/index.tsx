@@ -2,9 +2,9 @@ import React from 'react';
 import {
   StyledText,
   StyledSpacer,
-  StyledCycle,
   Stack,
   StyledPressable,
+  StyleShape
 } from 'fluent-styles';
 import {useNavigation, CommonActions} from '@react-navigation/native';
 
@@ -36,8 +36,6 @@ const RenderHeader = ({
   const {user} = useAppContext();
   const {t} = useAppTheme();
 
-  console.log('User Info:', user);
-
   return (
     <Stack
       horizontal
@@ -49,28 +47,27 @@ const RenderHeader = ({
       marginBottom={14}
       marginHorizontal={16}
       borderRadius={16}
-      shadowOpacity={0.1}
-      shadowColor={t.textSecondary}
-      shadowRadius={30}
-      paddingHorizontal={8}>
+      borderWidth={0.5}
+      borderColor={t.borderDefault}
+      paddingHorizontal={8}
+    >
       {showBackButton && (
         <StyledPressable
           onPress={() => {
             navigation.canGoBack() && navigation.goBack();
           }}>
-          <StyledCycle
-            paddingHorizontal={10}
-            borderWidth={1}
-            height={48}
-            width={48}
-            borderColor={t.textMuted}>
+          <StyleShape
+            cycle size={48}
+            borderWidth={1} borderColor={t.borderDefault}
+            backgroundColor={t.bgCard}
+            alignItems="center" justifyContent="center">
             <Icon
               style={{pointerEvents: 'none'}}
               size={24}
               name="arrow-back"
               color={t.textPrimary}
             />
-          </StyledCycle>
+          </StyleShape>
         </StyledPressable>
       )}
       {showLogo && <Logo />}
@@ -80,7 +77,7 @@ const RenderHeader = ({
           fontSize={theme.fontSize.normal}
           fontWeight={theme.fontWeight.normal as any}
           paddingHorizontal={8}
-          color={t.textSecondary}>
+          color={t.textPrimary}>
           {title || 'Dashboard'}
         </StyledText>
       )}
@@ -135,20 +132,18 @@ const RenderHeader = ({
                   })
                 );
               }}>
-              <StyledCycle
-                paddingHorizontal={10}
-                borderWidth={1}
-                height={48}
-                width={48}
+              <StyleShape
+                cycle size={48}
+                borderWidth={1} borderColor={t.borderDefault}
                 backgroundColor={t.bgCard}
-                borderColor={t.textMuted}>
+                alignItems="center" justifyContent="center">
                 <Icon
-                style={{pointerEvents: 'none'}}
+                  style={{pointerEvents: 'none'}}
                   size={24}
                   name="exit-to-app"
                   color={t.textPrimary}
                 />
-              </StyledCycle>
+              </StyleShape>
             </StyledPressable>
           </Stack>
         </>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyledText, StyledSkeleton, StyledSpacer, StyledEmptyState} from 'fluent-styles';
+import {StyledText, StyledSkeleton, StyledSpacer} from 'fluent-styles';
 import {Stack} from '../../../components/package/stack';
 import {theme} from '../../../utils/theme';
 import {StyledIcon} from '../../../components/package/icon';
@@ -15,9 +15,6 @@ const LowStockItems = () => {
   return (
     <Stack
       vertical
-      shadowOpacity={0.9}
-      shadowColor={t.borderDefault}
-      shadowRadius={8}
       width={'100%'}
       borderRadius={8}
       backgroundColor={t.bgCard}
@@ -48,13 +45,20 @@ const LowStockItems = () => {
 
       {data.length === 0 ? (
         <>
-          <Stack width={'100%'} vertical gap={4}>
-             <StyledEmptyState
-              variant="card"
-              illustration="🔔"
-              title="Nothing here yet"
-              description="Lower stock items will appear here. "
-            />
+          <Stack
+            width="100%" vertical alignItems="center" justifyContent="center"
+            paddingVertical={24} gap={12}
+            backgroundColor={t.bgCard} borderRadius={12}>
+            <StyledText fontSize={32}>🔔</StyledText>
+            <StyledText
+              fontSize={theme.fontSize.normal}
+              fontWeight={theme.fontWeight.semiBold as any}
+              color={t.textPrimary}>
+              Nothing here yet
+            </StyledText>
+            <StyledText fontSize={theme.fontSize.small} color={t.textSecondary} textAlign="center">
+              Lower stock items will appear here.
+            </StyledText>
           </Stack>
         </>
       ) : (

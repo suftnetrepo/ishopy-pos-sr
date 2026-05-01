@@ -125,7 +125,7 @@ export const dark = {
   textPrimary:   palette.gray50,
   textSecondary: palette.gray400,
   textMuted:     palette.gray600,
-  textInverse:   palette.gray900,
+  textInverse:   palette.white,    // always white — used on dark/coloured backgrounds
   textOnAmber:   palette.hero,
 
   // Brand — same amber, works on dark too

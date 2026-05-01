@@ -1,79 +1,73 @@
-
-import React, { useState } from "react";
-import { styled, theme, StyledSpacer, isValidColor, StyledCycle, isValidNumber, StyledInput } from 'fluent-styles';
-import { StyledMIcon } from "../icon";
-import { View } from "react-native";
+import React, {useState} from 'react';
+import {
+  theme,
+  StyledSpacer,
+  StyledCycle,
+  StyledPressable,
+  StyledText,
+  Stack,
+} from 'fluent-styles';
+import {TextInput} from 'react-native';
+import {StyledMIcon} from '../icon';
 import {useAppTheme} from '../../theme';
 
-const SearchBar = styled(View, {
-    base: {
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        paddingVertical: 1,
-        paddingHorizontal: 1,
-        height: 50,
-        borderRadius: 100,
-        backgroundColor: theme.colors.gray[1],
-    },
-    variants: {
-        borderColor: color => {
-            if (!color) return
-            if (!isValidColor(color)) {
-                throw new Error('Invalid color value')
-            }
-            return { borderColor: color }
-        },
-        borderRadius: (size = 32) => {
-            if (!isValidNumber(size)) {
-                throw new Error('Invalid borderRadius value')
-            }
-            return { borderRadius: size }
-        },
-        backgroundColor: color => {
-            if (!color) return
-            if (!isValidColor(color)) {
-                throw new Error('Invalid color value')
-            }
-            return { backgroundColor: color }
-        }
-    }
-})
+const StyledSearchBar = ({
+  size = 24,
+  name = 'search',
+  placeholder = 'Search item by name',
+  showSearchIcon = false,
+  onTextChange,
+  onPress,
+  flex = 1,
+  ...rest
+}) => {
+  const {t} = useAppTheme();
+  const [searchQuery, setSearchQuery] = useState('');
 
-const StyledSearchBar = ({size = 24, name = 'search', placeholder = 'Search item by name', showSearchIcon = false, onTextChange, onPress, t, ...rest}) => {
-    const [searchQuery, setSearchQuery] = useState('');
+  const handleSubmit = () => {
+    if (onPress && searchQuery) onPress(searchQuery);
+  };
 
-    const handleSubmit = () => {
-        if (onPress && searchQuery) {
-            onPress(searchQuery)
-        }
-    }
+  return (
+    <Stack
+      flex={flex}
+      horizontal
+      alignItems="center"
+      height={50}
+      borderRadius={100}
+      borderWidth={1}
+      borderColor={t.borderDefault}
+      backgroundColor={t.bgCard}
+      paddingHorizontal={4}
+      {...rest}>
+      <TextInput
+        style={{
+          flex: 1,
+          marginHorizontal: 12,
+          fontSize: theme.fontSize.normal,
+          color: t.textPrimary,
+          backgroundColor: 'transparent',
+        }}
+        placeholder={placeholder}
+        placeholderTextColor={t.textMuted}
+        value={searchQuery}
+        onChangeText={text => {
+          setSearchQuery(text);
+          onTextChange && onTextChange(text);
+        }}
+        returnKeyType="search"
+        onSubmitEditing={handleSubmit}
+      />
+      {showSearchIcon && (
+        <StyledCycle
+          borderWidth={1}
+          borderColor={theme.colors.cyan[400]}
+          backgroundColor={theme.colors.cyan[500]}>
+          <StyledMIcon size={size} name={name} color={t.bgCard} onPress={handleSubmit} />
+        </StyledCycle>
+      )}
+    </Stack>
+  );
+};
 
-    return (
-        <SearchBar flex={1}  {...rest}>
-            <StyledInput variant="outline" marginHorizontal={8} flex={1} placeholder={placeholder} fontSize={theme.fontSize.normal} value={searchQuery}
-                onChangeText={(text) => {
-                    setSearchQuery((pre) => {
-                        return {
-                            ...pre,
-                            text
-                        }
-                    })
-                    onTextChange(text)
-                }} returnKeyType='search'  onSubmitEditing={handleSubmit} />
-            <StyledSpacer marginHorizontal={2} />
-            {
-                showSearchIcon && (
-                    <StyledCycle borderWidth={1} borderColor={theme.colors.cyan[400]} backgroundColor={theme.colors.cyan[500]}>
-                        {
-                            <StyledMIcon size={size} name={name} color={t.bgCard} onPress={() => handleSubmit()} />
-                        }
-                    </StyledCycle>
-                )
-            }
-
-        </SearchBar>
-    )
-}
-
-export { StyledSearchBar }
+export {StyledSearchBar};

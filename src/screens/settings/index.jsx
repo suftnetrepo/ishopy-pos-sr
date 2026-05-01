@@ -17,68 +17,88 @@ import Printer from './printer';
 import {capitalize} from '../../utils/help';
 import {useAppTheme} from '../../theme';
 
+// ─── Helper to get semantic accent colors for settings cards ─────────────────
+// Maps setting IDs to semantic color keys so cards adapt to light/dark themes
+const getSettingsAccent = (settingId, t) => {
+  const accents = {
+    category: { bg: t.colors?.purple[50] || '#faf5ff',  color: t.colors?.purple[600] || '#9333ea' },
+    item:     { bg: t.colors?.blue[50] || '#eff6ff',   color: t.colors?.blue[600] || '#2563eb' },
+    tax:      { bg: t.colors?.amber[50] || '#fffbeb',  color: t.colors?.amber[700] || '#b45309' },
+    discount: { bg: t.colors?.green[50] || '#f0fdf4',  color: t.colors?.green[600] || '#16a34a' },
+    shop:     { bg: t.colors?.amber[50] || '#fffbeb',  color: t.colors?.amber[700] || '#b45309' },
+    user:     { bg: t.colors?.blue[50] || '#eff6ff',   color: t.colors?.blue[600] || '#2563eb' },
+    table:    { bg: t.colors?.purple[50] || '#faf5ff', color: t.colors?.purple[600] || '#9333ea' },
+    backup:   { bg: t.colors?.green[50] || '#f0fdf4',  color: t.colors?.green[600] || '#16a34a' },
+    printer:  { bg: t.colors?.purple[50] || '#faf5ff', color: t.colors?.purple[600] || '#9333ea' },
+  };
+  return accents[settingId] || accents.category;
+};
+
 const SETTINGS = [
   {
     section: 'Menu & Products',
     items: [
-      {id: 'category', icon: 'add-shopping-cart', iconBg: '#ede9fe', iconColor: '#7c3aed', name: 'Categories', sub: 'Manage menu groups'},
-      {id: 'item',     icon: 'edit',              iconBg: '#dbeafe', iconColor: '#1d4ed8', name: 'Items',       sub: 'Products & pricing'},
-      {id: 'tax',      icon: 'attach-money',      iconBg: '#fef3c7', iconColor: '#b45309', name: 'Taxes',       sub: 'Tax rates'},
-      {id: 'discount', icon: 'money',             iconBg: '#dcfce7', iconColor: '#15803d', name: 'Discounts',   sub: 'Discount rules'},
+      {id: 'category', icon: 'add-shopping-cart', name: 'Categories', sub: 'Manage menu groups'},
+      {id: 'item',     icon: 'edit',              name: 'Items',       sub: 'Products & pricing'},
+      {id: 'tax',      icon: 'attach-money',      name: 'Taxes',       sub: 'Tax rates'},
+      {id: 'discount', icon: 'money',             name: 'Discounts',   sub: 'Discount rules'},
     ],
   },
   {
     section: 'Business',
     items: [
-      {id: 'shop',  icon: 'email',      iconBg: '#fef3c7', iconColor: '#b45309', name: 'Shop',   sub: 'Name, currency, mode'},
-      {id: 'user',  icon: 'person',     iconBg: '#dbeafe', iconColor: '#1d4ed8', name: 'Users',  sub: 'Staff & access'},
-      {id: 'table', icon: 'date-range', iconBg: '#ede9fe', iconColor: '#7c3aed', name: 'Tables', sub: 'Dine in, bar, takeaway'},
+      {id: 'shop',  icon: 'email',      name: 'Shop',   sub: 'Name, currency, mode'},
+      {id: 'user',  icon: 'person',     name: 'Users',  sub: 'Staff & access'},
+      {id: 'table', icon: 'date-range', name: 'Tables', sub: 'Dine in, bar, takeaway'},
     ],
   },
   {
     section: 'System',
     items: [
-      {id: 'backup',  icon: 'cloud-upload', iconBg: '#dcfce7', iconColor: '#15803d', name: 'Backup',  sub: 'Google Drive sync'},
-      {id: 'printer', icon: 'print',        iconBg: '#f3e8ff', iconColor: '#7c3aed', name: 'Printer', sub: 'Receipt printer setup'},
+      {id: 'backup',  icon: 'cloud-upload', name: 'Backup',  sub: 'Google Drive sync'},
+      {id: 'printer', icon: 'print',        name: 'Printer', sub: 'Receipt printer setup'},
     ],
   },
 ];
 
 // ─── Card — receives t as prop so it works outside the main component ─────────
-const SettingsCard = ({icon, iconBg, iconColor, name, sub, onPress, t}) => (
-  <StyledPressable
-    onPress={onPress}
-    flexDirection="row"
-    alignItems="center"
-    gap={14}
-    backgroundColor={t.bgCard}
-    borderRadius={12}
-    borderWidth={0.5}
-    borderColor={t.borderDefault}
-    paddingHorizontal={16}
-    paddingVertical={14}
-    flex={1}>
-    <Stack
-      width={44} height={44} borderRadius={22}
-      backgroundColor={iconBg}
-      alignItems="center" justifyContent="center"
-      flexShrink={0}>
-      <StyledIcon name={icon} size={22} color={iconColor} />
-    </Stack>
-    <Stack vertical gap={2} flex={1}>
-      <StyledText
-        fontSize={theme.fontSize.normal}
-        fontWeight={theme.fontWeight.medium}
-        color={t.textPrimary}>
-        {name}
-      </StyledText>
-      <StyledText fontSize={theme.fontSize.small} color={t.textMuted}>
-        {sub}
-      </StyledText>
-    </Stack>
-    <StyledIcon name="chevron-right" size={20} color={t.textMuted} />
-  </StyledPressable>
-);
+const SettingsCard = ({icon, id, name, sub, onPress, t}) => {
+  const accent = getSettingsAccent(id, t);
+  return (
+    <StyledPressable
+      onPress={onPress}
+      flexDirection="row"
+      alignItems="center"
+      gap={14}
+      backgroundColor={t.bgCard}
+      borderRadius={12}
+      borderWidth={0.5}
+      borderColor={t.borderDefault}
+      paddingHorizontal={16}
+      paddingVertical={14}
+      flex={1}>
+      <Stack
+        width={44} height={44} borderRadius={22}
+        backgroundColor={accent.bg}
+        alignItems="center" justifyContent="center"
+        flexShrink={0}>
+        <StyledIcon name={icon} size={22} color={accent.color} />
+      </Stack>
+      <Stack vertical gap={2} flex={1}>
+        <StyledText
+          fontSize={theme.fontSize.normal}
+          fontWeight={theme.fontWeight.medium}
+          color={t.textPrimary}>
+          {name}
+        </StyledText>
+        <StyledText fontSize={theme.fontSize.small} color={t.textMuted}>
+          {sub}
+        </StyledText>
+      </Stack>
+      <StyledIcon name="chevron-right" size={20} color={t.textMuted} />
+    </StyledPressable>
+  );
+};
 
 const BigSettings = () => {
   const navigation = useNavigation();
@@ -129,9 +149,8 @@ const BigSettings = () => {
                       <SettingsCard
                         key={item.id}
                         t={t}
+                        id={item.id}
                         icon={item.icon}
-                        iconBg={item.iconBg}
-                        iconColor={item.iconColor}
                         name={item.name}
                         sub={item.sub}
                         onPress={() => handlePress(item.id)}

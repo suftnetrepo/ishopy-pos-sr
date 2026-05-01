@@ -157,12 +157,14 @@ const Card = ({table, onPress, t}) => {
           paddingHorizontal={8}
           paddingVertical={3}
           borderRadius={20}
-          backgroundColor={s.badgeBg}
+          backgroundColor={s.label === 'Available' ? t.bgPage : s.badgeBg}
+          borderWidth={0.5}
+          borderColor={s.label === 'Available' ? t.borderDefault : s.badgeBg}
           alignSelf="flex-start">
           <StyledText
             fontSize={10}
             fontWeight={theme.fontWeight.semiBold}
-            color={s.badgeColor}>
+            color={s.label === 'Available' ? t.textMuted : s.badgeColor}>
             {s.label}
           </StyledText>
         </Stack>

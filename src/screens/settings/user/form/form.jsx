@@ -25,6 +25,14 @@ const UserForm = ({user, onClose}) => {
     })
   }, [user])
 
+  const inputProps = {
+    fontSize: theme.fontSize.small,
+    borderColor: t.borderDefault,
+    backgroundColor: t.bgCard,
+    paddingHorizontal: 8,
+    placeholderTextColor: t.textMuted,
+  };
+
   const onNotify = ({status, t}) => {
     toastService.show({
       message: `User ${status}`,
@@ -80,13 +88,11 @@ const UserForm = ({user, onClose}) => {
             returnKeyType='next'
             maxLength={50}
             height={40}
-            fontSize={theme.fontSize.small}
-            paddingHorizontal={8}
             value={fields.first_name}
-            placeholderTextColor={t.textMuted}
             onChangeText={(text) => setFields({ ...fields, first_name: text })}
             error={!!errorMessages?.first_name}
             errorMessage={errorMessages?.first_name?.message}
+            {...inputProps}
           />
           <StyledTextInput
             label={'LastName'}
@@ -95,13 +101,11 @@ const UserForm = ({user, onClose}) => {
             returnKeyType='next'
             maxLength={50}
             height={40}
-            fontSize={theme.fontSize.small}
-            paddingHorizontal={8}
             value={fields.last_name}
-            placeholderTextColor={t.textMuted}
             onChangeText={(text) => setFields({ ...fields, last_name: text })}
             error={!!errorMessages?.last_name}
             errorMessage={errorMessages?.last_name?.message}
+            {...inputProps}
           />
           <StyledTextInput
             label={'Username'}
@@ -110,13 +114,11 @@ const UserForm = ({user, onClose}) => {
             returnKeyType='next'
             maxLength={50}
             height={40}
-            fontSize={theme.fontSize.small}
-            paddingHorizontal={8}
             value={fields.username}
-            placeholderTextColor={t.textMuted}
             onChangeText={(text) => setFields({ ...fields, username: text })}
             error={!!errorMessages?.username}
             errorMessage={errorMessages?.username?.message}
+            {...inputProps}
           />
           <StyledTextInput
             label={'Password'}
@@ -126,13 +128,11 @@ const UserForm = ({user, onClose}) => {
             returnKeyType='done'
             maxLength={8}
             height={40}
-            fontSize={theme.fontSize.small}
-            paddingHorizontal={8}
             value={fields.password}
-            placeholderTextColor={t.textMuted}
             onChangeText={(text) => setFields({ ...fields, password: text })}
             error={!!errorMessages?.password}
             errorMessage={errorMessages?.password?.message}
+            {...inputProps}
           />
           <StyledTextInput
             label={'Pass code'}
@@ -141,13 +141,11 @@ const UserForm = ({user, onClose}) => {
             returnKeyType='done'
             maxLength={4}
             height={40}
-            fontSize={theme.fontSize.small}
-            paddingHorizontal={8}
             value={fields.pass_code}
-            placeholderTextColor={t.textMuted}
             onChangeText={(text) => setFields({ ...fields, pass_code: text })}
             error={!!errorMessages?.pass_code}
             errorMessage={errorMessages?.pass_code?.message}
+            {...inputProps}
           />
           {/* Uncomment if user model supports status */}
 

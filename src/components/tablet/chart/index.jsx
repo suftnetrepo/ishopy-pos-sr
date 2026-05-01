@@ -42,16 +42,6 @@ const TREND_STYLE = {
   year:  {line: theme.colors.amber[500],   gradFrom: 'rgba(245,158,11,0.20)',  gradTo: 'rgba(245,158,11,0)'},
 };
 
-const barChartConfig = {
-  backgroundGradientFrom: '#fff',
-  backgroundGradientTo: '#fff',
-  decimalPlaces: 0,
-  color: (opacity = 1) => `rgba(34, 128, 176, ${opacity})`,
-  labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-  style: {borderRadius: 8},
-  propsForBackgroundLines: {strokeDasharray: ''},
-};
-
 // ─── Period chip ──────────────────────────────────────────────────────────────
 const PeriodChip = ({label, periodKey, active, onPress, t}) => {
   const c = ACTIVE_COLORS[periodKey];
@@ -80,9 +70,22 @@ const PeriodChip = ({label, periodKey, active, onPress, t}) => {
 };
 
 // ─── Day panel ────────────────────────────────────────────────────────────────
-const DayPanel = ({containerWidth, symbol, t}) => {
+const DayPanel = ({containerWidth, symbol, t, isDark}) => {
   const {data} = useWeeklyTransactions();
   const {trend, dailyTransaction} = useTransactionTrend();
+
+  const barChartConfig = {
+    backgroundGradientFrom: t.bgCard,
+    backgroundGradientTo: t.bgCard,
+    decimalPlaces: 0,
+    color: (opacity = 1) => `rgba(34, 128, 176, ${opacity})`,
+    // palette.gray50 (#fafafa) in dark, palette.gray900 (#18181b) in light
+    labelColor: (opacity = 1) => isDark
+      ? `rgba(250, 250, 250, ${opacity})`
+      : `rgba(24, 24, 27, ${opacity})`,
+    style: {borderRadius: 8},
+    propsForBackgroundLines: {strokeDasharray: ''},
+  };
 
   return (
     <Stack vertical>
@@ -203,18 +206,16 @@ const DailyTransactionChart = () => {
   const [activePeriod, setActivePeriod] = useState('day');
   const [containerWidth, setContainerWidth] = useState(0);
   const {shop} = useAppContext();
-  const {t} = useAppTheme();
+  const {t, isDark} = useAppTheme();
   const symbol = shop?.currency || '£';
-  const sharedProps = {containerWidth, symbol, t};
+  const sharedProps = {containerWidth, symbol, t, isDark};
 
   const activeTitle = PERIODS.find(p => p.key === activePeriod)?.title;
 
   return (
     <Stack
       vertical
-      shadowOpacity={0.9}
-      shadowColor={t.borderDefault}
-      shadowRadius={8}
+     
       marginVertical={16}
       marginLeft={16}
       backgroundColor={t.bgCard}

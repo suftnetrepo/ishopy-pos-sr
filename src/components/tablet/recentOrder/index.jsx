@@ -23,9 +23,6 @@ const RecentOrder = () => {
   return (
     <Stack
       vertical
-      shadowOpacity={0.9}
-      shadowColor={t.borderDefault}
-      shadowRadius={8}
       borderRadius={8}
       backgroundColor={t.bgCard}
       paddingHorizontal={24}

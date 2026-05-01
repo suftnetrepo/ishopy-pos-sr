@@ -35,6 +35,14 @@ const TaxForm = ({tax, onClose}) => {
     }));
   }, [tax]);
 
+  const inputProps = {
+    fontSize: theme.fontSize.small,
+    borderColor: t.borderDefault,
+    backgroundColor: t.bgCard,
+    paddingHorizontal: 8,
+    placeholderTextColor: t.textMuted,
+  };
+
   const onNotify = ({status, t}) => {
     toastService.show({
       message: `Tax ${status}`,
@@ -89,13 +97,11 @@ const TaxForm = ({tax, onClose}) => {
           returnKeyType="next"
           maxLength={50}
           height={40}
-          fontSize={theme.fontSize.small}
-          paddingHorizontal={8}
           value={fields.name}
-          placeholderTextColor={t.textMuted}
           onChangeText={text => setFields({...fields, name: text})}
           error={!!errorMessages.name}
           errorMessage={errorMessages.name?.message}
+          {...inputProps}
         />
         <StyledInput
           label={'Rate'}
@@ -104,17 +110,15 @@ const TaxForm = ({tax, onClose}) => {
           returnKeyType="next"
           maxLength={50}
           height={40}
-          fontSize={theme.fontSize.small}
-          paddingHorizontal={8}
           value={
             fields.rate !== undefined && fields.rate !== null
               ? String(fields.rate)
               : ''
           }
-          placeholderTextColor={t.textMuted}
           onChangeText={text => setFields({...fields, rate: text})}
           error={!!errorMessages.rate}
           errorMessage={errorMessages.rate?.message}
+          {...inputProps}
         />
         <XStack justifyContent="flex-start" alignItems="center" gap={8}>
           <Switch

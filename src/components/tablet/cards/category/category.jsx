@@ -60,6 +60,7 @@ const CategoryCard = ({name,
             fontFamily={fontStyles.Roboto_Regular}
             fontSize={theme.fontSize.medium}
             fontWeight={theme.fontWeight.medium}
+            color={t.textPrimary}
             numberOfLines={1}
             ellipsizeMode="tail">
             {name}

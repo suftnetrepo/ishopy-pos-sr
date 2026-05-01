@@ -144,7 +144,7 @@ const Shop = ({onClose}) => {
                         borderRadius={20}
                         backgroundColor={
                           active
-                            ? theme.colors.amber[100]
+                            ? t.brandPrimaryBg
                             : t.bgPage
                         }
                         alignItems="center"
@@ -168,7 +168,7 @@ const Shop = ({onClose}) => {
                         }
                         color={
                           active
-                            ? theme.colors.amber[800]
+                            ? t.brandPrimaryText
                             : t.textSecondary
                         }>
                         {mode.label}

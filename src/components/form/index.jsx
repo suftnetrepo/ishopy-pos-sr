@@ -88,24 +88,25 @@ const StyledInputText = styled(TextInput, {
 });
 
 const StyledInput = forwardRef(({ label, containerProps, borderColor, errorMessage, error, errorProps, labelProps, ...rest }, ref) => {
+    const {t} = useAppTheme();
     return (
         <>
             {
                 label && (
                     <YStack width={'100%'} justifyContent='flex-start' alignItems='flex-start' {...containerProps} >
-                        <StyledText paddingHorizontal={8} color={t.textPrimary} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.normal} {...labelProps}>
+                        <StyledText paddingHorizontal={8} color={t.textSecondary} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.normal} {...labelProps}>
                             {label}
                         </StyledText>
                         <StyledSpacer marginVertical={4} />
                     </YStack>
                 )
             }
-            <StyledInputText placeholderTextColor={t.textMuted} ref={ref} {...rest} borderColor={error ? theme.colors.pink[500] : borderColor} />
+            <StyledInputText placeholderTextColor={t.textMuted} ref={ref} {...rest} borderColor={error ? t.dangerColor : borderColor} />
             {
                 errorMessage && (
                     <YStack width={'100%'} justifyContent='flex-start' alignItems='flex-start' {...containerProps} >
                         <StyledSpacer marginVertical={1} />
-                        <StyledText marginHorizontal={8} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.small} color={theme.colors.pink[500]} {...errorProps}>
+                        <StyledText marginHorizontal={8} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.small} color={t.dangerColor} {...errorProps}>
                             {errorMessage}
                         </StyledText>
                     </YStack>

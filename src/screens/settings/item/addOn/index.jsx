@@ -200,16 +200,16 @@ const ItemAddOn = ({menu_id}) => {
             <StyledChip
               label="Required"
               variant="filled"
-              bgColor="#e8f5e9"
-              color="#388e3c"
+              bgColor={t.colors?.green[50] || '#f0fdf4'}
+              color={t.colors?.green[600] || '#16a34a'}
               selected={fields.group_id === 'required'}
               onPress={() => setFields({...fields, group_id: 'required'})}
             />
             <StyledChip
               label="Optional"
               variant="filled"
-              bgColor="#fff3e0"
-              color="#f57c00"
+              bgColor={t.colors?.amber[50] || '#fffbeb'}
+              color={t.colors?.amber[600] || '#d97706'}
               selected={fields.group_id === 'optional'}
               onPress={() => setFields({...fields, group_id: 'optional'})}
             />

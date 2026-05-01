@@ -27,9 +27,6 @@ const SideBarAdapter: React.FC<SideBarAdapterProps> = ({
       vertical
       marginLeft={16}
       paddingHorizontal={16}
-      shadowOpacity={0.9}
-      shadowColor={t.borderDefault}
-      shadowRadius={8}
       backgroundColor={t.bgCard}>
       <StyledSpacer marginVertical={7} />
       <SideBar

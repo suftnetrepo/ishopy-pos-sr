@@ -7,15 +7,15 @@ import {StyledIcon} from '../../../../components/package/icon';
 import {toWordCase} from '../../../../utils/help';
 import {useAppTheme} from '../../../../theme';
 
-// ─── Location pill config ─────────────────────────────────────────────────────
-const LOCATION_STYLE = {
-  'Bar':      {bg: '#f3e8ff', color: '#7c3aed'},
-  'Takeaway': {bg: '#fef3c7', color: '#b45309'},
-  'Dine In':  {bg: '#f4f4f5', color: '#71717a'},
+// ─── Location pill config with theme-aware tokens ────────────────
+const getLocationStyle = (loc, t) => {
+  const styles = {
+    'Bar':      { bg: t.colors?.purple[50] || '#faf5ff',  color: t.colors?.purple[600] || '#9333ea' },
+    'Takeaway': { bg: t.colors?.amber[50] || '#fffbeb',   color: t.colors?.amber[700] || '#b45309' },
+    'Dine In':  { bg: t.bgInput, color: t.textSecondary },
+  };
+  return styles[loc] || styles['Dine In'];
 };
-
-const getLocationStyle = loc =>
-  LOCATION_STYLE[loc] || LOCATION_STYLE['Dine In'];
 
 // ─── Table card ───────────────────────────────────────────────────────────────
 const TableCard = ({onTableChange, onTableDelete, data}) => {
@@ -23,7 +23,7 @@ const TableCard = ({onTableChange, onTableDelete, data}) => {
   const RenderCard = ({item, t}) => {
     const isActive    = item.status === 1;
     const location    = item.location || 'Dine In';
-    const locStyle    = getLocationStyle(location);
+    const locStyle    = getLocationStyle(location, t);
     const borderColor = isActive ? t.successColor : t.dangerBg;
 
     return (
