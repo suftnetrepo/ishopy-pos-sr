@@ -22,7 +22,7 @@ import BackupScreen from '../screens/settings/backup';
 import FAQ from '../screens/faq';
 import HelpCenter from '../screens/helpCenter';
 import Start from '../screens/start';
-import PurchaseScreen from '../screens/sandbox/PurchaseScreen';
+import PaywallScreen from '../screens/paywall';
 
 const Stack = createStackNavigator();
 function Navigator() {
@@ -38,9 +38,13 @@ function Navigator() {
       />
        <Stack.Screen
         name="big-purchase"
-        component={PurchaseScreen}
+        component={PaywallScreen}
         options={{
           headerShown: false,
+          presentation: 'modal',
+          gestureEnabled: true,
+          gestureDirection: 'vertical',
+          cardStyle: {borderTopLeftRadius: 20, borderTopRightRadius: 20},
         }}
       />
        <Stack.Screen

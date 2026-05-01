@@ -33,8 +33,9 @@ const buildColumns = symbol => [
    {
     key: 'order_id',
     title: 'Order Ref',
-    width: 110,
+    
     align: 'center',
+    
     render: v => (
       <StyledText
         fontSize={theme.fontSize.small}
@@ -47,7 +48,7 @@ const buildColumns = symbol => [
   {
     key: 'amount',
     title: 'Amount',
-    width: 120,
+    width: 180,
     sortable: true,
     render: v => (
       <Stack horizontal alignItems="center" gap={6}>
@@ -65,7 +66,7 @@ const buildColumns = symbol => [
   {
     key: 'payment_method',
     title: 'Method',
-    width: 90,
+   
     align: 'center',
     render: v => {
       if (!v) return (
@@ -125,11 +126,7 @@ const PaymentCard = () => {
         bordered
         forceTable
         emptyNode={
-          <EmptyView
-            color={theme.colors.gray[400]}
-            title="Your Payment list is empty"
-            description="Payments will appear here once added."
-          />
+          <></>
         }
       />
       {totalCount > 0 && (

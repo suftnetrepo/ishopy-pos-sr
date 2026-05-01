@@ -13,6 +13,7 @@ import RenderHeader from '../../../components/tablet/header';
 import TableCard from './card';
 import TableForm from './form';
 import {useFocus} from '../../../hooks/useFocus';
+import usePremium from '../../../hooks/usePremium';
 import {StyledIcon} from '../../../components/package/icon';
 import {Pressable} from 'react-native';
 import {useTables, useDeleteTable} from '../../../hooks/useTable';
@@ -29,6 +30,7 @@ const BigTableScreen = () => {
   const [screenFocus, setScreenFocus] = useState(true);
   const shouldOpen = state.tag === 'Edit' || state.tag === 'Add';
   const isFocused = navigationFocus && screenFocus;
+  const {checkLimit} = usePremium();
   const {data, error, loading,  resetHandler, loadTables} = useTables(isFocused);
 
   useLoaderAndError(loading, error, resetHandler);
@@ -99,7 +101,7 @@ const BigTableScreen = () => {
           showTitle={true}
           title="Tables"
           CopyIcon={
-            <Pressable onTouchStart={() => update('Add')}>
+            <Pressable onTouchStart={() => { if (checkLimit('tables', data?.length || 0)) update('Add'); }}>
               <StyledCycle
                 width={48}
                 height={48}

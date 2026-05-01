@@ -18,6 +18,7 @@ import {Pressable} from 'react-native';
 import {useAppContext} from '../../../hooks/appContext';
 import {useDeleteUser, useUsers} from '../../../hooks/useUser';
 import {useLoaderAndError} from '../../../hooks/useLoaderAndError';
+import usePremium from '../../../hooks/usePremium';
 
 const BigUser = () => {
   const dialogue = useDialogue();
@@ -31,6 +32,7 @@ const BigUser = () => {
   const shouldOpen = state.tag === 'Edit' || state.tag === 'Add';
   const isFocused = navigationFocus && screenFocus;
 
+  const {checkLimit} = usePremium();
   const {data, error, loading, resetHandler, loadUsers} = useUsers(isFocused);
   const {deleteUser} = useDeleteUser();
 
@@ -95,7 +97,7 @@ const BigUser = () => {
           showTitle={true}
           title="Users"
           CopyIcon={
-            <Pressable onTouchStart={() => update('Add')}>
+            <Pressable onTouchStart={() => { if (checkLimit('users', data?.length || 0)) update('Add'); }}>
               <StyledCycle
                 width={48}
                 height={48}

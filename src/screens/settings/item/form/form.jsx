@@ -32,16 +32,17 @@ const ItemForm = ({item, onClose}) => {
   const {insert} = useInsertMenu();
   const {data} = useCategories();
 
-  useEffect(() => {
-    setFields(pre => {
-      return {
-        ...pre,
-        ...item,
-      };
-    });
-  }, [item]);
-
   useLoaderAndError(loading, error, resetHandler);
+
+  useEffect(() => {
+    setFields(pre => ({
+      ...pre,
+      ...item, // spread raw item first
+      cost: parseFloat(parseFloat(item?.cost || 0).toFixed(2)), // then override with formatted
+      price: parseFloat(parseFloat(item?.price || 0).toFixed(2)),
+      stock: parseInt(item?.stock || 0),
+    }));
+  }, [item]);
 
   const onNotify = ({status, isDeleted}) => {
     toastService.show({
@@ -69,8 +70,8 @@ const ItemForm = ({item, onClose}) => {
       await update(fields.menu_id, {
         ...fields,
         stock: parseInt(fields.stock || 0),
-        price: parseFloat(fields.price),
-        cost: parseFloat(fields.cost || 0),
+        price: parseFloat(parseFloat(fields.price || 0).toFixed(2)),
+        cost: parseFloat(parseFloat(fields.cost || 0).toFixed(2)),
         icon_name: fields.icon_name,
       }).then(async result => {
         result && onNotify({status: 'updated', isDeleted: false});
@@ -80,8 +81,8 @@ const ItemForm = ({item, onClose}) => {
       await insert({
         ...fields,
         stock: parseInt(fields.stock || 0),
-        price: parseFloat(fields.price),
-        cost: parseFloat(fields.cost || 0),
+        price: parseFloat(parseFloat(fields.price || 0).toFixed(2)),
+        cost: parseFloat(parseFloat(fields.cost || 0).toFixed(2)),
         icon_name: fields.icon_name,
       }).then(async result => {
         result && onNotify({status: 'added', isDeleted: false});
@@ -126,9 +127,15 @@ const ItemForm = ({item, onClose}) => {
               returnKeyType="next"
               maxLength={50}
               fontSize={theme.fontSize.small}
-              value={fields.price.toString()}
+              value={fields.price?.toString() || ''}
               placeholderTextColor={theme.colors.gray[400]}
               onChangeText={text => setFields({...fields, price: text})}
+              onBlur={() =>
+                setFields(f => ({
+                  ...f,
+                  price: parseFloat(parseFloat(f.price || 0).toFixed(2)),
+                }))
+              }
               error={!!errorMessages?.price}
               errorMessage={errorMessages?.price?.message}
             />
@@ -139,9 +146,15 @@ const ItemForm = ({item, onClose}) => {
               returnKeyType="next"
               maxLength={50}
               fontSize={theme.fontSize.small}
-              value={fields.cost.toString()}
+              value={fields.cost?.toString() || ''}
               placeholderTextColor={theme.colors.gray[400]}
               onChangeText={text => setFields({...fields, cost: text})}
+              onBlur={() =>
+                setFields(f => ({
+                  ...f,
+                  cost: parseFloat(parseFloat(f.cost || 0).toFixed(2)),
+                }))
+              }
               error={!!errorMessages?.cost}
               errorMessage={errorMessages?.cost?.message}
             />

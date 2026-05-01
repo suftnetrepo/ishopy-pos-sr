@@ -46,7 +46,7 @@ const useProductManager = () => {
     const [product, setProduct] = useState<Product | null>(null);
 
     useEffect(() => {
-        let timeout: NodeJS.Timeout;
+        let timeout: any;
 
         if (connected) {
             // Delay is REQUIRED on iOS

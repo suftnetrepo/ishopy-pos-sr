@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   StyledCycle,
   Stack,
@@ -18,15 +18,14 @@ import {StyledIcon} from '../../../components/package/icon';
 import {Pressable} from 'react-native';
 import {useAppContext} from '../../../hooks/appContext';
 import ItemAddOn from './addOn';
-import {useDeleteAddOn} from '../../../hooks/useAddon';
 import { useDeleteMenu } from '../../../hooks/useMenu';
 
 const BigItem = () => {
   const dialogue = useDialogue();
   const {shop, updateMenuQuery} = useAppContext();
-  const {deleteAddOn} = useDeleteAddOn();
   const {deleteMenu} = useDeleteMenu();
   const navigationFocus = useFocus();
+  const itemCardRef = useRef(null);
   const [state, setState] = useState({
     data: null,
     tag: '',
@@ -50,33 +49,6 @@ const BigItem = () => {
 
   const update = tag => {
     setState({...state, tag, data: null});
-  };
-
-  const onDeleteAddon = async addOn_id => {
-    const id = dialogue.show({
-      title: 'Delete addon?',
-      message: 'This action cannot be undone.',
-      icon: '⚠️',
-      theme: 'light',
-      actions: [
-        {
-          label: 'Delete',
-          variant: 'destructive',
-          onPress: () => {
-            deleteAddOn(addOn_id).then(async result => {
-              onNotify({status: 'deleted'});
-            });
-          },
-        },
-        {
-          label: 'Keep it',
-          variant: 'secondary',
-          onPress: () => {
-            dialogue.dismiss(id);
-          },
-        },
-      ],
-    });
   };
 
    const onDeleteItem = async item_id => {
@@ -125,7 +97,7 @@ const BigItem = () => {
           showTitle={true}
           title="Items"
           CopyIcon={
-            <Pressable onTouchStart={() => update('Add')}>
+            <Pressable onTouchStart={() => itemCardRef.current?.requestAdd()}>
               <StyledCycle
                 width={48}
                 height={48}
@@ -152,6 +124,8 @@ const BigItem = () => {
         <SideBarAdapter selectedMenu={5} showMenu={false} collapse={true} />
         <Stack flex={3} gap={8} marginLeft={8} marginRight={12} vertical>
           <ItemCard
+            ref={itemCardRef}
+            onRequestAdd={() => update('Add')}
             shop={shop}
             flag={isFocused}
             onItemDelete={(item_id) => onDeleteItem(item_id)}

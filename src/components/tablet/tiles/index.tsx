@@ -60,7 +60,7 @@ const Tile = ({label, barColor, bgColor, numColor, lblColor, dotBg, dotColor, va
   <Stack flex={1} vertical borderRadius={12} overflow="hidden"
     borderWidth={0.5} borderColor={theme.colors.gray[200]}>
     {/* Colour top bar */}
-    <Stack height={4} backgroundColor={barColor} />
+    {/* <Stack height={4} backgroundColor={barColor} /> */}
     {/* Tinted body */}
     <Stack
       horizontal
@@ -92,7 +92,7 @@ const Tiles = () => {
   const {data} = useOrderStatusAggregate();
 
   return (
-    <Stack horizontal gap={10} marginHorizontal={16} marginBottom={4} alignItems="stretch">
+    <Stack horizontal gap={10} marginHorizontal={16}  alignItems="stretch">
       {TILES.map(({key, ...tile}) => (
         <Tile
           key={key}

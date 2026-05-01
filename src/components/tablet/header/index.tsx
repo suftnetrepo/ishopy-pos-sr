@@ -3,15 +3,16 @@ import {
   StyledText,
   StyledSpacer,
   StyledCycle,
-  Stack
+  Stack,
+  StyledPressable,
 } from 'fluent-styles';
-import { useNavigation, CommonActions } from '@react-navigation/native';
+import {useNavigation, CommonActions} from '@react-navigation/native';
 
-import { fontStyles, theme } from '../../../utils/theme';
-import { StyledImage } from '../../../components/package/image';
+import {fontStyles, theme} from '../../../utils/theme';
+import {StyledImage} from '../../../components/package/image';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Logo from '../../../components/tablet/logo';
-import { useAppContext } from '../../../hooks/appContext';
+import {useAppContext} from '../../../hooks/appContext';
 
 type Props = {
   showLogo?: boolean;
@@ -19,7 +20,7 @@ type Props = {
   showTitle?: boolean;
   title?: string;
   children?: React.ReactNode;
-  CopyIcon?: React.ReactNode
+  CopyIcon?: React.ReactNode;
 };
 
 const RenderHeader = ({
@@ -28,17 +29,16 @@ const RenderHeader = ({
   showTitle,
   title,
   children,
-  CopyIcon
+  CopyIcon,
 }: Props) => {
   const navigation = useNavigation();
-  const { user } = useAppContext();
+  const {user} = useAppContext();
 
   console.log('User Info:', user);
 
   return (
     <Stack
-     horizontal
-    
+      horizontal
       backgroundColor={theme.colors.gray[1]}
       justifyContent="flex-start"
       alignItems="center"
@@ -52,22 +52,24 @@ const RenderHeader = ({
       shadowRadius={30}
       paddingHorizontal={8}>
       {showBackButton && (
-        <StyledCycle
-          paddingHorizontal={10}
-          borderWidth={1}
-          height={48}
-          width={48}
-          borderColor={theme.colors.gray[400]}>
-          <Icon
-            size={24}
-            name="arrow-back"
-            color={theme.colors.gray[800]}
-            onPress={() => {
-
-              navigation.canGoBack() && navigation.goBack();
-            }}
-          />
-        </StyledCycle>
+        <StyledPressable
+          onPress={() => {
+            navigation.canGoBack() && navigation.goBack();
+          }}>
+          <StyledCycle
+            paddingHorizontal={10}
+            borderWidth={1}
+            height={48}
+            width={48}
+            borderColor={theme.colors.gray[400]}>
+            <Icon
+              style={{pointerEvents: 'none'}}
+              size={24}
+              name="arrow-back"
+              color={theme.colors.gray[800]}
+            />
+          </StyledCycle>
+        </StyledPressable>
       )}
       {showLogo && <Logo />}
       {showTitle && (
@@ -80,49 +82,57 @@ const RenderHeader = ({
           {title || 'Dashboard'}
         </StyledText>
       )}
-      {
-        children && (
-          <Stack marginHorizontal={8} flex={1} horizontal>{children}</Stack>
-        )
-      }
-      {
-        !children && <StyledSpacer flex={1} />
-      }
+      {children && (
+        <Stack marginHorizontal={8} flex={1} horizontal>
+          {children}
+        </Stack>
+      )}
+      {!children && <StyledSpacer flex={1} />}
 
-      {
-        CopyIcon ? CopyIcon : (
-          <>
+      {CopyIcon ? (
+        CopyIcon
+      ) : (
+        <>
+          <Stack
+            horizontal
+            paddingHorizontal={16}
+            justifyContent="flex-start"
+            alignItems="center">
+            <StyledImage
+              source={require('./../../../../assets/img/doctor_1.png')}
+              size={32}
+              cycle
+              resizeMode="contain"></StyledImage>
             <Stack
-              horizontal
-              paddingHorizontal={16}
+              vertical
+              marginLeft={8}
               justifyContent="flex-start"
-              alignItems="center">
-              <StyledImage
-                source={require('./../../../../assets/img/doctor_1.png')}
-                size={32}
-                cycle
-                resizeMode="contain"></StyledImage>
-              <Stack
-                vertical
-                marginLeft={8}
-                justifyContent="flex-start"
-                alignItems="flex-start">
-                <StyledText
-                  color={theme.colors.gray[900]}
-                  fontSize={theme.fontSize.small}
-                  fontWeight={theme.fontWeight.semiBold as any}>
-                  {user?.first_name} {user?.last_name}  
-                </StyledText>
-                <StyledText
-                  color={theme.colors.gray[400]}
-                  fontSize={theme.fontSize.small}
-                  fontWeight={theme.fontWeight.medium as any}>
+              alignItems="flex-start">
+              <StyledText
+                color={theme.colors.gray[900]}
+                fontSize={theme.fontSize.small}
+                fontWeight={theme.fontWeight.semiBold as any}>
+                {user?.first_name} {user?.last_name}
+              </StyledText>
+              <StyledText
+                color={theme.colors.gray[400]}
+                fontSize={theme.fontSize.small}
+                fontWeight={theme.fontWeight.medium as any}>
                 {user?.role}
-                </StyledText>
-              </Stack>
+              </StyledText>
             </Stack>
+          </Stack>
 
-            <Stack horizontal>
+          <Stack horizontal>
+            <StyledPressable
+              onPress={() => {
+                navigation.dispatch(
+                  CommonActions.reset({
+                    index: 0,
+                    routes: [{name: 'keypad'}],
+                  })
+                );
+              }}>
               <StyledCycle
                 paddingHorizontal={10}
                 borderWidth={1}
@@ -131,26 +141,16 @@ const RenderHeader = ({
                 backgroundColor={theme.colors.gray[1]}
                 borderColor={theme.colors.gray[400]}>
                 <Icon
+                style={{pointerEvents: 'none'}}
                   size={24}
                   name="exit-to-app"
                   color={theme.colors.gray[800]}
-                  onPress={() => {
-                    navigation.dispatch(
-                      CommonActions.reset({
-                        index: 0,
-                        routes: [{ name: 'keypad' }],
-                      })
-                    );
-                  }}
                 />
               </StyledCycle>
-            </Stack>
-          </>
-        )
-      }
-
-
-
+            </StyledPressable>
+          </Stack>
+        </>
+      )}
     </Stack>
   );
 };

@@ -410,6 +410,7 @@ export default function AddOn({table_id, onClose, item, setItem}) {
               onPress={addButtonDisabled ? undefined : onSubmit}
               disabled={addButtonDisabled}>
               <StyledMIcon
+                pointerEvents={'none'}
                 name="add-shopping-cart"
                 size={20}
                 color={addButtonDisabled ? theme.colors.gray[400] : theme.colors.gray[1]}

@@ -21,25 +21,25 @@ const SETTINGS = [
   {
     section: 'Menu & Products',
     items: [
-      {id: 'category', icon: 'category',      iconBg: '#ede9fe', iconColor: '#7c3aed', name: 'Categories',  sub: 'Manage menu groups'},
-      {id: 'item',     icon: 'inventory-2',   iconBg: '#dbeafe', iconColor: '#1d4ed8', name: 'Items',        sub: 'Products & pricing'},
-      {id: 'tax',      icon: 'receipt-long',  iconBg: '#fef3c7', iconColor: '#b45309', name: 'Taxes',        sub: 'Tax rates'},
-      {id: 'discount', icon: 'local-offer',   iconBg: '#dcfce7', iconColor: '#15803d', name: 'Discounts',    sub: 'Discount rules'},
+      {id: 'category', icon: 'add-shopping-cart', iconBg: '#ede9fe', iconColor: '#7c3aed', name: 'Categories', sub: 'Manage menu groups'},
+      {id: 'item',     icon: 'edit',              iconBg: '#dbeafe', iconColor: '#1d4ed8', name: 'Items',       sub: 'Products & pricing'},
+      {id: 'tax',      icon: 'attach-money',      iconBg: '#fef3c7', iconColor: '#b45309', name: 'Taxes',       sub: 'Tax rates'},
+      {id: 'discount', icon: 'money',             iconBg: '#dcfce7', iconColor: '#15803d', name: 'Discounts',   sub: 'Discount rules'},
     ],
   },
   {
     section: 'Business',
     items: [
-      {id: 'shop',    icon: 'storefront',    iconBg: '#fef3c7', iconColor: '#b45309', name: 'Shop',         sub: 'Name, currency, mode'},
-      {id: 'user',    icon: 'people',        iconBg: '#dbeafe', iconColor: '#1d4ed8', name: 'Users',        sub: 'Staff & access'},
-      {id: 'table',   icon: 'table-restaurant', iconBg: '#ede9fe', iconColor: '#7c3aed', name: 'Tables',    sub: 'Dine in, bar, takeaway'},
+      {id: 'shop',  icon: 'email',         iconBg: '#fef3c7', iconColor: '#b45309', name: 'Shop',   sub: 'Name, currency, mode'},
+      {id: 'user',  icon: 'person',        iconBg: '#dbeafe', iconColor: '#1d4ed8', name: 'Users',  sub: 'Staff & access'},
+      {id: 'table', icon: 'date-range',    iconBg: '#ede9fe', iconColor: '#7c3aed', name: 'Tables', sub: 'Dine in, bar, takeaway'},
     ],
   },
   {
     section: 'System',
     items: [
-      {id: 'backup',  icon: 'cloud-upload',  iconBg: '#dcfce7', iconColor: '#15803d', name: 'Backup',       sub: 'Google Drive sync'},
-      {id: 'printer', icon: 'print',         iconBg: '#f3e8ff', iconColor: '#7c3aed', name: 'Printer',      sub: 'Receipt printer setup'},
+      {id: 'backup',  icon: 'cloud-upload', iconBg: '#dcfce7', iconColor: '#15803d', name: 'Backup',  sub: 'Google Drive sync'},
+      {id: 'printer', icon: 'print',        iconBg: '#f3e8ff', iconColor: '#7c3aed', name: 'Printer', sub: 'Receipt printer setup'},
     ],
   },
 ];

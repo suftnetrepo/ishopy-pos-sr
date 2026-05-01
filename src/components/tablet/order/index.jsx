@@ -44,8 +44,8 @@ const buildColumns = symbol => [
     render: v => (
       <StyledText
         fontSize={theme.fontSize.small}
-        fontWeight={theme.fontWeight.semiBold}
-        color={theme.colors.blue[600]}>
+        fontWeight={theme.fontWeight.normal}
+        color={theme.colors.blueGray[600]}>
         #{getLastChars(v, 8)}
       </StyledText>
     ),
@@ -245,11 +245,7 @@ export default function OrderCard({onOrderChange, onHandleFilter}) {
           onOrderChange('basket');
         }}
         emptyNode={
-          <EmptyView
-            color={theme.colors.gray[400]}
-            title="No orders found"
-            description="Try a different filter or date range."
-          />
+          <></>
         }
       />
     </Stack>

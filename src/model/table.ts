@@ -51,13 +51,16 @@ const insertTable = async (
   });
 };
 
+// Natural numeric sort — Table 1, 2, 3 ... 10, 11 instead of 1, 10, 11, 2
+const naturalSort = (a: string, b: string): number =>
+  a.localeCompare(b, undefined, {numeric: true, sensitivity: 'base'});
+
 const queryAllTables = async (): Promise<Table[]> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
       const tables = realm
         .objects<Table>('Table')
-        .sorted('tableName')
         .map(table => ({
           table_id: table.table_id,
           tableName: table.tableName,
@@ -70,7 +73,7 @@ const queryAllTables = async (): Promise<Table[]> => {
           location: table.location,
           color_code: table.color_code,
         }));
-      resolve(tables);
+      resolve([...tables].sort((a, b) => naturalSort(a.tableName, b.tableName)));
     } catch (error) {
       reject(error);
     }
@@ -84,7 +87,6 @@ const queryTablesByStatus = async (status: number): Promise<Table[]> => {
       const tables = realm
         .objects<Table>('Table')
         .filtered('status == $0', status)
-        .sorted('tableName')
         .map(table => ({
           table_id: table.table_id,
           tableName: table.tableName,
@@ -98,7 +100,7 @@ const queryTablesByStatus = async (status: number): Promise<Table[]> => {
           color_code: table.color_code,
         }));
 
-      resolve(tables);
+      resolve([...tables].sort((a, b) => naturalSort(a.tableName, b.tableName)));
     } catch (error) {
       reject(error);
     }

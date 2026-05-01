@@ -15,6 +15,7 @@ import SideBarAdapter from '../../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../../components/tablet/header';
 import {StyledIcon} from '../../../components/package/icon';
 import useKursaBackup from '../../../scripts/backup/useKursaBackup';
+import usePremium from '../../../hooks/usePremium';
 
 const InfoRow = ({icon, label, value}) => (
   <Stack horizontal alignItems="center" gap={10} paddingVertical={10}
@@ -54,6 +55,7 @@ const BackupRow = ({file, onRestore, restoring}) => (
 
 const BackupScreen = () => {
   const [showFiles, setShowFiles] = useState(false);
+  const {isPremium, requirePremium} = usePremium();
   const {backup, backingUp, backupError, lastBackup,
          listBackups, restore, restoring, restoreError,
          backupFiles, signIn, signOut, isSignedIn} = useKursaBackup();
@@ -67,6 +69,7 @@ const BackupScreen = () => {
   }, [restoreError]);
 
   const handleBackup = async () => {
+    if (!isPremium) { requirePremium(); return; }
     await backup();
     toastService.show({message: 'Backup saved', description: 'Your data was saved to Google Drive.', variant: 'success', duration: 2500, theme: 'light'});
   };
@@ -90,7 +93,8 @@ const BackupScreen = () => {
             <StyledText fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.semiBold}
               color={theme.colors.gray[500]} marginBottom={12} letterSpacing={0.5}>GOOGLE ACCOUNT</StyledText>
             {!isSignedIn ? (
-              <StyledPressable onPress={signIn} flexDirection='row' alignItems="center" gap={12}
+              <StyledPressable onPress={signIn}
+                flexDirection="row" alignItems="center" gap={12}
                 borderWidth={1} borderColor={theme.colors.gray[200]}
                 backgroundColor={theme.colors.gray[50]} borderRadius={12} padding={14}>
                 <Stack width={36} height={36} borderRadius={18} backgroundColor={theme.colors.blue[50]}
