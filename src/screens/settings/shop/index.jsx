@@ -7,7 +7,6 @@ import {
   StyledSpinner,
   YStack,
   StyledOkDialog,
-  StyledTextInput,
   StyledSpacer,
   StyledInput,
   StyledText,

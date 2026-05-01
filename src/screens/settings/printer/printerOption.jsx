@@ -27,6 +27,8 @@ export default function PrinterOptions() {
     borderRadius: 12,
     paddingHorizontal: 12,
     paddingVertical: 12,
+    backgroundColor: t.bgInput,
+    color: t.textPrimary,
   };
 
   useEffect(() => { if (Platform.OS === 'ios') setConnectionType('wifi'); }, []);
