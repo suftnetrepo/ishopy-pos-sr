@@ -161,7 +161,7 @@ export default function KeyCard({onSubmit, onClose, table_name, table_id}) {
               </StyledPressable>
               <StyledSpacer flex={1} />
               <StyledPressable
-                backgroundColor={canSubmit ? t.brandPrimary : '#3a3a3a'}
+                backgroundColor={canSubmit ? t.brandPrimary : t.borderDefault}
                 paddingHorizontal={30}
                 paddingVertical={10}
                 borderRadius={25}
