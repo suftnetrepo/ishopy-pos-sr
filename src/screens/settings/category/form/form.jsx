@@ -13,6 +13,7 @@ import {
   StyledTextInput,
   toastService
 } from 'fluent-styles';
+import { ThemedStyledTextInput } from '../../../../components/form';
 import {fontStyles} from '../../../../configs/theme';
 import {categoryRules} from './validatorRules';
 import {
@@ -102,18 +103,14 @@ const CategoryForm = ({category, onClose}) => {
             onPress={color => setFields({...fields, color_code: color})}
           />
 
-          <StyledTextInput
+          <ThemedStyledTextInput
             label={'Name'}
             keyboardType="default"
             placeholder="Enter category name"
             returnKeyType="next"
             maxLength={50}
             fontSize={theme.fontSize.small}
-            backgroundColor={t.bgInput}
-            color={t.textPrimary}
-            borderColor={t.borderDefault}
             value={fields.name}
-            placeholderTextColor={t.textMuted}
             onChangeText={text => setFields({...fields, name: text})}
             error={!!errorMessages?.name}
             errorMessage={errorMessages?.name?.message}

@@ -275,7 +275,7 @@ const Shop = ({onClose}) => {
             marginBottom={24}>
             <SectionLabel label="About" 
                         t={t}/>
-            <StyledTextInput
+            <StyledInput
               label="Address"
               placeholder="Enter your address"
               returnKeyType="next"
@@ -288,7 +288,7 @@ const Shop = ({onClose}) => {
               numberOfLines={3}
               {...inputProps}
             />
-            <StyledTextInput
+            <StyledInput
               label="Description"
               placeholder="A short description of your business"
               returnKeyType="done"

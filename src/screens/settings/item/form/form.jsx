@@ -9,13 +9,13 @@ import {
   XStack,
   YStack,
   StyledOkDialog,
-  StyledTextInput,
   StyledSpacer,
   toastService,
   StyledText,
   StyledPressable,
   StyledChip,
 } from 'fluent-styles';
+import { ThemedStyledTextInput } from '../../../../components/form';
 import {fontStyles} from '../../../../configs/theme';
 import {menuRules} from './validatorRules';
 import {useUpdateMenu, useInsertMenu} from '../../../../hooks/useMenu';
@@ -109,34 +109,26 @@ const ItemForm = ({item, onClose}) => {
             onPress={color => setFields({...fields, color_code: color})}
           />
           <StyledForm flex={1}>
-            <StyledTextInput
+            <ThemedStyledTextInput
               label={'Name'}
               keyboardType="default"
               placeholder="Enter menu name"
               returnKeyType="next"
               maxLength={50}
               fontSize={theme.fontSize.small}
-              backgroundColor={t.bgInput}
-              color={t.textPrimary}
-              borderColor={t.borderDefault}
               value={fields.name}
-              placeholderTextColor={t.textMuted}
               onChangeText={text => setFields({...fields, name: text})}
               error={!!errorMessages?.name}
               errorMessage={errorMessages?.name?.message}
             />
-            <StyledTextInput
+            <ThemedStyledTextInput
               label={'Price'}
               keyboardType="number-pad"
               placeholder="Enter price"
               returnKeyType="next"
               maxLength={50}
               fontSize={theme.fontSize.small}
-              backgroundColor={t.bgInput}
-              color={t.textPrimary}
-              borderColor={t.borderDefault}
               value={fields.price?.toString() || ''}
-              placeholderTextColor={t.textMuted}
               onChangeText={text => setFields({...fields, price: text})}
               onBlur={() =>
                 setFields(f => ({
@@ -147,18 +139,14 @@ const ItemForm = ({item, onClose}) => {
               error={!!errorMessages?.price}
               errorMessage={errorMessages?.price?.message}
             />
-            <StyledTextInput
+            <ThemedStyledTextInput
               label={'Cost'}
               keyboardType="number-pad"
               placeholder="Enter cost"
               returnKeyType="next"
               maxLength={50}
               fontSize={theme.fontSize.small}
-              backgroundColor={t.bgInput}
-              color={t.textPrimary}
-              borderColor={t.borderDefault}
               value={fields.cost?.toString() || ''}
-              placeholderTextColor={t.textMuted}
               onChangeText={text => setFields({...fields, cost: text})}
               onBlur={() =>
                 setFields(f => ({
@@ -169,7 +157,7 @@ const ItemForm = ({item, onClose}) => {
               error={!!errorMessages?.cost}
               errorMessage={errorMessages?.cost?.message}
             />
-            <StyledTextInput
+            <ThemedStyledTextInput
               label={'Quantity'}
               labelProps={{
                 fontSize: theme.fontSize.small,
@@ -179,11 +167,7 @@ const ItemForm = ({item, onClose}) => {
               returnKeyType="next"
               maxLength={50}
               fontSize={theme.fontSize.normal}
-              backgroundColor={t.bgInput}
-              color={t.textPrimary}
-              borderColor={t.borderDefault}
               value={fields.stock.toString()}
-              placeholderTextColor={t.textMuted}
               onChangeText={text => setFields({...fields, stock: text})}
               error={!!errorMessages?.stock}
               errorMessage={errorMessages?.stock?.message}

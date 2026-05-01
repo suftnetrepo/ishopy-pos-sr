@@ -175,5 +175,44 @@ const StyledMultiInput = ({label, errorMessage, borderColor, error, errorProps, 
     )
 }
 
-export { StyledInput, StyledMultiInput }
+// ─── Themed wrapper for Fluent Styles StyledTextInput ───────────────────────
+const ThemedStyledTextInput = forwardRef((props, ref) => {
+    const { t } = useAppTheme();
+    const [focused, setFocused] = React.useState(false);
+    
+    return (
+        <YStack marginBottom={props.marginBottom ?? 12} width="100%">
+            <StyledInputText
+                ref={ref}
+                backgroundColor={props.backgroundColor ?? t.bgInput}
+                color={props.color ?? t.textPrimary}
+                placeholderTextColor={props.placeholderTextColor ?? t.textMuted}
+                borderColor={props.error ? (props.dangerColor ?? t.dangerColor) : (focused ? (props.focusColor ?? t.borderFocus) : (props.borderColor ?? t.borderDefault))}
+                borderWidth={props.borderWidth ?? 1}
+                borderRadius={props.borderRadius ?? 12}
+                paddingHorizontal={props.paddingHorizontal ?? 12}
+                paddingVertical={props.paddingVertical ?? 10}
+                onFocus={() => {
+                    setFocused(true);
+                    props.onFocus?.();
+                }}
+                onBlur={() => {
+                    setFocused(false);
+                    props.onBlur?.();
+                }}
+                {...props}
+            />
+            {props.errorMessage && (
+                <>
+                    <StyledSpacer marginVertical={4} />
+                    <StyledText marginHorizontal={8} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.small} color={t.dangerColor}>
+                        {props.errorMessage}
+                    </StyledText>
+                </>
+            )}
+        </YStack>
+    );
+});
+
+export { StyledInput, StyledMultiInput, ThemedStyledTextInput }
 export default StyledInputText

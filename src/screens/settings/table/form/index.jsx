@@ -15,6 +15,7 @@ import {
   Stack,
   toastService,
 } from 'fluent-styles';
+import { ThemedStyledTextInput } from '../../../../components/form';
 import {fontStyles} from '../../../../configs/theme';
 import {tableRules} from './validatorRules';
 import {useUpdateTable, useInsertTable} from '../../../../hooks/useTable';
@@ -106,39 +107,27 @@ const TableForm = ({table, onClose}) => {
           onPress={color => setFields({...fields, color_code: color})}
         />
 
-        <StyledTextInput
+        <ThemedStyledTextInput
           label="Name"
           keyboardType="default"
           placeholder="Enter table name"
           returnKeyType="next"
           maxLength={50}
           fontSize={theme.fontSize.small}
-          backgroundColor={t.bgInput}
-          color={t.textPrimary}
-          borderColor={t.borderDefault}
-          borderRadius={32}
-          paddingHorizontal={8}
           value={fields.tableName}
-          placeholderTextColor={t.textMuted}
           onChangeText={text => setFields({...fields, tableName: text})}
           error={!!errorMessages?.tableName}
           errorMessage={errorMessages?.tableName?.message}
         />
 
-        <StyledTextInput
+        <ThemedStyledTextInput
           label="Size"
           keyboardType="number-pad"
           placeholder="Enter table size"
           returnKeyType="next"
           maxLength={3}
           fontSize={theme.fontSize.small}
-          backgroundColor={t.bgInput}
-          color={t.textPrimary}
-          borderColor={t.borderDefault}
-          borderRadius={32}
-          paddingHorizontal={8}
           value={fields.size?.toString()}
-          placeholderTextColor={t.textMuted}
           onChangeText={text => setFields({...fields, size: parseInt(text) || 0})}
           error={!!errorMessages?.size}
           errorMessage={errorMessages?.size?.message}

@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from "react";
-import { validate, theme, StyledPressable, YStack, toastService, StyledCard, XStack, StyledSpacer, StyledTextInput, StyledInput, StyledText, StyledForm, Switch } from 'fluent-styles';
+import { validate, theme, StyledPressable, YStack, toastService, StyledCard, XStack, StyledSpacer, StyledText, StyledForm, Switch } from 'fluent-styles';
+import { StyledInput, ThemedStyledTextInput } from '../../../../components/form';
 import { fontStyles } from "../../../../configs/theme";
 import { userRules } from "./validatorRules";
 import { useUpdateUser, useInsertUser } from "../../../../hooks/useUser";
@@ -82,71 +83,66 @@ const UserForm = ({user, onClose}) => {
 
 
         <StyledForm >
-          <StyledTextInput
+          <ThemedStyledTextInput
             label={'FirstName'}
             keyboardType='default'
             placeholder='Enter your firstname'
             returnKeyType='next'
             maxLength={50}
-            height={40}
+            fontSize={theme.fontSize.small}
             value={fields.first_name}
             onChangeText={(text) => setFields({ ...fields, first_name: text })}
             error={!!errorMessages?.first_name}
             errorMessage={errorMessages?.first_name?.message}
-            {...inputProps}
           />
-          <StyledTextInput
+          <ThemedStyledTextInput
             label={'LastName'}
             keyboardType='default'
             placeholder='Enter your lastname'
             returnKeyType='next'
             maxLength={50}
-            height={40}
+            fontSize={theme.fontSize.small}
             value={fields.last_name}
             onChangeText={(text) => setFields({ ...fields, last_name: text })}
             error={!!errorMessages?.last_name}
             errorMessage={errorMessages?.last_name?.message}
-            {...inputProps}
           />
-          <StyledTextInput
+          <ThemedStyledTextInput
             label={'Username'}
             keyboardType='default'
             placeholder='Enter your username'
             returnKeyType='next'
             maxLength={50}
-            height={40}
+            fontSize={theme.fontSize.small}
             value={fields.username}
             onChangeText={(text) => setFields({ ...fields, username: text })}
             error={!!errorMessages?.username}
             errorMessage={errorMessages?.username?.message}
-            {...inputProps}
           />
-          <StyledTextInput
+          <ThemedStyledTextInput
             label={'Password'}
             keyboardType='default'
             secureTextEntry={true}
             placeholder='Enter your password'
             returnKeyType='done'
             maxLength={8}
-            height={40}
+            fontSize={theme.fontSize.small}
             value={fields.password}
             onChangeText={(text) => setFields({ ...fields, password: text })}
             error={!!errorMessages?.password}
             errorMessage={errorMessages?.password?.message}
-            {...inputProps}
           />
-          <StyledTextInput
+          <ThemedStyledTextInput
             label={'Pass code'}
             keyboardType='numeric'
             placeholder='Enter your pass code'
             returnKeyType='done'
             maxLength={4}
-            height={40}
+            fontSize={theme.fontSize.small}
             value={fields.pass_code}
             onChangeText={(text) => setFields({ ...fields, pass_code: text })}
             error={!!errorMessages?.pass_code}
             errorMessage={errorMessages?.pass_code?.message}
-            {...inputProps}
           />
           {/* Uncomment if user model supports status */}
 

@@ -168,36 +168,26 @@ const ItemAddOn = ({menu_id}) => {
         marginTop={16}
         paddingVertical={16}>
         <StyledForm>
-          <StyledTextInput
+          <ThemedStyledTextInput
             label={'Name'}
             keyboardType="default"
             placeholder="Enter your addOn name"
             returnKeyType="next"
             maxLength={50}
             fontSize={theme.fontSize.small}
-            backgroundColor={t.bgInput}
-            color={t.textPrimary}
-            borderColor={t.borderDefault}
-            paddingHorizontal={8}
             value={fields.addOnName}
-            placeholderTextColor={t.textMuted}
             onChangeText={text => setFields({...fields, addOnName: text})}
             error={!!errorMessages?.addOnName}
             errorMessage={errorMessages?.addOnName?.message}
           />
-          <StyledTextInput
+          <ThemedStyledTextInput
             label={'Price'}
             keyboardType="default"
             placeholder="Enter your addOn price"
             returnKeyType="next"
             maxLength={9}
             fontSize={theme.fontSize.small}
-            backgroundColor={t.bgInput}
-            color={t.textPrimary}
-            borderColor={t.borderDefault}
-            paddingHorizontal={8}
             value={fields.price.toString()}
-            placeholderTextColor={t.textMuted}
             onChangeText={text => setFields({...fields, price: text})}
             error={!!errorMessages?.price}
             errorMessage={errorMessages?.price?.message}

@@ -68,7 +68,7 @@ export const light = {
   bgPage:   palette.gray100,
   bgCard:   palette.white,
   bgHero:   palette.hero,
-  bgInput:  palette.white,
+  bgInput:  palette.gray50,  // Slightly darker than bgCard for input distinction
   bgModal:  palette.white,
 
   // Text
