@@ -14,16 +14,15 @@ import {useAppTheme} from '../../theme';
 
 const StyledInputText = styled(TextInput, {
     base: {
-        borderColor: theme.colors.gray[900],
-        borderWidth: 1,
-        borderRadius: 30,
-        backgroundColor: theme.colors.gray[1],
+        borderWidth: 0,
+        borderRadius: 0,
+        backgroundColor: 'transparent',
         width: '100%',
         color: theme.colors.gray[900],
-        paddingHorizontal: 16,
-        paddingVertical: 8,
+        paddingHorizontal: 14,
+        paddingVertical: 12,
         fontSize: theme.fontSize.normal,
-        placeholderTextColor: theme.colors.gray[1],
+        placeholderTextColor: theme.colors.gray[400],
     },
     variants: {
         fontWeight: (size = theme.fontWeight.normal) => {
@@ -87,12 +86,12 @@ const StyledInputText = styled(TextInput, {
     }
 });
 
-const StyledInput = forwardRef(({ label, containerProps, borderColor, errorMessage, error, errorProps, labelProps, ...rest }, ref) => {
+const StyledInput = forwardRef(({ label, containerProps, borderColor, errorMessage, error, errorProps, labelProps, marginBottom, ...rest }, ref) => {
     const {t} = useAppTheme();
     const [focused, setFocused] = React.useState(false);
     
     return (
-        <>
+        <YStack marginBottom={marginBottom ?? 12} width="100%">
             {
                 label && (
                     <YStack width={'100%'} justifyContent='flex-start' alignItems='flex-start' {...containerProps} >
@@ -103,18 +102,26 @@ const StyledInput = forwardRef(({ label, containerProps, borderColor, errorMessa
                     </YStack>
                 )
             }
-            <StyledInputText
-                ref={ref}
+            <YStack
                 backgroundColor={t.bgInput}
-                color={t.textPrimary}
-                placeholderTextColor={t.textMuted}
                 borderColor={error ? t.dangerColor : (focused ? t.borderFocus : t.borderDefault)}
                 borderWidth={1}
                 borderRadius={12}
-                onFocus={() => setFocused(true)}
-                onBlur={() => setFocused(false)}
-                {...rest}
-            />
+                overflow="hidden"
+                width="100%"
+            >
+                <StyledInputText
+                    ref={ref}
+                    color={t.textPrimary}
+                    placeholderTextColor={t.textMuted}
+                    borderWidth={0}
+                    borderRadius={0}
+                    backgroundColor="transparent"
+                    onFocus={() => setFocused(true)}
+                    onBlur={() => setFocused(false)}
+                    {...rest}
+                />
+            </YStack>
             {
                 errorMessage && (
                     <YStack width={'100%'} justifyContent='flex-start' alignItems='flex-start' {...containerProps} >
@@ -125,16 +132,16 @@ const StyledInput = forwardRef(({ label, containerProps, borderColor, errorMessa
                     </YStack>
                 )
             }
-        </>
+        </YStack>
     )
 })
 
-const StyledMultiInput = ({label, errorMessage, borderColor, error, errorProps, labelProps, ...rest}) => {
+const StyledMultiInput = ({label, errorMessage, borderColor, error, errorProps, labelProps, marginBottom, ...rest}) => {
     const {t} = useAppTheme();
     const [focused, setFocused] = React.useState(false);
     
     return (
-        <YStack width={'100%'} justifyContent='flex-start' alignItems='flex-start'>
+        <YStack marginBottom={marginBottom ?? 12} width="100%">
             {
                 label && (
                     <>
@@ -146,21 +153,29 @@ const StyledMultiInput = ({label, errorMessage, borderColor, error, errorProps, 
                     </>
                 )
             }
-            <StyledInputText
+            <YStack
                 backgroundColor={t.bgInput}
-                color={t.textPrimary}
-                placeholderTextColor={t.textMuted}
                 borderColor={error ? t.dangerColor : (focused ? t.borderFocus : t.borderDefault)}
                 borderWidth={1}
                 borderRadius={12}
-                textAlignVertical='top'
-                multiline
-                numberOfLines={5}
-                inputMode='text'
-                onFocus={() => setFocused(true)}
-                onBlur={() => setFocused(false)}
-                {...rest}
-            />
+                overflow="hidden"
+                width="100%"
+            >
+                <StyledInputText
+                    color={t.textPrimary}
+                    placeholderTextColor={t.textMuted}
+                    borderWidth={0}
+                    borderRadius={0}
+                    backgroundColor="transparent"
+                    textAlignVertical='top'
+                    multiline
+                    numberOfLines={5}
+                    inputMode='text'
+                    onFocus={() => setFocused(true)}
+                    onBlur={() => setFocused(false)}
+                    {...rest}
+                />
+            </YStack>
             {
                 errorMessage && (
                     <>
@@ -182,26 +197,44 @@ const ThemedStyledTextInput = forwardRef((props, ref) => {
     
     return (
         <YStack marginBottom={props.marginBottom ?? 12} width="100%">
-            <StyledInputText
-                ref={ref}
+            {
+                props.label && (
+                    <YStack width={'100%'} justifyContent='flex-start' alignItems='flex-start'>
+                        <StyledText paddingHorizontal={8} color={t.textSecondary} fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.normal}>
+                            {props.label}
+                        </StyledText>
+                        <StyledSpacer marginVertical={4} />
+                    </YStack>
+                )
+            }
+            <YStack
                 backgroundColor={props.backgroundColor ?? t.bgInput}
-                color={props.color ?? t.textPrimary}
-                placeholderTextColor={props.placeholderTextColor ?? t.textMuted}
                 borderColor={props.error ? (props.dangerColor ?? t.dangerColor) : (focused ? (props.focusColor ?? t.borderFocus) : (props.borderColor ?? t.borderDefault))}
                 borderWidth={props.borderWidth ?? 1}
                 borderRadius={props.borderRadius ?? 12}
-                paddingHorizontal={props.paddingHorizontal ?? 12}
-                paddingVertical={props.paddingVertical ?? 10}
-                onFocus={() => {
-                    setFocused(true);
-                    props.onFocus?.();
-                }}
-                onBlur={() => {
-                    setFocused(false);
-                    props.onBlur?.();
-                }}
-                {...props}
-            />
+                overflow="hidden"
+                width="100%"
+            >
+                <StyledInputText
+                    ref={ref}
+                    color={props.color ?? t.textPrimary}
+                    placeholderTextColor={props.placeholderTextColor ?? t.textMuted}
+                    borderWidth={0}
+                    borderRadius={0}
+                    backgroundColor="transparent"
+                    paddingHorizontal={props.paddingHorizontal ?? 14}
+                    paddingVertical={props.paddingVertical ?? 12}
+                    onFocus={() => {
+                        setFocused(true);
+                        props.onFocus?.();
+                    }}
+                    onBlur={() => {
+                        setFocused(false);
+                        props.onBlur?.();
+                    }}
+                    {...props}
+                />
+            </YStack>
             {props.errorMessage && (
                 <>
                     <StyledSpacer marginVertical={4} />
