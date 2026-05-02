@@ -71,9 +71,11 @@ type SparklineProps = {
   data?: number[];
   color: string;
   opacity?: number;
+  width?: number;
+  height?: number;
 };
 
-const Sparkline = ({ data = [], color, opacity = 0.4 }: SparklineProps) => {
+const Sparkline = ({ data = [], color, opacity = 0.45, width = 80, height = 32 }: SparklineProps) => {
   const safeData = Array.isArray(data) ? data : [];
 
   if (safeData.length < 2) return null;
@@ -83,7 +85,7 @@ const Sparkline = ({ data = [], color, opacity = 0.4 }: SparklineProps) => {
   if (!path) return null;
 
   return (
-    <Svg width="100%" height={28} viewBox="0 0 100 24" preserveAspectRatio="none">
+    <Svg width={width} height={height} viewBox="0 0 100 24" preserveAspectRatio="none">
       <Path
         d={path}
         stroke={color}
@@ -100,12 +102,34 @@ const Sparkline = ({ data = [], color, opacity = 0.4 }: SparklineProps) => {
 const Tile = ({label, value, t, sparklineColorKey}: TileProps) => {
   const sparklineData = getSparklineData(label as any) ?? [];
   const sparklineColor = t[sparklineColorKey];
+  const hasSparklineData = Array.isArray(sparklineData) && sparklineData.length >= 2;
 
   return (
     <Stack flex={1} vertical borderRadius={16} overflow="hidden"
-      borderWidth={1} borderColor={t.borderDefault} backgroundColor={t.bgCard}>
+      borderWidth={1} borderColor={t.borderDefault} backgroundColor={t.bgCard}
+      position="relative">
       
-      {/* Content area */}
+      {/* Sparkline in top-right corner (absolute positioned) */}
+      {hasSparklineData && (
+        <Stack
+          position="absolute"
+          top={16}
+          right={16}
+          width={80}
+          height={32}
+          pointerEvents="none"
+        >
+          <Sparkline
+            data={sparklineData}
+            color={sparklineColor}
+            opacity={0.45}
+            width={80}
+            height={32}
+          />
+        </Stack>
+      )}
+      
+      {/* Content area with number and label */}
       <Stack
         vertical
         paddingHorizontal={20}
@@ -123,11 +147,6 @@ const Tile = ({label, value, t, sparklineColorKey}: TileProps) => {
         <StyledText fontSize={theme.fontSize.small} color={t.textSecondary}>
           {label}
         </StyledText>
-      </Stack>
-      
-      {/* Sparkline at bottom */}
-      <Stack paddingHorizontal={20} paddingBottom={12}>
-        <Sparkline data={sparklineData ?? []} color={sparklineColor} opacity={0.4} />
       </Stack>
     </Stack>
   );
