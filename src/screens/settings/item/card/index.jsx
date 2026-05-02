@@ -15,7 +15,6 @@ import {
   StyledPressable,
 } from 'fluent-styles';
 import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {StyledIcon} from '../../../../components/package/icon';
 import {StyledMIcon} from '../../../../components/icon';
 import {useMenus, useDeleteMenu} from '../../../../hooks/useMenu';
 import {formatCurrency, toWordCase} from '../../../../utils/help';
@@ -144,7 +143,7 @@ const ItemCard = forwardRef(
                 horizontal
                 borderRadius={18}
                 backgroundColor={t.bgCard}
-                borderWidth={1}
+                borderWidth={0.2}
                 borderColor={t.borderSubtle}
                 marginHorizontal={4}
                 marginBottom={12}

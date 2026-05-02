@@ -1,10 +1,8 @@
 /* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
 import {FlatList, Animated} from 'react-native';
-import {StyledSpacer, StyledPressable, Stack} from 'fluent-styles';
+import {StyledPressable, Stack} from 'fluent-styles';
 import Text from '../../../../components/text';
-import {theme} from '../../../../configs/theme';
-import {StyledIcon} from '../../../../components/package/icon';
 import {toWordCase} from '../../../../utils/help';
 import {useAppTheme} from '../../../../theme';
 import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -62,10 +60,10 @@ const TableCard = ({onTableChange, onTableDelete, data}) => {
             horizontal
             borderRadius={18}
             backgroundColor={t.bgCard}
-            borderWidth={1}
-            borderColor="rgba(255,255,255,0.05)"
+            borderWidth={0.2}
+          borderColor={t.borderSubtle}
             marginHorizontal={4}
-            marginBottom={16}
+            marginBottom={12}
             paddingHorizontal={20}
             paddingVertical={18}
             shadowColor={t.textPrimary}
@@ -88,7 +86,7 @@ const TableCard = ({onTableChange, onTableDelete, data}) => {
               </Text>
 
               {/* Metadata Row: Size • Status • Location (if not Dine In) */}
-              <Stack horizontal alignItems="center" gap={10}>
+              <Stack horizontal alignItems="center" gap={5}>
                 {/* Size */}
                 <Text variant="bodySmall" color={t.textMuted} style={{opacity: 0.75}}>
                   Size {item.size}

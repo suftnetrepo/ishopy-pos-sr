@@ -173,7 +173,11 @@ const BigItem = () => {
         title={`${state.tag === 'Edit' ? 'Edit' : 'Add'} Item `}
         width={'30%'}
          colors={{
-          background: t.bgCard,
+          background: t.bgPage,
+          headerBg: theme.colors.transparent,
+          headerTitle: t.textPrimary,
+          headerSubtitle: t.textSecondary,
+          headerBorder: t.bgPage,
         }}
         side="right">
         <ItemForm item={state?.data} onClose={() => reset()} />

@@ -57,8 +57,8 @@ const TEXT_VARIANTS: Record<TextVariant, any> = {
   },
   title: {
     fontSize: 20,
-    fontWeight: '700',
-    lineHeight: 28,
+    fontWeight: '500',
+    lineHeight: 24,
   },
   subtitle: {
     fontSize: 16,

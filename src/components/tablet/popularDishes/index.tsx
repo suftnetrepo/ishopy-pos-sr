@@ -65,10 +65,10 @@ const PopularDishes = () => {
             <Text fontSize={32}>📢</Text>
             <Text
               variant="title"
-              color={t.textPrimary}>
+              color={t.textMuted}>
               Nothing here yet
             </Text>
-            <Text variant="caption" color={t.textSecondary} textAlign="center">
+            <Text variant="caption" color={t.textMuted} textAlign="center">
               Popular dishes will appear here.
             </Text>
           </Stack>

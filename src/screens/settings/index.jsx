@@ -1,12 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, {useState, useCallback} from 'react';
-import {
-  StyledPage,
-  StyledPressable,
-  Stack,
-  theme,
-  Drawer,
-} from 'fluent-styles';
+import {StyledPage, StyledPressable, Stack, theme, Drawer} from 'fluent-styles';
 import Text from '../../components/text';
 import SideBarAdapter from '../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../components/tablet/header';
@@ -21,15 +15,42 @@ import {useAppTheme} from '../../theme';
 // Maps setting IDs to semantic color keys so cards adapt to light/dark themes
 const getSettingsAccent = (settingId, t) => {
   const accents = {
-    category: { bg: t.colors?.purple[50] || '#faf5ff',  color: t.colors?.purple[600] || '#9333ea' },
-    item:     { bg: t.colors?.blue[50] || '#eff6ff',   color: t.colors?.blue[600] || '#2563eb' },
-    tax:      { bg: t.colors?.amber[50] || '#fffbeb',  color: t.colors?.amber[700] || '#b45309' },
-    discount: { bg: t.colors?.green[50] || '#f0fdf4',  color: t.colors?.green[600] || '#16a34a' },
-    shop:     { bg: t.colors?.amber[50] || '#fffbeb',  color: t.colors?.amber[700] || '#b45309' },
-    user:     { bg: t.colors?.blue[50] || '#eff6ff',   color: t.colors?.blue[600] || '#2563eb' },
-    table:    { bg: t.colors?.purple[50] || '#faf5ff', color: t.colors?.purple[600] || '#9333ea' },
-    backup:   { bg: t.colors?.green[50] || '#f0fdf4',  color: t.colors?.green[600] || '#16a34a' },
-    printer:  { bg: t.colors?.purple[50] || '#faf5ff', color: t.colors?.purple[600] || '#9333ea' },
+    category: {
+      bg: t.colors?.purple[50] || '#faf5ff',
+      color: t.colors?.purple[600] || '#9333ea',
+    },
+    item: {
+      bg: t.colors?.blue[50] || '#eff6ff',
+      color: t.colors?.blue[600] || '#2563eb',
+    },
+    tax: {
+      bg: t.colors?.amber[50] || '#fffbeb',
+      color: t.colors?.amber[700] || '#b45309',
+    },
+    discount: {
+      bg: t.colors?.green[50] || '#f0fdf4',
+      color: t.colors?.green[600] || '#16a34a',
+    },
+    shop: {
+      bg: t.colors?.amber[50] || '#fffbeb',
+      color: t.colors?.amber[700] || '#b45309',
+    },
+    user: {
+      bg: t.colors?.blue[50] || '#eff6ff',
+      color: t.colors?.blue[600] || '#2563eb',
+    },
+    table: {
+      bg: t.colors?.purple[50] || '#faf5ff',
+      color: t.colors?.purple[600] || '#9333ea',
+    },
+    backup: {
+      bg: t.colors?.green[50] || '#f0fdf4',
+      color: t.colors?.green[600] || '#16a34a',
+    },
+    printer: {
+      bg: t.colors?.purple[50] || '#faf5ff',
+      color: t.colors?.purple[600] || '#9333ea',
+    },
   };
   return accents[settingId] || accents.category;
 };
@@ -38,25 +59,45 @@ const SETTINGS = [
   {
     section: 'Menu & Products',
     items: [
-      {id: 'category', icon: 'add-shopping-cart', name: 'Categories', sub: 'Manage menu groups'},
-      {id: 'item',     icon: 'edit',              name: 'Items',       sub: 'Products & pricing'},
-      {id: 'tax',      icon: 'attach-money',      name: 'Taxes',       sub: 'Tax rates'},
-      {id: 'discount', icon: 'money',             name: 'Discounts',   sub: 'Discount rules'},
+      {
+        id: 'category',
+        icon: 'add-shopping-cart',
+        name: 'Categories',
+        sub: 'Manage menu groups',
+      },
+      {id: 'item', icon: 'edit', name: 'Items', sub: 'Products & pricing'},
+      {id: 'tax', icon: 'attach-money', name: 'Taxes', sub: 'Tax rates'},
+      {id: 'discount', icon: 'money', name: 'Discounts', sub: 'Discount rules'},
     ],
   },
   {
     section: 'Business',
     items: [
-      {id: 'shop',  icon: 'email',      name: 'Shop',   sub: 'Name, currency, mode'},
-      {id: 'user',  icon: 'person',     name: 'Users',  sub: 'Staff & access'},
-      {id: 'table', icon: 'date-range', name: 'Tables', sub: 'Dine in, bar, takeaway'},
+      {id: 'shop', icon: 'email', name: 'Shop', sub: 'Name, currency, mode'},
+      {id: 'user', icon: 'person', name: 'Users', sub: 'Staff & access'},
+      {
+        id: 'table',
+        icon: 'date-range',
+        name: 'Tables',
+        sub: 'Dine in, bar, takeaway',
+      },
     ],
   },
   {
     section: 'System',
     items: [
-      {id: 'backup',  icon: 'cloud-upload', name: 'Backup',  sub: 'Google Drive sync'},
-      {id: 'printer', icon: 'print',        name: 'Printer', sub: 'Receipt printer setup'},
+      {
+        id: 'backup',
+        icon: 'cloud-upload',
+        name: 'Backup',
+        sub: 'Google Drive sync',
+      },
+      {
+        id: 'printer',
+        icon: 'print',
+        name: 'Printer',
+        sub: 'Receipt printer setup',
+      },
     ],
   },
 ];
@@ -78,16 +119,17 @@ const SettingsCard = ({icon, id, name, sub, onPress, t}) => {
       paddingVertical={14}
       flex={1}>
       <Stack
-        width={44} height={44} borderRadius={22}
+        width={44}
+        height={44}
+        borderRadius={22}
         backgroundColor={accent.bg}
-        alignItems="center" justifyContent="center"
+        alignItems="center"
+        justifyContent="center"
         flexShrink={0}>
         <StyledIcon name={icon} size={22} color={accent.color} />
       </Stack>
       <Stack vertical gap={2} flex={1}>
-        <Text
-          variant="label"
-          color={t.textPrimary}>
+        <Text variant="label" color={t.textPrimary}>
           {name}
         </Text>
         <Text variant="caption" color={t.textMuted}>
@@ -104,17 +146,35 @@ const BigSettings = () => {
   const {t} = useAppTheme();
   const [show, setShow] = useState({data: null, id: '', tag: ''});
 
-  const handlePress = useCallback((id) => {
+  const handlePress = useCallback(id => {
     switch (id) {
-      case 'shop':     setShow({data: null, id, tag: 'shop'}); break;
-      case 'printer':  setShow({data: null, id, tag: 'printer'}); break;
-      case 'category': navigation.navigate('big-category'); break;
-      case 'tax':      navigation.navigate('big-tax'); break;
-      case 'discount': navigation.navigate('big-discount'); break;
-      case 'item':     navigation.navigate('big-item'); break;
-      case 'user':     navigation.navigate('big-user'); break;
-      case 'table':    navigation.navigate('table-settings'); break;
-      case 'backup':   navigation.navigate('big-backup'); break;
+      case 'shop':
+        setShow({data: null, id, tag: 'shop'});
+        break;
+      case 'printer':
+        setShow({data: null, id, tag: 'printer'});
+        break;
+      case 'category':
+        navigation.navigate('big-category');
+        break;
+      case 'tax':
+        navigation.navigate('big-tax');
+        break;
+      case 'discount':
+        navigation.navigate('big-discount');
+        break;
+      case 'item':
+        navigation.navigate('big-item');
+        break;
+      case 'user':
+        navigation.navigate('big-user');
+        break;
+      case 'table':
+        navigation.navigate('table-settings');
+        break;
+      case 'backup':
+        navigation.navigate('big-backup');
+        break;
     }
   }, []);
 
@@ -123,13 +183,17 @@ const BigSettings = () => {
   return (
     <StyledPage backgroundColor={t.bgPage}>
       <StyledPage.Header.Full>
-        <RenderHeader showBackButton showLogo={false} showTitle title="Settings" />
+        <RenderHeader
+          showBackButton
+          showLogo={false}
+          showTitle
+          title="Settings"
+        />
       </StyledPage.Header.Full>
 
       <Stack flex={1.5} horizontal>
         <SideBarAdapter selectedMenu={6} showMenu={false} collapse />
         <Stack flex={3} paddingHorizontal={16} vertical paddingTop={8}>
-
           {SETTINGS.map(section => (
             <Stack key={section.section} vertical marginBottom={16}>
               <Text
@@ -140,28 +204,30 @@ const BigSettings = () => {
                 {section.section.toUpperCase()}
               </Text>
               <Stack vertical gap={8}>
-                {Array.from({length: Math.ceil(section.items.length / 2)}, (_, i) => (
-                  <Stack key={i} horizontal gap={8}>
-                    {section.items.slice(i * 2, i * 2 + 2).map(item => (
-                      <SettingsCard
-                        key={item.id}
-                        t={t}
-                        id={item.id}
-                        icon={item.icon}
-                        name={item.name}
-                        sub={item.sub}
-                        onPress={() => handlePress(item.id)}
-                      />
-                    ))}
-                    {section.items.slice(i * 2, i * 2 + 2).length === 1 && (
-                      <Stack marginHorizontal={16} horizontal flex={1} />
-                    )}
-                  </Stack>
-                ))}
+                {Array.from(
+                  {length: Math.ceil(section.items.length / 2)},
+                  (_, i) => (
+                    <Stack key={i} horizontal gap={8}>
+                      {section.items.slice(i * 2, i * 2 + 2).map(item => (
+                        <SettingsCard
+                          key={item.id}
+                          t={t}
+                          id={item.id}
+                          icon={item.icon}
+                          name={item.name}
+                          sub={item.sub}
+                          onPress={() => handlePress(item.id)}
+                        />
+                      ))}
+                      {section.items.slice(i * 2, i * 2 + 2).length === 1 && (
+                        <Stack marginHorizontal={16} horizontal flex={1} />
+                      )}
+                    </Stack>
+                  )
+                )}
               </Stack>
             </Stack>
           ))}
-
         </Stack>
       </Stack>
 
@@ -170,9 +236,15 @@ const BigSettings = () => {
         onClose={close}
         title={capitalize(show.tag)}
         width="30%"
-        colors={{background: t.bgPage}}
+        colors={{
+          background: t.bgPage,
+          headerBg: theme.colors.transparent,
+          headerTitle: t.textPrimary,
+          headerSubtitle: t.textSecondary,
+          headerBorder: t.bgPage,
+        }}
         side="right">
-        {show.tag === 'shop'    && <Shop onClose={close} />}
+        {show.tag === 'shop' && <Shop onClose={close} />}
         {show.tag === 'printer' && <Printer onClose={close} />}
       </Drawer>
     </StyledPage>

@@ -134,7 +134,11 @@ const BigDiscount = () => {
         title={`${state.tag === 'Edit' ? 'Edit' : 'Add'} Category `}
         width={'30%'}
         colors={{
-          background: t.bgPage,
+      background: t.bgPage,
+                headerBg: theme.colors.transparent,
+                headerTitle: t.textPrimary,
+                headerSubtitle: t.textSecondary,
+                headerBorder: t.bgPage,
         }}
         side="right">
         <DiscountForm discount={state?.data} onClose={() => reset()} />

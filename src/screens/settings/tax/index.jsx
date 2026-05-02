@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Drawer, StyledPage, StyleShape} from 'fluent-styles';
+import {Drawer, StyledPage, StyleShape, theme} from 'fluent-styles';
 import {Stack} from '../../../components/package/stack';
 import SideBarAdapter from '../../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../../components/tablet/header';
@@ -127,6 +127,10 @@ const BigTax = () => {
         width={'30%'}
         colors={{
           background: t.bgPage,
+          headerBg: theme.colors.transparent,
+          headerTitle: t.textPrimary,
+          headerSubtitle: t.textSecondary,
+          headerBorder: t.bgPage,
         }}
         side="right">
        <TaxForm tax={state?.data} onClose={() => reset()} />

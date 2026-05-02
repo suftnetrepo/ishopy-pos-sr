@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {
-  StyledCycle,
+  theme,
   Stack,
   StyleShape,
   StyledPage,
@@ -33,7 +33,7 @@ const BigTableScreen = () => {
   const shouldOpen = state.tag === 'Edit' || state.tag === 'Add';
   const isFocused = navigationFocus && screenFocus;
   const {checkLimit} = usePremium();
-  const {data, error, loading,  resetHandler, loadTables} = useTables(isFocused);
+  const {data, error, loading, resetHandler, loadTables} = useTables(isFocused);
 
   useLoaderAndError(loading, error, resetHandler);
 
@@ -87,7 +87,7 @@ const BigTableScreen = () => {
     console.log('Resetting state and reloading tables');
     setState({...state, tag: '', data: null});
     resetHandler();
-      await loadTables();
+    await loadTables();
   };
 
   const update = tag => {
@@ -103,7 +103,10 @@ const BigTableScreen = () => {
           showTitle={true}
           title="Tables"
           CopyIcon={
-            <Pressable onTouchStart={() => { if (checkLimit('tables', data?.length || 0)) update('Add'); }}>
+            <Pressable
+              onTouchStart={() => {
+                if (checkLimit('tables', data?.length || 0)) update('Add');
+              }}>
               <StyleShape
                 cycle
                 size={48}
@@ -141,6 +144,10 @@ const BigTableScreen = () => {
         width={'30%'}
         colors={{
           background: t.bgPage,
+          headerBg: theme.colors.transparent,
+          headerTitle: t.textPrimary,
+          headerSubtitle: t.textSecondary,
+          headerBorder: t.bgPage,
         }}
         side="right">
         <TableForm table={state?.data} onClose={() => reset()} />

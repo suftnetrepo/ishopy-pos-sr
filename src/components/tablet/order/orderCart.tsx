@@ -164,7 +164,7 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
           paddingVertical={8}
           paddingHorizontal={16}
           alignItems="center"
-          backgroundColor={t.bgCard}>
+          backgroundColor={t.bgInput}>
           <Text
             flex={2.5}
             color={t.textPrimary}
@@ -172,8 +172,8 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
             {addOn.addOnName}
           </Text>
           <StyledBadge
-            color={t.textPrimary}
-            backgroundColor={t.bgCard}
+            color={t.textSecondary}
+            backgroundColor="transparent"
             paddingHorizontal={10}
             paddingVertical={1}
             flex={0.5}>
@@ -197,8 +197,8 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
     return (
       <>
         <XStack
-          backgroundColor={theme.colors.blueGray[100]}
-          borderColor={theme.colors.blueGray[100]}
+          backgroundColor={t.bgInput}
+          borderColor={t.borderDefault}
           justifyContent="space-between"
           paddingVertical={8}
           paddingHorizontal={16}
@@ -210,8 +210,8 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
             {item.menu_name}
           </Text>
           <StyledBadge
-            color={t.textPrimary}
-            backgroundColor={theme.colors.blueGray[100]}
+            color={t.textSecondary}
+            backgroundColor="transparent"
             paddingHorizontal={10}
             paddingVertical={1}
             flex={0.5}>
@@ -277,10 +277,10 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
               paddingVertical={8}
               paddingHorizontal={16}
               alignItems="center"
-              backgroundColor={t.bgPage}>
+              backgroundColor={t.bgCard}>
               <Text
-                color={t.textPrimary}
-                variant="label"
+                color={t.textSecondary}
+                variant="caption"
                 paddingHorizontal={16}>
                 Subtotal
               </Text>
@@ -296,10 +296,10 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
               paddingVertical={8}
               paddingHorizontal={16}
               alignItems="center"
-              backgroundColor={t.bgPage}>
+              backgroundColor={t.bgCard}>
               <Text
-                color={t.textPrimary}
-                variant="label"
+                color={t.textSecondary}
+                variant="caption"
                 paddingHorizontal={16}>
                 Discount
               </Text>
@@ -318,11 +318,11 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
               paddingVertical={8}
               paddingHorizontal={16}
               alignItems="center"
-              backgroundColor={t.bgPage}>
+              backgroundColor={t.bgCard}>
               <Text
-                color={t.textPrimary}
+                color={t.textSecondary}
                 paddingHorizontal={16}
-                variant="label">
+                variant="caption">
                 Tax
               </Text>
               <StyledSpacer marginHorizontal={8} />
@@ -340,7 +340,10 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
               paddingVertical={8}
               paddingHorizontal={16}
               alignItems="center"
-              backgroundColor={t.bgCard}>
+              backgroundColor={t.bgInput}
+              borderRadius={8}
+              marginHorizontal={0}
+              marginVertical={8}>
               <Text
                 color={t.textPrimary}
                 variant="title"

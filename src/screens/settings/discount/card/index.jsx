@@ -3,7 +3,6 @@ import React from 'react';
 import {FlatList} from 'react-native';
 import {StyledText, StyledPressable, Stack} from 'fluent-styles';
 import {theme} from '../../../../configs/theme';
-import {StyledIcon} from '../../../../components/package/icon';
 import {toWordCase} from '../../../../utils/help';
 import {useAppTheme} from '../../../../theme';
 import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -21,7 +20,7 @@ const RenderCard = ({item, onEdit, onDelete, t}) => {
         horizontal
         borderRadius={18}
         backgroundColor={t.bgCard}
-        borderWidth={1}
+       borderWidth={0.2}
         borderColor={t.borderSubtle}
         marginHorizontal={4}
         marginBottom={12}

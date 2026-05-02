@@ -48,7 +48,7 @@ const LowStockItems = () => {
         marginVertical={12}
       />
 
-      {data.length === 0 ? (
+      {data?.length === 0 ? (
         <>
           <Stack
             width="100%" vertical alignItems="center" justifyContent="center"
@@ -57,10 +57,10 @@ const LowStockItems = () => {
             <Text fontSize={32}>🔔</Text>
             <Text
               variant="title"
-              color={t.textPrimary}>
+              color={t.textMuted}>
               Nothing here yet
             </Text>
-            <Text variant="caption" color={t.textSecondary} textAlign="center">
+            <Text variant="caption" color={t.textMuted} textAlign="center">
               Lower stock items will appear here.
             </Text>
           </Stack>

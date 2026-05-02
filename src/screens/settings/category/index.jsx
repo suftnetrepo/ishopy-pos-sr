@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {
-  StyledCycle,
+  theme,
   Stack,
   StyleShape,
   StyledPage,
@@ -136,6 +136,10 @@ const BigCategory = () => {
         width={'30%'}
         colors={{
           background: t.bgPage,
+          headerBg: theme.colors.transparent,
+          headerTitle: t.textPrimary,
+          headerSubtitle: t.textSecondary,
+          headerBorder: t.bgPage,
         }}
         side="right">
         <CategoryForm category={state?.data} onClose={() => reset()} />
