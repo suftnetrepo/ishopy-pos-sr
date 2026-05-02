@@ -159,31 +159,32 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
     return (
       <XStack
         flex={1}
-        justifyContent="space-between"
-        paddingVertical={10}
+        paddingVertical={11}
         paddingHorizontal={16}
         alignItems="center"
-        backgroundColor="transparent">
+        backgroundColor="transparent"
+        gap={12}>
         <Text
-          flex={2.5}
-          color={t.textPrimary}
-          variant="body">
-          {addOn.addOnName}
-        </Text>
-        <StyledBadge
-          color={t.textSecondary}
-          backgroundColor="transparent"
-          paddingHorizontal={10}
-          paddingVertical={1}
-          flex={0.5}>
-          {addOn.quantity}
-        </StyledBadge>
-
-        <Text
-          textAlign={'right'}
           flex={1}
           color={t.textPrimary}
-          variant="body">
+          variant="body"
+          numberOfLines={1}>
+          {addOn.addOnName}
+        </Text>
+        <Text
+          width={32}
+          textAlign="center"
+          color={t.textSecondary}
+          variant="caption"
+          style={{opacity: 0.75}}>
+          {addOn.quantity}
+        </Text>
+        <Text
+          width={80}
+          textAlign="right"
+          color={t.textPrimary}
+          variant="body"
+          fontWeight="600">
           {formatCurrency(shop?.currency || '£', addOn?.price || 0)}
         </Text>
       </XStack>
@@ -195,40 +196,43 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
       <>
         <XStack
           backgroundColor="transparent"
-          justifyContent="space-between"
-          paddingVertical={10}
+          paddingVertical={11}
           paddingHorizontal={16}
-          alignItems="center">
+          alignItems="center"
+          gap={12}>
           <Text
-            flex={2.5}
-            color={t.textPrimary}
-            variant="body">
-            {item.menu_name}
-          </Text>
-          <StyledBadge
-            color={t.textSecondary}
-            backgroundColor="transparent"
-            paddingHorizontal={10}
-            paddingVertical={1}
-            flex={0.5}>
-            {item.quantity}
-          </StyledBadge>
-          <Text
-            textAlign={'right'}
             flex={1}
             color={t.textPrimary}
-            variant="body">
+            variant="body"
+            fontWeight="600"
+            numberOfLines={1}>
+            {item.menu_name}
+          </Text>
+          <Text
+            width={32}
+            textAlign="center"
+            color={t.textSecondary}
+            variant="caption"
+            style={{opacity: 0.75}}>
+            {item.quantity}
+          </Text>
+          <Text
+            width={80}
+            textAlign="right"
+            color={t.textPrimary}
+            variant="body"
+            fontWeight="600">
             {formatCurrency(shop?.currency || '£', item?.price || 0)}
           </Text>
         </XStack>
         {(item?.addOns ? JSON.parse(item.addOns) : []).length > 0 && (
-          <Stack paddingHorizontal={16} paddingVertical={2}>
+          <YStack paddingHorizontal={16} paddingVertical={4} gap={0}>
             {(item?.addOns ? JSON.parse(item.addOns) : []).map(
               (addOn: AddOn, addOnIndex: number) => (
                 <RenderAddOn addOn={addOn} key={addOnIndex} />
               )
             )}
-          </Stack>
+          </YStack>
         )}
       </>
     );
@@ -284,23 +288,25 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
           <YStack
             flex={1}
             width={'100%'}
-            marginTop={14}
-            paddingTop={12}
+            marginTop={16}
+            paddingTop={14}
             borderTopWidth={1}
-            borderTopColor={`${t.borderSubtle}30`}>
+            borderTopColor={`${t.borderSubtle}30`}
+            gap={10}>
             <XStack
-              justifyContent="flex-end"
               paddingVertical={8}
               paddingHorizontal={16}
               alignItems="center"
-              backgroundColor="transparent">
+              gap={12}>
               <Text
+                flex={1}
                 color={t.textSecondary}
-                variant="caption"
-                paddingHorizontal={16}>
+                variant="caption">
                 Subtotal
               </Text>
               <Text
+                width={80}
+                textAlign="right"
                 color={t.textPrimary}
                 variant="body">
                 {formatCurrency(shop?.currency || '£', order?.total || 0)}
@@ -308,68 +314,67 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
             </XStack>
 
             <XStack
-              justifyContent="flex-end"
               paddingVertical={8}
               paddingHorizontal={16}
               alignItems="center"
-              backgroundColor="transparent">
+              gap={12}>
               <Text
+                flex={1}
                 color={t.textSecondary}
-                variant="caption"
-                paddingHorizontal={16}>
+                variant="caption">
                 Discount
               </Text>
-              <StyledSpacer marginHorizontal={16} />
-              <XStack justifyContent="flex-end" alignItems="center">
-                <Text
-                  color={t.textPrimary}
-                  variant="body">
-                  {formatCurrency(shop?.currency || '£', order?.discount || 0)}
-                </Text>
-              </XStack>
+              <Text
+                width={80}
+                textAlign="right"
+                color={t.textPrimary}
+                variant="body">
+                {formatCurrency(shop?.currency || '£', order?.discount || 0)}
+              </Text>
             </XStack>
 
             <XStack
-              justifyContent="flex-end"
               paddingVertical={8}
               paddingHorizontal={16}
               alignItems="center"
-              backgroundColor="transparent">
+              gap={12}>
               <Text
+                flex={1}
                 color={t.textSecondary}
-                paddingHorizontal={16}
                 variant="caption">
                 Tax
               </Text>
-              <StyledSpacer marginHorizontal={8} />
-              <XStack justifyContent="flex-end" alignItems="center">
-                <Text
-                  color={t.textPrimary}
-                  variant="body">
-                  {formatCurrency(shop?.currency || '£', order?.tax || 0)}
-                </Text>
-              </XStack>
+              <Text
+                width={80}
+                textAlign="right"
+                color={t.textPrimary}
+                variant="body">
+                {formatCurrency(shop?.currency || '£', order?.tax || 0)}
+              </Text>
             </XStack>
 
             <XStack
-              justifyContent="flex-end"
-              paddingVertical={10}
+              paddingVertical={12}
               paddingHorizontal={16}
               alignItems="center"
+              gap={12}
               backgroundColor={t.bgInput}
               borderRadius={8}
-              marginHorizontal={8}
-              marginVertical={12}>
+              marginHorizontal={0}
+              marginVertical={4}>
               <Text
+                flex={1}
                 color={t.textPrimary}
                 variant="title"
-                paddingHorizontal={16}>
+                fontWeight="700">
                 Total
               </Text>
-              <StyledSpacer marginHorizontal={8} />
               <Text
+                width={80}
+                textAlign="right"
                 color={t.textPrimary}
-                variant="title">
+                variant="title"
+                fontWeight="700">
                 {formatCurrency(shop?.currency || '£', order?.total_price || 0)}
               </Text>
             </XStack>
