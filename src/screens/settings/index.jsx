@@ -2,12 +2,12 @@
 import React, {useState, useCallback} from 'react';
 import {
   StyledPage,
-  StyledText,
   StyledPressable,
   Stack,
   theme,
   Drawer,
 } from 'fluent-styles';
+import Text from '../../components/text';
 import SideBarAdapter from '../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../components/tablet/header';
 import {StyledIcon} from '../../components/package/icon';
@@ -85,15 +85,14 @@ const SettingsCard = ({icon, id, name, sub, onPress, t}) => {
         <StyledIcon name={icon} size={22} color={accent.color} />
       </Stack>
       <Stack vertical gap={2} flex={1}>
-        <StyledText
-          fontSize={theme.fontSize.normal}
-          fontWeight={theme.fontWeight.medium}
+        <Text
+          variant="label"
           color={t.textPrimary}>
           {name}
-        </StyledText>
-        <StyledText fontSize={theme.fontSize.small} color={t.textMuted}>
+        </Text>
+        <Text variant="caption" color={t.textMuted}>
           {sub}
-        </StyledText>
+        </Text>
       </Stack>
       <StyledIcon name="chevron-right" size={20} color={t.textMuted} />
     </StyledPressable>
@@ -133,15 +132,13 @@ const BigSettings = () => {
 
           {SETTINGS.map(section => (
             <Stack key={section.section} vertical marginBottom={16}>
-              <StyledText
-                fontSize={10}
-                fontWeight={theme.fontWeight.semiBold}
+              <Text
+                variant="overline"
                 color={t.textMuted}
-                letterSpacing={0.8}
                 marginBottom={8}
                 marginLeft={4}>
                 {section.section.toUpperCase()}
-              </StyledText>
+              </Text>
               <Stack vertical gap={8}>
                 {Array.from({length: Math.ceil(section.items.length / 2)}, (_, i) => (
                   <Stack key={i} horizontal gap={8}>

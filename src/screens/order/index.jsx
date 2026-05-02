@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {
   Drawer as StyledDrawer,
   StyledPressable,
-  StyledText,
   StyledPage,
   Stack,
   theme,

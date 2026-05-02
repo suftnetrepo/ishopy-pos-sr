@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React, { useState } from "react";
-import { validate, StyledSpinner, YStack, StyledBadge, StyledOkDialog, XStack, StyledHeader, StyledSafeAreaView, StyledSpacer, StyledInput, StyledText, StyledButton } from 'fluent-styles';
+import { validate, StyledSpinner, YStack, StyledBadge, StyledOkDialog, XStack, StyledHeader, StyledSafeAreaView, StyledSpacer, StyledInput, StyledButton } from 'fluent-styles';
+import Text from '../../components/text';
 import { fontStyles, theme } from "../../configs/theme";
 import { validatorRules } from "./validatorRules";
 import { useLogin } from "../../hooks/useUser";
@@ -97,13 +98,13 @@ const Login = () => {
 
         <XStack justifyContent='flex-start' alignItems='center'>
           <StyledMIcon size={32} name='info' color={theme.colors.cyan[500]} />
-          <StyledText paddingHorizontal={8} fontFamily={fontStyles.Roboto_Regular} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.large} color={t.textPrimary}>
+          <Text variant="header" paddingHorizontal={8} color={t.textPrimary}>
             Welcome to iRit
-          </StyledText>
+          </Text>
         </XStack>
-        <StyledText fontFamily={fontStyles.Roboto_Regular} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.medium} color={t.textPrimary}>
+        <Text variant="body" color={t.textPrimary}>
           Get started quickly! Tap Sample Restaurant to generate dummy Data to see a sample of what the app can do. Feel free to explore the features!.
-        </StyledText>
+        </Text>
       </YStack>
     )
   }
@@ -134,12 +135,12 @@ const Login = () => {
                 justifyContent='flex-start' alignItems='center' marginVertical={24}
               >
                 <StyledSpacer marginVertical={16} />
-                <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.xlarge} color={t.textPrimary}>
+                <Text variant="header" paddingHorizontal={8} color={t.textPrimary}>
                   Welcome to iRit
-                </StyledText>
-                <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.medium} color={t.textSecondary}>
+                </Text>
+                <Text variant="body" paddingHorizontal={8} color={t.textSecondary}>
                   Sign in to continue.
-                </StyledText>
+                </Text>
               </YStack>
             </>
           )
@@ -181,11 +182,9 @@ const Login = () => {
         />
         <StyledSpacer marginVertical={8} />
         <StyledButton width='100%' backgroundColor={theme.colors.cyan[500]} onPress={() => onSubmit()} >
-          <StyledText fontFamily={fontStyles.Roboto_Regular}
-            fontSize={theme.fontSize.normal}
-            fontWeight={theme.fontWeight.normal} paddingHorizontal={20} paddingVertical={10} color={t.bgCard}>
+          <Text variant="button" paddingHorizontal={20} paddingVertical={10} color={t.bgCard}>
             Sign in
-          </StyledText>
+          </Text>
         </StyledButton>
         <StyledSpacer marginVertical={4} />
         {
@@ -194,11 +193,9 @@ const Login = () => {
               <StyledButton link backgroundColor={theme.colors.cyan[500]} onPress={() => navigator.navigate("keypad", {
                 recovery_password: true
               })} >
-                <StyledText paddingHorizontal={20} fontFamily={fontStyles.Roboto_Regular}
-                  fontSize={theme.fontSize.normal}
-                  fontWeight={theme.fontWeight.normal} color={t.textMuted}>
+                <Text variant="body" paddingHorizontal={20} color={t.textMuted}>
                   Forgot password
-                </StyledText>
+                </Text>
               </StyledButton>
             </XStack>
           )

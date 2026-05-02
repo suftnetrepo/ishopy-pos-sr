@@ -3,11 +3,11 @@ import React, {useState} from 'react';
 import {ScrollView, Alert} from 'react-native';
 import {
   Stack,
-  StyledText,
   StyledPressable,
   StyledSpacer,
   StyledSpinner,
 } from 'fluent-styles';
+import Text from '../../components/text';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {store} from '../../utils/asyncStorage';
 import {seedFromTemplate, clearSeedData} from '../../model/seed';
@@ -82,12 +82,11 @@ const OnboardingScreen = ({onChange}) => {
       {step > n ? (
         <Icon name="check" size={14} color={t.textOnAmber} />
       ) : (
-        <StyledText
-          fontSize={12}
-          fontWeight="600"
+        <Text
+          variant="caption"
           color={step === n ? t.textOnAmber : t.textMuted}>
           {n}
-        </StyledText>
+        </Text>
       )}
     </Stack>
   );
@@ -116,13 +115,11 @@ const OnboardingScreen = ({onChange}) => {
             alignItems="center" justifyContent="center">
             <Icon name="silverware-fork-knife" size={20} color={t.textOnAmber} />
           </Stack>
-          <StyledText
-            fontSize={20}
-            fontWeight="700"
-            fontFamily={fonts.displayBold}
+          <Text
+            variant="header"
             color={t.textPrimary}>
             Kursa
-          </StyledText>
+          </Text>
         </Stack>
 
         {/* ── Step progress ── */}
@@ -132,12 +129,11 @@ const OnboardingScreen = ({onChange}) => {
               <Stack alignItems="center" gap={6}>
                 <StepDot n={s.id} 
                         t={t}/>
-                <StyledText
-                  fontSize={10}
-                  color={step >= s.id ? t.brandPrimaryText : t.textMuted}
-                  fontWeight={step === s.id ? '600' : '400'}>
+                <Text
+                  variant="caption"
+                  color={step >= s.id ? t.brandPrimaryText : t.textMuted}>
                   {s.label}
-                </StyledText>
+                </Text>
               </Stack>
               {i < STEPS.length - 1 && (
                 <Stack
@@ -167,13 +163,11 @@ const OnboardingScreen = ({onChange}) => {
               paddingVertical={14}
               borderRadius={32}
               backgroundColor={canNext() && !loading ? t.brandPrimary : t.borderDefault}>
-              <StyledText
-                fontFamily={fonts.displaySemi}
-                fontSize={16}
-                fontWeight="600"
+              <Text
+                variant="button"
                 color={canNext() && !loading ? t.textOnAmber : t.textMuted}>
                 {step === 3 ? (loading ? 'Setting up…' : 'Get Started →') : 'Continue →'}
-              </StyledText>
+              </Text>
             </StyledPressable>
 
             {step > 1 && (
@@ -183,21 +177,21 @@ const OnboardingScreen = ({onChange}) => {
                 alignItems="center"
                 justifyContent="center"
                 paddingVertical={8}>
-                <StyledText fontSize={14} color={t.textSecondary}>
+                <Text variant="body" color={t.textSecondary}>
                   ← Back
-                </StyledText>
+                </Text>
               </StyledPressable>
             )}
           </Stack>
 
           {/* ── Footer note ── */}
-          <StyledText
-            fontSize={12}
+          <Text
+            variant="caption"
             color={t.textMuted}
             textAlign="center"
             marginTop={12}>
             Default PIN is 1234 · Change it in Settings after setup
-          </StyledText>
+          </Text>
         </Stack>
       </Stack>
 

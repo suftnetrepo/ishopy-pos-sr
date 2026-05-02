@@ -6,10 +6,10 @@ import {
   StyledHeader,
   StyledSafeAreaView,
   StyledSpacer,
-  StyledText,
   StyledSpinner,
   StyledButton,
 } from 'fluent-styles';
+import Text from '../components/text';
 import {fontStyles, theme} from '../configs/theme';
 import {usePin} from '../hooks/useUser';
 import {useNavigation} from '@react-navigation/native';
@@ -111,24 +111,20 @@ const Keypad = () => {
               borderColor={pin[index] ? t.brandPrimary : t.borderStrong}
               justifyContent="center"
               alignItems="center">
-              <StyledText
-                fontFamily={fontStyles.Roboto_Regular}
-                fontSize={theme.fontSize.large}
-                fontWeight={theme.fontWeight.bold}
+              <Text
+                variant="header"
                 color={t.textPrimary}>
                 {pin[index]}
-              </StyledText>
+              </Text>
             </YStack>
           ))}
         </XStack>
         {(!purchase_status || recovery_password) && (
-          <StyledText
-            color={t.textMuted}
-            fontFamily={fontStyles.Roboto_Regular}
-            fontSize={theme.fontSize.normal}
-            fontWeight={theme.fontWeight.normal}>
+          <Text
+            variant="body"
+            color={t.textMuted}>
             1234
-          </StyledText>
+          </Text>
         )}
         <StyledSpacer marginVertical={8} />
         <Stack
@@ -152,13 +148,11 @@ const Keypad = () => {
                   backgroundColor={t.bgCard}
                   borderColor={t.borderStrong}
                   onPress={() => handlePress(num.toString())}>
-                  <StyledText
-                    fontFamily={fontStyles.Roboto_Regular}
-                    fontSize={theme.fontSize.xxlarge}
-                    fontWeight={theme.fontWeight.bold}
+                  <Text
+                    variant="header"
                     color={t.textPrimary}>
                     {num}
-                  </StyledText>
+                  </Text>
                 </StyledButton>
               ))}
             </Stack>
@@ -172,12 +166,9 @@ const Keypad = () => {
             backgroundColor={t.bgCard}
             borderColor={t.borderStrong}
             onPress={handleDelete}>
-            <StyledText
-              color={t.textPrimary}
-              fontSize={theme.fontSize.xxlarge}
-              fontWeight={theme.fontWeight.bold}>
+            <Text variant="header" color={t.textPrimary}>
               ⌫
-            </StyledText>
+            </Text>
           </StyledButton>
         </Stack>
         <StyledSpacer marginVertical={8} />

@@ -2,7 +2,8 @@
 /* eslint-disable no-undef */
 /* eslint-disable prettier/prettier */
 import React, { useState } from "react";
-import { validate, StyledSpinner, YStack, StyledBadge, StyledOkDialog, XStack, StyledHeader, StyledSafeAreaView, StyledSpacer, StyledInput, StyledText, StyledButton } from 'fluent-styles';
+import { validate, StyledSpinner, YStack, StyledBadge, StyledOkDialog, XStack, StyledHeader, StyledSafeAreaView, StyledSpacer, StyledInput, StyledButton } from 'fluent-styles';
+import Text from '../../components/text';
 import { theme } from "../../configs/theme";
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -83,12 +84,12 @@ const SignUp = () => {
           justifyContent='flex-start' alignItems='center'
         >
           <StyledSpacer marginVertical={16} />
-          <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.xlarge} color={t.textPrimary}>
+          <Text variant="header" paddingHorizontal={8} color={t.textPrimary}>
             Welcome to iShopy
-          </StyledText>
-          <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.medium} color={t.textSecondary}>
+          </Text>
+          <Text variant="body" paddingHorizontal={8} color={t.textSecondary}>
             Sign Up to continue.
-          </StyledText>
+          </Text>
         </YStack>
         <StyledSpacer marginVertical={16} />
         <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
@@ -231,20 +232,20 @@ const SignUp = () => {
           />
           <StyledSpacer marginVertical={8} />
           <StyledButton flex={1} backgroundColor={theme.colors.cyan[500]} onPress={() => onSubmit()} >
-            <StyledText paddingHorizontal={20} paddingVertical={10} color={t.bgCard}>
+            <Text variant="button" paddingHorizontal={20} paddingVertical={10} color={t.bgCard}>
               Sign up
-            </StyledText>
+            </Text>
           </StyledButton>
           <StyledSpacer marginVertical={4} />
           <XStack paddingHorizontal={20} justifyContent='center' alignItems='center'>
-            <StyledText  >
+            <Text variant="body">
               {`Already have an account?`}  { }
-            </StyledText>
+            </Text>
             <StyledSpacer marginHorizontal={2} />
             <StyledButton link onPress={() => { navigator.navigate("login") }} >
-              <StyledText paddingHorizontal={1} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.large} >
+              <Text variant="button">
                 Sign in
-              </StyledText>
+              </Text>
             </StyledButton>
           </XStack>
         </KeyboardAwareScrollView>
