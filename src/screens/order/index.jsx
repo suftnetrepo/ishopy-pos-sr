@@ -57,19 +57,19 @@ const BigOrder = () => {
         width={'30%'}
         headerRight={
           <StyledMIcon
-              name="print"
-              size={32}
-              color={t.textPrimary}
-              onPress={() => {}}
-            />
+            name="print"
+            size={32}
+            color={t.textPrimary}
+            onPress={() => {}}
+          />
         }
-         colors={{
-                  background: t.bgPage,
-                  headerBg: theme.colors.transparent,
-                  headerTitle: t.textPrimary,
-                  headerSubtitle: t.textSecondary,
-                  headerBorder: t.bgPage,
-                }}
+        colors={{
+          background: t.bgPage,
+          headerBg: theme.colors.transparent,
+          headerTitle: t.textPrimary,
+          headerSubtitle: t.textSecondary,
+          headerBorder: t.bgPage,
+        }}
         side="right">
         <OrderCart onClose={() => setShow(null)} />
       </StyledDrawer>

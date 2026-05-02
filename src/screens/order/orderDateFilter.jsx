@@ -69,7 +69,7 @@ const OrderDateFilter = ({visible, setVisible}) => {
               Filter by date
             </Text>
             <StyledPressable onPress={() => setVisible(false)} padding={4}>
-              <Text variant="caption" color={t.textSecondary}>✕</Text>
+              <Text variant="title" color={t.textSecondary}>✕</Text>
             </StyledPressable>
           </Stack>
 

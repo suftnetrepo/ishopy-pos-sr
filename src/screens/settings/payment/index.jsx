@@ -4,7 +4,7 @@ import {
   StyledCycle,
   StyledSpacer,
   Stack,
-  theme,
+  StyleShape,
   StyledPage,
 } from 'fluent-styles';
 import SideBarAdapter from '../../../components/tablet/sideBar/sideBarAdapter';
@@ -40,26 +40,26 @@ const BigPayment = () => {
             <>
               {hasActiveFilter && (
                 <Pressable onTouchStart={handleClearDateFilter}>
-                  <StyledCycle
-                    width={48}
-                    height={48}
+                  <StyleShape
+                    cycle
+                    size={48}
                     borderWidth={1}
                     backgroundColor={t.bgPage}
                     borderColor={t.textMuted}>
                     <StyledIcon size={24} name="close" color={t.textPrimary} />
-                  </StyledCycle>
+                  </StyleShape>
                 </Pressable>
               )}
               <StyledSpacer marginHorizontal={4} />
               <Pressable onTouchStart={() => setCalendarShow(true)}>
-                <StyledCycle
-                  width={48}
-                  height={48}
+                <StyleShape
+                  cycle
+                  size={48}
                   borderWidth={1}
                   backgroundColor={t.bgPage}
                   borderColor={t.textMuted}>
                   <StyledIcon size={24} name="filter-list" color={t.textPrimary} />
-                </StyledCycle>
+                </StyleShape>
               </Pressable>
             </>
           }

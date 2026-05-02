@@ -257,7 +257,7 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
                 {index < (Array.isArray(data) ? data.length - 1 : 0) && (
                   <Stack
                     height={1}
-                    backgroundColor={`${t.borderSubtle}20`}
+                    backgroundColor={`${t.textMuted}20`}
                     marginHorizontal={16}
                   />
                 )}
@@ -289,19 +289,19 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
             flex={1}
             width={'100%'}
             marginTop={16}
-            paddingTop={12}
+            paddingTop={8}
             paddingHorizontal={16}
             borderTopWidth={1}
-            borderTopColor={`${t.borderSubtle}30`}
+            borderTopColor={`${t.textMuted}30`}
             gap={6}>
             <XStack
-              paddingVertical={9}
+              paddingVertical={4}
               alignItems="flex-end"
               gap={6}>
               <Text
                 flex={1}
                 color={t.textSecondary}
-                variant="caption">
+                variant="subtitle">
                 Subtotal
               </Text>
               <Stack width={28} />
@@ -309,19 +309,19 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
                 width={80}
                 textAlign="right"
                 color={t.textPrimary}
-                variant="body">
+                variant="title">
                 {formatCurrency(shop?.currency || '£', order?.total || 0)}
               </Text>
             </XStack>
 
             <XStack
-              paddingVertical={9}
+              paddingVertical={4}
               alignItems="flex-end"
               gap={6}>
               <Text
                 flex={1}
                 color={t.textSecondary}
-                variant="caption">
+                variant="subtitle">
                 Discount
               </Text>
               <Stack width={28} />
@@ -329,19 +329,19 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
                 width={80}
                 textAlign="right"
                 color={t.textPrimary}
-                variant="body">
+                variant="title">
                 {formatCurrency(shop?.currency || '£', order?.discount || 0)}
               </Text>
             </XStack>
 
             <XStack
-              paddingVertical={9}
+              paddingVertical={4}
               alignItems="flex-end"
               gap={6}>
               <Text
                 flex={1}
                 color={t.textSecondary}
-                variant="caption">
+                variant="subtitle">
                 Tax
               </Text>
               <Stack width={28} />
@@ -349,18 +349,18 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
                 width={80}
                 textAlign="right"
                 color={t.textPrimary}
-                variant="body">
+                variant="title">
                 {formatCurrency(shop?.currency || '£', order?.tax || 0)}
               </Text>
             </XStack>
 
             <XStack
-              paddingVertical={15}
-              paddingHorizontal={12}
-              marginTop={6}
+              paddingVertical={4}
+            
+        
               alignItems="flex-end"
               gap={6}
-              backgroundColor={t.bgInput}
+            
               borderRadius={8}>
               <Text
                 flex={1}

@@ -6,6 +6,7 @@ import {
   StyledTable,
   StyledChip,
   Stack,
+  StyleShape,
 } from 'fluent-styles';
 import {theme} from '../../../utils/theme';
 import {
@@ -23,15 +24,17 @@ import {useAppTheme} from '../../../theme';
 
 // ─── Status chip colours ──────────────────────────────────────────────────────
 const STATUS_STYLE = {
-  completed: {bg: theme.colors.green[50],  color: theme.colors.green[700]},
-  progress:  {bg: theme.colors.amber[500],  color: theme.colors.amber[700]},
-  pending:   {bg: theme.colors.blue[50],   color: theme.colors.blue[600]},
-  cancelled: {bg: theme.colors.red[50],    color: theme.colors.red[500]},
+  completed: {bg: theme.colors.green[50], color: theme.colors.green[700]},
+  progress: {bg: theme.colors.amber[500], color: theme.colors.amber[700]},
+  pending: {bg: theme.colors.blue[50], color: theme.colors.blue[600]},
+  cancelled: {bg: theme.colors.red[50], color: theme.colors.red[500]},
 };
 
 const getStatusStyle = status =>
-  STATUS_STYLE[(status || '').toLowerCase()] ||
-  {bg: theme.colors.gray[100], color: theme.colors.gray[500]};
+  STATUS_STYLE[(status || '').toLowerCase()] || {
+    bg: theme.colors.gray[100],
+    color: theme.colors.gray[500],
+  };
 
 const formatStatus = status =>
   status ? status.charAt(0).toUpperCase() + status.slice(1).toLowerCase() : '';
@@ -57,7 +60,9 @@ const buildColumns = symbol => [
     width: 90,
     align: 'center',
     render: v => (
-      <StyledText fontSize={theme.fontSize.small} color={theme.colors.gray[500]}>
+      <StyledText
+        fontSize={theme.fontSize.small}
+        color={theme.colors.gray[500]}>
         {v || '—'}
       </StyledText>
     ),
@@ -98,7 +103,9 @@ const buildColumns = symbol => [
     width: 80,
     align: 'right',
     render: v => (
-      <StyledText fontSize={theme.fontSize.small} color={theme.colors.gray[500]}>
+      <StyledText
+        fontSize={theme.fontSize.small}
+        color={theme.colors.gray[500]}>
         {v ? formatCurrency(symbol, v) : '—'}
       </StyledText>
     ),
@@ -122,8 +129,14 @@ const buildColumns = symbol => [
     sortable: true,
     render: v => (
       <Stack horizontal alignItems="center" gap={4}>
-        <MaterialIcon name="access-time" size={14} color={theme.colors.gray[400]} />
-        <StyledText fontSize={theme.fontSize.small} color={theme.colors.gray[500]}>
+        <MaterialIcon
+          name="access-time"
+          size={14}
+          color={theme.colors.gray[400]}
+        />
+        <StyledText
+          fontSize={theme.fontSize.small}
+          color={theme.colors.gray[500]}>
           {formatDate(v)}
         </StyledText>
       </Stack>
@@ -158,13 +171,14 @@ const buildColumns = symbol => [
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function OrderCard({onOrderChange, onHandleFilter}) {
-  const {updateSelectedOrder, date_filter, updateDateFilter, shop} = useAppContext();
+  const {updateSelectedOrder, date_filter, updateDateFilter, shop} =
+    useAppContext();
   const {t} = useAppTheme();
 
   // Active chip label — UI only, actual filtering done via setStatusFilter
   const [activeChip, setActiveChip] = useState('All');
 
-  const symbol  = shop?.currency || '£';
+  const symbol = shop?.currency || '£';
   const columns = buildColumns(symbol);
 
   const {tableProps, setStatusFilter} = useOrderTable({
@@ -211,27 +225,31 @@ export default function OrderCard({onOrderChange, onHandleFilter}) {
         <Stack horizontal gap={8} alignItems="center">
           {hasActiveFilter && (
             <Pressable onPress={handleClearDateFilter}>
-              <StyledCycle
+              <StyleShape
                 paddingHorizontal={10}
                 borderWidth={1}
-                height={48}
-                width={48}
+                cycle
+                size={48}
                 backgroundColor={t.bgPage}
                 borderColor={t.textMuted}>
                 <MaterialIcon size={24} name="close" color={t.textPrimary} />
-              </StyledCycle>
+              </StyleShape>
             </Pressable>
           )}
           <Pressable onPress={() => onHandleFilter('filter')}>
-            <StyledCycle
+            <StyleShape
               paddingHorizontal={10}
               borderWidth={1}
-              height={48}
-              width={48}
+              cycle
+              size={48}
               backgroundColor={t.bgPage}
               borderColor={t.textMuted}>
-              <MaterialIcon size={24} name="filter-list" color={t.textPrimary} />
-            </StyledCycle>
+              <MaterialIcon
+                size={24}
+                name="filter-list"
+                color={t.textPrimary}
+              />
+            </StyleShape>
           </Pressable>
         </Stack>
       </Stack>
@@ -246,9 +264,7 @@ export default function OrderCard({onOrderChange, onHandleFilter}) {
           updateSelectedOrder(row);
           onOrderChange('basket');
         }}
-        emptyNode={
-          <></>
-        }
+        emptyNode={<></>}
       />
     </Stack>
   );
