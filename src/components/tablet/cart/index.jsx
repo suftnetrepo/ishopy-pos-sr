@@ -3,8 +3,9 @@ import React, {Fragment, useState, useEffect} from 'react';
 import {ScrollView} from 'react-native';
 import {
   StyledSpacer, Drawer, StyledPressable,
-  StyledText, XStack, YStack, Stack,
+  XStack, YStack, Stack,
 } from 'fluent-styles';
+import {Text} from '../../../components/text';
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import {useAppContext} from '../../../hooks/appContext';
 import {formatCurrency, paymentOptions} from '../../../utils/help';
@@ -69,15 +70,15 @@ export default function Cart({table_id, table_name}) {
             backgroundColor={t.bgInput}
             borderWidth={1} borderColor={t.borderDefault}
             horizontal flex={1} justifyContent="space-between" alignItems="center">
-            <StyledText
+            <Text
               flex={1} color={t.textPrimary}
-              fontSize={theme.fontSize.small}>
+              variant="body">
               {item.name}
-            </StyledText>
+            </Text>
             <Stack horizontal alignItems="center" gap={12}>
-              <StyledText fontSize={theme.fontSize.small} color={t.textSecondary}>
+              <Text variant="body" color={t.textSecondary}>
                 {formatCurrency(shop?.currency || '£', calculateItemPrice(item))}
-              </StyledText>
+              </Text>
               <Stack
                 width={20} height={30} borderRadius={15}
                 backgroundColor={t.bgInput}
@@ -102,23 +103,23 @@ export default function Cart({table_id, table_name}) {
       borderWidth={1} borderColor={t.borderDefault}
       paddingHorizontal={16} paddingVertical={16} borderRadius={12} vertical>
       <Stack horizontal justifyContent="space-between" marginBottom={8}>
-        <StyledText color={t.textSecondary} fontSize={theme.fontSize.normal}>Subtotal</StyledText>
-        <StyledText color={t.textSecondary} fontSize={theme.fontSize.normal}>
+        <Text variant="subLabel" color={t.textSecondary}>Subtotal</Text>
+        <Text variant="subLabel" color={t.textSecondary}>
           {formatCurrency(shop?.currency || '£', getTotal(table_id))}
-        </StyledText>
+        </Text>
       </Stack>
       <Stack horizontal justifyContent="space-between" marginBottom={8}>
-        <StyledText color={t.textSecondary} fontSize={theme.fontSize.normal}>Tax%</StyledText>
-        <StyledText color={t.textSecondary} fontSize={theme.fontSize.normal}>
+        <Text variant="subLabel" color={t.textSecondary}>Tax%</Text>
+        <Text variant="subLabel" color={t.textSecondary}>
           {formatCurrency(shop?.currency || '£', getTotalTax(table_id))}
-        </StyledText>
+        </Text>
       </Stack>
       <Stack height={1} backgroundColor={t.borderDefault} marginVertical={10} />
       <Stack horizontal justifyContent="space-between">
-        <StyledText color={t.textPrimary} fontWeight={theme.fontWeight.semiBold} fontSize={theme.fontSize.normal}>Total</StyledText>
-        <StyledText color={t.textPrimary} fontWeight={theme.fontWeight.semiBold} fontSize={theme.fontSize.normal}>
+        <Text variant="label" color={t.textPrimary}>Total</Text>
+        <Text variant="label" color={t.textPrimary}>
           {formatCurrency(shop?.currency || '£', totalPrice)}
-        </StyledText>
+        </Text>
       </Stack>
     </Stack>
   );
@@ -141,12 +142,12 @@ export default function Cart({table_id, table_name}) {
               name={option.icon} size={24}
               color={isSelected ? t.textPrimary : t.textSecondary}
             />
-            <StyledText
+            <Text
               marginTop={4}
               color={isSelected ? t.textPrimary : t.textSecondary}
-              fontSize={14}>
+              variant="label">
               {option.label}
-            </StyledText>
+            </Text>
           </StyledPressable>
         );
       })}
@@ -161,8 +162,7 @@ export default function Cart({table_id, table_name}) {
       borderRadius={12} alignItems="center" justifyContent="center"
       backgroundColor={bg} borderWidth={borderCol ? 1 : 0} borderColor={borderCol}
       onPress={onPress} disabled={disabled}>
-      <StyledText color={textColor} fontSize={theme.fontSize.small}
-        fontWeight={theme.fontWeight.semiBold}>{label}</StyledText>
+      <Text color={textColor} variant="button">{label}</Text>
     </StyledPressable>
   );
 

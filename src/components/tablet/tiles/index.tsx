@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import {StyledText} from 'fluent-styles';
 import {Stack} from '../../../components/package/stack';
+import {Text} from '../../../components/text';
 import {theme} from '../../../utils/theme';
 import {useOrderStatusAggregate} from '../../../hooks/useOrder';
 import {OrderStatusAggregate} from '../../../model/orders';
@@ -163,15 +163,15 @@ const Tile = ({label, value, t, sparklineColorKey, sparkline}: TileProps) => {
         flex={1}
         justifyContent="space-between">
         
-        {/* Number (large, bold, primary) */}
-        <StyledText fontSize={40} fontWeight="800" color={t.textPrimary}>
+        {/* Number (large, bold, primary) — metric variant */}
+        <Text variant="metric" color={t.textPrimary}>
           {value}
-        </StyledText>
+        </Text>
         
-        {/* Label (smaller, secondary) */}
-        <StyledText fontSize={theme.fontSize.small} color={t.textSecondary}>
+        {/* Label (smaller, secondary) — subLabel variant */}
+        <Text variant="subLabel" color={t.textSecondary}>
           {label}
-        </StyledText>
+        </Text>
       </Stack>
     </Stack>
   );
