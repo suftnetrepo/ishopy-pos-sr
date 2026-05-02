@@ -6,26 +6,20 @@ import {theme} from '../../../utils/theme';
 import {useOrderStatusAggregate} from '../../../hooks/useOrder';
 import {OrderStatusAggregate} from '../../../model/orders';
 import {useAppTheme, ThemeTokens} from '../../../theme';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Svg, {Path} from 'react-native-svg';
 
 type OrderKey = 'Progress' | 'Completed' | 'Cancelled';
 
 interface TileConfig {
   key:      OrderKey;
   label:    string;
-  barColor: string;
-  bgColor:  string;
-  numColor: string;
-  lblColor: string;
-  dotBg:    string;
-  dotColor: string;
-  deltaType: 'positive' | 'negative' | 'neutral'; // for demo
+  sparklineColorKey: 'brandPrimary' | 'successColor' | 'dangerColor';
 }
 
 const TILES: TileConfig[] = [
-  {key: 'Progress', label: 'In progress', barColor: '#f59e0b', bgColor: '#fffbeb', numColor: '#92400e', lblColor: '#b45309', dotBg: '#fde68a', dotColor: '#f59e0b', deltaType: 'positive'},
-  {key: 'Completed', label: 'Completed',  barColor: '#22c55e', bgColor: '#f0fdf4', numColor: '#166534', lblColor: '#15803d', dotBg: '#bbf7d0', dotColor: '#22c55e', deltaType: 'positive'},
-  {key: 'Cancelled', label: 'Cancelled',  barColor: '#ef4444', bgColor: '#fff5f5', numColor: '#991b1b', lblColor: '#b91c1c', dotBg: '#fecaca', dotColor: '#ef4444', deltaType: 'negative'},
+  {key: 'Progress', label: 'In progress', sparklineColorKey: 'brandPrimary'},
+  {key: 'Completed', label: 'Completed',  sparklineColorKey: 'successColor'},
+  {key: 'Cancelled', label: 'Cancelled',  sparklineColorKey: 'dangerColor'},
 ];
 
 interface TileProps extends TileConfig {
@@ -33,77 +27,91 @@ interface TileProps extends TileConfig {
   t: ThemeTokens;
 }
 
-// Mock delta data (in future, fetch from API)
-const getDeltaData = (key: OrderKey): {delta: number; percentage: number} => {
-  const deltas: Record<OrderKey, {delta: number; percentage: number}> = {
-    Progress: {delta: 3, percentage: 12},
-    Completed: {delta: 8, percentage: 15},
-    Cancelled: {delta: -2, percentage: -8},
+// Generate mock sparkline data (smooth curve)
+const getSparklineData = (key: OrderKey): number[] => {
+  const mockData: Record<OrderKey, number[]> = {
+    Progress: [10, 15, 12, 18, 22, 20, 25, 28, 30],
+    Completed: [5, 8, 10, 9, 12, 15, 18, 20, 22],
+    Cancelled: [8, 6, 7, 5, 4, 6, 3, 2, 1],
   };
-  return deltas[key];
+  return mockData[key];
 };
 
-const getDeltaIcon = (delta: number): string => {
-  if (delta > 0) return 'trending-up';
-  if (delta < 0) return 'trending-down';
-  return 'trending-flat';
+// Create smooth SVG path from data points
+const createSparklinePath = (data: number[]): string => {
+  if (data.length === 0) return '';
+  
+  const width = 100;
+  const height = 24;
+  const maxValue = Math.max(...data);
+  const minValue = Math.min(...data);
+  const range = maxValue - minValue || 1;
+  
+  // Scale data to fit in chart area
+  const points = data.map((value, index) => {
+    const x = (index / (data.length - 1)) * width;
+    const y = height - ((value - minValue) / range) * height;
+    return {x, y};
+  });
+  
+  // Create smooth curve using quadratic bezier
+  let pathData = `M ${points[0].x} ${points[0].y}`;
+  
+  for (let i = 1; i < points.length; i++) {
+    const xMid = (points[i - 1].x + points[i].x) / 2;
+    const yMid = (points[i - 1].y + points[i].y) / 2;
+    pathData += ` Q ${xMid} ${points[i - 1].y} ${xMid} ${yMid}`;
+    pathData += ` Q ${xMid} ${points[i].y} ${points[i].x} ${points[i].y}`;
+  }
+  
+  return pathData;
 };
 
-const getDeltaColor = (delta: number, t: ThemeTokens): string => {
-  if (delta > 0) return t.successColor;
-  if (delta < 0) return t.dangerColor;
-  return t.textMuted;
-};
+const Sparkline = ({data, color, opacity = 0.4}: {data: number[]; color: string; opacity?: number}) => (
+  <Svg width="100%" height={28} viewBox="0 0 100 24" preserveAspectRatio="none">
+    <Path
+      d={createSparklinePath(data)}
+      stroke={color}
+      strokeWidth={1.5}
+      fill="none"
+      opacity={opacity}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </Svg>
+);
 
-const Tile = ({label, bgColor, numColor, lblColor, dotBg, dotColor, value, t, deltaType}: TileProps) => {
-  const {delta, percentage} = getDeltaData(label as any);
-  const deltaColor = getDeltaColor(delta, t);
-  const deltaIcon = getDeltaIcon(delta);
+const Tile = ({label, value, t, sparklineColorKey}: TileProps) => {
+  const sparklineData = getSparklineData(label as any);
+  const sparklineColor = t[sparklineColorKey];
 
   return (
-    <Stack flex={1} vertical borderRadius={12} overflow="hidden"
+    <Stack flex={1} vertical borderRadius={16} overflow="hidden"
       borderWidth={1} borderColor={t.borderDefault} backgroundColor={t.bgCard}>
-      {/* Top bar with color accent */}
-      <Stack height={3} backgroundColor={dotColor} width="100%" />
       
-      {/* Content */}
+      {/* Content area */}
       <Stack
-        horizontal alignItems="center" justifyContent="space-between"
-        backgroundColor={t.bgCard} paddingHorizontal={16} paddingVertical={16}>
+        vertical
+        paddingHorizontal={20}
+        paddingVertical={20}
+        gap={12}
+        flex={1}
+        justifyContent="space-between">
         
-        {/* Left: Number + Label + Delta */}
-        <Stack vertical gap={8} flex={1}>
-          {/* Number (hierarchy: largest, boldest) */}
-          <StyledText fontSize={36} fontWeight="800" color={t.textPrimary}>
-            {value}
-          </StyledText>
-          
-          {/* Label (hierarchy: small, muted) */}
-          <StyledText fontSize={theme.fontSize.small} color={t.textSecondary}>
-            {label}
-          </StyledText>
-          
-          {/* Delta indicator (small accent text with icon) */}
-          <Stack horizontal alignItems="center" gap={4} marginTop={4}>
-            <Icon
-              name={deltaIcon}
-              size={14}
-              color={deltaColor}
-            />
-            <StyledText fontSize={12} fontWeight="600" color={deltaColor}>
-              {delta > 0 ? '+' : ''}{delta} ({percentage > 0 ? '+' : ''}{percentage}%)
-            </StyledText>
-            <StyledText fontSize={11} color={t.textMuted}>
-              vs last period
-            </StyledText>
-          </Stack>
-        </Stack>
+        {/* Number (large, bold, primary) */}
+        <StyledText fontSize={40} fontWeight="800" color={t.textPrimary}>
+          {value}
+        </StyledText>
         
-        {/* Right: Dot indicator */}
-        <Stack width={48} height={48} borderRadius={24}
-          backgroundColor={dotBg} alignItems="center" justifyContent="center">
-          <Stack width={12} height={12} borderRadius={6} backgroundColor={dotColor} />
-        </Stack>
+        {/* Label (smaller, secondary) */}
+        <StyledText fontSize={theme.fontSize.small} color={t.textSecondary}>
+          {label}
+        </StyledText>
+      </Stack>
+      
+      {/* Sparkline at bottom */}
+      <Stack paddingHorizontal={20} paddingBottom={12}>
+        <Sparkline data={sparklineData} color={sparklineColor} opacity={0.4} />
       </Stack>
     </Stack>
   );
@@ -114,12 +122,11 @@ const Tiles = () => {
   const {data} = useOrderStatusAggregate();
 
   return (
-    <Stack horizontal gap={12} marginHorizontal={16} alignItems="stretch" marginVertical={8}>
-      {TILES.map(({key, deltaType, ...tile}) => (
+    <Stack horizontal gap={16} marginHorizontal={16} alignItems="stretch" marginVertical={8}>
+      {TILES.map(({key, ...tile}) => (
         <Tile
           key={key}
           {...tile}
-          deltaType={deltaType}
           t={t}
           value={data ? (data as OrderStatusAggregate)[key] : 0}
         />
