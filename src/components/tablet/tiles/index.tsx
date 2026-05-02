@@ -38,8 +38,8 @@ const getSparklineData = (key: OrderKey): number[] => {
 };
 
 // Create smooth SVG path from data points
-const createSparklinePath = (data: number[]): string => {
-  if (data.length === 0) return '';
+const createSparklinePath = (data: number[] = []): string => {
+  if (!Array.isArray(data) || data.length === 0) return '';
   
   const width = 100;
   const height = 24;
@@ -67,22 +67,38 @@ const createSparklinePath = (data: number[]): string => {
   return pathData;
 };
 
-const Sparkline = ({data, color, opacity = 0.4}: {data: number[]; color: string; opacity?: number}) => (
-  <Svg width="100%" height={28} viewBox="0 0 100 24" preserveAspectRatio="none">
-    <Path
-      d={createSparklinePath(data)}
-      stroke={color}
-      strokeWidth={1.5}
-      fill="none"
-      opacity={opacity}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </Svg>
-);
+type SparklineProps = {
+  data?: number[];
+  color: string;
+  opacity?: number;
+};
+
+const Sparkline = ({ data = [], color, opacity = 0.4 }: SparklineProps) => {
+  const safeData = Array.isArray(data) ? data : [];
+
+  if (safeData.length < 2) return null;
+
+  const path = createSparklinePath(safeData);
+
+  if (!path) return null;
+
+  return (
+    <Svg width="100%" height={28} viewBox="0 0 100 24" preserveAspectRatio="none">
+      <Path
+        d={path}
+        stroke={color}
+        strokeWidth={1.5}
+        fill="none"
+        opacity={opacity}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  );
+};
 
 const Tile = ({label, value, t, sparklineColorKey}: TileProps) => {
-  const sparklineData = getSparklineData(label as any);
+  const sparklineData = getSparklineData(label as any) ?? [];
   const sparklineColor = t[sparklineColorKey];
 
   return (
@@ -111,7 +127,7 @@ const Tile = ({label, value, t, sparklineColorKey}: TileProps) => {
       
       {/* Sparkline at bottom */}
       <Stack paddingHorizontal={20} paddingBottom={12}>
-        <Sparkline data={sparklineData} color={sparklineColor} opacity={0.4} />
+        <Sparkline data={sparklineData ?? []} color={sparklineColor} opacity={0.4} />
       </Stack>
     </Stack>
   );
