@@ -2,13 +2,13 @@
 import React, {useState} from 'react';
 import {
   Stack,
-  StyledText,
   StyledPressable,
   StyledCard,
   StyledTextInput,
   StyledScrollView,
   theme,
 } from 'fluent-styles';
+import Text from '../../components/text';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useAppTheme} from '../../theme';
 
@@ -50,18 +50,17 @@ const CurrencySelect: React.FC<Props> = ({selected, onSelect}) => {
   return (
     <Stack gap={16} flex={1}>
       <Stack gap={4} marginBottom={4}>
-        <StyledText
-          fontSize={theme.fontSize.large}
-          fontWeight={theme.fontWeight.bold}
+        <Text
+          variant="header"
           color={t.textPrimary}>
           Select your currency
-        </StyledText>
-        <StyledText
-          fontSize={theme.fontSize.normal}
+        </Text>
+        <Text
+          variant="body"
           color={t.textSecondary}>
           Used on receipts, menus and reports. You can change this later in
           Settings.
-        </StyledText>
+        </Text>
       </Stack>
     
       <StyledScrollView
@@ -103,20 +102,19 @@ const CurrencySelect: React.FC<Props> = ({selected, onSelect}) => {
                     }
                     alignItems="center"
                     justifyContent="center">
-                    <StyledText fontSize={22}>{c.flag}</StyledText>
+                    <Text variant="header">{c.flag}</Text>
                   </Stack>
                   <Stack flex={1}>
-                    <StyledText
-                      fontSize={theme.fontSize.normal}
-                      fontWeight={theme.fontWeight.semiBold}
+                    <Text
+                      variant="label"
                       color={t.textPrimary}>
                       {c.name}
-                    </StyledText>
-                    <StyledText
-                      fontSize={theme.fontSize.small}
+                    </Text>
+                    <Text
+                      variant="caption"
                       color={t.textMuted}>
                       {c.code} · {c.symbol}
-                    </StyledText>
+                    </Text>
                   </Stack>
                   {/* Check */}
                   {active && (

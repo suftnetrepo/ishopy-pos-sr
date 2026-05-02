@@ -12,6 +12,16 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		361B3DC32F0352D500D56979 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 361B3DC22F0352D500D56979 /* GoogleService-Info.plist */; };
+		36D58A852FA5E2CC000C1AF1 /* CrimsonText-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 36D58A7C2FA5E2CC000C1AF1 /* CrimsonText-Regular.ttf */; };
+		36D58A862FA5E2CC000C1AF1 /* CrimsonText-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 36D58A7B2FA5E2CC000C1AF1 /* CrimsonText-Italic.ttf */; };
+		36D58A872FA5E2CC000C1AF1 /* CrimsonText-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 36D58A7A2FA5E2CC000C1AF1 /* CrimsonText-Bold.ttf */; };
+		36D58A882FA5E2CC000C1AF1 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 36D58A7E2FA5E2CC000C1AF1 /* Poppins-Regular.ttf */; };
+		36D58A892FA5E2CC000C1AF1 /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 36D58A7D2FA5E2CC000C1AF1 /* Poppins-Bold.ttf */; };
+		36D58A8A2FA5E2CC000C1AF1 /* Roboto-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 36D58A812FA5E2CC000C1AF1 /* Roboto-BlackItalic.ttf */; };
+		36D58A8B2FA5E2CC000C1AF1 /* Roboto-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 36D58A802FA5E2CC000C1AF1 /* Roboto-Black.ttf */; };
+		36D58A8C2FA5E2CC000C1AF1 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 36D58A7F2FA5E2CC000C1AF1 /* Poppins-SemiBold.ttf */; };
+		36D58A8D2FA5E2CC000C1AF1 /* Roboto-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 36D58A832FA5E2CC000C1AF1 /* Roboto-BoldItalic.ttf */; };
+		36D58A8E2FA5E2CC000C1AF1 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 36D58A822FA5E2CC000C1AF1 /* Roboto-Bold.ttf */; };
 		562D6D787F51A81BD9CB20A8 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4CF57A246B7E2D244B12658F /* PrivacyInfo.xcprivacy */; };
 		7120837583F014DC84A8DB76 /* libPods-ishopyPos-ishopyPosTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F93FC33E26A600E7B42CCB1 /* libPods-ishopyPos-ishopyPosTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -40,6 +50,16 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ishopyPos/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = ishopyPos/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		361B3DC22F0352D500D56979 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		36D58A7A2FA5E2CC000C1AF1 /* CrimsonText-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CrimsonText-Bold.ttf"; sourceTree = "<group>"; };
+		36D58A7B2FA5E2CC000C1AF1 /* CrimsonText-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CrimsonText-Italic.ttf"; sourceTree = "<group>"; };
+		36D58A7C2FA5E2CC000C1AF1 /* CrimsonText-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CrimsonText-Regular.ttf"; sourceTree = "<group>"; };
+		36D58A7D2FA5E2CC000C1AF1 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Bold.ttf"; sourceTree = "<group>"; };
+		36D58A7E2FA5E2CC000C1AF1 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Regular.ttf"; sourceTree = "<group>"; };
+		36D58A7F2FA5E2CC000C1AF1 /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
+		36D58A802FA5E2CC000C1AF1 /* Roboto-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Black.ttf"; sourceTree = "<group>"; };
+		36D58A812FA5E2CC000C1AF1 /* Roboto-BlackItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-BlackItalic.ttf"; sourceTree = "<group>"; };
+		36D58A822FA5E2CC000C1AF1 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
+		36D58A832FA5E2CC000C1AF1 /* Roboto-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-BoldItalic.ttf"; sourceTree = "<group>"; };
 		4CF57A246B7E2D244B12658F /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = ishopyPos/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		7F93FC33E26A600E7B42CCB1 /* libPods-ishopyPos-ishopyPosTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ishopyPos-ishopyPosTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ishopyPos/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -113,6 +133,23 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		36D58A842FA5E2CC000C1AF1 /* fonts 2 */ = {
+			isa = PBXGroup;
+			children = (
+				36D58A7A2FA5E2CC000C1AF1 /* CrimsonText-Bold.ttf */,
+				36D58A7B2FA5E2CC000C1AF1 /* CrimsonText-Italic.ttf */,
+				36D58A7C2FA5E2CC000C1AF1 /* CrimsonText-Regular.ttf */,
+				36D58A7D2FA5E2CC000C1AF1 /* Poppins-Bold.ttf */,
+				36D58A7E2FA5E2CC000C1AF1 /* Poppins-Regular.ttf */,
+				36D58A7F2FA5E2CC000C1AF1 /* Poppins-SemiBold.ttf */,
+				36D58A802FA5E2CC000C1AF1 /* Roboto-Black.ttf */,
+				36D58A812FA5E2CC000C1AF1 /* Roboto-BlackItalic.ttf */,
+				36D58A822FA5E2CC000C1AF1 /* Roboto-Bold.ttf */,
+				36D58A832FA5E2CC000C1AF1 /* Roboto-BoldItalic.ttf */,
+			);
+			path = "fonts 2";
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -123,6 +160,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				36D58A842FA5E2CC000C1AF1 /* fonts 2 */,
 				361B3DC22F0352D500D56979 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* ishopyPos */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -252,6 +290,16 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				361B3DC32F0352D500D56979 /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				36D58A852FA5E2CC000C1AF1 /* CrimsonText-Regular.ttf in Resources */,
+				36D58A862FA5E2CC000C1AF1 /* CrimsonText-Italic.ttf in Resources */,
+				36D58A872FA5E2CC000C1AF1 /* CrimsonText-Bold.ttf in Resources */,
+				36D58A882FA5E2CC000C1AF1 /* Poppins-Regular.ttf in Resources */,
+				36D58A892FA5E2CC000C1AF1 /* Poppins-Bold.ttf in Resources */,
+				36D58A8A2FA5E2CC000C1AF1 /* Roboto-BlackItalic.ttf in Resources */,
+				36D58A8B2FA5E2CC000C1AF1 /* Roboto-Black.ttf in Resources */,
+				36D58A8C2FA5E2CC000C1AF1 /* Poppins-SemiBold.ttf in Resources */,
+				36D58A8D2FA5E2CC000C1AF1 /* Roboto-BoldItalic.ttf in Resources */,
+				36D58A8E2FA5E2CC000C1AF1 /* Roboto-Bold.ttf in Resources */,
 				562D6D787F51A81BD9CB20A8 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -283,9 +331,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ishopyPos/Pods-ishopyPos-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ishopyPos/Pods-ishopyPos-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -322,9 +374,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ishopyPos/Pods-ishopyPos-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ishopyPos/Pods-ishopyPos-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -339,9 +395,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ishopyPos-ishopyPosTests/Pods-ishopyPos-ishopyPosTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ishopyPos-ishopyPosTests/Pods-ishopyPos-ishopyPosTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -378,9 +438,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ishopyPos-ishopyPosTests/Pods-ishopyPos-ishopyPosTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ishopyPos-ishopyPosTests/Pods-ishopyPos-ishopyPosTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -612,10 +676,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -687,10 +748,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

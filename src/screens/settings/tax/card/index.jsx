@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import {FlatList} from 'react-native';
-import {StyledText, StyledPressable, Stack} from 'fluent-styles';
+import {StyledPressable, Stack} from 'fluent-styles';
+import Text from '../../../../components/text';
 import {theme} from '../../../../configs/theme';
 import {StyledIcon} from '../../../../components/package/icon';
 import {toWordCase} from '../../../../utils/help';
@@ -15,23 +16,22 @@ const RenderCard = ({item, onEdit, onDelete, t}) => {
       backgroundColor={t.bgCard}
       marginHorizontal={4} marginBottom={8} paddingHorizontal={14} paddingVertical={12}>
       <Stack horizontal alignItems="center" justifyContent="space-between" marginBottom={4}>
-        <StyledText
-          fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.normal}
+        <Text
+          variant="label"
           color={t.textPrimary} flex={1} numberOfLines={1}>
           {toWordCase(item.name)}
-        </StyledText>
+        </Text>
         <Stack horizontal alignItems="center" gap={4}>
           <Stack width={6} height={6} borderRadius={3}
             backgroundColor={isActive ? t.successColor : t.dangerColor} />
-          <StyledText fontSize={10} color={isActive ? t.successColor : t.dangerColor}>
+          <Text variant="caption" color={isActive ? t.successColor : t.dangerColor}>
             {isActive ? 'Active' : 'Inactive'}
-          </StyledText>
+          </Text>
         </Stack>
       </Stack>
-      <StyledText fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.bold}
-        color={t.textSecondary} marginBottom={12}>
+      <Text variant="label" color={t.textSecondary} marginBottom={12}>
         {item.rate}%
-      </StyledText>
+      </Text>
       <Stack horizontal gap={8}>
         <StyledPressable
           flex={1} onPress={onEdit}
@@ -39,7 +39,7 @@ const RenderCard = ({item, onEdit, onDelete, t}) => {
           borderWidth={1} borderColor={t.borderDefault}
           backgroundColor={t.bgPage} borderRadius={8} paddingVertical={7}>
           <StyledIcon name="edit" size={14} color={t.textSecondary} />
-          <StyledText fontSize={theme.fontSize.small} color={t.textSecondary}>Edit</StyledText>
+          <Text variant="button" color={t.textSecondary}>Edit</Text>
         </StyledPressable>
         <StyledPressable
           flex={1} onPress={onDelete}
@@ -47,7 +47,7 @@ const RenderCard = ({item, onEdit, onDelete, t}) => {
           borderWidth={1} borderColor={t.dangerBg}
           backgroundColor={t.dangerBg} borderRadius={8} paddingVertical={7}>
           <StyledIcon name="delete-outline" size={14} color={t.dangerColor} />
-          <StyledText fontSize={theme.fontSize.small} color={t.dangerColor}>Delete</StyledText>
+          <Text variant="button" color={t.dangerColor}>Delete</Text>
         </StyledPressable>
       </Stack>
     </Stack>

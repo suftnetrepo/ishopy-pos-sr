@@ -6,14 +6,14 @@
 import React, { useState} from 'react';
 import {
     YStack,
-    StyledText,
     StyledSpacer,
     StyledButton,
     StyledCheckBox,
     XStack
 } from 'fluent-styles';
+import Text from '../../components/text';
 import { StyledMIcon } from '../../components/icon';
-import { fontStyles, palettes, theme } from '../../configs/theme';
+import { palettes, theme } from '../../configs/theme';
 import { prepareSeedData } from '../../model/seed';
 import { useNavigation } from '@react-navigation/native';
 import { useUtil } from '../../store';
@@ -53,28 +53,24 @@ const PurchaseSuccess = () => {
                     color={t.successColor}
                 />
                 <StyledSpacer marginVertical={8} />
-                <StyledText
-                    fontFamily={fontStyles.Roboto_Regular}
+                <Text
+                    variant="header"
                     color={t.textPrimary}
-                    fontWeight={theme.fontWeight.normal}
-                    fontSize={theme.fontSize.xlarge}
                     paddingVertical={1}
                     paddingHorizontal={16}
                     textAlign='center'
                 >
                     Thank You for Your Purchase!
-                </StyledText>
+                </Text>
                 <StyledSpacer marginVertical={8} />
-                <StyledText
-                    fontFamily={fontStyles.Roboto_Regular}
+                <Text
+                    variant="body"
                     color={t.textPrimary}
-                    fontWeight={theme.fontWeight.normal}
-                    fontSize={theme.fontSize.normal}
                     textAlign='center'
                 >
                     We appreciate your support and are thrilled to have you on board. Please note that all sample Restaurant data will be deleted to ensure a clean experience.
                     We recommend updating your Restaurant and User account details.
-                </StyledText>
+                </Text>
                 <StyledSpacer marginVertical={8} />
                 <XStack
                     justifyContent='space-between'
@@ -90,14 +86,12 @@ const PurchaseSuccess = () => {
                         onPress={() => setClearSeed(!clearSeed)}
                     />
                     <StyledSpacer marginHorizontal={8} />
-                    <StyledText
-                        fontFamily={fontStyles.Roboto_Regular}
-                        fontWeight={theme.fontWeight.normal}
+                    <Text
+                        variant="body"
                         color={t.textSecondary}
-                        fontSize={theme.fontSize.normal}
                     >
                         Clear Sample Restaurant data
-                    </StyledText>
+                    </Text>
                     
                 </XStack>
                 <StyledSpacer marginVertical={8} />
@@ -107,16 +101,14 @@ const PurchaseSuccess = () => {
                     backgroundColor={theme.colors.cyan[500]}
                     onPress={() => clearHandler()}
                 >
-                    <StyledText
-                        fontFamily={fontStyles.OpenSansRegular}
+                    <Text
+                        variant="button"
                         color={t.bgCard}
-                        fontWeight={theme.fontWeight.normal}
-                        fontSize={theme.fontSize.normal}
                         paddingHorizontal={16}
                         paddingVertical={8}
                     >
                         Go to Settings
-                    </StyledText>
+                    </Text>
                 </StyledButton>
                 <StyledSpacer marginVertical={8} />
             </YStack>

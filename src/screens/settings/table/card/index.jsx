@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import {FlatList} from 'react-native';
-import {StyledText, StyledSpacer, StyledPressable, Stack} from 'fluent-styles';
+import {StyledSpacer, StyledPressable, Stack} from 'fluent-styles';
+import Text from '../../../../components/text';
 import {theme} from '../../../../configs/theme';
 import {StyledIcon} from '../../../../components/package/icon';
 import {toWordCase} from '../../../../utils/help';
@@ -39,42 +40,41 @@ const TableCard = ({onTableChange, onTableDelete, data}) => {
 
         {/* Top row: name + location pill */}
         <Stack horizontal alignItems="center" justifyContent="space-between" marginBottom={4}>
-          <StyledText
-            fontSize={theme.fontSize.normal}
-            fontWeight={theme.fontWeight.normal}
+          <Text
+            variant="label"
             color={t.textPrimary}
             flex={1}
             numberOfLines={1}>
             {toWordCase(item.tableName)}
-          </StyledText>
+          </Text>
           {location !== 'Dine In' && (
             <Stack
               paddingHorizontal={8} paddingVertical={3}
               borderRadius={20}
               backgroundColor={locStyle.bg}>
-              <StyledText fontSize={10} fontWeight={theme.fontWeight.medium} color={locStyle.color}>
+              <Text variant="caption" color={locStyle.color}>
                 {location}
-              </StyledText>
+              </Text>
             </Stack>
           )}
         </Stack>
 
         {/* Size + status */}
         <Stack horizontal alignItems="center" gap={8} marginBottom={12}>
-          <StyledText fontSize={theme.fontSize.small} color={t.textMuted}>
+          <Text variant="caption" color={t.textMuted}>
             Size {item.size}
-          </StyledText>
+          </Text>
           <Stack width={4} height={4} borderRadius={2} backgroundColor={t.textMuted} />
           <Stack horizontal alignItems="center" gap={4}>
             <Stack
               width={6} height={6} borderRadius={3}
               backgroundColor={isActive ? t.successColor : t.dangerColor}
             />
-            <StyledText
-              fontSize={theme.fontSize.small}
+            <Text
+              variant="caption"
               color={isActive ? t.successColor : t.dangerColor}>
               {isActive ? 'Active' : 'Inactive'}
-            </StyledText>
+            </Text>
           </Stack>
         </Stack>
 
