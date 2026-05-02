@@ -3,12 +3,12 @@ import React, {useState} from 'react';
 import {
   YStack,
   StyledSpacer,
-  StyledText,
   StyledPressable,
   Stack,
 } from 'fluent-styles';
+import Text from '../../text';
 import {StyledIcon} from '../../package/icon';
-import {fontStyles, theme} from '../../../utils/theme';
+import {theme} from '../../../utils/theme';
 import {useAppTheme} from '../../../theme';
 
 export default function KeyCard({onSubmit, onClose, table_name, table_id}) {
@@ -68,13 +68,11 @@ export default function KeyCard({onSubmit, onClose, table_name, table_id}) {
               alignItems="center"
               gap={8}>
               <StyledIcon name="attach-money" size={24} color={t.textInverse} />
-              <StyledText
-                fontFamily={fontStyles.Roboto_Regular}
-                color={t.textInverse}
-                fontSize={theme.fontSize.large}
-                fontWeight={theme.fontWeight.medium}>
+              <Text
+                variant="label"
+                color={t.textInverse}>
                 {table_name}
-              </StyledText>
+              </Text>
             </Stack>
             <StyledPressable onPress={handleClose}>
               <StyledIcon
@@ -93,21 +91,17 @@ export default function KeyCard({onSubmit, onClose, table_name, table_id}) {
             justifyContent="center"
             alignItems="center"
             vertical>
-            <StyledText
-              marginBottom={24}
-              fontFamily={fontStyles.Roboto_Regular}
+            <Text
+              variant="body"
               color={t.textInverse}
-              fontSize={theme.fontSize.normal}
-              fontWeight={theme.fontWeight.thin}>
+              marginBottom={24}>
               Enter number of guests
-            </StyledText>
-            <StyledText
-              fontFamily={fontStyles.Roboto_Regular}
-              color={t.textInverse}
-              fontSize={theme.fontSize.large}
-              fontWeight={theme.fontWeight.medium}>
+            </Text>
+            <Text
+              variant="metric"
+              color={t.textInverse}>
               {pad}
-            </StyledText>
+            </Text>
             <StyledSpacer marginVertical={16} />
 
             {/* Keypad */}
@@ -129,13 +123,11 @@ export default function KeyCard({onSubmit, onClose, table_name, table_id}) {
                   borderColor={t.borderDefault}
                   alignItems="center"
                   justifyContent="center">
-                  <StyledText
-                    color={t.textPrimary}
-                    fontFamily={fontStyles.Roboto_Regular}
-                    fontSize={theme.fontSize.large}
-                    fontWeight={theme.fontWeight.medium}>
+                  <Text
+                    variant="label"
+                    color={t.textPrimary}>
                     {num}
-                  </StyledText>
+                  </Text>
                 </StyledPressable>
               ))}
             </Stack>
@@ -155,11 +147,11 @@ export default function KeyCard({onSubmit, onClose, table_name, table_id}) {
                 paddingVertical={10}
                 borderRadius={25}
                 onPress={handleClose}>
-                <StyledText
-                  fontFamily={fontStyles.Roboto_Regular}
+                <Text
+                  variant="button"
                   color={t.textInverse}>
                   Close
-                </StyledText>
+                </Text>
               </StyledPressable>
               <StyledSpacer flex={1} />
               <StyledPressable
@@ -168,11 +160,11 @@ export default function KeyCard({onSubmit, onClose, table_name, table_id}) {
                 paddingVertical={10}
                 borderRadius={25}
                 onPress={() => canSubmit && handleSubmit()}>
-                <StyledText
-                  fontFamily={fontStyles.Roboto_Regular}
+                <Text
+                  variant="button"
                   color={canSubmit ? t.textOnAmber : t.textMuted}>
                   Open
-                </StyledText>
+                </Text>
               </StyledPressable>
             </Stack>
           </Stack>
