@@ -154,4 +154,5 @@ const Text = styled<AppTextProps>(StyledText, {
 })
 
 export { Text }
+export default Text
 export type { AppTextProps, TextVariant }

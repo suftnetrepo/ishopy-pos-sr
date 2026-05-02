@@ -85,5 +85,6 @@ const ModeSelect: React.FC<Props> = ({ selected, onSelect }) => {
     })}
   </Stack>
 );
+};
 
 export default ModeSelect;
