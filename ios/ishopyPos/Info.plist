@@ -61,14 +61,20 @@
 		<string>CrimsonText-Bold.ttf</string>
 		<string>CrimsonText-Italic.ttf</string>
 		<string>CrimsonText-Regular.ttf</string>
+		<string>FontAwesome.ttf</string>
+		<string>FontAwesome5_Solid.ttf</string>
+		<string>Foundation.ttf</string>
+		<string>Ionicons.ttf</string>
+		<string>MaterialIcons.ttf</string>
+		<string>MaterialCommunityIcons.ttf</string>
+		<string>Poppins-Bold.ttf</string>
+		<string>Poppins-Regular.ttf</string>
+		<string>Poppins-SemiBold.ttf</string>
 		<string>Roboto-Bold.ttf</string>
-		<string>Roboto-Regular.ttf</string>
 		<string>Roboto-Italic.ttf</string>
 		<string>Roboto-Medium.ttf</string>
+		<string>Roboto-Regular.ttf</string>
 		<string>Roboto-Thin.ttf</string>
-		<string>Poppins-Bold.ttf</string>
-		<string>Poppins-Italic.ttf</string>
-		<string>Poppins-Regular.ttf</string>
 	</array>
 	<key>UIDeviceFamily</key>
 	<array>

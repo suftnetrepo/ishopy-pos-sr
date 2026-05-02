@@ -3,8 +3,9 @@ import {
   StyledSpacer,
   Stack,
   StyleShape,
+  StyledDivider,
 } from 'fluent-styles';
-import {Text} from '../../../components/text';
+import Text from '../../../components/text';
 import {StyledIcon} from '../../../components/package/icon';
 import {ScrollView} from 'react-native';
 import {useQueryPopularMenuItems} from '../../../hooks/useOrderItems';
@@ -22,18 +23,24 @@ const PopularDishes = () => {
   return (
     <Stack
       vertical
-      borderRadius={8}
+      borderRadius={16}
+      borderWidth={1}
+      borderColor={t.borderDefault}
       backgroundColor={t.bgCard}
-      paddingHorizontal={24}
-      paddingVertical={24}
+      paddingHorizontal={16}
+      paddingVertical={16}
       justifyContent="flex-start"
-      alignItems="flex-start">
+      alignItems="flex-start"
+      shadowColor="#000"
+      shadowOpacity={0.06}
+      shadowRadius={12}
+      elevation={3}>
       <Stack
         horizontal
         width="100%"
         justifyContent="space-between"
         alignItems="center"
-        gap={8}>
+        gap={12}>
         <Text
           color={t.textPrimary}
           variant="title">
@@ -43,10 +50,10 @@ const PopularDishes = () => {
       </Stack>
 
       <StyledSpacer
-        borderWidth={0.4}
-        borderColor={t.textMuted}
+        borderWidth={1}
+        borderColor={t.borderDefault}
         width={'100%'}
-        marginVertical={8}
+        marginVertical={12}
       />
 
       {data.length === 0 ? (
@@ -74,51 +81,45 @@ const PopularDishes = () => {
                 key={index}
                 horizontal
                 width="100%"
-                flexWrap="wrap"
                 justifyContent="flex-start"
                 alignItems="center"
-                gap={4}
+                gap={12}
                 marginBottom={16}>
-                {/* Icon box with color */}
+                {/* Icon box */}
                 <StyleShape
-                  size={48}
-                  borderRadius={10}
+                  size={36}
+                  borderRadius={30}
                   backgroundColor={t.bgPage}
                   alignItems="center"
                   justifyContent="center">
                   <PosIcon
                     name={dish?.menu_icon_name}
-                    size={24}
-                    color={t.textSecondary}
+                    size={15}
+                    color={t.brandPrimary}
                   />
                 </StyleShape>
 
+                {/* Text content */}
                 <Stack vertical>
                   <Text
-                    color={t.textSecondary}
-                    variant="body"
-                    marginLeft={2}>
-                    {dish.menu_name}
+                    color={t.textPrimary}
+                    variant="label">
+                    {dish?.menu_name}
                   </Text>
-                  <Stack
-                    horizontal
-                    justifyContent="flex-start"
-                    alignItems="center"
-                    gap={4}>
+                  <Stack horizontal gap={4} alignItems="center">
                     <Text
-                      color={t.textMuted}
-                      variant="caption"
-                      marginLeft={2}>
+                      color={t.textSecondary}
+                      variant="caption">
                       Orders:
                     </Text>
                     <Text
                       color={t.successColor}
-                      variant="label"
-                      marginLeft={5}>
-                      {dish.order_count || 0}
+                      variant="caption">
+                      {dish?.order_count || 0}
                     </Text>
                   </Stack>
                 </Stack>
+                
               </Stack>
             ))}
           </ScrollView>

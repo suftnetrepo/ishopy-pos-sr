@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyledSkeleton, StyledSpacer} from 'fluent-styles';
 import {Stack} from '../../../components/package/stack';
-import {Text} from '../../../components/text';
+import Text from '../../../components/text';
 import {StyledIcon} from '../../../components/package/icon';
 import {ScrollView} from 'react-native';
 import {useQueryGetLowerStock} from '../../../hooks/useStock';
@@ -16,18 +16,24 @@ const LowStockItems = () => {
     <Stack
       vertical
       width={'100%'}
-      borderRadius={8}
+      borderRadius={16}
+      borderWidth={1}
+      borderColor={t.borderDefault}
       backgroundColor={t.bgCard}
-      paddingHorizontal={24}
-      paddingVertical={24}
+      paddingHorizontal={16}
+      paddingVertical={16}
       justifyContent="flex-start"
-      alignItems="flex-start">
+      alignItems="flex-start"
+      shadowColor="#000"
+      shadowOpacity={0.06}
+      shadowRadius={12}
+      elevation={3}>
       <Stack
         horizontal
         width="100%"
         justifyContent="space-between"
         alignItems="center"
-        gap={8}>
+        gap={12}>
         <Text
           color={t.textPrimary}
           variant="title">
@@ -36,10 +42,10 @@ const LowStockItems = () => {
         <StyledIcon size={24} name="share" color={t.textMuted} />
       </Stack>
       <StyledSpacer
-        borderWidth={0.5}
-        borderColor={t.textMuted}
+        borderWidth={1}
+        borderColor={t.borderDefault}
         width={'100%'}
-        marginVertical={8}
+        marginVertical={12}
       />
 
       {data.length === 0 ? (
@@ -66,38 +72,31 @@ const LowStockItems = () => {
               <Stack
                 key={index}
                 horizontal
+                width="100%"
                 justifyContent="flex-start"
                 alignItems="center"
-                gap={4}
+                gap={12}
                 marginBottom={16}>
                 <Icon name={dish?.icon_name} isSelected={false} />
                 <Stack vertical>
                   <Text
-                    color={t.textSecondary}
-                    variant="body"
-                    marginLeft={2}>
-                    {dish.menu_name}
+                    color={t.textPrimary}
+                    variant="label">
+                    {dish?.menu_name}
                   </Text>
-                  <Stack
-                    horizontal
-                    justifyContent="flex-start"
-                    alignItems="center"
-                    gap={4}>
+                  <Stack horizontal gap={4} alignItems="center">
                     <Text
-                      color={t.textMuted}
-                      variant="caption"
-                      marginLeft={2}>
+                      color={t.textSecondary}
+                      variant="caption">
                       Available:
                     </Text>
                     <Text
                       color={t.successColor}
-                      variant="label"
-                      marginLeft={5}>
-                      {dish.current_stock || 0}
+                      variant="caption">
+                      {dish?.current_stock || 0}
                     </Text>
                   </Stack>
                 </Stack>
-                <StyledSpacer flex={1} />
               </Stack>
             ))}
           </ScrollView>

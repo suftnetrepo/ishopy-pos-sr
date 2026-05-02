@@ -2,7 +2,7 @@ import React from 'react';
 import {ViewStyle} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {StyledButton} from '../../../components/package/button';
-import {Text} from '../../../components/text';
+import Text from '../../../components/text';
 import {theme} from '../../../utils/theme';
 import {useAppTheme} from '../../../theme';
 
@@ -25,7 +25,7 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
 }) => {
   const {t} = useAppTheme();
   const backgroundColor = active ? t.brandPrimary : 'transparent';
-  const textColor       = active ? t.textOnAmber  : t.textSecondary;
+  const textColor       = active ? t.textOnAmber  : t.textPrimary;
   const iconColor       = textColor;
 
   return (

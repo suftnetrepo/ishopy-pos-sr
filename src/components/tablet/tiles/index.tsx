@@ -11,8 +11,8 @@ import Svg, {Path} from 'react-native-svg';
 type OrderKey = 'Progress' | 'Completed' | 'Cancelled';
 
 interface TileConfig {
-  key:      OrderKey;
-  label:    string;
+  key: OrderKey;
+  label: string;
   sparklineColorKey: 'brandPrimary' | 'successColor' | 'dangerColor';
   sparkline: number[];
 }
@@ -44,6 +44,7 @@ const TILES: TileConfig[] = [
 interface TileProps extends TileConfig {
   value: number;
   t: ThemeTokens;
+  orderKey?: OrderKey;
 }
 
 // Generate mock sparkline data (smooth curve)
@@ -59,30 +60,30 @@ const getSparklineData = (key: OrderKey): number[] => {
 // Create smooth SVG path from data points
 const createSparklinePath = (data: number[] = []): string => {
   if (!Array.isArray(data) || data.length === 0) return '';
-  
+
   const width = 100;
   const height = 24;
   const maxValue = Math.max(...data);
   const minValue = Math.min(...data);
   const range = maxValue - minValue || 1;
-  
+
   // Scale data to fit in chart area
   const points = data.map((value, index) => {
     const x = (index / (data.length - 1)) * width;
     const y = height - ((value - minValue) / range) * height;
     return {x, y};
   });
-  
+
   // Create smooth curve using quadratic bezier
   let pathData = `M ${points[0].x} ${points[0].y}`;
-  
+
   for (let i = 1; i < points.length; i++) {
     const xMid = (points[i - 1].x + points[i].x) / 2;
     const yMid = (points[i - 1].y + points[i].y) / 2;
     pathData += ` Q ${xMid} ${points[i - 1].y} ${xMid} ${yMid}`;
     pathData += ` Q ${xMid} ${points[i].y} ${points[i].x} ${points[i].y}`;
   }
-  
+
   return pathData;
 };
 
@@ -94,7 +95,13 @@ type SparklineProps = {
   height?: number;
 };
 
-const Sparkline = ({ data = [], color, opacity = 0.45, width = 80, height = 32 }: SparklineProps) => {
+const Sparkline = ({
+  data = [],
+  color,
+  opacity = 0.8,
+  width = 80,
+  height = 32,
+}: SparklineProps) => {
   const safeData = Array.isArray(data) ? data : [];
 
   if (safeData.length < 2) return null;
@@ -104,11 +111,15 @@ const Sparkline = ({ data = [], color, opacity = 0.45, width = 80, height = 32 }
   if (!path) return null;
 
   return (
-    <Svg width={width} height={height} viewBox="0 0 100 24" preserveAspectRatio="none">
+    <Svg
+      width={width}
+      height={height}
+      viewBox="0 0 100 24"
+      preserveAspectRatio="none">
       <Path
         d={path}
         stroke={color}
-        strokeWidth={1.5}
+        strokeWidth={2}
         fill="none"
         opacity={opacity}
         strokeLinecap="round"
@@ -118,60 +129,94 @@ const Sparkline = ({ data = [], color, opacity = 0.45, width = 80, height = 32 }
   );
 };
 
-const Tile = ({label, value, t, sparklineColorKey, sparkline}: TileProps) => {
+// Mock delta data: change from previous period
+const DELTA_DATA: Record<OrderKey, {change: number; percentage: number}> = {
+  Progress: {change: 2, percentage: 12},
+  Completed: {change: 5, percentage: 18},
+  Cancelled: {change: -1, percentage: -20},
+};
+
+const Tile = ({
+  label,
+  value,
+  t,
+  sparklineColorKey,
+  sparkline,
+  orderKey,
+}: TileProps) => {
   const sparklineColor = t[sparklineColorKey];
-  
+
   // Safe sparkline fallback
   const safeSparkline =
     sparkline && Array.isArray(sparkline) && sparkline.length >= 2
       ? sparkline
       : DEFAULT_SPARKLINE;
-  
+
   const hasSparklineData = safeSparkline.length >= 2;
 
+  // Get delta indicator
+  const delta = orderKey ? DELTA_DATA[orderKey] : {change: 0, percentage: 0};
+  const isDeltaPositive = delta.change > 0;
+  const isDeltaNeutral = delta.change === 0;
+  const deltaColor = isDeltaPositive
+    ? t.successColor
+    : isDeltaNeutral
+    ? t.textMuted
+    : t.dangerColor;
+  const deltaArrow = isDeltaPositive ? '↑' : isDeltaNeutral ? '→' : '↓';
+
   return (
-    <Stack flex={1} vertical borderRadius={16} overflow="hidden"
-      borderWidth={1} borderColor={t.borderDefault} backgroundColor={t.bgCard}
-      position="relative">
-      
-      {/* Sparkline in top-right corner (absolute positioned) */}
-      {hasSparklineData && (
-        <Stack
-          position="absolute"
-          top={16}
-          right={16}
-          width={65}
-          height={26}
-          pointerEvents="none"
-        >
-          <Sparkline
-            data={safeSparkline}
-            color={sparklineColor}
-            opacity={0.4}
-            width={65}
-            height={26}
-          />
-        </Stack>
-      )}
-      
+    <Stack
+      flex={1}
+      horizontal
+      borderRadius={16}
+      overflow="hidden"
+      borderWidth={1}
+      borderColor={t.borderDefault}
+      backgroundColor={t.bgCard}
+      shadowColor="#000"
+      shadowOpacity={0.06}
+      shadowRadius={12}
+      elevation={3}
+      alignItems="center"
+      justifyContent="space-between">
       {/* Content area with number and label */}
       <Stack
         vertical
-        paddingHorizontal={20}
-        paddingVertical={20}
-        gap={12}
+        paddingHorizontal={16}
+        paddingVertical={16}
+        gap={4}
         flex={1}
         justifyContent="space-between">
-        
         {/* Number (large, bold, primary) — metric variant */}
         <Text variant="metric" color={t.textPrimary}>
           {value}
         </Text>
-        
+
         {/* Label (smaller, secondary) — subLabel variant */}
         <Text variant="subLabel" color={t.textSecondary}>
           {label}
         </Text>
+
+        {/* Delta indicator: change vs previous period */}
+        <Stack horizontal gap={6} alignItems="center">
+          <Text variant="caption" color={deltaColor}>
+            {deltaArrow}
+          </Text>
+          <Text variant="caption" color={deltaColor}>
+            {Math.abs(delta.change)} ({Math.abs(delta.percentage)}%)
+          </Text>
+        </Stack>
+      </Stack>
+
+      <Stack marginRight={16}>
+        <Sparkline
+          data={safeSparkline}
+          color={sparklineColor}
+          opacity={0.8}
+          width={50}
+          height={26}
+        />
       </Stack>
     </Stack>
   );
@@ -182,13 +227,19 @@ const Tiles = () => {
   const {data} = useOrderStatusAggregate();
 
   return (
-    <Stack horizontal gap={16} marginHorizontal={16} alignItems="stretch" marginVertical={8}>
+    <Stack
+      horizontal
+      gap={16}
+      paddingHorizontal={16}
+      alignItems="stretch"
+      marginBottom={16}>
       {TILES.map(({key, ...tile}) => (
         <Tile
           key={key}
           {...tile}
           t={t}
           value={data ? (data as OrderStatusAggregate)[key] : 0}
+          orderKey={key}
         />
       ))}
     </Stack>

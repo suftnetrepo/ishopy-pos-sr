@@ -49,12 +49,12 @@ const PeriodChip = ({label, periodKey, active, onPress, t}) => {
     <StyledPressable
       onPress={onPress}
       paddingHorizontal={12}
-      paddingVertical={5}
-      borderRadius={999}
-      borderWidth={1}
-      borderColor={active ? c.border : t.textMuted}
-      backgroundColor={active ? c.bg : t.bgCard}>
-      <Stack horizontal alignItems="center" gap={4}>
+      paddingVertical={6}
+      borderRadius={8}
+      borderWidth={active ? 0 : 1}
+      borderColor={active ? 'transparent' : t.borderDefault}
+      backgroundColor={active ? c.bg : 'transparent'}>
+      <Stack horizontal alignItems="center" gap={8}>
         {active && (
           <Text variant="caption" color={c.text}>✓</Text>
         )}
@@ -83,15 +83,14 @@ const DayPanel = ({containerWidth, symbol, t, isDark}) => {
       ? `rgba(250, 250, 250, ${opacity})`
       : `rgba(24, 24, 27, ${opacity})`,
     style: {borderRadius: 8},
-    propsForBackgroundLines: {strokeDasharray: ''},
+    propsForBackgroundLines: {stroke: t.borderDefault, strokeOpacity: 0.4, strokeDasharray: ''},
   };
 
   return (
-    <Stack vertical>
-      <Stack horizontal justifyContent="flex-start" alignItems="center">
+    <Stack vertical gap={10}>
+      <Stack horizontal justifyContent="flex-start" alignItems="center" gap={8}>
         <Text
           variant="metric"
-          paddingHorizontal={8}
           color={t.textPrimary}>
           {formatCurrency(symbol, dailyTransaction)}
         </Text>
@@ -110,15 +109,14 @@ const DayPanel = ({containerWidth, symbol, t, isDark}) => {
           </Stack>
         </Stack>
       </Stack>
-      <StyledSpacer marginVertical={8} />
       {containerWidth > 0 && (
         <BarChart
           data={data}
-          width={containerWidth - 16}
+          width={containerWidth - 32}
           height={250}
           fromZero
           chartConfig={barChartConfig}
-          style={{marginVertical: 8, borderRadius: 16, marginLeft: 8}}
+          style={{borderRadius: 16}}
         />
       )}
     </Stack>
@@ -159,8 +157,8 @@ const TrendPanel = ({period, containerWidth, symbol, data, labels, total, loadin
   }
 
   return (
-    <Stack vertical>
-      <Stack horizontal justifyContent="space-between" alignItems="center" paddingHorizontal={8}>
+    <Stack vertical gap={12}>
+      <Stack horizontal justifyContent="space-between" alignItems="center">
         <Text variant="caption" color={t.textSecondary}>
           {periodLabel}
         </Text>
@@ -170,7 +168,6 @@ const TrendPanel = ({period, containerWidth, symbol, data, labels, total, loadin
           {formattedTotal}
         </Text>
       </Stack>
-      <StyledSpacer marginVertical={4} />
       {containerWidth > 0 && (
         <SvgTrendLine
           data={data}
@@ -211,17 +208,22 @@ const DailyTransactionChart = () => {
   return (
     <Stack
       vertical
-     
-      marginVertical={16}
       marginLeft={16}
+      marginTop={0}
       backgroundColor={t.bgCard}
-      borderRadius={8}
-      paddingHorizontal={8}
-      paddingVertical={16}>
+      borderRadius={16}
+      borderWidth={1}
+      borderColor={t.borderDefault}
+      paddingHorizontal={16}
+      paddingVertical={16}
+      shadowColor="#000"
+      shadowOpacity={0.06}
+      shadowRadius={12}
+      elevation={3}>
 
       {/* Chips left, dynamic title right */}
-      <Stack horizontal justifyContent="space-between" alignItems="center" paddingHorizontal={8}>
-        <Stack horizontal gap={6} alignItems="center">
+      <Stack horizontal justifyContent="space-between" alignItems="center">
+        <Stack horizontal gap={8} alignItems="center">
           {PERIODS.map(p => (
             <PeriodChip
               key={p.key}

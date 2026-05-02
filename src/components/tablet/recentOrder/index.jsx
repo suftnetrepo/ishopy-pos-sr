@@ -2,7 +2,7 @@ import React from 'react';
 import {StyledSpacer, StyledEmptyState} from 'fluent-styles';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {Stack} from '../../package/stack';
-import {Text} from '../../../components/text';
+import Text from '../../../components/text';
 import {StyledIcon} from '../../package/icon';
 import {ScrollView} from 'react-native';
 import {
@@ -23,11 +23,17 @@ const RecentOrder = () => {
   return (
     <Stack
       vertical
-      borderRadius={8}
+      borderRadius={16}
+      borderWidth={1}
+      borderColor={t.borderDefault}
       backgroundColor={t.bgCard}
-      paddingHorizontal={24}
-      paddingVertical={24}
-      marginLeft={16}>
+      paddingHorizontal={16}
+      paddingVertical={16}
+      marginLeft={16}
+      shadowColor="#000"
+      shadowOpacity={0.06}
+      shadowRadius={12}
+      elevation={3}>
       <Stack
         horizontal
         justifyContent="space-between"
@@ -41,10 +47,10 @@ const RecentOrder = () => {
         <StyledIcon size={24} name="share" color={t.textMuted} />
       </Stack>
       <StyledSpacer
-        borderWidth={0.4}
-        borderColor={t.textMuted}
+        borderWidth={1}
+        borderColor={t.borderDefault}
         width={'100%'}
-        marginVertical={8}
+        marginVertical={12}
       />
 
       {data.length === 0 ? (
