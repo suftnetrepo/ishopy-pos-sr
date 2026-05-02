@@ -139,11 +139,11 @@ export default function Cart({table_id, table_name}) {
             borderColor={isSelected ? t.brandPrimary : t.borderDefault}>
             <Icons
               name={option.icon} size={24}
-              color={isSelected ? t.onBrandPrimary || '#fff' : t.textSecondary}
+              color={isSelected ? t.textInverse : t.textSecondary}
             />
             <StyledText
               marginTop={4}
-              color={isSelected ? t.onBrandPrimary || '#fff' : t.textSecondary}
+              color={isSelected ? t.textInverse : t.textSecondary}
               fontSize={14}>
               {option.label}
             </StyledText>
@@ -156,7 +156,7 @@ export default function Cart({table_id, table_name}) {
   // ── Action buttons ────────────────────────────────────────────────────────
   const ActionBtn = ({onPress, bg, borderCol, label, disabled, textColor}) => (
     <StyledPressable
-      flex={1} paddingVertical={14} paddingHorizontal={12}
+      paddingVertical={14} paddingHorizontal={12}
       borderRadius={12} alignItems="center" justifyContent="center"
       backgroundColor={bg} borderWidth={borderCol ? 1 : 0} borderColor={borderCol}
       onPress={onPress} disabled={disabled}>
@@ -167,22 +167,22 @@ export default function Cart({table_id, table_name}) {
 
   const renderActionButtons = () => {
     if (isCartChanged && hasOrderId)
-      return <ActionBtn onPress={handleUpdateOrder} bg={t.brandPrimary} textColor={t.onBrandPrimary || '#fff'} label="+ Order" />;
+      return <ActionBtn onPress={handleUpdateOrder} bg={t.brandPrimary} textColor={t.textInverse} label="+ Order" />;
 
     if (!isCartChanged && hasItems) {
       if (!hasOrderId)
-        return <ActionBtn onPress={handleOrder} bg={t.brandPrimary} textColor={t.onBrandPrimary || '#fff'} label="Place Order" />;
+        return <ActionBtn onPress={handleOrder} bg={t.brandPrimary} textColor={t.textInverse} label="Place Order" />;
 
       return (
         <StyledScrollView horizontal showsHorizontalScrollIndicator={false}>
           <ActionBtn onPress={handlePrint} bg={t.bgInput} borderCol={t.borderDefault} textColor={t.textSecondary} label="Print" />
-          <StyledSpacer marginHorizontal={8} />
-          <ActionBtn onPress={() => navigation.navigate('big-table')} bg={t.brandPrimary} textColor={t.onBrandPrimary || '#fff'} label="Send" />
-          <StyledSpacer marginHorizontal={8} />
-          <ActionBtn onPress={handlePaymentPress} disabled={!paymentMethod} bg={t.successColor} textColor={t.onBrandPrimary || '#fff'} label="Pay" />
-          <StyledSpacer marginHorizontal={8} />
-          <ActionBtn onPress={handleVoid} bg={t.dangerColor} textColor={t.onBrandPrimary || '#fff'} label="Void" />
-          <StyledSpacer marginHorizontal={8} />
+          <StyledSpacer marginHorizontal={16} />
+          <ActionBtn onPress={() => navigation.navigate('big-table')} bg={t.brandPrimary} textColor={t.textInverse} label="Send" />
+          <StyledSpacer marginHorizontal={16} />
+          <ActionBtn onPress={handlePaymentPress} disabled={!paymentMethod} bg={t.successColor} textColor={t.textInverse} label="Pay" />
+          <StyledSpacer marginHorizontal={16} />
+          <ActionBtn onPress={handleVoid} bg={t.dangerColor} textColor={t.textInverse} label="Void" />
+          <StyledSpacer marginHorizontal={16} />
         </StyledScrollView>
       );
     }
