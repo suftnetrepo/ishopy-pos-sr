@@ -2,7 +2,7 @@ import React from 'react';
 import {ViewStyle} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {StyledButton} from '../../../components/package/button';
-import {StyledText} from 'fluent-styles';
+import {Text} from '../../../components/text';
 import {theme} from '../../../utils/theme';
 import {useAppTheme} from '../../../theme';
 
@@ -42,14 +42,13 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
       style={style}>
       <Icon name={icon} size={25} color={iconColor} />
       {!collapse && (
-        <StyledText
+        <Text
           color={textColor}
-          fontSize={15}
-          fontWeight={theme.fontWeight.medium as any}
+          variant={active ? 'label' : 'subLabel'}
           marginLeft={10}
           textAlign="center">
           {label}
-        </StyledText>
+        </Text>
       )}
     </StyledButton>
   );

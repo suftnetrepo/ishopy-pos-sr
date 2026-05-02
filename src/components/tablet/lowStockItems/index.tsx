@@ -1,7 +1,7 @@
 import React from 'react';
-import {StyledText, StyledSkeleton, StyledSpacer} from 'fluent-styles';
+import {StyledSkeleton, StyledSpacer} from 'fluent-styles';
 import {Stack} from '../../../components/package/stack';
-import {theme} from '../../../utils/theme';
+import {Text} from '../../../components/text';
 import {StyledIcon} from '../../../components/package/icon';
 import {ScrollView} from 'react-native';
 import {useQueryGetLowerStock} from '../../../hooks/useStock';
@@ -28,12 +28,11 @@ const LowStockItems = () => {
         justifyContent="space-between"
         alignItems="center"
         gap={8}>
-        <StyledText
+        <Text
           color={t.textPrimary}
-          fontSize={theme.fontSize.large}
-          fontWeight={theme.fontWeight.normal as any}>
+          variant="title">
           Low Stock Items
-        </StyledText>
+        </Text>
         <StyledIcon size={24} name="share" color={t.textMuted} />
       </Stack>
       <StyledSpacer
@@ -49,16 +48,15 @@ const LowStockItems = () => {
             width="100%" vertical alignItems="center" justifyContent="center"
             paddingVertical={24} gap={12}
             backgroundColor={t.bgCard} borderRadius={12}>
-            <StyledText fontSize={32}>🔔</StyledText>
-            <StyledText
-              fontSize={theme.fontSize.normal}
-              fontWeight={theme.fontWeight.semiBold as any}
+            <Text fontSize={32}>🔔</Text>
+            <Text
+              variant="title"
               color={t.textPrimary}>
               Nothing here yet
-            </StyledText>
-            <StyledText fontSize={theme.fontSize.small} color={t.textSecondary} textAlign="center">
+            </Text>
+            <Text variant="caption" color={t.textSecondary} textAlign="center">
               Lower stock items will appear here.
-            </StyledText>
+            </Text>
           </Stack>
         </>
       ) : (
@@ -74,32 +72,29 @@ const LowStockItems = () => {
                 marginBottom={16}>
                 <Icon name={dish?.icon_name} isSelected={false} />
                 <Stack vertical>
-                  <StyledText
+                  <Text
                     color={t.textSecondary}
-                    fontSize={16}
-                    fontWeight={theme.fontWeight.medium as any}
+                    variant="body"
                     marginLeft={2}>
                     {dish.menu_name}
-                  </StyledText>
+                  </Text>
                   <Stack
                     horizontal
                     justifyContent="flex-start"
                     alignItems="center"
                     gap={4}>
-                    <StyledText
+                    <Text
                       color={t.textMuted}
-                      fontSize={14}
-                      fontWeight={theme.fontWeight.normal as any}
+                      variant="caption"
                       marginLeft={2}>
                       Available:
-                    </StyledText>
-                    <StyledText
-                      color={theme.colors.green[800]}
-                      fontSize={14}
-                      fontWeight={theme.fontWeight.semiBold as any}
+                    </Text>
+                    <Text
+                      color={t.successColor}
+                      variant="label"
                       marginLeft={5}>
                       {dish.current_stock || 0}
-                    </StyledText>
+                    </Text>
                   </Stack>
                 </Stack>
                 <StyledSpacer flex={1} />

@@ -2,7 +2,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { FlatList } from 'react-native';
 import { palettes, theme } from '../../configs/theme';
-import { YStack, XStack, StyledSpacer, StyledText, StyledButton } from 'fluent-styles';
+import { YStack, XStack, StyledSpacer, StyledButton } from 'fluent-styles';
+import {Text} from '../text';
 import {useAppTheme} from '../../theme';
 
 const ColorPicker = React.memo(({ color, onPress }) => {
@@ -48,9 +49,9 @@ const ColorPicker = React.memo(({ color, onPress }) => {
         <YStack padding={10} backgroundColor={t?.bgCard} borderRadius={12} justifyContent='center' alignItems='center'>
             {selectedColor && (
                 <XStack flex={1} justifyContent='center' alignItems='center' height={100} width={100} marginTop={20} borderRadius={10} backgroundColor={selectedColor} borderColor={t?.borderDefault} borderWidth={1}>
-                    <StyledText fontSize={theme.fontSize.small} color={selectedColor === '#ffffff' || selectedColor === '#fff' ? t?.textPrimary : '#ffffff'}>
+                    <Text variant="caption" color={selectedColor === '#ffffff' || selectedColor === '#fff' ? t?.textPrimary : '#ffffff'}>
                         {selectedColor}
-                    </StyledText>
+                    </Text>
                 </XStack>
             )}
             <StyledSpacer marginVertical={8} />

@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import {StyledText, StyledPressable, Stack} from 'fluent-styles';
+import {StyledPressable, Stack} from 'fluent-styles';
+import {Text} from './text';
 import {useAppTheme} from '../theme';
 
 const OPTIONS = [
@@ -34,13 +35,12 @@ const ThemeToggle = () => {
             backgroundColor={active ? t.brandPrimary : t.bgPage}
             borderRightWidth={i < OPTIONS.length - 1 ? 0.5 : 0}
             borderRightColor={t.borderDefault}>
-            <StyledText fontSize={14}>{opt.icon}</StyledText>
-            <StyledText
-              fontSize={11}
-              fontWeight={active ? '600' : '400'}
+            <Text variant="body">{opt.icon}</Text>
+            <Text
+              variant={active ? 'label' : 'subLabel'}
               color={active ? t.textOnAmber : t.textSecondary}>
               {opt.label}
-            </StyledText>
+            </Text>
           </StyledPressable>
         );
       })}

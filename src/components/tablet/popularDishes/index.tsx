@@ -1,11 +1,10 @@
 import React from 'react';
 import {
-  StyledText,
   StyledSpacer,
   Stack,
   StyleShape,
 } from 'fluent-styles';
-import {theme} from '../../../utils/theme';
+import {Text} from '../../../components/text';
 import {StyledIcon} from '../../../components/package/icon';
 import {ScrollView} from 'react-native';
 import {useQueryPopularMenuItems} from '../../../hooks/useOrderItems';
@@ -35,12 +34,11 @@ const PopularDishes = () => {
         justifyContent="space-between"
         alignItems="center"
         gap={8}>
-        <StyledText
+        <Text
           color={t.textPrimary}
-          fontSize={theme.fontSize.large}
-          fontWeight={theme.fontWeight.normal as any}>
+          variant="title">
           {shop?.mode === 'shop' ? 'Popular Items ' : 'Popular Dishes '}
-        </StyledText>
+        </Text>
         <StyledIcon size={24} name="share" color={t.textMuted} />
       </Stack>
 
@@ -57,16 +55,15 @@ const PopularDishes = () => {
             width="100%" vertical alignItems="center" justifyContent="center"
             paddingVertical={24} gap={12}
             backgroundColor={t.bgCard} borderRadius={12}>
-            <StyledText fontSize={32}>📢</StyledText>
-            <StyledText
-              fontSize={theme.fontSize.normal}
-              fontWeight={theme.fontWeight.semiBold as any}
+            <Text fontSize={32}>📢</Text>
+            <Text
+              variant="title"
               color={t.textPrimary}>
               Nothing here yet
-            </StyledText>
-            <StyledText fontSize={theme.fontSize.small} color={t.textSecondary} textAlign="center">
+            </Text>
+            <Text variant="caption" color={t.textSecondary} textAlign="center">
               Popular dishes will appear here.
-            </StyledText>
+            </Text>
           </Stack>
         </>
       ) : (
@@ -97,32 +94,29 @@ const PopularDishes = () => {
                 </StyleShape>
 
                 <Stack vertical>
-                  <StyledText
+                  <Text
                     color={t.textSecondary}
-                    fontSize={16}
-                    fontWeight={theme.fontWeight.normal as any}
+                    variant="body"
                     marginLeft={2}>
                     {dish.menu_name}
-                  </StyledText>
+                  </Text>
                   <Stack
                     horizontal
                     justifyContent="flex-start"
                     alignItems="center"
                     gap={4}>
-                    <StyledText
+                    <Text
                       color={t.textMuted}
-                      fontSize={14}
-                      fontWeight={theme.fontWeight.normal as any}
+                      variant="caption"
                       marginLeft={2}>
                       Orders:
-                    </StyledText>
-                    <StyledText
-                      color={theme.colors.green[800]}
-                      fontSize={14}
-                      fontWeight={theme.fontWeight.semiBold as any}
+                    </Text>
+                    <Text
+                      color={t.successColor}
+                      variant="label"
                       marginLeft={5}>
                       {dish.order_count || 0}
-                    </StyledText>
+                    </Text>
                   </Stack>
                 </Stack>
               </Stack>

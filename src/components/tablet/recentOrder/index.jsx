@@ -1,8 +1,8 @@
 import React from 'react';
-import {StyledText, StyledSpacer, StyledEmptyState} from 'fluent-styles';
+import {StyledSpacer, StyledEmptyState} from 'fluent-styles';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {Stack} from '../../package/stack';
-import {theme} from '../../../utils/theme';
+import {Text} from '../../../components/text';
 import {StyledIcon} from '../../package/icon';
 import {ScrollView} from 'react-native';
 import {
@@ -33,12 +33,11 @@ const RecentOrder = () => {
         justifyContent="space-between"
         alignItems="center"
         gap={8}>
-        <StyledText
+        <Text
           color={t.textPrimary}
-          fontSize={theme.fontSize.large}
-          fontWeight={theme.fontWeight.normal}>
+          variant="title">
           Recent Orders
-        </StyledText>
+        </Text>
         <StyledIcon size={24} name="share" color={t.textMuted} />
       </Stack>
       <StyledSpacer
@@ -76,20 +75,18 @@ const RecentOrder = () => {
                     justifyContent="flex-start"
                     alignItems="center"
                     gap={4}>
-                    <StyledText
+                    <Text
                       color={t.textPrimary}
-                      fontSize={theme.fontSize.small}
-                      fontWeight={theme.fontWeight.medium}
+                      variant="label"
                       marginLeft={2}>
                       #{getLastChars(dish.order?.order_id, 8)}
-                    </StyledText>
-                    <StyledText
+                    </Text>
+                    <Text
                       color={t.textPrimary}
-                      fontSize={theme.fontSize.small}
-                      fontWeight={theme.fontWeight.thin}
+                      variant="caption"
                       marginLeft={5}>
                       X {dish.item_count}
-                    </StyledText>
+                    </Text>
                   </Stack>
                   <Stack
                     horizontal
@@ -102,11 +99,11 @@ const RecentOrder = () => {
                         size={16}
                         color={t.textSecondary}
                       />
-                      <StyledText
+                      <Text
                         color={t.textSecondary}
-                        fontSize={theme.fontSize.small}>
+                        variant="caption">
                         {formatDate(dish.order?.date)}
-                      </StyledText>
+                      </Text>
                     </Stack>
                   </Stack>
                 </Stack>
@@ -115,14 +112,13 @@ const RecentOrder = () => {
                   borderColor={backgroundColorHelper(dish.order.status)}
                   backgroundColor={backgroundColorHelper(dish.order.status)}
                   borderRadius={30}>
-                  <StyledText
+                  <Text
                     color={textColorHelper(dish.order.status)}
-                    fontSize={12}
+                    variant="caption"
                     paddingHorizontal={12}
-                    paddingVertical={4}
-                    fontWeight={theme.fontWeight.normal}>
+                    paddingVertical={4}>
                     {capitalize(dish.order.status)}
-                  </StyledText>
+                  </Text>
                 </Stack>
               </Stack>
             ))}

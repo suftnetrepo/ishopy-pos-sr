@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  StyledText,
   StyledSpacer,
   Stack,
   StyledPressable,
@@ -8,7 +7,8 @@ import {
 } from 'fluent-styles';
 import {useNavigation, CommonActions} from '@react-navigation/native';
 
-import {fontStyles, theme} from '../../../utils/theme';
+import {theme} from '../../../utils/theme';
+import {Text} from '../../../components/text';
 import {StyledImage} from '../../../components/package/image';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Logo from '../../../components/tablet/logo';
@@ -72,14 +72,12 @@ const RenderHeader = ({
       )}
       {showLogo && <Logo />}
       {showTitle && (
-        <StyledText
-          fontFamily={fontStyles.Roboto_Regular}
-          fontSize={theme.fontSize.normal}
-          fontWeight={theme.fontWeight.normal as any}
+        <Text
+          variant="title"
           paddingHorizontal={8}
           color={t.textPrimary}>
           {title || 'Dashboard'}
-        </StyledText>
+        </Text>
       )}
       {children && (
         <Stack marginHorizontal={8} flex={1} horizontal>
@@ -107,18 +105,16 @@ const RenderHeader = ({
               marginLeft={8}
               justifyContent="flex-start"
               alignItems="flex-start">
-              <StyledText
+              <Text
                 color={t.textPrimary}
-                fontSize={theme.fontSize.small}
-                fontWeight={theme.fontWeight.semiBold as any}>
+                variant="label">
                 {user?.first_name} {user?.last_name}
-              </StyledText>
-              <StyledText
+              </Text>
+              <Text
                 color={t.textMuted}
-                fontSize={theme.fontSize.small}
-                fontWeight={theme.fontWeight.medium as any}>
+                variant="caption">
                 {user?.role}
-              </StyledText>
+              </Text>
             </Stack>
           </Stack>
 

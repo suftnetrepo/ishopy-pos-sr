@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
 import {ActivityIndicator} from 'react-native';
-import {StyledText, StyledSpacer, StyledPressable} from 'fluent-styles';
+import {StyledSpacer, StyledPressable} from 'fluent-styles';
 import {Stack} from '../../package/stack';
-import {theme} from '../../../utils/theme';
+import {Text} from '../../../components/text';
 import {BarChart} from 'react-native-chart-kit';
-import {fontStyles} from '../../../configs/theme';
+import {theme} from '../../../utils/theme';
 import {formatCurrency} from '../../../utils/help';
 import {
   useWeeklyTransactions,
@@ -56,14 +56,13 @@ const PeriodChip = ({label, periodKey, active, onPress, t}) => {
       backgroundColor={active ? c.bg : t.bgCard}>
       <Stack horizontal alignItems="center" gap={4}>
         {active && (
-          <StyledText fontSize={theme.fontSize.small} color={c.text}>✓</StyledText>
+          <Text variant="caption" color={c.text}>✓</Text>
         )}
-        <StyledText
-          fontSize={theme.fontSize.small}
-          fontWeight={active ? theme.fontWeight.medium : theme.fontWeight.normal}
-          color={active ? c.text : t.textSecondary}>
+        <Text
+          color={active ? c.text : t.textSecondary}
+          variant={active ? 'label' : 'subLabel'}>
           {label}
-        </StyledText>
+        </Text>
       </Stack>
     </StyledPressable>
   );
@@ -90,14 +89,12 @@ const DayPanel = ({containerWidth, symbol, t, isDark}) => {
   return (
     <Stack vertical>
       <Stack horizontal justifyContent="flex-start" alignItems="center">
-        <StyledText
-          fontFamily={fontStyles.Roboto_Regular}
-          fontSize={theme.fontSize.xxxlarge}
-          fontWeight={theme.fontWeight.bold}
+        <Text
+          variant="metric"
           paddingHorizontal={8}
           color={t.textPrimary}>
           {formatCurrency(symbol, dailyTransaction)}
-        </StyledText>
+        </Text>
         <Stack
           flexShrink={1}
           borderRadius={16}
@@ -154,9 +151,9 @@ const TrendPanel = ({period, containerWidth, symbol, data, labels, total, loadin
   if (error) {
     return (
       <Stack vertical alignItems="center" justifyContent="center" height={250}>
-        <StyledText fontSize={theme.fontSize.small} color={t.textMuted}>
+        <Text variant="caption" color={t.textMuted}>
           Unable to load data
-        </StyledText>
+        </Text>
       </Stack>
     );
   }
@@ -164,15 +161,14 @@ const TrendPanel = ({period, containerWidth, symbol, data, labels, total, loadin
   return (
     <Stack vertical>
       <Stack horizontal justifyContent="space-between" alignItems="center" paddingHorizontal={8}>
-        <StyledText fontSize={theme.fontSize.small} color={t.textSecondary}>
+        <Text variant="caption" color={t.textSecondary}>
           {periodLabel}
-        </StyledText>
-        <StyledText
-          fontSize={theme.fontSize.small}
-          fontWeight={theme.fontWeight.semiBold}
+        </Text>
+        <Text
+          variant="label"
           color={style.line}>
           {formattedTotal}
-        </StyledText>
+        </Text>
       </Stack>
       <StyledSpacer marginVertical={4} />
       {containerWidth > 0 && (

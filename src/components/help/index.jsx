@@ -1,9 +1,10 @@
 /* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
 import {ScrollView, Image} from 'react-native';
-import {StyledText, StyledSpacer, StyledButton, StyledPressable, Stack} from 'fluent-styles';
+import {StyledSpacer, StyledButton, StyledPressable, Stack} from 'fluent-styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {fontStyles, theme} from '../../utils/theme';
+import {theme} from '../../utils/theme';
+import {Text} from '../text';
 import {usePin} from '../../hooks/useUser';
 import {ShowToast} from '../../components/toast';
 import {useAppTheme} from '../../theme';
@@ -65,12 +66,12 @@ export default function HelpScreen({onClose}) {
           <Icon name="arrow-left" size={20} color={t.textPrimary} />
         </StyledPressable>
         <Stack vertical marginLeft={16}>
-          <StyledText fontSize={theme.fontSize.xxlarge} fontWeight={theme.fontWeight.bold}>
+          <Text variant="hero">
             Help Center
-          </StyledText>
-          <StyledText fontSize={theme.fontSize.small} color={t.textSecondary}>
+          </Text>
+          <Text variant="caption" color={t.textSecondary}>
             Get support and learn more
-          </StyledText>
+          </Text>
         </Stack>
       </Stack>
 
@@ -83,19 +84,19 @@ export default function HelpScreen({onClose}) {
             resizeMode="cover"
           />
         </Stack>
-        <StyledText fontSize={theme.fontSize.large} marginBottom={8}>
+        <Text variant="title" marginBottom={8}>
           How can we help you today?
-        </StyledText>
-        <StyledText color={t.textSecondary} textAlign="center">
+        </Text>
+        <Text variant="caption" color={t.textSecondary} textAlign="center">
           Browse our guides or search for specific topics
-        </StyledText>
+        </Text>
       </Stack>
 
       {/* Quick guides */}
       <Stack paddingHorizontal={24} marginBottom={16} vertical>
-        <StyledText fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.bold} marginBottom={12}>
+        <Text variant="title" marginBottom={12}>
           Quick Guides
-        </StyledText>
+        </Text>
         {guides.map(g => (
           <Stack
             key={g.id}
@@ -110,12 +111,12 @@ export default function HelpScreen({onClose}) {
               <Icon name={g.icon} size={20} color={t.brandPrimaryDark} />
             </Stack>
             <Stack vertical flex={1}>
-              <StyledText fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.medium}>
+              <Text variant="label">
                 {g.title}
-              </StyledText>
-              <StyledText fontSize={theme.fontSize.small} color={t.textSecondary}>
+              </Text>
+              <Text variant="caption" color={t.textSecondary}>
                 {g.description}
-              </StyledText>
+              </Text>
             </Stack>
             <Icon name="chevron-right" size={20} color={t.textMuted} />
           </Stack>
@@ -124,9 +125,9 @@ export default function HelpScreen({onClose}) {
 
       {/* FAQs */}
       <Stack paddingHorizontal={24} marginBottom={16} vertical>
-        <StyledText fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.bold} marginBottom={12}>
+        <Text variant="title" marginBottom={12}>
           Frequently Asked Questions
-        </StyledText>
+        </Text>
         {faqs.map((faq, index) => (
           <Stack
             key={index}
@@ -138,12 +139,12 @@ export default function HelpScreen({onClose}) {
               horizontal justifyContent="space-between" alignItems="center"
               paddingHorizontal={20} paddingVertical={16}
               onPress={() => toggleFAQ(index)}>
-              <StyledText
-                flex={1} fontSize={theme.fontSize.normal}
-                fontWeight={theme.fontWeight.medium}
+              <Text
+                flex={1}
+                variant="label"
                 color={t.textPrimary}>
                 {faq.question}
-              </StyledText>
+              </Text>
               <Icon
                 name={expandedFAQ === index ? 'chevron-up' : 'chevron-down'}
                 size={20}
@@ -154,27 +155,25 @@ export default function HelpScreen({onClose}) {
               <Stack
                 paddingHorizontal={20} paddingBottom={20} paddingTop={12}
                 borderTopWidth={0.5} borderColor={t.borderDefault} vertical>
-                <StyledText fontSize={theme.fontSize.normal} color={t.textSecondary}>
+                <Text variant="body" color={t.textSecondary}>
                   {faq.answer}
-                </StyledText>
+                </Text>
                 <StyledSpacer marginVertical={4} />
-                {faq.options.map((t, i) => (
-                  <StyledText key={i} fontSize={theme.fontSize.normal} color={t.textSecondary}>
-                    • {t}
-                  </StyledText>
+                {faq.options.map((opt, i) => (
+                  <Text key={i} variant="body" color={t.textSecondary}>
+                    • {opt}
+                  </Text>
                 ))}
                 {faq.isReset && (
                   <>
                     <StyledSpacer marginVertical={8} />
                     <StyledButton backgroundColor={t.borderDefault} onPress={handleReset}>
-                      <StyledText
-                        fontFamily={fontStyles.Roboto_Regular}
-                        fontSize={theme.fontSize.normal}
-                        fontWeight={theme.fontWeight.normal}
+                      <Text
+                        variant="button"
                         paddingHorizontal={8} paddingVertical={4}
                         color={t.textPrimary}>
                         Reset
-                      </StyledText>
+                      </Text>
                     </StyledButton>
                   </>
                 )}
@@ -190,12 +189,12 @@ export default function HelpScreen({onClose}) {
           backgroundColor={t.brandPrimaryBg}
           borderRadius={24} padding={24}
           borderWidth={1} borderColor={theme.colors.amber[200]} vertical>
-          <StyledText fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.bold} marginBottom={8}>
+          <Text variant="title" marginBottom={8}>
             Still need help?
-          </StyledText>
-          <StyledText color={t.textSecondary} marginBottom={24}>
+          </Text>
+          <Text variant="body" color={t.textSecondary} marginBottom={24}>
             Our support team is here to assist you.
-          </StyledText>
+          </Text>
           <StyledPressable
             horizontal
             backgroundColor={t.bgCard}
@@ -203,21 +202,21 @@ export default function HelpScreen({onClose}) {
             alignItems="center" justifyContent="center" gap={8}
             borderWidth={1} borderColor={t.borderDefault}>
             <Icon name="email-outline" size={20} color={t.textPrimary} />
-            <StyledText fontWeight={theme.fontWeight.semiBold} color={t.textPrimary}>
+            <Text variant="label" color={t.textPrimary}>
               support@kursa.app
-            </StyledText>
+            </Text>
           </StyledPressable>
         </Stack>
       </Stack>
 
       {/* Footer */}
       <Stack paddingHorizontal={24} alignItems="center" vertical>
-        <StyledText fontSize={theme.fontSize.micro} color={t.textMuted}>
+        <Text variant="caption" color={t.textMuted}>
           Kursa v1.0.0
-        </StyledText>
-        <StyledText fontSize={theme.fontSize.micro} color={t.textMuted}>
+        </Text>
+        <Text variant="caption" color={t.textMuted}>
           © 2025 All rights reserved
-        </StyledText>
+        </Text>
       </Stack>
     </ScrollView>
   );
