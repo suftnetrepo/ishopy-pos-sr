@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import {
-  Stack, StyledText, StyledPressable, StyledCard, theme,
+  Stack, StyledPressable, StyledCard, theme,
 } from 'fluent-styles';
+import Text from '../../components/text';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useAppTheme} from '../../theme';
 
@@ -32,19 +33,20 @@ interface Props {
   onSelect: (mode: string) => void;
 }
 
-const ModeSelect: React.FC<Props> = ({ selected, onSelect }) => (
-  <Stack gap={16}>
-    <Stack gap={4} marginBottom={8}>
-      <StyledText fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.bold}
-        color={t.textPrimary}>
-        What type of business?
-      </StyledText>
-      <StyledText fontSize={theme.fontSize.normal} color={t.textSecondary}>
-        We'll load the right menu templates and layout for you.
-      </StyledText>
-    </Stack>
+const ModeSelect: React.FC<Props> = ({ selected, onSelect }) => {
+  const {t} = useAppTheme();
+  return (
+    <Stack gap={16}>
+      <Stack gap={4} marginBottom={8}>
+        <Text variant="title" color={t.textPrimary}>
+          What type of business?
+        </Text>
+        <Text variant="body" color={t.textSecondary}>
+          We'll load the right menu templates and layout for you.
+        </Text>
+      </Stack>
 
-    {MODES.map(m => {
+      {MODES.map(m => {
       const active = selected === m.value;
       return (
         <StyledPressable key={m.value} onPress={() => onSelect(m.value)}>
@@ -61,14 +63,13 @@ const ModeSelect: React.FC<Props> = ({ selected, onSelect }) => (
                 <Icon name={m.icon} size={28} color={active ? '#fff' : t.textSecondary} />
               </Stack>
               <Stack flex={1}>
-                <StyledText fontSize={theme.fontSize.medium} fontWeight={theme.fontWeight.semiBold}
-                  color={t.textPrimary}>
+                <Text variant="label" color={t.textPrimary}>
                   {m.label}
-                </StyledText>
-                <StyledText fontSize={theme.fontSize.small} color={t.textSecondary}
+                </Text>
+                <Text variant="body" color={t.textSecondary}
                   marginTop={2}>
                   {m.desc}
-                </StyledText>
+                </Text>
               </Stack>
               <Stack width={24} height={24} borderRadius={12}
                 borderWidth={2}

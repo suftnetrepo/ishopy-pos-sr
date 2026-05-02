@@ -2,13 +2,13 @@
 import React from 'react';
 import {ScrollView, Linking} from 'react-native';
 import {
-  StyledText,
   StyledSpacer,
   StyledPressable,
   StyledSpinner,
   StyledDivider,
   Stack,
 } from 'fluent-styles';
+import Text from '../../components/text';
 import {useNavigation} from '@react-navigation/native';
 import {useInAppPurchase} from '../../hooks/useInAppPurchase';
 import {StyledIcon} from '../../components/package/icon';
@@ -37,13 +37,12 @@ const Feature = ({text, t}) => (
       flexShrink={0}>
       <StyledIcon name="check" size={14} color={t.successColor} />
     </Stack>
-    <StyledText
-      fontSize={15}
-      fontFamily={fonts.bodyRegular}
+    <Text
+      variant="body"
       color={t.textPrimary}
       flex={1}>
       {text}
-    </StyledText>
+    </Text>
   </Stack>
 );
 
@@ -121,24 +120,21 @@ const PaywallScreen = ({onDismiss}) => {
           <Logo />
           <StyledSpacer marginVertical={8} />
 
-          <StyledText
-            fontFamily={fonts.displayBold}
-            fontSize={24}
-            fontWeight="700"
+          <Text
+            variant="display"
             color="#fafafa"
             letterSpacing={-0.5}>
             Kursa Premium
-          </StyledText>
+          </Text>
 
           <StyledSpacer marginVertical={4} />
 
-          <StyledText
-            fontFamily={fonts.bodyRegular}
-            fontSize={13}
+          <Text
+            variant="caption"
             color="rgba(255,255,255,0.55)"
             textAlign="center">
             The complete POS for restaurants & shops
-          </StyledText>
+          </Text>
 
           <StyledSpacer marginVertical={12} />
 
@@ -149,13 +145,11 @@ const PaywallScreen = ({onDismiss}) => {
             borderWidth={0.5}
             borderColor="rgba(245,158,11,0.45)"
             backgroundColor="rgba(245,158,11,0.12)">
-            <StyledText
-              fontFamily={fonts.displaySemi}
-              fontSize={12}
-              fontWeight="600"
+            <Text
+              variant="caption"
               color={t.brandPrimary}>
               7 days free — no credit card needed
-            </StyledText>
+            </Text>
           </Stack>
         </Stack>
 
@@ -164,28 +158,24 @@ const PaywallScreen = ({onDismiss}) => {
 
           {/* Price */}
           <Stack horizontal alignItems="baseline" gap={8} marginBottom={4}>
-            <StyledText
-              fontFamily={fonts.displayBold}
-              fontSize={34}
-              fontWeight="700"
+            <Text
+              variant="metric"
               color={t.textPrimary}>
               {price}
-            </StyledText>
-            <StyledText
-              fontFamily={fonts.bodyRegular}
-              fontSize={14}
+            </Text>
+            <Text
+              variant="caption"
               color={t.textSecondary}>
               one-time
-            </StyledText>
+            </Text>
           </Stack>
 
-          <StyledText
-            fontFamily={fonts.bodyRegular}
-            fontSize={13}
+          <Text
+            variant="body"
             color={t.textMuted}
             marginBottom={20}>
             Pay once, own it forever. No subscriptions.
-          </StyledText>
+          </Text>
 
           {/* Features */}
           <Stack vertical marginBottom={20}>
@@ -204,13 +194,11 @@ const PaywallScreen = ({onDismiss}) => {
             alignItems="center"
             justifyContent="center"
             marginBottom={12}>
-            <StyledText
-              fontFamily={fonts.displaySemi}
-              fontSize={16}
-              fontWeight="600"
+            <Text
+              variant="button"
               color={isLoading ? t.textMuted : t.textOnAmber}>
               {isLoading ? 'Processing...' : 'Start 7-day free trial'}
-            </StyledText>
+            </Text>
           </StyledPressable>
 
           {/* Restore */}
@@ -219,36 +207,34 @@ const PaywallScreen = ({onDismiss}) => {
             disabled={isLoading}
             paddingVertical={10}
             alignItems="center">
-            <StyledText
-              fontFamily={fonts.bodyRegular}
-              fontSize={13}
+            <Text
+              variant="body"
               color={t.textMuted}>
               Restore purchase
-            </StyledText>
+            </Text>
           </StyledPressable>
 
           {/* Legal */}
           <Stack paddingTop={8}>
-            <StyledText
-              fontFamily={fonts.bodyRegular}
-              fontSize={11}
+            <Text
+              variant="caption"
               color={t.textMuted}
               textAlign="center"
               lineHeight={18}>
               After the 7-day trial, {price} is charged as a one-time payment.{'\n'}
               Managed in your App Store settings.{' '}
-            </StyledText>
+            </Text>
             <Stack horizontal justifyContent="center" gap={4}>
               <StyledPressable onPress={() => Linking.openURL('https://kursa.app/privacy')}>
-                <StyledText fontSize={11} color={t.textMuted} textDecorationLine="underline">
+                <Text variant="caption" color={t.textMuted} textDecorationLine="underline">
                   Privacy
-                </StyledText>
+                </Text>
               </StyledPressable>
-              <StyledText fontSize={11} color={t.textMuted}>·</StyledText>
+              <Text variant="caption" color={t.textMuted}>·</Text>
               <StyledPressable onPress={() => Linking.openURL('https://kursa.app/terms')}>
-                <StyledText fontSize={11} color={t.textMuted} textDecorationLine="underline">
+                <Text variant="caption" color={t.textMuted} textDecorationLine="underline">
                   Terms
-                </StyledText>
+                </Text>
               </StyledPressable>
             </Stack>
           </Stack>

@@ -6,12 +6,12 @@
 import React from 'react';
 import { 
     XStack,
-    StyledText,
     StyledSpacer,
     StyledButton
 } from 'fluent-styles';
+import Text from '../../components/text';
 import { StyledMIcon } from '../../components/icon';
-import { fontStyles, theme } from '../../configs/theme';
+import { theme } from '../../configs/theme';
 import { useInAppPurchase } from '../../hooks/_useInAppPurchase';
 import {useAppTheme} from '../../theme';
 
@@ -26,9 +26,9 @@ const PurchaseButton = () => {
                 <XStack justifyContent='flex-end' alignItems='center' paddingHorizontal={16} paddingVertical={8}>
                     <StyledMIcon size={24} name='apps' color={t.bgCard} />
                     <StyledSpacer marginHorizontal={4} />
-                    <StyledText color={t.bgCard} fontFamily={fontStyles.Roboto_Regular} fontWeight={theme.fontWeight.bold} fontSize={theme.fontSize.large} >
+                    <Text variant="button" color={t.bgCard}>
                         Buy this App
-                    </StyledText>
+                    </Text>
                 </XStack>
             </StyledButton>
         </XStack>

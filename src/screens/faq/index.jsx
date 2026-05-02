@@ -1,7 +1,8 @@
 
 import React from "react";
 import { useNavigation } from '@react-navigation/native';
-import { YStack, XStack, StyledHeader, StyledSafeAreaView, StyledText, theme } from 'fluent-styles';
+import { YStack, XStack, StyledHeader, StyledSafeAreaView, theme } from 'fluent-styles';
+import Text from "../../components/text";
 import { StyledMIcon } from "../../components/icon";
 import FaqProvider, { useFaqContext } from "../../hooks/faqContext";
 import FAQS from '../../../assets/data/faq.json'
@@ -18,18 +19,18 @@ const FAQ = () => {
             <YStack>
                 <XStack borderRadius={16} marginBottom={4} backgroundColor={t.bgCard} justifyContent='space-between' alignItems='center' paddingVertical={8} paddingHorizontal={8}>
                     <XStack flex={1}>
-                        <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.normal} color={t.textPrimary}>
+                        <Text variant="label" paddingHorizontal={8} color={t.textPrimary}>
                             {faq.question}
-                        </StyledText>
+                        </Text>
                     </XStack>
                     <StyledMIcon size={32} name={selected === faq.id ? 'arrow-drop-down' : 'arrow-drop-up'} color={t.textSecondary} onPress={() => onValueChange(faq.id)} />
                 </XStack>
                 {
                     selected === faq.id && (
                         <XStack borderRadius={16} marginBottom={4} borderColor={t.textPrimary} backgroundColor={t.textPrimary} justifyContent='space-between' alignItems='center' paddingVertical={8} paddingHorizontal={8}>
-                            <StyledText paddingHorizontal={8} fontWeight={theme.fontWeight.normal} fontSize={theme.fontSize.normal} color={t.bgCard}>
+                            <Text variant="body" paddingHorizontal={8} color={t.bgCard}>
                                 {faq.answer}
-                            </StyledText>
+                            </Text>
                         </XStack>
                     )
                 }
