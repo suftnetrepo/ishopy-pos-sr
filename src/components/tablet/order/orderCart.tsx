@@ -159,11 +159,11 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
     return (
       <XStack
         flex={1}
-        paddingVertical={11}
+        paddingVertical={10}
         paddingHorizontal={16}
-        alignItems="center"
+        alignItems="flex-end"
         backgroundColor="transparent"
-        gap={12}>
+        gap={6}>
         <Text
           flex={1}
           color={t.textPrimary}
@@ -172,11 +172,11 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
           {addOn.addOnName}
         </Text>
         <Text
-          width={32}
+          width={28}
           textAlign="center"
           color={t.textSecondary}
           variant="caption"
-          style={{opacity: 0.75}}>
+          style={{opacity: 0.7}}>
           {addOn.quantity}
         </Text>
         <Text
@@ -196,10 +196,10 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
       <>
         <XStack
           backgroundColor="transparent"
-          paddingVertical={11}
+          paddingVertical={10}
           paddingHorizontal={16}
-          alignItems="center"
-          gap={12}>
+          alignItems="flex-end"
+          gap={6}>
           <Text
             flex={1}
             color={t.textPrimary}
@@ -209,11 +209,11 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
             {item.menu_name}
           </Text>
           <Text
-            width={32}
+            width={28}
             textAlign="center"
             color={t.textSecondary}
             variant="caption"
-            style={{opacity: 0.75}}>
+            style={{opacity: 0.7}}>
             {item.quantity}
           </Text>
           <Text
@@ -226,7 +226,7 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
           </Text>
         </XStack>
         {(item?.addOns ? JSON.parse(item.addOns) : []).length > 0 && (
-          <YStack paddingHorizontal={16} paddingVertical={4} gap={0}>
+          <YStack paddingHorizontal={16} paddingVertical={2} gap={0}>
             {(item?.addOns ? JSON.parse(item.addOns) : []).map(
               (addOn: AddOn, addOnIndex: number) => (
                 <RenderAddOn addOn={addOn} key={addOnIndex} />
@@ -243,10 +243,10 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
       <StyledCard
         shadow="dark"
         borderColor={t.borderDefault}
-        borderRadius={8}
+        borderRadius={12}
         borderWidth={1}
         backgroundColor={t.bgCard}
-        paddingVertical={0}
+        paddingVertical={6}
         paddingHorizontal={0}
         overflow="hidden">
         <YStack gap={0}>
@@ -289,21 +289,22 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
             flex={1}
             width={'100%'}
             marginTop={16}
-            paddingTop={14}
+            paddingTop={12}
+            paddingHorizontal={16}
             borderTopWidth={1}
             borderTopColor={`${t.borderSubtle}30`}
-            gap={10}>
+            gap={6}>
             <XStack
-              paddingVertical={8}
-              paddingHorizontal={16}
-              alignItems="center"
-              gap={12}>
+              paddingVertical={9}
+              alignItems="flex-end"
+              gap={6}>
               <Text
                 flex={1}
                 color={t.textSecondary}
                 variant="caption">
                 Subtotal
               </Text>
+              <Stack width={28} />
               <Text
                 width={80}
                 textAlign="right"
@@ -314,16 +315,16 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
             </XStack>
 
             <XStack
-              paddingVertical={8}
-              paddingHorizontal={16}
-              alignItems="center"
-              gap={12}>
+              paddingVertical={9}
+              alignItems="flex-end"
+              gap={6}>
               <Text
                 flex={1}
                 color={t.textSecondary}
                 variant="caption">
                 Discount
               </Text>
+              <Stack width={28} />
               <Text
                 width={80}
                 textAlign="right"
@@ -334,16 +335,16 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
             </XStack>
 
             <XStack
-              paddingVertical={8}
-              paddingHorizontal={16}
-              alignItems="center"
-              gap={12}>
+              paddingVertical={9}
+              alignItems="flex-end"
+              gap={6}>
               <Text
                 flex={1}
                 color={t.textSecondary}
                 variant="caption">
                 Tax
               </Text>
+              <Stack width={28} />
               <Text
                 width={80}
                 textAlign="right"
@@ -354,14 +355,13 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
             </XStack>
 
             <XStack
-              paddingVertical={12}
-              paddingHorizontal={16}
-              alignItems="center"
-              gap={12}
+              paddingVertical={15}
+              paddingHorizontal={12}
+              marginTop={6}
+              alignItems="flex-end"
+              gap={6}
               backgroundColor={t.bgInput}
-              borderRadius={8}
-              marginHorizontal={0}
-              marginVertical={4}>
+              borderRadius={8}>
               <Text
                 flex={1}
                 color={t.textPrimary}
@@ -369,6 +369,7 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
                 fontWeight="700">
                 Total
               </Text>
+              <Stack width={28} />
               <Text
                 width={80}
                 textAlign="right"
