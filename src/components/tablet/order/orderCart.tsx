@@ -157,39 +157,36 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
 
   const RenderAddOn: FC<{addOn: AddOn}> = ({addOn}) => {
     return (
-      <>
-        <XStack
-          flex={1}
-          justifyContent="space-between"
-          paddingVertical={8}
-          paddingHorizontal={16}
-          alignItems="center"
-          backgroundColor={t.bgInput}>
-          <Text
-            flex={2.5}
-            color={t.textPrimary}
-            variant="body">
-            {addOn.addOnName}
-          </Text>
-          <StyledBadge
-            color={t.textSecondary}
-            backgroundColor="transparent"
-            paddingHorizontal={10}
-            paddingVertical={1}
-            flex={0.5}>
-            {addOn.quantity}
-          </StyledBadge>
+      <XStack
+        flex={1}
+        justifyContent="space-between"
+        paddingVertical={10}
+        paddingHorizontal={16}
+        alignItems="center"
+        backgroundColor="transparent">
+        <Text
+          flex={2.5}
+          color={t.textPrimary}
+          variant="body">
+          {addOn.addOnName}
+        </Text>
+        <StyledBadge
+          color={t.textSecondary}
+          backgroundColor="transparent"
+          paddingHorizontal={10}
+          paddingVertical={1}
+          flex={0.5}>
+          {addOn.quantity}
+        </StyledBadge>
 
-          <Text
-            textAlign={'right'}
-            flex={1}
-            color={t.textPrimary}
-            variant="body">
-            {formatCurrency(shop?.currency || '£', addOn?.price || 0)}
-          </Text>
-        </XStack>
-        <StyledDivider borderColor={t.borderDefault} />
-      </>
+        <Text
+          textAlign={'right'}
+          flex={1}
+          color={t.textPrimary}
+          variant="body">
+          {formatCurrency(shop?.currency || '£', addOn?.price || 0)}
+        </Text>
+      </XStack>
     );
   };
 
@@ -197,10 +194,9 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
     return (
       <>
         <XStack
-          backgroundColor={t.bgInput}
-          borderColor={t.borderDefault}
+          backgroundColor="transparent"
           justifyContent="space-between"
-          paddingVertical={8}
+          paddingVertical={10}
           paddingHorizontal={16}
           alignItems="center">
           <Text
@@ -225,7 +221,15 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
             {formatCurrency(shop?.currency || '£', item?.price || 0)}
           </Text>
         </XStack>
-        <StyledDivider borderColor={t.borderDefault} />
+        {(item?.addOns ? JSON.parse(item.addOns) : []).length > 0 && (
+          <Stack paddingHorizontal={16} paddingVertical={2}>
+            {(item?.addOns ? JSON.parse(item.addOns) : []).map(
+              (addOn: AddOn, addOnIndex: number) => (
+                <RenderAddOn addOn={addOn} key={addOnIndex} />
+              )
+            )}
+          </Stack>
+        )}
       </>
     );
   };
@@ -237,20 +241,26 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
         borderColor={t.borderDefault}
         borderRadius={8}
         borderWidth={1}
-        backgroundColor={t.bgCard}>
-        {(Array.isArray(data) ? (data as OrderItem[]) : []).map(
-          (item: OrderItem, index: number) => (
-            <React.Fragment key={index}>
-              <RenderItem item={item} />
-              <StyledDivider borderColor={t.borderDefault} />
-              {(item?.addOns ? JSON.parse(item.addOns) : []).map(
-                (addOn: AddOn, addOnIndex: number) => (
-                  <RenderAddOn addOn={addOn} key={`${index}-${addOnIndex}`} />
-                )
-              )}
-            </React.Fragment>
-          )
-        )}
+        backgroundColor={t.bgCard}
+        paddingVertical={0}
+        paddingHorizontal={0}
+        overflow="hidden">
+        <YStack gap={0}>
+          {(Array.isArray(data) ? (data as OrderItem[]) : []).map(
+            (item: OrderItem, index: number) => (
+              <React.Fragment key={index}>
+                <RenderItem item={item} />
+                {index < (Array.isArray(data) ? data.length - 1 : 0) && (
+                  <Stack
+                    height={1}
+                    backgroundColor={`${t.borderSubtle}20`}
+                    marginHorizontal={16}
+                  />
+                )}
+              </React.Fragment>
+            )
+          )}
+        </YStack>
       </StyledCard>
     );
   };
@@ -271,13 +281,19 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
       <XStack>
         <ScrollView showsVerticalScrollIndicator={false}>
           <RenderOrderItems />
-          <YStack flex={1} width={'100%'}>
+          <YStack
+            flex={1}
+            width={'100%'}
+            marginTop={14}
+            paddingTop={12}
+            borderTopWidth={1}
+            borderTopColor={`${t.borderSubtle}30`}>
             <XStack
               justifyContent="flex-end"
               paddingVertical={8}
               paddingHorizontal={16}
               alignItems="center"
-              backgroundColor={t.bgCard}>
+              backgroundColor="transparent">
               <Text
                 color={t.textSecondary}
                 variant="caption"
@@ -296,7 +312,7 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
               paddingVertical={8}
               paddingHorizontal={16}
               alignItems="center"
-              backgroundColor={t.bgCard}>
+              backgroundColor="transparent">
               <Text
                 color={t.textSecondary}
                 variant="caption"
@@ -318,7 +334,7 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
               paddingVertical={8}
               paddingHorizontal={16}
               alignItems="center"
-              backgroundColor={t.bgCard}>
+              backgroundColor="transparent">
               <Text
                 color={t.textSecondary}
                 paddingHorizontal={16}
@@ -337,13 +353,13 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
 
             <XStack
               justifyContent="flex-end"
-              paddingVertical={8}
+              paddingVertical={10}
               paddingHorizontal={16}
               alignItems="center"
               backgroundColor={t.bgInput}
               borderRadius={8}
-              marginHorizontal={0}
-              marginVertical={8}>
+              marginHorizontal={8}
+              marginVertical={12}>
               <Text
                 color={t.textPrimary}
                 variant="title"
