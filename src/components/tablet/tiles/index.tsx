@@ -115,16 +115,16 @@ const Tile = ({label, value, t, sparklineColorKey}: TileProps) => {
           position="absolute"
           top={16}
           right={16}
-          width={80}
-          height={32}
+          width={65}
+          height={26}
           pointerEvents="none"
         >
           <Sparkline
             data={sparklineData}
             color={sparklineColor}
-            opacity={0.45}
-            width={80}
-            height={32}
+            opacity={0.4}
+            width={65}
+            height={26}
           />
         </Stack>
       )}
