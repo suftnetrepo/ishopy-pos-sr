@@ -2,7 +2,7 @@
 import React, {Fragment, useState, useEffect} from 'react';
 import {ScrollView} from 'react-native';
 import {
-  StyledSpacer, Drawer, StyledScrollView, StyledPressable,
+  StyledSpacer, Drawer, StyledPressable,
   StyledText, XStack, YStack, Stack,
 } from 'fluent-styles';
 import Icons from 'react-native-vector-icons/MaterialIcons';
@@ -154,9 +154,10 @@ export default function Cart({table_id, table_name}) {
   );
 
   // ── Action buttons ────────────────────────────────────────────────────────
-  const ActionBtn = ({onPress, bg, borderCol, label, disabled, textColor}) => (
+  const ActionBtn = ({onPress, bg, borderCol, label, disabled, textColor, flex = 1}) => (
     <StyledPressable
-      paddingVertical={14} paddingHorizontal={12}
+      flex={flex}
+      height={56}
       borderRadius={12} alignItems="center" justifyContent="center"
       backgroundColor={bg} borderWidth={borderCol ? 1 : 0} borderColor={borderCol}
       onPress={onPress} disabled={disabled}>
@@ -174,16 +175,12 @@ export default function Cart({table_id, table_name}) {
         return <ActionBtn onPress={handleOrder} bg={t.brandPrimary} textColor={t.textInverse} label="Place Order" />;
 
       return (
-        <StyledScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <ActionBtn onPress={handlePrint} bg={t.bgInput} borderCol={t.borderDefault} textColor={t.textSecondary} label="Print" />
-          <StyledSpacer marginHorizontal={16} />
-          <ActionBtn onPress={() => navigation.navigate('big-table')} bg={t.brandPrimary} textColor={t.textInverse} label="Send" />
-          <StyledSpacer marginHorizontal={16} />
-          <ActionBtn onPress={handlePaymentPress} disabled={!paymentMethod} bg={t.successColor} textColor={t.textInverse} label="Pay" />
-          <StyledSpacer marginHorizontal={16} />
-          <ActionBtn onPress={handleVoid} bg={t.dangerColor} textColor={t.textInverse} label="Void" />
-          <StyledSpacer marginHorizontal={16} />
-        </StyledScrollView>
+        <XStack width="100%" gap={8}>
+          <ActionBtn onPress={handlePrint} bg={t.bgInput} borderCol={t.borderDefault} textColor={t.textSecondary} label="Print" flex={1} />
+          <ActionBtn onPress={() => navigation.navigate('big-table')} bg={t.brandPrimary} textColor={t.textInverse} label="Send" flex={1} />
+          <ActionBtn onPress={handlePaymentPress} disabled={!paymentMethod} bg={t.successColor} textColor={t.textInverse} label="Pay" flex={1} />
+          <ActionBtn onPress={handleVoid} bg={t.dangerColor} textColor={t.textInverse} label="Void" flex={1} />
+        </XStack>
       );
     }
     return null;
