@@ -134,16 +134,16 @@ export default function Cart({table_id, table_name}) {
             onPress={() => setPaymentMethod(option.key)}
             flex={1} padding={14} borderRadius={12}
             alignItems="center"
-            backgroundColor={isSelected ? t.brandPrimary : t.bgInput}
+            backgroundColor={isSelected ? t.bgInput : t.bgCard}
             borderWidth={1}
-            borderColor={isSelected ? t.brandPrimary : t.borderDefault}>
+            borderColor={isSelected ? t.borderFocus : t.borderDefault}>
             <Icons
               name={option.icon} size={24}
-              color={isSelected ? t.textInverse : t.textSecondary}
+              color={isSelected ? t.textPrimary : t.textSecondary}
             />
             <StyledText
               marginTop={4}
-              color={isSelected ? t.textInverse : t.textSecondary}
+              color={isSelected ? t.textPrimary : t.textSecondary}
               fontSize={14}>
               {option.label}
             </StyledText>
@@ -157,7 +157,7 @@ export default function Cart({table_id, table_name}) {
   const ActionBtn = ({onPress, bg, borderCol, label, disabled, textColor, flex = 1}) => (
     <StyledPressable
       flex={flex}
-      height={56}
+      paddingVertical={8}
       borderRadius={12} alignItems="center" justifyContent="center"
       backgroundColor={bg} borderWidth={borderCol ? 1 : 0} borderColor={borderCol}
       onPress={onPress} disabled={disabled}>
@@ -175,9 +175,9 @@ export default function Cart({table_id, table_name}) {
         return <ActionBtn onPress={handleOrder} bg={t.brandPrimary} textColor={t.textInverse} label="Place Order" />;
 
       return (
-        <XStack width="100%" gap={8}>
+        <XStack flex={1}  gap={8}>
           <ActionBtn onPress={handlePrint} bg={t.bgInput} borderCol={t.borderDefault} textColor={t.textSecondary} label="Print" flex={1} />
-          <ActionBtn onPress={() => navigation.navigate('big-table')} bg={t.brandPrimary} textColor={t.textInverse} label="Send" flex={1} />
+          <ActionBtn onPress={() => navigation.navigate('big-table')} bg={t.bgCard} borderCol={t.borderDefault} textColor={t.textSecondary} label="Send" flex={1} />
           <ActionBtn onPress={handlePaymentPress} disabled={!paymentMethod} bg={t.successColor} textColor={t.textInverse} label="Pay" flex={1} />
           <ActionBtn onPress={handleVoid} bg={t.dangerColor} textColor={t.textInverse} label="Void" flex={1} />
         </XStack>
