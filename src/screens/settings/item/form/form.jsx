@@ -14,8 +14,9 @@ import {
   StyledText,
   StyledPressable,
   StyledChip,
+  StyledTextInput,
 } from 'fluent-styles';
-import { ThemedStyledTextInput } from '../../../../components/form';
+import {ThemedStyledTextInput} from '../../../../components/form';
 import {fontStyles} from '../../../../configs/theme';
 import {menuRules} from './validatorRules';
 import {useUpdateMenu, useInsertMenu} from '../../../../hooks/useMenu';
@@ -92,6 +93,14 @@ const ItemForm = ({item, onClose}) => {
     }
   };
 
+  const inputProps = {
+    fontSize: theme.fontSize.normal,
+    borderColor: t?.borderDefault,
+    backgroundColor: t?.bgInput,
+    color: t?.textPrimary,
+    placeholderTextColor: t?.textMuted,
+  };
+
   return (
     <>
       <YStack flex={1} backgroundColor={t.bgPage}>
@@ -109,7 +118,7 @@ const ItemForm = ({item, onClose}) => {
             onPress={color => setFields({...fields, color_code: color})}
           />
           <StyledForm flex={1}>
-            <ThemedStyledTextInput
+            <StyledTextInput
               label={'Name'}
               keyboardType="default"
               placeholder="Enter menu name"
@@ -120,8 +129,9 @@ const ItemForm = ({item, onClose}) => {
               onChangeText={text => setFields({...fields, name: text})}
               error={!!errorMessages?.name}
               errorMessage={errorMessages?.name?.message}
+              {...inputProps}
             />
-            <ThemedStyledTextInput
+            <StyledTextInput
               label={'Price'}
               keyboardType="number-pad"
               placeholder="Enter price"
@@ -138,8 +148,9 @@ const ItemForm = ({item, onClose}) => {
               }
               error={!!errorMessages?.price}
               errorMessage={errorMessages?.price?.message}
+              {...inputProps}
             />
-            <ThemedStyledTextInput
+            <StyledTextInput
               label={'Cost'}
               keyboardType="number-pad"
               placeholder="Enter cost"
@@ -156,8 +167,9 @@ const ItemForm = ({item, onClose}) => {
               }
               error={!!errorMessages?.cost}
               errorMessage={errorMessages?.cost?.message}
+              {...inputProps}
             />
-            <ThemedStyledTextInput
+            <StyledTextInput
               label={'Quantity'}
               labelProps={{
                 fontSize: theme.fontSize.small,
@@ -166,11 +178,13 @@ const ItemForm = ({item, onClose}) => {
               placeholder="Enter quantity"
               returnKeyType="next"
               maxLength={50}
+              borderColor={t.borderDefault}
               fontSize={theme.fontSize.normal}
               value={fields.stock.toString()}
               onChangeText={text => setFields({...fields, stock: text})}
               error={!!errorMessages?.stock}
               errorMessage={errorMessages?.stock?.message}
+              {...inputProps}
             />
             <StyledText
               fontWeight={theme.fontWeight.semiBold}

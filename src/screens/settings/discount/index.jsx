@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {
   StyledSafeAreaView,
   Drawer,
-  StyledCycle,
+  StyleShape,
   Stack,
   theme,
   StyledPage,
@@ -96,18 +96,19 @@ const BigDiscount = () => {
           title="Discounts"
           CopyIcon={
             <Pressable onTouchStart={() => update('Add')}>
-              <StyledCycle
-                width={48}
-                height={48}
+              <StyleShape
+                cycle
+                size={48}
                 borderWidth={1}
                 backgroundColor={t.brandPrimary}
                 borderColor={t.brandPrimary}>
                 <StyledIcon
+                  pointerEvents="none"
                   size={24}
                   name="add"
                   color={t.textPrimary}
                 />
-              </StyledCycle>
+              </StyleShape>
             </Pressable>
           }
         />

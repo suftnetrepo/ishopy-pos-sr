@@ -76,12 +76,14 @@ export default function KeyCard({onSubmit, onClose, table_name, table_id}) {
                 {table_name}
               </StyledText>
             </Stack>
-            <StyledIcon
-              name="cancel"
-              size={48}
-              color={t.textInverse}
-              onPress={handleClose}
-            />
+            <StyledPressable onPress={handleClose}>
+              <StyledIcon
+                pointerEvents="none"  
+                name="cancel"
+                size={48}
+                color={t.textInverse}
+              />
+            </StyledPressable>
           </Stack>
 
           {/* Body */}
@@ -94,7 +96,7 @@ export default function KeyCard({onSubmit, onClose, table_name, table_id}) {
             <StyledText
               marginBottom={24}
               fontFamily={fontStyles.Roboto_Regular}
-              color={t.textMuted}
+              color={t.textInverse}
               fontSize={theme.fontSize.normal}
               fontWeight={theme.fontWeight.thin}>
               Enter number of guests

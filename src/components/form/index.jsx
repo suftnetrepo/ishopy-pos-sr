@@ -1,8 +1,4 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable react/display-name */
-/* eslint-disable react/prop-types */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable prettier/prettier */
+
 import React, { forwardRef } from 'react';
 import { TextInput } from 'react-native';
 import { YStack, StyledSpacer, StyledText } from 'fluent-styles';
@@ -208,7 +204,7 @@ const ThemedStyledTextInput = forwardRef((props, ref) => {
             }
             <YStack
                 backgroundColor={t.bgInput}
-                borderColor={props.error ? t.dangerColor : (focused ? t.borderFocus : t.borderDefault)}
+                // borderColor={props.error ? t.dangerColor : (focused ? t.borderFocus : t.borderDefault)}
                 borderWidth={1}
                 borderRadius={12}
                 overflow="hidden"
@@ -219,7 +215,7 @@ const ThemedStyledTextInput = forwardRef((props, ref) => {
                     backgroundColor={t.bgInput}
                     color={t.textPrimary}
                     placeholderTextColor={t.textMuted}
-                    borderColor={props.error ? t.dangerColor : t.borderDefault}
+                    // borderColor={props.error ? t.dangerColor : t.borderDefault}
                     borderWidth={0}
                     borderRadius={0}
                     paddingHorizontal={props.paddingHorizontal ?? 14}

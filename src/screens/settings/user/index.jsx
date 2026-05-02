@@ -3,7 +3,7 @@ import {
   Drawer,
   StyledCycle,
   Stack,
-  theme,
+  StyleShape,
   StyledPage,
   toastService,
   useDialogue
@@ -99,19 +99,20 @@ const BigUser = () => {
           showTitle={true}
           title="Users"
           CopyIcon={
-            <Pressable onTouchStart={() => { if (checkLimit('users', data?.length || 0)) update('Add'); }}>
-              <StyledCycle
-                width={48}
-                height={48}
+           <Pressable onTouchStart={() => update('Add')}>
+              <StyleShape
+                cycle
+                size={48}
                 borderWidth={1}
                 backgroundColor={t.brandPrimary}
                 borderColor={t.brandPrimary}>
                 <StyledIcon
+                  pointerEvents="none"
                   size={24}
                   name="add"
                   color={t.textPrimary}
                 />
-              </StyledCycle>
+              </StyleShape>
             </Pressable>
           }
         />

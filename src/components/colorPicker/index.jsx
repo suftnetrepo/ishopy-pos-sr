@@ -1,7 +1,4 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable react/display-name */
-/* eslint-disable react/prop-types */
-/* eslint-disable prettier/prettier */
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { FlatList } from 'react-native';
 import { palettes, theme } from '../../configs/theme';
@@ -33,7 +30,7 @@ const ColorPicker = React.memo(({ color, onPress }) => {
         }, []);
     }, [palettes]);
 
-    const renderItem = ({item, t}) => (
+    const renderItem = ({item}) => (
         <StyledButton
             height={48}
             width={48}
@@ -48,10 +45,10 @@ const ColorPicker = React.memo(({ color, onPress }) => {
     );
 
     return (
-        <YStack padding={10} backgroundColor={t.bgCard} borderRadius={12} justifyContent='center' alignItems='center'>
+        <YStack padding={10} backgroundColor={t?.bgCard} borderRadius={12} justifyContent='center' alignItems='center'>
             {selectedColor && (
-                <XStack flex={1} justifyContent='center' alignItems='center' height={100} width={100} marginTop={20} borderRadius={10} backgroundColor={selectedColor} borderColor={t.borderDefault} borderWidth={1}>
-                    <StyledText fontSize={theme.fontSize.small} color={selectedColor === '#ffffff' || selectedColor === '#fff' ? t.textPrimary : '#ffffff'}>
+                <XStack flex={1} justifyContent='center' alignItems='center' height={100} width={100} marginTop={20} borderRadius={10} backgroundColor={selectedColor} borderColor={t?.borderDefault} borderWidth={1}>
+                    <StyledText fontSize={theme.fontSize.small} color={selectedColor === '#ffffff' || selectedColor === '#fff' ? t?.textPrimary : '#ffffff'}>
                         {selectedColor}
                     </StyledText>
                 </XStack>

@@ -82,19 +82,6 @@ const Card = ({table, onPress, t}) => {
       paddingHorizontal={12}
       marginBottom={8}
       marginHorizontal={4}
-      borderLeftWidth={3}
-      borderLeftColor={s.borderColor}
-      borderTopWidth={0.5}
-      borderRightWidth={0.5}
-      borderBottomWidth={0.5}
-      borderTopColor={t.borderDefault}
-      borderRightColor={t.borderDefault}
-      borderBottomColor={t.borderDefault}
-      shadowColor={t.textMuted}
-      shadowOffset={{width: 0, height: 1}}
-      shadowOpacity={0.12}
-      shadowRadius={3}
-      elevation={2}
       horizontal
       justifyContent="space-between"
       alignItems="center"

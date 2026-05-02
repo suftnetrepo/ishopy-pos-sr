@@ -6,7 +6,7 @@ import {
   StyledPage,
   Drawer as StyledDrawer,
   useDialogue,
-  toastService
+  toastService, StyleShape
 } from 'fluent-styles';
 import SideBarAdapter from '../../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../../components/tablet/header';
@@ -100,21 +100,23 @@ const BigItem = () => {
           title="Items"
           CopyIcon={
             <Pressable onTouchStart={() => itemCardRef.current?.requestAdd()}>
-              <StyledCycle
-                width={48}
-                height={48}
+              <StyleShape
+                cycle
+                size={48}
                 borderWidth={1}
                 backgroundColor={t.brandPrimary}
                 borderColor={t.brandPrimary}>
                 <StyledIcon
+                  pointerEvents="none"
                   size={24}
                   name="add"
                   color={t.textPrimary}
                 />
-              </StyledCycle>
+              </StyleShape>
             </Pressable>
           }>
           <StyledSearchBar
+          marginRight={12}
             placeholder="Search items..."
             flex={1}
             onTextChange={query => updateMenuQuery(query)}
@@ -141,6 +143,9 @@ const BigItem = () => {
         onClose={() => reset()}
         title={`${state.tag === 'Edit' ? 'Edit' : 'Add'} Item `}
         width={'30%'}
+         colors={{
+          background: t.bgCard,
+        }}
         side="right">
         <ItemForm item={state?.data} onClose={() => reset()} />
       </StyledDrawer>
@@ -152,7 +157,7 @@ const BigItem = () => {
         width={'30%'}
         side="right"
         colors={{
-          background: t.bgPage,
+          background: t.bgCard,
         }}>
         <ItemAddOn
           menu_id={showAddOn?.menu_id}

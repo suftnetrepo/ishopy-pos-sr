@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {
   StyledCycle,
   Stack,
-  theme,
+  StyleShape,
   StyledPage,
   Drawer,
   toastService,
@@ -99,18 +99,19 @@ const BigCategory = () => {
           title="Categories"
           CopyIcon={
             <Pressable onTouchStart={() => update('Add')}>
-              <StyledCycle
-                width={48}
-                height={48}
+              <StyleShape
+                cycle
+                size={48}
                 borderWidth={1}
                 backgroundColor={t.brandPrimary}
                 borderColor={t.brandPrimary}>
                 <StyledIcon
+                  pointerEvents="none"
                   size={24}
                   name="add"
                   color={t.textPrimary}
                 />
-              </StyledCycle>
+              </StyleShape>
             </Pressable>
           }
         />

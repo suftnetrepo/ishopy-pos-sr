@@ -66,7 +66,7 @@ export default function Cart({table_id, table_name}) {
         <Fragment key={`${item.id}-${index}`}>
           <Stack
             borderRadius={8} paddingHorizontal={12} paddingVertical={4}
-            backgroundColor={t.bgPage}
+            backgroundColor={t.bgInput}
             borderWidth={1} borderColor={t.borderDefault}
             horizontal flex={1} justifyContent="space-between" alignItems="center">
             <StyledText
@@ -80,7 +80,7 @@ export default function Cart({table_id, table_name}) {
               </StyledText>
               <Stack
                 width={20} height={30} borderRadius={15}
-                backgroundColor={t.bgPage}
+                backgroundColor={t.bgInput}
                 justifyContent="center" alignItems="center">
                 <Icons
                   name="cancel" size={24} color={t.textMuted}
@@ -98,7 +98,7 @@ export default function Cart({table_id, table_name}) {
   // ── Order summary ─────────────────────────────────────────────────────────
   const renderOrderSummary = () => (
     <Stack
-      backgroundColor={t.bgPage}
+      backgroundColor={t.bgInput}
       borderWidth={1} borderColor={t.borderDefault}
       paddingHorizontal={16} paddingVertical={16} borderRadius={12} vertical>
       <Stack horizontal justifyContent="space-between" marginBottom={8}>
@@ -126,64 +126,62 @@ export default function Cart({table_id, table_name}) {
   // ── Payment methods ───────────────────────────────────────────────────────
   const renderPaymentMethods = () => (
     <XStack marginTop={16} gap={16}>
-      {paymentOptions.map(option => (
-        <StyledPressable
-          key={option.key}
-          onPress={() => setPaymentMethod(option.key)}
-          flex={1} padding={14} borderRadius={12}
-          alignItems="center"
-          backgroundColor={paymentMethod === option.key ? t.textPrimary : t.bgCard}
-          borderWidth={1}
-          borderColor={paymentMethod === option.key ? t.textPrimary : t.borderDefault}>
-          <Icons
-            name={option.icon} size={24}
-            color={paymentMethod === option.key ? t.bgCard : t.textSecondary}
-          />
-          <StyledText
-            marginTop={4}
-            color={paymentMethod === option.key ? t.bgCard : t.textSecondary}
-            fontSize={14}>
-            {option.label}
-          </StyledText>
-        </StyledPressable>
-      ))}
+      {paymentOptions.map(option => {
+        const isSelected = paymentMethod === option.key;
+        return (
+          <StyledPressable
+            key={option.key}
+            onPress={() => setPaymentMethod(option.key)}
+            flex={1} padding={14} borderRadius={12}
+            alignItems="center"
+            backgroundColor={isSelected ? t.brandPrimary : t.bgInput}
+            borderWidth={1}
+            borderColor={isSelected ? t.brandPrimary : t.borderDefault}>
+            <Icons
+              name={option.icon} size={24}
+              color={isSelected ? t.onBrandPrimary || '#fff' : t.textSecondary}
+            />
+            <StyledText
+              marginTop={4}
+              color={isSelected ? t.onBrandPrimary || '#fff' : t.textSecondary}
+              fontSize={14}>
+              {option.label}
+            </StyledText>
+          </StyledPressable>
+        );
+      })}
     </XStack>
   );
 
   // ── Action buttons ────────────────────────────────────────────────────────
-  const ActionBtn = ({onPress, bg, border, label, disabled, t}) => (
+  const ActionBtn = ({onPress, bg, borderCol, label, disabled, textColor}) => (
     <StyledPressable
       flex={1} paddingVertical={14} paddingHorizontal={12}
       borderRadius={12} alignItems="center" justifyContent="center"
-      backgroundColor={bg} borderWidth={border ? 1 : 0} borderColor={border}
+      backgroundColor={bg} borderWidth={borderCol ? 1 : 0} borderColor={borderCol}
       onPress={onPress} disabled={disabled}>
-      <StyledText color={t.bgCard} fontSize={theme.fontSize.small}
+      <StyledText color={textColor} fontSize={theme.fontSize.small}
         fontWeight={theme.fontWeight.semiBold}>{label}</StyledText>
     </StyledPressable>
   );
 
   const renderActionButtons = () => {
     if (isCartChanged && hasOrderId)
-      return <ActionBtn onPress={handleUpdateOrder} bg={t.textPrimary} label="+ Order" 
-                        t={t}/>;
+      return <ActionBtn onPress={handleUpdateOrder} bg={t.brandPrimary} textColor={t.onBrandPrimary || '#fff'} label="+ Order" />;
 
     if (!isCartChanged && hasItems) {
       if (!hasOrderId)
-        return <ActionBtn onPress={handleOrder} bg={t.textPrimary} label="Place Order" 
-                        t={t}/>;
+        return <ActionBtn onPress={handleOrder} bg={t.brandPrimary} textColor={t.onBrandPrimary || '#fff'} label="Place Order" />;
 
       return (
         <StyledScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <ActionBtn onPress={handlePrint}                     bg={t.bgCard}   border={t.textMuted} label="Print" 
-                        t={t}/>
+          <ActionBtn onPress={handlePrint} bg={t.bgInput} borderCol={t.borderDefault} textColor={t.textSecondary} label="Print" />
           <StyledSpacer marginHorizontal={8} />
-          <ActionBtn onPress={() => navigation.navigate('big-table')} bg={t.brandPrimary} label="Send" t={t} />
+          <ActionBtn onPress={() => navigation.navigate('big-table')} bg={t.brandPrimary} textColor={t.onBrandPrimary || '#fff'} label="Send" />
           <StyledSpacer marginHorizontal={8} />
-          <ActionBtn onPress={handlePaymentPress} disabled={!paymentMethod} bg={t.successColor} label="Pay" 
-                        t={t}/>
+          <ActionBtn onPress={handlePaymentPress} disabled={!paymentMethod} bg={t.successColor} textColor={t.onBrandPrimary || '#fff'} label="Pay" />
           <StyledSpacer marginHorizontal={8} />
-          <ActionBtn onPress={handleVoid}         bg={theme.colors.pink[700]}  label="Void" 
-                        t={t}/>
+          <ActionBtn onPress={handleVoid} bg={t.dangerColor} textColor={t.onBrandPrimary || '#fff'} label="Void" />
           <StyledSpacer marginHorizontal={8} />
         </StyledScrollView>
       );

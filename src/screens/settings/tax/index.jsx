@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {Drawer, StyledPage, StyledCycle} from 'fluent-styles';
+import {Drawer, StyledPage, StyleShape} from 'fluent-styles';
 import {Stack} from '../../../components/package/stack';
-import {theme} from '../../../utils/theme';
 import SideBarAdapter from '../../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../../components/tablet/header';
 
@@ -29,9 +28,7 @@ const BigTax = () => {
   const shouldOpen = state.tag === 'Edit' || state.tag === 'Add';
   const isFocused = navigationFocus && screenFocus;
 
-  console.log('tax error', error);
-
-    useLoaderAndError(loading, error, resetHandler);
+  useLoaderAndError(loading, error, resetHandler);
 
   useEffect(() => {
     if (state.tag) {
@@ -93,18 +90,19 @@ const BigTax = () => {
           title="Taxes"
           CopyIcon={
             <Pressable onTouchStart={() => update('Add')}>
-              <StyledCycle
-                width={48}
-                height={48}
+              <StyleShape
+                cycle
+                size={48}
                 borderWidth={1}
                 backgroundColor={t.brandPrimary}
                 borderColor={t.brandPrimary}>
                 <StyledIcon
+                  pointerEvents="none"
                   size={24}
                   name="add"
                   color={t.textPrimary}
                 />
-              </StyledCycle>
+              </StyleShape>
             </Pressable>
           }
         />

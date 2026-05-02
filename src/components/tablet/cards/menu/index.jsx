@@ -73,12 +73,14 @@ export default function ItemCard({onChangeItem, table_id}) {
   }
 
   const Card = ({item, t}) => {
+    const isSelected = selectedItem?.menu_id === item.menu_id;
     return (
       <Stack
-        blue={selectedItem?.menu_id === item.menu_id}
         flex={1}
-        backgroundColor={item?.color_code || t.bgCard}
+        backgroundColor={isSelected ? t.brandPrimaryBg : t.bgCard}
         borderRadius={16}
+        borderWidth={1}
+        borderColor={isSelected ? t.brandPrimary : t.borderDefault}
         padding={12}
         marginVertical={4}
         marginHorizontal={4}
@@ -87,7 +89,6 @@ export default function ItemCard({onChangeItem, table_id}) {
         shadowOpacity={0.1}
         shadowRadius={2}
         elevation={3}
-        status={item?.color_code}
         vertical
         onTouchStart={() => handleTouchStart(item)}>
         {/* <StyledShape
@@ -105,14 +106,14 @@ export default function ItemCard({onChangeItem, table_id}) {
           />
         </StyledShape> */}
 
-        {selectedItem?.menu_id === item.menu_id && (
+        {isSelected && (
           <StyledIcon
             position="absolute"
             right={1}
             top={1}
             name="check-circle"
             size={32}
-            color={theme.colors.blue[500]}
+            color={t.brandPrimary}
           />
         )}
 

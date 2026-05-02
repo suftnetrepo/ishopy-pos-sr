@@ -13,6 +13,7 @@ import {
   StyledPressable,
   StyledChip,
   StyledDivider,
+  StyledTextInput,
   Stack,
   toastService,
 } from 'fluent-styles';
@@ -92,10 +93,7 @@ const Shop = ({onClose}) => {
     borderColor: t.borderDefault,
     backgroundColor: t.bgInput,
     color: t.textPrimary,
-    borderRadius: 12,
-    paddingHorizontal: 12,
     placeholderTextColor: t.textMuted,
-    marginBottom: 12,
   };
 
   return (
@@ -115,8 +113,7 @@ const Shop = ({onClose}) => {
             borderRadius={14}
             padding={16}
             marginBottom={12}>
-            <SectionLabel label="Business type" 
-                        t={t}/>
+           
             <Stack horizontal gap={10}>
               {MODES.map(mode => {
                 const active = fields.mode === mode.key;
@@ -204,9 +201,8 @@ const Shop = ({onClose}) => {
             borderRadius={14}
             padding={16}
             marginBottom={12}>
-            <SectionLabel label="Contact details" 
-                        t={t}/>
-            <StyledInput
+    
+            <StyledTextInput
               label="Shop name"
               placeholder="Enter your shop name"
               returnKeyType="next"
@@ -217,7 +213,7 @@ const Shop = ({onClose}) => {
               errorMessage={errorMessages?.name?.message}
               {...inputProps}
             />
-            <StyledInput
+            <StyledTextInput
               label="Email"
               keyboardType="email-address"
               placeholder="hello@yourshop.com"
@@ -229,7 +225,7 @@ const Shop = ({onClose}) => {
               errorMessage={errorMessages?.email?.message}
               {...inputProps}
             />
-            <StyledInput
+            <StyledTextInput
               label="Mobile"
               keyboardType="phone-pad"
               placeholder="Enter your mobile number"
@@ -250,9 +246,8 @@ const Shop = ({onClose}) => {
             borderRadius={14}
             padding={16}
             marginBottom={12}>
-            <SectionLabel label="Localisation" 
-                        t={t}/>
-            <StyledInput
+            
+            <StyledTextInput
               label="Currency symbol"
               placeholder="£  $  €  ₦"
               returnKeyType="next"
@@ -272,9 +267,8 @@ const Shop = ({onClose}) => {
             borderRadius={14}
             padding={16}
             marginBottom={24}>
-            <SectionLabel label="About" 
-                        t={t}/>
-            <StyledInput
+            
+            <StyledTextInput
               label="Address"
               placeholder="Enter your address"
               returnKeyType="next"
@@ -287,7 +281,8 @@ const Shop = ({onClose}) => {
               numberOfLines={3}
               {...inputProps}
             />
-            <StyledInput
+            <StyledSpacer marginVertical={4} />
+            <StyledTextInput
               label="Description"
               placeholder="A short description of your business"
               returnKeyType="done"
@@ -308,8 +303,7 @@ const Shop = ({onClose}) => {
             borderRadius={14}
             padding={16}
             marginBottom={24}>
-            <SectionLabel label="Appearance" 
-                        t={t}/>
+           
             <StyledText
               fontFamily={fontStyles.Roboto_Regular}
               fontSize={theme.fontSize.small}
@@ -329,6 +323,7 @@ const Shop = ({onClose}) => {
             alignItems="center"
             justifyContent="center">
             <StyledText
+              fontFamily={fontStyles.Roboto_Regular}
               fontSize={theme.fontSize.normal}
               fontWeight={theme.fontWeight.semiBold}
               color={t.textPrimary}>

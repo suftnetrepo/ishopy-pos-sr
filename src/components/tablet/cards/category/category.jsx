@@ -20,11 +20,11 @@ const CategoryCard = ({name,
 
   const menuText = total_menu === 1 ? 'item' : 'items';
 
+  const isSelected = selected_category_id === category_id;
+
   return (
     <Pressable onTouchStart={() => onPress(category_id)} style={{flex: 1}}>
       <Stack
-        green={selected_category_id === category_id}
-        horizonal
         padding={8}
         gap={8}
         flex={1}
@@ -32,9 +32,9 @@ const CategoryCard = ({name,
         marginVertical={4}
         marginHorizontal={4}
         borderRadius={8}
-        borderWidth={0}
-        borderColor={t.bgCard}
-        backgroundColor={t.bgCard}
+        borderWidth={1}
+        borderColor={isSelected ? t.brandPrimary : t.borderDefault}
+        backgroundColor={isSelected ? t.brandPrimaryBg : t.bgCard}
         shadowColor="black"
         shadowOffset={{width: 0, height: 1}}
         shadowOpacity={0.1}
@@ -42,7 +42,7 @@ const CategoryCard = ({name,
         elevation={3}>
         <StyledShape
           size={48}
-          backgroundColor={ t.bgPage}
+          backgroundColor={t.bgInput}
           justifyContent="center"
           alignItems="center"
           cycle
