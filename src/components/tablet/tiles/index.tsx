@@ -14,12 +14,31 @@ interface TileConfig {
   key:      OrderKey;
   label:    string;
   sparklineColorKey: 'brandPrimary' | 'successColor' | 'dangerColor';
+  sparkline: number[];
 }
 
+// Default fallback sparkline
+const DEFAULT_SPARKLINE = [0, 1, 1, 2, 1, 2, 2];
+
 const TILES: TileConfig[] = [
-  {key: 'Progress', label: 'In progress', sparklineColorKey: 'brandPrimary'},
-  {key: 'Completed', label: 'Completed',  sparklineColorKey: 'successColor'},
-  {key: 'Cancelled', label: 'Cancelled',  sparklineColorKey: 'dangerColor'},
+  {
+    key: 'Progress',
+    label: 'In progress',
+    sparklineColorKey: 'brandPrimary',
+    sparkline: [1, 2, 2, 3, 4, 5, 6],
+  },
+  {
+    key: 'Completed',
+    label: 'Completed',
+    sparklineColorKey: 'successColor',
+    sparkline: [0, 1, 1, 2, 3, 4, 5],
+  },
+  {
+    key: 'Cancelled',
+    label: 'Cancelled',
+    sparklineColorKey: 'dangerColor',
+    sparkline: [3, 3, 2, 2, 1, 1, 0],
+  },
 ];
 
 interface TileProps extends TileConfig {
@@ -30,11 +49,11 @@ interface TileProps extends TileConfig {
 // Generate mock sparkline data (smooth curve)
 const getSparklineData = (key: OrderKey): number[] => {
   const mockData: Record<OrderKey, number[]> = {
-    Progress: [10, 15, 12, 18, 22, 20, 25, 28, 30],
-    Completed: [5, 8, 10, 9, 12, 15, 18, 20, 22],
-    Cancelled: [8, 6, 7, 5, 4, 6, 3, 2, 1],
+    Progress: [1, 2, 2, 3, 4, 5, 6],
+    Completed: [0, 1, 1, 2, 3, 4, 5],
+    Cancelled: [3, 3, 2, 2, 1, 1, 0],
   };
-  return mockData[key];
+  return mockData[key] ?? DEFAULT_SPARKLINE;
 };
 
 // Create smooth SVG path from data points
@@ -99,10 +118,16 @@ const Sparkline = ({ data = [], color, opacity = 0.45, width = 80, height = 32 }
   );
 };
 
-const Tile = ({label, value, t, sparklineColorKey}: TileProps) => {
-  const sparklineData = getSparklineData(label as any) ?? [];
+const Tile = ({label, value, t, sparklineColorKey, sparkline}: TileProps) => {
   const sparklineColor = t[sparklineColorKey];
-  const hasSparklineData = Array.isArray(sparklineData) && sparklineData.length >= 2;
+  
+  // Safe sparkline fallback
+  const safeSparkline =
+    sparkline && Array.isArray(sparkline) && sparkline.length >= 2
+      ? sparkline
+      : DEFAULT_SPARKLINE;
+  
+  const hasSparklineData = safeSparkline.length >= 2;
 
   return (
     <Stack flex={1} vertical borderRadius={16} overflow="hidden"
@@ -120,7 +145,7 @@ const Tile = ({label, value, t, sparklineColorKey}: TileProps) => {
           pointerEvents="none"
         >
           <Sparkline
-            data={sparklineData}
+            data={safeSparkline}
             color={sparklineColor}
             opacity={0.4}
             width={65}
