@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {ActivityIndicator} from 'react-native';
 import {StyledSpacer, StyledPressable} from 'fluent-styles';
 import {Stack} from '../../package/stack';
-import {Text} from '../../../components/text';
+import Text from '../../../components/text';
 import {BarChart} from 'react-native-chart-kit';
 import {theme} from '../../../utils/theme';
 import {formatCurrency} from '../../../utils/help';
@@ -233,13 +233,11 @@ const DailyTransactionChart = () => {
             />
           ))}
         </Stack>
-        <StyledText
-          fontFamily={fontStyles.Roboto_Regular}
-          fontSize={theme.fontSize.small}
-          fontWeight={theme.fontWeight.normal}
+        <Text
+          variant="caption"
           color={t.textPrimary}>
           {activeTitle}
-        </StyledText>
+        </Text>
       </Stack>
 
       <StyledSpacer marginVertical={8} />
