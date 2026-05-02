@@ -19,8 +19,10 @@ const CategoryCard = ({name,
   const {category_id: selected_category_id} = useAppContext();
 
   const menuText = total_menu === 1 ? 'item' : 'items';
-
   const isSelected = selected_category_id === category_id;
+  
+  // Safe icon validation - only render if icon_name is valid
+  const hasValidIcon = Boolean(icon_name) && icon_name !== 'undefined' && String(icon_name).trim().length > 0;
 
   return (
     <Pressable onTouchStart={() => onPress(category_id)} style={{flex: 1}}>
@@ -48,11 +50,13 @@ const CategoryCard = ({name,
           cycle
           marginHorizontal={4}
           padding={4}>
-          <PosIcon
-            name={icon_name}
-            size={32}
-            color={color_code || t.textSecondary}
-          />
+          {hasValidIcon ? (
+            <PosIcon
+              name={icon_name}
+              size={32}
+              color={color_code || t.textSecondary}
+            />
+          ) : null}
         </StyledShape>
 
         <Stack vertical flex={1} justifyContent="center">

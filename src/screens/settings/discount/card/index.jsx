@@ -6,51 +6,117 @@ import {theme} from '../../../../configs/theme';
 import {StyledIcon} from '../../../../components/package/icon';
 import {toWordCase} from '../../../../utils/help';
 import {useAppTheme} from '../../../../theme';
+import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const RenderCard = ({item, onEdit, onDelete, t}) => {
   const isActive = item.status === 1;
+  
   return (
-    <Stack
-      flex={1} vertical borderRadius={12}
-      backgroundColor={t.bgCard}
-      marginHorizontal={4} marginBottom={8} paddingHorizontal={14} paddingVertical={12}>
-      <Stack horizontal alignItems="center" justifyContent="space-between" marginBottom={4}>
-        <StyledText
-          fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.normal}
-          color={t.textPrimary} flex={1} numberOfLines={1}>
-          {toWordCase(item.name)}
-        </StyledText>
-        <Stack horizontal alignItems="center" gap={4}>
-          <Stack width={6} height={6} borderRadius={3}
-            backgroundColor={isActive ? t.successColor : t.dangerColor} />
-          <StyledText fontSize={10} color={isActive ? t.successColor : t.dangerColor}>
-            {isActive ? 'Active' : 'Inactive'}
+    <StyledPressable
+      onPress={onEdit}
+      style={{flex: 1}}
+      activeOpacity={0.7}>
+      <Stack
+        flex={1}
+        horizontal
+        borderRadius={18}
+        backgroundColor={t.bgCard}
+        borderWidth={1}
+        borderColor={t.borderSubtle}
+        marginHorizontal={4}
+        marginBottom={12}
+        paddingHorizontal={16}
+        paddingVertical={16}
+        shadowColor={t.textPrimary}
+        shadowOffset={{width: 0, height: 1}}
+        shadowOpacity={0.04}
+        shadowRadius={3}
+        elevation={1}
+        gap={12}>
+
+        {/* Left Content: Title + Metadata */}
+        <Stack flex={1} vertical gap={8}>
+          {/* Title */}
+          <StyledText
+            fontSize={theme.fontSize.medium}
+            fontWeight={theme.fontWeight.semiBold}
+            color={t.textPrimary}
+            numberOfLines={1}>
+            {toWordCase(item.name)}
           </StyledText>
+
+          {/* Metadata Row: Status Pill + Discount Value */}
+          <Stack horizontal alignItems="center" gap={10}>
+            {/* Status Pill */}
+            <Stack
+              paddingHorizontal={10}
+              paddingVertical={4}
+              borderRadius={999}
+              backgroundColor={isActive ? `${t.successColor}15` : `${t.dangerColor}15`}>
+              <StyledText
+                fontSize={10}
+                fontWeight={theme.fontWeight.semiBold}
+                color={isActive ? t.successColor : t.dangerColor}>
+                {isActive ? 'Active' : 'Inactive'}
+              </StyledText>
+            </Stack>
+
+            {/* Discount Value */}
+            <StyledText
+              fontSize={theme.fontSize.small}
+              fontWeight={theme.fontWeight.normal}
+              color={t.textSecondary}>
+              -{item.rate}%
+            </StyledText>
+          </Stack>
+        </Stack>
+
+        {/* Right Content: Action Icons */}
+        <Stack horizontal alignItems="flex-start" gap={8}>
+          {/* Edit Icon Button */}
+          <StyledPressable
+            onPress={(e) => {
+              e.stopPropagation?.();
+              onEdit();
+            }}
+            width={36}
+            height={36}
+            borderRadius={18}
+            alignItems="center"
+            justifyContent="center"
+            backgroundColor="transparent"
+            activeOpacity={0.6}>
+            <MIcon
+              pointerEvents="none"
+              size={18}
+              name="pencil"
+              color={t.textMuted}
+            />
+          </StyledPressable>
+
+          {/* Delete Icon Button */}
+          <StyledPressable
+            onPress={(e) => {
+              e.stopPropagation?.();
+              onDelete();
+            }}
+            width={36}
+            height={36}
+            borderRadius={18}
+            alignItems="center"
+            justifyContent="center"
+            backgroundColor="transparent"
+            activeOpacity={0.6}>
+            <MIcon
+              pointerEvents="none"
+              size={18}
+              name="trash-can-outline"
+              color={t.textMuted}
+            />
+          </StyledPressable>
         </Stack>
       </Stack>
-      <StyledText fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.normal}
-        color={t.textSecondary} marginBottom={12}>
-        {item.rate}% off
-      </StyledText>
-      <Stack horizontal gap={8}>
-        <StyledPressable
-          flex={1} onPress={onEdit}
-          flexDirection="row" alignItems="center" justifyContent="center" gap={4}
-          borderWidth={1} borderColor={t.borderDefault}
-          backgroundColor={t.bgPage} borderRadius={8} paddingVertical={7}>
-          <StyledIcon name="edit" size={14} color={t.textSecondary} />
-          <StyledText fontSize={theme.fontSize.small} color={t.textSecondary}>Edit</StyledText>
-        </StyledPressable>
-        <StyledPressable
-          flex={1} onPress={onDelete}
-          flexDirection="row" alignItems="center" justifyContent="center" gap={4}
-          borderWidth={1} borderColor={t.dangerBg}
-          backgroundColor={t.dangerBg} borderRadius={8} paddingVertical={7}>
-          <StyledIcon name="delete-outline" size={14} color={t.dangerColor} />
-          <StyledText fontSize={theme.fontSize.small} color={t.dangerColor}>Delete</StyledText>
-        </StyledPressable>
-      </Stack>
-    </Stack>
+    </StyledPressable>
   );
 };
 

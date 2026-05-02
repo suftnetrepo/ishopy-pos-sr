@@ -8,6 +8,7 @@ import {
   useDialogue,
   toastService, StyleShape
 } from 'fluent-styles';
+import {Animated, Pressable} from 'react-native';
 import SideBarAdapter from '../../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../../components/tablet/header';
 import {StyledSearchBar} from '../../../components/searchBar';
@@ -15,7 +16,6 @@ import ItemCard from '../item/card';
 import ItemForm from '../item/form/form';
 import {useFocus} from '../../../hooks/useFocus';
 import {StyledIcon} from '../../../components/package/icon';
-import {Pressable} from 'react-native';
 import {useAppContext} from '../../../hooks/appContext';
 import ItemAddOn from './addOn';
 import { useDeleteMenu } from '../../../hooks/useMenu';
@@ -34,6 +34,7 @@ const BigItem = () => {
   });
   const [screenFocus, setScreenFocus] = useState(true);
   const [showAddOn, setShowAddOn] = useState(null);
+  const [addButtonScale] = useState(new Animated.Value(1));
   const shouldOpen = state.tag === 'Edit' || state.tag === 'Add';
   const isFocused = navigationFocus && screenFocus;
 
@@ -51,6 +52,24 @@ const BigItem = () => {
 
   const update = tag => {
     setState({...state, tag, data: null});
+  };
+
+  const handleAddButtonPressIn = () => {
+    Animated.spring(addButtonScale, {
+      toValue: 0.92,
+      useNativeDriver: true,
+      friction: 6,
+      tension: 40,
+    }).start();
+  };
+
+  const handleAddButtonPressOut = () => {
+    Animated.spring(addButtonScale, {
+      toValue: 1,
+      useNativeDriver: true,
+      friction: 6,
+      tension: 40,
+    }).start();
   };
 
    const onDeleteItem = async item_id => {
@@ -99,24 +118,34 @@ const BigItem = () => {
           showTitle={true}
           title="Items"
           CopyIcon={
-            <Pressable onTouchStart={() => itemCardRef.current?.requestAdd()}>
-              <StyleShape
-                cycle
-                size={48}
-                borderWidth={1}
-                backgroundColor={t.brandPrimary}
-                borderColor={t.brandPrimary}>
-                <StyledIcon
-                  pointerEvents="none"
-                  size={24}
-                  name="add"
-                  color={t.textPrimary}
-                />
-              </StyleShape>
-            </Pressable>
+            <Animated.View style={{transform: [{scale: addButtonScale}]}}>
+              <Pressable 
+                onTouchStart={() => itemCardRef.current?.requestAdd()}
+                onPressIn={handleAddButtonPressIn}
+                onPressOut={handleAddButtonPressOut}>
+                <StyleShape
+                  cycle
+                  size={48}
+                  borderWidth={0}
+                  backgroundColor={t.brandPrimary}
+                  borderColor={t.brandPrimary}
+                  shadowColor={t.brandPrimary}
+                  shadowOffset={{width: 0, height: 3}}
+                  shadowOpacity={0.25}
+                  shadowRadius={8}
+                  elevation={4}>
+                  <StyledIcon
+                    pointerEvents="none"
+                    size={24}
+                    name="add"
+                    color="#ffffff"
+                  />
+                </StyleShape>
+              </Pressable>
+            </Animated.View>
           }>
           <StyledSearchBar
-          marginRight={12}
+            marginRight={12}
             placeholder="Search items..."
             flex={1}
             onTextChange={query => updateMenuQuery(query)}

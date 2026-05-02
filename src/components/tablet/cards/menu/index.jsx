@@ -29,10 +29,16 @@ export default function ItemCard({onChangeItem, table_id}) {
   }, [menuQuery]);
 
   const handleAddItem = async item => {
-    if ([item?.addOns || []].length > 0) {
+    // Check if item has add-ons available
+    const hasAddons = Array.isArray(item?.addOns) && item?.addOns.length > 0;
+    
+    if (hasAddons) {
+      // Open add-on modal for items with add-ons
       onChangeItem(item);
       return;
     }
+    
+    // Add item directly to cart without modal for items with no add-ons
     const index = `${Date.now()}${Math.random().toString(36).slice(2, 8)}`;
     addItem(
       index,
@@ -41,7 +47,7 @@ export default function ItemCard({onChangeItem, table_id}) {
       item.price,
       1,
       table_id,
-      item?.icon_name
+      []
     ).then(() => {});
   };
 

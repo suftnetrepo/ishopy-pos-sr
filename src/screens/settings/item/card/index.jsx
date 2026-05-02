@@ -5,7 +5,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from 'react';
-import {FlatList, ScrollView} from 'react-native';
+import {FlatList, ScrollView, Animated} from 'react-native';
 import {Swipeable} from 'react-native-gesture-handler';
 import {
   theme,
@@ -100,123 +100,175 @@ const ItemCard = forwardRef(
 
     const RenderCard = ({item, t}) => {
       const isActive = item.status === 1;
+      const [scale] = useState(new Animated.Value(1));
+
+      const handleCardPress = () => {
+        // Scale animation feedback
+        Animated.sequence([
+          Animated.timing(scale, {
+            toValue: 0.98,
+            duration: 100,
+            useNativeDriver: true,
+          }),
+          Animated.timing(scale, {
+            toValue: 1,
+            duration: 100,
+            useNativeDriver: true,
+          }),
+        ]).start();
+
+        onItemChange({data: item, tag: 'Edit'});
+      };
+
+      const handleEditPress = (e) => {
+        e.stopPropagation?.();
+        onItemChange({data: item, tag: 'Edit'});
+      };
+
+      const handleAddonPress = (e) => {
+        e.stopPropagation?.();
+        onAddonChange(item);
+      };
 
       return (
         <Swipeable
           containerStyle={{flex: 1}}
           renderRightActions={() => renderRightActions(item)}>
-          <Stack
-            flex={1}
-            vertical
-            borderRadius={12}
-            backgroundColor={t.bgCard}
-            marginHorizontal={4}
-            marginBottom={8}
-            paddingHorizontal={14}
-            paddingVertical={12}>
-            {/* Name + status dot */}
-            <Stack
-              horizontal
-              alignItems="center"
-              justifyContent="space-between"
-              marginBottom={2}>
-              <StyledText
-                fontSize={theme.fontSize.small}
-                fontWeight={theme.fontWeight.normal}
-                color={t.textPrimary}
+          <Animated.View style={{transform: [{scale}], flex: 1}}>
+            <StyledPressable
+              onPress={handleCardPress}
+              style={{flex: 1}}
+              activeOpacity={0.7}>
+              <Stack
                 flex={1}
-                numberOfLines={1}>
-                {toWordCase(item.name)}
-              </StyledText>
-              <Stack horizontal alignItems="center" gap={4}>
-                <Stack
-                  width={6}
-                  height={6}
-                  borderRadius={3}
-                  backgroundColor={isActive ? t.successColor : t.dangerColor}
-                />
-                <StyledText
-                  fontSize={10}
-                  color={isActive ? t.successColor : t.dangerColor}>
-                  {isActive ? 'Active' : 'Off'}
-                </StyledText>
-              </Stack>
-            </Stack>
-
-            {/* Price */}
-            <StyledText
-              fontSize={theme.fontSize.small}
-              fontWeight={theme.fontWeight.normal}
-              color={t.textSecondary}
-              marginBottom={12}>
-              {formatCurrency(shop?.currency || '£', item.price)}
-            </StyledText>
-
-            {/* Actions */}
-            <Stack horizontal gap={8}>
-              <StyledPressable
-                flex={1}
-                onPress={() => onItemChange({data: item, tag: 'Edit'})}
-                flexDirection="row"
-                alignItems="center"
-                justifyContent="center"
-                gap={4}
+                horizontal
+                borderRadius={18}
+                backgroundColor={t.bgCard}
                 borderWidth={1}
-                borderColor={t.bgPage}
-                backgroundColor={t.bgPage}
-                borderRadius={30}
-                paddingVertical={7}>
-                <StyledIcon pointerEvents="none" name="edit" size={14} color={t.textSecondary} />
-                <StyledText
-                  fontSize={theme.fontSize.small}
-                  color={t.textSecondary}>
-                  Edit
-                </StyledText>
-              </StyledPressable>
+                borderColor={t.borderSubtle}
+                marginHorizontal={4}
+                marginBottom={12}
+                paddingHorizontal={16}
+                paddingVertical={16}
+                shadowColor={t.textPrimary}
+                shadowOffset={{width: 0, height: 1}}
+                shadowOpacity={0.04}
+                shadowRadius={3}
+                elevation={1}
+                gap={12}>
 
-              {shop?.mode === 'restaurant' && (
-                <StyledPressable
-                  flex={1}
-                  onPress={() => onAddonChange(item)}
-                  flexDirection="row"
-                  alignItems="center"
-                  justifyContent="center"
-                  gap={4}
-                  borderWidth={1}
-                  borderColor={t.borderFocus}
-                  backgroundColor={t.brandPrimaryBg}
-                  borderRadius={30}
-                  paddingVertical={7}>
-                  <MIcon pointerEvents="none" size={14} name="bowl-mix" color={t.brandPrimary} />
+                {/* Left Content: Title + Metadata */}
+                <Stack flex={1} vertical gap={8}>
+                  {/* Item Title */}
                   <StyledText
-                    fontSize={theme.fontSize.small}
-                    color={t.brandPrimary}>
-                    Add-ons
+                    fontSize={theme.fontSize.medium}
+                    fontWeight={theme.fontWeight.semiBold}
+                    color={t.textPrimary}
+                    numberOfLines={1}>
+                    {toWordCase(item.name)}
                   </StyledText>
-                </StyledPressable>
-              )}
-            </Stack>
-          </Stack>
+
+                  {/* Metadata Row: Status Pill + Price */}
+                  <Stack horizontal alignItems="center" gap={10}>
+                    {/* Status Pill Badge */}
+                    <Stack
+                      paddingHorizontal={10}
+                      paddingVertical={4}
+                      borderRadius={999}
+                      backgroundColor={
+                        isActive
+                          ? `${t.successColor}15`
+                          : `${t.dangerColor}15`
+                      }>
+                      <StyledText
+                        fontSize={10}
+                        fontWeight={theme.fontWeight.semiBold}
+                        color={isActive ? t.successColor : t.dangerColor}>
+                        {isActive ? 'Active' : 'Off'}
+                      </StyledText>
+                    </Stack>
+
+                    {/* Price */}
+                    <StyledText
+                      fontSize={theme.fontSize.small}
+                      fontWeight={theme.fontWeight.normal}
+                      color={t.textSecondary}>
+                      {formatCurrency(shop?.currency || '£', item.price)}
+                    </StyledText>
+                  </Stack>
+                </Stack>
+
+                {/* Right Content: Action Icons */}
+                <Stack horizontal alignItems="flex-start" gap={8}>
+                  {/* Edit Icon Button */}
+                  <StyledPressable
+                    onPress={handleEditPress}
+                    width={36}
+                    height={36}
+                    borderRadius={18}
+                    alignItems="center"
+                    justifyContent="center"
+                    backgroundColor="transparent"
+                    activeOpacity={0.6}>
+                    <MIcon
+                      pointerEvents="none"
+                      size={18}
+                      name="pencil"
+                      color={t.textMuted}
+                    />
+                  </StyledPressable>
+
+                  {/* Add-ons Icon Button (Restaurant Mode Only) */}
+                  {shop?.mode === 'restaurant' && (
+                    <StyledPressable
+                      onPress={handleAddonPress}
+                      width={36}
+                      height={36}
+                      borderRadius={18}
+                      alignItems="center"
+                      justifyContent="center"
+                      backgroundColor="transparent"
+                      activeOpacity={0.6}>
+                      <MIcon
+                        pointerEvents="none"
+                        size={18}
+                        name="tune"
+                        color={t.textMuted}
+                      />
+                    </StyledPressable>
+                  )}
+                </Stack>
+              </Stack>
+            </StyledPressable>
+          </Animated.View>
         </Swipeable>
       );
     };
 
     return (
       <>
-        {/* Category chips */}
-        <Stack horizontal marginBottom={12}>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <Stack horizontal gap={6} alignItems="center">
+        {/* Category Filter Pills */}
+        <Stack 
+          horizontal 
+          marginBottom={16}
+          paddingHorizontal={0}>
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false}
+            scrollEventThrottle={16}>
+            <Stack horizontal gap={10} alignItems="center">
               {[{category_id: 'All', name: 'All'}, ...(categories || [])].map(
                 cat => (
                   <StyledChip
                     key={cat.category_id}
                     label={cat.name}
-                    variant="ingredient"
-                    size="sm"
+                    variant="outlined"
+                    size="md"
                     selected={cat.category_id === activeCategory}
-                    showCheck={cat.category_id === activeCategory}
+                    color={cat.category_id === activeCategory ? t.brandPrimary : t.textMuted}
+                    bgColor={cat.category_id === activeCategory ? `${t.brandPrimary}08` : undefined}
                     onPress={() => handleFilter(cat)}
+                    showCheck={false}
                   />
                 )
               )}
@@ -224,13 +276,14 @@ const ItemCard = forwardRef(
           </ScrollView>
         </Stack>
 
-        {/* Items grid */}
+        {/* Items Grid */}
         <FlatList
           data={data}
           initialNumToRender={100}
           showsVerticalScrollIndicator={false}
           keyExtractor={item => item.menu_id}
           numColumns={3}
+          columnWrapperStyle={{justifyContent: 'space-between'}}
           renderItem={({item, index}) => (
             <RenderCard item={item} key={index} t={t} />
           )}

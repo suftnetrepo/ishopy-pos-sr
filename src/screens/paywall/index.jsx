@@ -110,10 +110,10 @@ const PaywallScreen = ({onDismiss}) => {
             />
             <StyledPressable
               onPress={dismiss}
-              width={36} height={36} borderRadius={18}
+              width={48} height={48} borderRadius={50}
               backgroundColor="rgba(255,255,255,0.1)"
               alignItems="center" justifyContent="center">
-              <StyledIcon name="close" size={18} color="rgba(255,255,255,0.6)" />
+              <StyledIcon pointerEvents="none" name="close" size={24} color="rgba(255,255,255,0.6)" />
             </StyledPressable>
           </Stack>
 
