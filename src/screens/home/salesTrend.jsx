@@ -7,12 +7,12 @@ import React from 'react';
 import {
     YStack,
     XStack,
-    StyledText,
     StyledSpacer,
     StyledCard
 } from 'fluent-styles';
+import Text from '../../components/text';
 import { StyledMIcon } from '../../components/icon';
-import { fontStyles, theme } from '../../configs/theme';
+import { theme } from '../../configs/theme';
 import {
     useMonthlySales,
     useWeeklySales,
@@ -39,19 +39,12 @@ const SalesTrend = () => {
                 <YStack justifyContent='flex-start' alignItems='flex-start' paddingHorizontal={8} paddingVertical={16}>
                     <StyledMIcon size={24} name={'weekend'} color={t.brandPrimary} />
                     <StyledSpacer marginVertical={8} />
-                    <StyledText
-                        fontFamily={fontStyles.Roboto_Regular}
-                        fontSize={theme.fontSize.normal}
-                        fontWeight={theme.fontWeight.bold}
-                        color={theme.colors.orange[800]}>
+                    <Text variant="metric" color={theme.colors.orange[800]}>
                         {formatCurrency(shop.currency || '£', weeklySales)}
-                    </StyledText>
-                    <StyledText fontFamily={fontStyles.Roboto_Regular}
-                        fontSize={theme.fontSize.small}
-                        fontWeight={theme.fontWeight.normal}
-                        color={t.textSecondary}>
+                    </Text>
+                    <Text variant="body" color={t.textSecondary}>
                         Weekly sales
-                    </StyledText>
+                    </Text>
                 </YStack>
             </StyledCard>
             <StyledCard
@@ -64,19 +57,12 @@ const SalesTrend = () => {
                 <YStack justifyContent='flex-start' alignItems='flex-start' paddingHorizontal={8} paddingVertical={16}>
                     <StyledMIcon size={24} name={'view-day'} color={t.brandPrimary} />
                     <StyledSpacer marginVertical={8} />
-                    <StyledText
-                        fontFamily={fontStyles.Roboto_Regular}
-                        fontSize={theme.fontSize.normal}
-                        fontWeight={theme.fontWeight.bold}
-                        color={t.brandPrimaryDark}>
+                    <Text variant="metric" color={t.brandPrimaryDark}>
                         {formatCurrency(shop.currency || '£', monthlySales)}
-                    </StyledText>
-                    <StyledText fontFamily={fontStyles.Roboto_Regular}
-                        fontSize={theme.fontSize.small}
-                        fontWeight={theme.fontWeight.normal}
-                        color={t.textSecondary}>
+                    </Text>
+                    <Text variant="body" color={t.textSecondary}>
                         Monthly sales
-                    </StyledText>
+                    </Text>
                 </YStack>
             </StyledCard>
 

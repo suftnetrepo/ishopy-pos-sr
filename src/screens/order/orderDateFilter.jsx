@@ -2,7 +2,8 @@
 import React, {useState} from 'react';
 import {Modal} from 'react-native';
 import {Calendar} from 'react-native-calendars';
-import {StyledText, StyledPressable, StyledDivider, Stack} from 'fluent-styles';
+import {StyledPressable, StyledDivider, Stack} from 'fluent-styles';
+import Text from '../../components/text';
 import {useAppContext} from '../../hooks/appContext';
 import {theme} from '../../utils/theme';
 import {useAppTheme} from '../../theme';
@@ -64,11 +65,11 @@ const OrderDateFilter = ({visible, setVisible}) => {
           {/* Header */}
           <Stack horizontal justifyContent="space-between" alignItems="center"
             paddingHorizontal={20} paddingVertical={16}>
-            <StyledText fontSize={theme.fontSize.large} fontWeight={theme.fontWeight.bold}>
+            <Text variant="title" color={t.textPrimary}>
               Filter by date
-            </StyledText>
+            </Text>
             <StyledPressable onPress={() => setVisible(false)} padding={4}>
-              <StyledText fontSize={20} color={t.textSecondary}>✕</StyledText>
+              <Text variant="caption" color={t.textSecondary}>✕</Text>
             </StyledPressable>
           </Stack>
 
@@ -76,17 +77,17 @@ const OrderDateFilter = ({visible, setVisible}) => {
           <Stack horizontal justifyContent="space-around" alignItems="center"
             paddingHorizontal={20} paddingBottom={16}>
             <Stack vertical alignItems="center">
-              <StyledText fontSize={theme.fontSize.micro} color={t.textSecondary}>Start Date</StyledText>
-              <StyledText fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.semiBold}>
+              <Text variant="caption" color={t.textSecondary}>Start Date</Text>
+              <Text variant="label" color={t.textPrimary}>
                 {formatDate(startDate)}
-              </StyledText>
+              </Text>
             </Stack>
-            <StyledText fontSize={theme.fontSize.large} color={t.textMuted}>→</StyledText>
+            <Text variant="caption" color={t.textMuted}>→</Text>
             <Stack vertical alignItems="center">
-              <StyledText fontSize={theme.fontSize.micro} color={t.textSecondary}>End Date</StyledText>
-              <StyledText fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.semiBold}>
+              <Text variant="caption" color={t.textSecondary}>End Date</Text>
+              <Text variant="label" color={t.textPrimary}>
                 {formatDate(endDate)}
-              </StyledText>
+              </Text>
             </Stack>
           </Stack>
 
@@ -111,18 +112,18 @@ const OrderDateFilter = ({visible, setVisible}) => {
               borderWidth={1} borderColor={t.textMuted}
               backgroundColor={t.bgCard}
               onPress={clearDates}>
-              <StyledText color={t.textSecondary} fontWeight={theme.fontWeight.semiBold}>
+              <Text variant="button" color={t.textSecondary}>
                 Clear
-              </StyledText>
+              </Text>
             </StyledPressable>
             <StyledPressable
               flex={1} borderRadius={8} paddingVertical={12} alignItems="center"
               backgroundColor={startDate && endDate ? t.brandPrimary : t.borderDefault}
               disabled={!startDate || !endDate}
               onPress={applyFilter}>
-              <StyledText color={t.textPrimary} fontWeight={theme.fontWeight.semiBold}>
+              <Text variant="button" color={t.textPrimary}>
                 Apply Filter
-              </StyledText>
+              </Text>
             </StyledPressable>
           </Stack>
 

@@ -3,7 +3,6 @@ import React, {useEffect, useState} from 'react';
 import {Alert} from 'react-native';
 import {
   StyledPage,
-  StyledText,
   StyledSpacer,
   StyledPressable,
   StyledSpinner,
@@ -11,6 +10,7 @@ import {
   theme,
   toastService,
 } from 'fluent-styles';
+import Text from '../../../components/text';
 import SideBarAdapter from '../../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../../components/tablet/header';
 import {StyledIcon} from '../../../components/package/icon';
@@ -22,8 +22,8 @@ const InfoRow = ({icon, label, value, t}) => (
   <Stack horizontal alignItems="center" gap={10} paddingVertical={10}
     borderBottomWidth={0.5} borderBottomColor={t.bgPage}>
     <StyledIcon name={icon} size={18} color={t.textMuted} />
-    <StyledText fontSize={theme.fontSize.small} color={t.textSecondary} flex={1}>{label}</StyledText>
-    <StyledText fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.medium} color={t.textSecondary}>{value}</StyledText>
+    <Text variant="body" color={t.textSecondary} flex={1}>{label}</Text>
+    <Text variant="label" color={t.textSecondary}>{value}</Text>
   </Stack>
 );
 
@@ -35,9 +35,8 @@ const BackupRow = ({file, onRestore, restoring, t}) => (
       <StyledIcon name="cloud-done" size={18} color={t.infoColor} />
     </Stack>
     <Stack vertical flex={1} gap={2}>
-      <StyledText fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.medium}
-        color={t.textPrimary} numberOfLines={1}>{file.date}</StyledText>
-      <StyledText fontSize={10} color={t.textMuted}>{file.size}</StyledText>
+      <Text variant="label" color={t.textPrimary} numberOfLines={1}>{file.date}</Text>
+      <Text variant="caption" color={t.textMuted}>{file.size}</Text>
     </Stack>
     <StyledPressable
       onPress={() => Alert.alert('Restore this backup?',
@@ -48,8 +47,7 @@ const BackupRow = ({file, onRestore, restoring, t}) => (
       backgroundColor={t.brandPrimaryBg}
       borderRadius={8} paddingHorizontal={14} paddingVertical={6}
       disabled={restoring}>
-      <StyledText fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.medium}
-        color={t.brandPrimaryText}>Restore</StyledText>
+      <Text variant="button" color={t.brandPrimaryText}>Restore</Text>
     </StyledPressable>
   </Stack>
 );
@@ -92,8 +90,7 @@ const BackupScreen = () => {
 
           {/* Google account */}
           <Stack backgroundColor={t.bgCard} borderRadius={14} padding={16} marginTop={16} marginBottom={12}>
-            <StyledText fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.semiBold}
-              color={t.textSecondary} marginBottom={12} letterSpacing={0.5}>GOOGLE ACCOUNT</StyledText>
+            <Text variant="overline" color={t.textSecondary} marginBottom={12} letterSpacing={0.5}>GOOGLE ACCOUNT</Text>
             {!isSignedIn ? (
               <StyledPressable onPress={signIn}
                 flexDirection="row" alignItems="center" gap={12}
@@ -104,8 +101,8 @@ const BackupScreen = () => {
                   <StyledIcon name="account-circle" size={22} color={t.infoColor} />
                 </Stack>
                 <Stack vertical flex={1}>
-                  <StyledText fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.medium} color={t.textPrimary}>Sign in with Google</StyledText>
-                  <StyledText fontSize={10} color={t.textMuted}>Required to backup and restore</StyledText>
+                  <Text variant="label" color={t.textPrimary}>Sign in with Google</Text>
+                  <Text variant="caption" color={t.textMuted}>Required to backup and restore</Text>
                 </Stack>
                 <StyledIcon name="chevron-right" size={20} color={t.textMuted} />
               </StyledPressable>
@@ -116,12 +113,12 @@ const BackupScreen = () => {
                   <StyledIcon name="check-circle" size={22} color={t.successColor} />
                 </Stack>
                 <Stack vertical flex={1}>
-                  <StyledText fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.medium} color={t.textPrimary}>Connected to Google Drive</StyledText>
-                  <StyledText fontSize={10} color={t.textMuted}>Backups saved to "Kursa Backups" folder</StyledText>
+                  <Text variant="label" color={t.textPrimary}>Connected to Google Drive</Text>
+                  <Text variant="caption" color={t.textMuted}>Backups saved to "Kursa Backups" folder</Text>
                 </Stack>
                 <StyledPressable onPress={signOut} borderWidth={1} borderColor={t.dangerBg}
                   backgroundColor={t.dangerBg} borderRadius={8} paddingHorizontal={12} paddingVertical={6}>
-                  <StyledText fontSize={theme.fontSize.small} color={t.dangerColor}>Sign out</StyledText>
+                  <Text variant="button" color={t.dangerColor}>Sign out</Text>
                 </StyledPressable>
               </Stack>
             )}
@@ -129,13 +126,12 @@ const BackupScreen = () => {
 
           {/* Backup */}
           <Stack backgroundColor={t.bgCard} borderRadius={14} padding={16} marginBottom={12}>
-            <StyledText fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.semiBold}
-              color={t.textSecondary} marginBottom={12} letterSpacing={0.5}>BACKUP</StyledText>
+            <Text variant="overline" color={t.textSecondary} marginBottom={12} letterSpacing={0.5}>BACKUP</Text>
             <Stack horizontal alignItems="center" gap={10} marginBottom={16}>
               <StyledIcon name="info-outline" size={16} color={t.textMuted} />
-              <StyledText fontSize={theme.fontSize.small} color={t.textSecondary} flex={1}>
+              <Text variant="body" color={t.textSecondary} flex={1}>
                 Saves all menus, orders, tables and settings to Google Drive.
-              </StyledText>
+              </Text>
             </Stack>
             {lastBackup && <InfoRow icon="history" label="Last backup" value={lastBackup} 
                         t={t}/>}
@@ -144,33 +140,31 @@ const BackupScreen = () => {
               backgroundColor={isSignedIn ? t.brandPrimary : t.borderDefault}
               borderRadius={12} paddingVertical={14} alignItems="center" justifyContent="center" horizontal gap={8}>
               <StyledIcon name="cloud-upload" size={20} color={isSignedIn ? t.textPrimary : t.textMuted} />
-              <StyledText fontSize={theme.fontSize.normal} fontWeight={theme.fontWeight.semiBold}
-                color={isSignedIn ? t.textPrimary : t.textMuted}>
+              <Text variant="button" color={isSignedIn ? t.textPrimary : t.textMuted}>
                 {backingUp ? 'Backing up...' : 'Back up now'}
-              </StyledText>
+              </Text>
             </StyledPressable>
           </Stack>
 
           {/* Restore */}
           <Stack backgroundColor={t.bgCard} borderRadius={14} padding={16} marginBottom={12}>
             <Stack horizontal justifyContent="space-between" alignItems="center" marginBottom={12}>
-              <StyledText fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.semiBold}
-                color={t.textSecondary} letterSpacing={0.5}>RESTORE</StyledText>
+              <Text variant="overline" color={t.textSecondary} letterSpacing={0.5}>RESTORE</Text>
               {isSignedIn && (
                 <StyledPressable onPress={handleShowFiles}
                   borderWidth={1} borderColor={t.borderDefault}
                   backgroundColor={t.bgPage} borderRadius={8} paddingHorizontal={12} paddingVertical={5}>
-                  <StyledText fontSize={theme.fontSize.small} color={t.textSecondary}>
+                  <Text variant="body" color={t.textSecondary}>
                     {showFiles ? 'Refresh' : 'Show backups'}
-                  </StyledText>
+                  </Text>
                 </StyledPressable>
               )}
             </Stack>
-            {!isSignedIn && <StyledText fontSize={theme.fontSize.small} color={t.textMuted}>Sign in to Google to see your backups.</StyledText>}
+            {!isSignedIn && <Text variant="body" color={t.textMuted}>Sign in to Google to see your backups.</Text>}
             {showFiles && backupFiles.length === 0 && (
               <Stack alignItems="center" paddingVertical={24} gap={8}>
                 <StyledIcon name="cloud-off" size={32} color={t.textMuted} />
-                <StyledText fontSize={theme.fontSize.small} color={t.textMuted}>No backups found in Google Drive</StyledText>
+                <Text variant="body" color={t.textMuted}>No backups found in Google Drive</Text>
               </Stack>
             )}
             {showFiles && backupFiles.map(file => (
@@ -181,8 +175,7 @@ const BackupScreen = () => {
 
           {/* How it works */}
           <Stack backgroundColor={t.bgCard} borderRadius={14} padding={16}>
-            <StyledText fontSize={theme.fontSize.small} fontWeight={theme.fontWeight.semiBold}
-              color={t.textSecondary} marginBottom={12} letterSpacing={0.5}>HOW IT WORKS</StyledText>
+            <Text variant="overline" color={t.textSecondary} marginBottom={12} letterSpacing={0.5}>HOW IT WORKS</Text>
             {[
               {icon: 'cloud-upload', text: 'Tap "Back up now" to save everything to your Google Drive'},
               {icon: 'devices',      text: 'On a new device, sign in to the same Google account and restore'},
@@ -192,7 +185,7 @@ const BackupScreen = () => {
               <Stack key={i} horizontal alignItems="flex-start" gap={10}
                 paddingVertical={8} borderBottomWidth={i < 3 ? 0.5 : 0} borderBottomColor={t.bgPage}>
                 <StyledIcon name={item.icon} size={16} color={t.brandPrimaryDark} />
-                <StyledText fontSize={theme.fontSize.small} color={t.textSecondary} flex={1}>{item.text}</StyledText>
+                <Text variant="body" color={t.textSecondary} flex={1}>{item.text}</Text>
               </Stack>
             ))}
           </Stack>
