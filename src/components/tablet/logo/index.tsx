@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import Svg, {Rect, Path, Text as SvgText, G} from 'react-native-svg';
+import {useAppTheme} from '../../../theme';
 
 /**
  * Kursa Logo — Option D
@@ -8,6 +9,8 @@ import Svg, {Rect, Path, Text as SvgText, G} from 'react-native-svg';
  * Works for restaurant, retail, bar and takeaway contexts.
  */
 const Logo = () => {
+  const {t} = useAppTheme();
+
   return (
     <Svg width={120} height={44} viewBox="0 0 120 44">
 
@@ -54,7 +57,7 @@ const Logo = () => {
         fontFamily="System"
         fontSize="22"
         fontWeight="700"
-        fill="#18181b"
+        fill={t.textPrimary}
         letterSpacing="-0.5">
         Kursa
       </SvgText>
