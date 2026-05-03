@@ -11,8 +11,10 @@ import {StyledIcon} from '../../package/icon';
 import {theme} from '../../../utils/theme';
 import {useAppTheme} from '../../../theme';
 
-export default function KeyCard({onSubmit, onClose, table_name, table_id}) {
-  const [pad, setPad] = useState('');
+export default function KeyCard({onSubmit, onClose, table_name, table_id, prefill}) {
+  const [pad, setPad] = useState(
+    prefill?.guest_count ? String(prefill.guest_count) : ''
+  );
   const {t} = useAppTheme();
   const keypad = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '<'];
 
@@ -28,9 +30,9 @@ export default function KeyCard({onSubmit, onClose, table_name, table_id}) {
     onSubmit({
       table_id,
       guest_count: pad,
-      guest_name: 'Guest',
-      isOccupied: 1,
-      start_time: new Date().toTimeString().split(' ')[0],
+      guest_name:  prefill?.guest_name || 'Guest',
+      isOccupied:  1,
+      start_time:  new Date().toTimeString().split(' ')[0],
     });
     onClose();
   };
@@ -68,15 +70,20 @@ export default function KeyCard({onSubmit, onClose, table_name, table_id}) {
               alignItems="center"
               gap={8}>
               <StyledIcon name="attach-money" size={24} color={t.textInverse} />
-              <Text
-                variant="label"
-                color={t.textInverse}>
-                {table_name}
-              </Text>
+              <Stack vertical>
+                <Text variant="label" color={t.textInverse}>
+                  {table_name}
+                </Text>
+                {prefill?.guest_name && (
+                  <Text variant="caption" color={t.textMuted}>
+                    {prefill.guest_name}
+                  </Text>
+                )}
+              </Stack>
             </Stack>
             <StyledPressable onPress={handleClose}>
               <StyledIcon
-                pointerEvents="none"  
+                pointerEvents="none"
                 name="cancel"
                 size={48}
                 color={t.textInverse}
@@ -95,11 +102,11 @@ export default function KeyCard({onSubmit, onClose, table_name, table_id}) {
               variant="body"
               color={t.textInverse}
               marginBottom={24}>
-              Enter number of guests
+              {prefill?.guest_count
+                ? 'Confirm number of guests'
+                : 'Enter number of guests'}
             </Text>
-            <Text
-              variant="metric"
-              color={t.textInverse}>
+            <Text variant="metric" color={t.textInverse}>
               {pad}
             </Text>
             <StyledSpacer marginVertical={16} />
@@ -123,15 +130,14 @@ export default function KeyCard({onSubmit, onClose, table_name, table_id}) {
                   borderColor={t.borderDefault}
                   alignItems="center"
                   justifyContent="center">
-                  <Text
-                    variant="label"
-                    color={t.textPrimary}>
+                  <Text variant="label" color={t.textPrimary}>
                     {num}
                   </Text>
                 </StyledPressable>
               ))}
             </Stack>
             <StyledSpacer marginVertical={8} />
+
             {/* Actions */}
             <Stack
               horizontal
@@ -147,9 +153,7 @@ export default function KeyCard({onSubmit, onClose, table_name, table_id}) {
                 paddingVertical={10}
                 borderRadius={25}
                 onPress={handleClose}>
-                <Text
-                  variant="button"
-                  color={t.textInverse}>
+                <Text variant="button" color={t.textInverse}>
                   Close
                 </Text>
               </StyledPressable>

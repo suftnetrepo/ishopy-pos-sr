@@ -204,6 +204,22 @@ export const PaymentSchema: ObjectSchema = {
   },
 };
 
+export const WaitlistSchema: ObjectSchema = {
+  name: 'Waitlist',
+  primaryKey: 'waitlist_id',
+  properties: {
+    waitlist_id: 'string',
+    guest_name:  'string',
+    party_size:  {type: 'int',    default: 2},
+    preference:  {type: 'string', default: 'none'},
+    phone:       {type: 'string', default: ''},
+    notify_sms:  {type: 'bool',   default: false},
+    joined_at:   'string',
+    status:      {type: 'string', default: 'waiting'},
+    notes:       {type: 'string', default: ''},
+  },
+};
+
 const {useRealm, useQuery, RealmProvider} = createRealmContext({
   schema: [
     PaymentSchema,
@@ -218,6 +234,7 @@ const {useRealm, useQuery, RealmProvider} = createRealmContext({
     DiscountSchema,
     TaxSchema,
     AddOnSchema,
+    WaitlistSchema
   ],
   deleteRealmIfMigrationNeeded: true,
 });
@@ -235,12 +252,13 @@ const schema = [
   DiscountSchema,
   TaxSchema,
   TableSchema,
-  AddOnSchema
+  AddOnSchema,
+  WaitlistSchema,
 ];
 
 const RealmOptions = () => {
   return {
-    path: '__store__.realm',
+    path: '__store____.realm',
     schema: schema,
     schemaVersion: SCHEMA_VERSION,
     migration 

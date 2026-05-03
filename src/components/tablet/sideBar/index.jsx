@@ -24,6 +24,14 @@ const SideBar = ({ collapse = false, selectedMenu = 1, showMenu }) => {
       name: 'big-table',
       show: shop.mode === 'restaurant' ? true : false,
     },
+     {
+      id: 7,
+      label: 'Waitlist',
+      icon: 'clock-outline',
+      active: false,
+      name: 'big-waitlist',
+      show: shop.mode === 'restaurant' ? true : false,
+    },
     {
       id: 3,
       label: shop.mode === 'shop' ? 'Items' : 'Menu',
@@ -56,6 +64,7 @@ const SideBar = ({ collapse = false, selectedMenu = 1, showMenu }) => {
       name: 'big-settings',
       show: true,
     },
+   
   ];
 
  return items

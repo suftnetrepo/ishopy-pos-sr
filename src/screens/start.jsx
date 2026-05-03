@@ -17,6 +17,8 @@ const Start = () => {
     const [showPaywall, setShowPaywall]       = useState(false);
     const [hasPurchased, setHasPurchased]     = useState(false);
 
+     // clearStore(); // Clear storage for testing purposes; remove in production!
+
     useEffect(() => {
         const checkOnboarding = async () => {
             try {

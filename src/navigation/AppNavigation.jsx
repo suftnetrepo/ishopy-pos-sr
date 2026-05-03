@@ -23,6 +23,7 @@ import FAQ from '../screens/faq';
 import HelpCenter from '../screens/helpCenter';
 import Start from '../screens/start';
 import PaywallScreen from '../screens/paywall';
+import WaitlistScreen from '../screens/waitlist';
 
 const Stack = createStackNavigator();
 function Navigator() {
@@ -45,6 +46,13 @@ function Navigator() {
           gestureEnabled: true,
           gestureDirection: 'vertical',
           cardStyle: {borderTopLeftRadius: 20, borderTopRightRadius: 20},
+        }}
+      />
+      <Stack.Screen
+        name="big-waitlist"
+        component={WaitlistScreen}
+        options={{
+          headerShown: false,
         }}
       />
        <Stack.Screen

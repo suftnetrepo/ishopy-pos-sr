@@ -67,11 +67,16 @@ const LOCATION_STYLE = {
 };
 
 // ─── Individual card ──────────────────────────────────────────────────────────
-const Card = ({table, onPress, t}) => {
-  const s = getStatus(table);
+const Card = ({table, onPress, t, waitlistEntry}) => {
+  const s        = getStatus(table);
   const location = table?.location || 'Dine In';
   const locStyle = LOCATION_STYLE[location];
   const locIcon  = LOCATION_ICON[location];
+
+  // Waitlist mode: dim tables that are occupied or too small
+  const isWaitlistMode = !!waitlistEntry;
+  const fits  = !isWaitlistMode || (table.isOccupied !== 1 && table.size >= waitlistEntry.party_size);
+  const dimmed = isWaitlistMode && !fits;
 
   return (
     <Stack
@@ -85,7 +90,8 @@ const Card = ({table, onPress, t}) => {
       horizontal
       justifyContent="space-between"
       alignItems="center"
-      onTouchStart={() => onPress(table)}>
+      opacity={dimmed ? 0.35 : 1}
+      onTouchStart={() => !dimmed && onPress(table)}>
 
       {/* Left col */}
       <Stack flex={1} vertical gap={6}>
@@ -178,7 +184,7 @@ const Card = ({table, onPress, t}) => {
 };
 
 // ─── Main component ───────────────────────────────────────────────────────────
-export default function TableCard({data, onTableSelect}) {
+export default function TableCard({data, onTableSelect, waitlistEntry}) {
   const focused = useFocus();
   const {updateCurrentMenu} = useAppContext();
   const {t} = useAppTheme();
@@ -196,7 +202,7 @@ export default function TableCard({data, onTableSelect}) {
     if (location === 'Bar' || location === 'Takeaway') {
       navigation.navigate('big-menu', {
         table_id:   table.table_id,
-        table_name: table.tableName,   // e.g. "Bar 1", "Takeaway 2"
+        table_name: table.tableName,
         order_type: location,
       });
       return;
@@ -231,6 +237,23 @@ export default function TableCard({data, onTableSelect}) {
 
   return (
     <Stack vertical flex={1}>
+
+      {/* Waitlist banner — only shown when coming from waitlist */}
+      {waitlistEntry && (
+        <Stack
+          horizontal alignItems="center" gap={8}
+          backgroundColor={t.brandPrimaryBg}
+          borderRadius={10} paddingHorizontal={14} paddingVertical={8}
+          marginBottom={10} marginHorizontal={4}
+          borderWidth={0.5} borderColor={t.brandPrimary}>
+          <StyledIcon name="person" size={16} color={t.brandPrimaryText} />
+          <StyledText fontSize={theme.fontSize.small} color={t.brandPrimaryText}>
+            Seating {waitlistEntry.guest_name || 'Guest'} · {waitlistEntry.party_size}{' '}
+            {waitlistEntry.party_size === 1 ? 'guest' : 'guests'} — tap a highlighted table
+          </StyledText>
+        </Stack>
+      )}
+
       {/* Location filter chips */}
       {locationTabs.length > 1 && (
         <Stack horizontal gap={8} alignItems="center" marginBottom={12} marginHorizontal={4}>
@@ -272,8 +295,13 @@ export default function TableCard({data, onTableSelect}) {
           numColumns={4}
           showsVerticalScrollIndicator={false}
           renderItem={({item}) => (
-            <Card key={item.table_id} table={item} onPress={handlePress} 
-                        t={t}/>
+            <Card
+              key={item.table_id}
+              table={item}
+              onPress={handlePress}
+              t={t}
+              waitlistEntry={waitlistEntry}
+            />
           )}
         />
       </ScrollView>
