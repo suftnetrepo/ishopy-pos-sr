@@ -108,7 +108,7 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
         vertical
         width={'100%'}
         backgroundColor={t.bgCard}
-        borderRadius={8}
+        borderRadius={16}
         paddingHorizontal={16}
         paddingVertical={16}
         shadowColor="black"
@@ -117,7 +117,9 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
         shadowRadius={2}
         elevation={3}
         borderWidth={1}
-        borderColor={t.textPrimary}
+        borderColor={t.borderDefault}
+        borderLeftWidth={4}
+        borderLeftColor={t.brandPrimary}
         status={colorCodeStatus(order?.status) as any}>
         <XStack
           marginBottom={2}
@@ -159,31 +161,32 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
     return (
       <XStack
         flex={1}
-        paddingVertical={10}
-        paddingHorizontal={16}
+        paddingVertical={8}
+        paddingLeft={32}
+        paddingRight={16}
         alignItems="flex-end"
         backgroundColor="transparent"
         gap={6}>
         <Text
           flex={1}
-          color={t.textPrimary}
-          variant="body"
+          color={t.textSecondary}
+          variant="caption"
           numberOfLines={1}>
           {addOn.addOnName}
         </Text>
         <Text
           width={28}
           textAlign="center"
-          color={t.textSecondary}
+          color={t.textMuted}
           variant="caption"
-          style={{opacity: 0.7}}>
+          style={{opacity: 0.6}}>
           {addOn.quantity}
         </Text>
         <Text
           width={80}
           textAlign="right"
-          color={t.textPrimary}
-          variant="body"
+          color={t.textSecondary}
+          variant="caption"
           fontWeight="600">
           {formatCurrency(shop?.currency || '£', addOn?.price || 0)}
         </Text>
@@ -196,14 +199,14 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
       <>
         <XStack
           backgroundColor="transparent"
-          paddingVertical={10}
+          paddingVertical={12}
           paddingHorizontal={16}
           alignItems="flex-end"
           gap={6}>
           <Text
             flex={1}
             color={t.textPrimary}
-            variant="body"
+            variant="bodySmall"
             fontWeight="600"
             numberOfLines={1}>
             {item.menu_name}
@@ -256,8 +259,8 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
                 <RenderItem item={item} />
                 {index < (Array.isArray(data) ? data.length - 1 : 0) && (
                   <Stack
-                    height={1}
-                    backgroundColor={`${t.textMuted}20`}
+                    height={0.5}
+                    backgroundColor={`${t.textMuted}`}
                     marginHorizontal={16}
                   />
                 )}
@@ -281,107 +284,112 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
       paddingVertical={8}>
    
       <Card order={order} />
-      <StyledSpacer marginVertical={4} />
-      <XStack>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <RenderOrderItems />
-          <YStack
-            flex={1}
-            width={'100%'}
-            marginTop={16}
-            paddingTop={8}
-            paddingHorizontal={16}
-            borderTopWidth={1}
-            borderTopColor={`${t.textMuted}30`}
+      <StyledSpacer marginVertical={8} />
+      <ScrollView showsVerticalScrollIndicator={false} style={{width: '100%'}}>
+        <RenderOrderItems />
+        <StyledCard
+          backgroundColor={t.bgCard}
+          borderColor={t.borderDefault}
+          borderWidth={1}
+          borderRadius={16}
+          paddingHorizontal={16}
+          paddingVertical={16}
+          marginTop={16}
+          marginHorizontal={0}
+          gap={10}>
+          <XStack
+            paddingVertical={6}
+            alignItems="flex-end"
             gap={6}>
-            <XStack
-              paddingVertical={4}
-              alignItems="flex-end"
-              gap={6}>
-              <Text
-                flex={1}
-                color={t.textSecondary}
-                variant="subtitle">
-                Subtotal
-              </Text>
-              <Stack width={28} />
-              <Text
-                width={80}
-                textAlign="right"
-                color={t.textPrimary}
-                variant="title">
-                {formatCurrency(shop?.currency || '£', order?.total || 0)}
-              </Text>
-            </XStack>
+            <Text
+              flex={1}
+              color={t.textSecondary}
+              variant="body">
+              Subtotal
+            </Text>
+            <Stack width={28} />
+            <Text
+              width={80}
+              textAlign="right"
+              color={t.textPrimary}
+              variant="body"
+              fontWeight="600">
+              {formatCurrency(shop?.currency || '£', order?.total || 0)}
+            </Text>
+          </XStack>
 
-            <XStack
-              paddingVertical={4}
-              alignItems="flex-end"
-              gap={6}>
-              <Text
-                flex={1}
-                color={t.textSecondary}
-                variant="subtitle">
-                Discount
-              </Text>
-              <Stack width={28} />
-              <Text
-                width={80}
-                textAlign="right"
-                color={t.textPrimary}
-                variant="title">
-                {formatCurrency(shop?.currency || '£', order?.discount || 0)}
-              </Text>
-            </XStack>
+          <XStack
+            paddingVertical={1}
+            alignItems="flex-end"
+            gap={6}>
+            <Text
+              flex={1}
+              color={t.textSecondary}
+              variant="body">
+              Discount
+            </Text>
+            <Stack width={28} />
+            <Text
+              width={80}
+              textAlign="right"
+              color={t.textPrimary}
+              variant="body"
+              fontWeight="600">
+              {formatCurrency(shop?.currency || '£', order?.discount || 0)}
+            </Text>
+          </XStack>
 
-            <XStack
-              paddingVertical={4}
-              alignItems="flex-end"
-              gap={6}>
-              <Text
-                flex={1}
-                color={t.textSecondary}
-                variant="subtitle">
-                Tax
-              </Text>
-              <Stack width={28} />
-              <Text
-                width={80}
-                textAlign="right"
-                color={t.textPrimary}
-                variant="title">
-                {formatCurrency(shop?.currency || '£', order?.tax || 0)}
-              </Text>
-            </XStack>
+          <XStack
+            paddingVertical={1}
+            alignItems="flex-end"
+            gap={6}>
+            <Text
+              flex={1}
+              color={t.textSecondary}
+              variant="body">
+              Tax
+            </Text>
+            <Stack width={28} />
+            <Text
+              width={80}
+              textAlign="right"
+              color={t.textPrimary}
+              variant="body"
+              fontWeight="600">
+              {formatCurrency(shop?.currency || '£', order?.tax || 0)}
+            </Text>
+          </XStack>
 
-            <XStack
-              paddingVertical={4}
-            
-        
-              alignItems="flex-end"
-              gap={6}
-            
-              borderRadius={8}>
-              <Text
-                flex={1}
-                color={t.textPrimary}
-                variant="title"
-                fontWeight="700">
-                Total
-              </Text>
-              <Stack width={28} />
-              <Text
-                width={80}
-                textAlign="right"
-                color={t.textPrimary}
-                variant="title"
-                fontWeight="700">
-                {formatCurrency(shop?.currency || '£', order?.total_price || 0)}
-              </Text>
-            </XStack>
-          </YStack>
-        </ScrollView>
-      </XStack>
+          <Stack
+            height={1}
+            backgroundColor={`${t.textMuted}35`}
+            marginVertical={6}
+            style={{borderStyle: 'dashed', borderTopWidth: 1, borderTopColor: `${t.textMuted}35`}}
+          />
+
+          <XStack
+            paddingVertical={12}
+            alignItems="flex-end"
+            gap={6}>
+            <Text
+              flex={1}
+              color={t.textPrimary}
+              variant="title"
+              fontWeight="700">
+              Total
+            </Text>
+            <Stack width={28} />
+            <Text
+              width={80}
+              textAlign="right"
+              color={t.textPrimary}
+              variant="title"
+              fontWeight="700">
+              {formatCurrency(shop?.currency || '£', order?.total_price || 0)}
+            </Text>
+          </XStack>
+        </StyledCard>
+      </ScrollView>
     </YStack>
   );
 };
