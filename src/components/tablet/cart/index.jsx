@@ -214,6 +214,13 @@ export default function Cart({table_id, table_name}) {
         visible={showPayment}
         bodyStyle={{backgroundColor: t.bgPage}}
         onClose={() => setShowPayment(false)}
+        colors={{
+          background: t.bgPage,
+          headerBg: theme.colors.transparent,
+          headerTitle: t.textPrimary,
+          headerSubtitle: t.textSecondary,
+          headerBorder: t.bgPage,
+        }}
         title="Cash Payment" width="30%" side="right">
         <Payment
           order_id={items?.order_id} payment_method={paymentMethod}

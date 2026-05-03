@@ -136,6 +136,7 @@ export default function Payment({
           {hasInput && (
             <StyledPressable
               flex={1} backgroundColor={t.bgPage}
+                alignItems='center'
               borderWidth={1} borderColor={t.textMuted}
               paddingHorizontal={20} paddingVertical={10}
               borderRadius={12} onPress={handleClear}>
@@ -147,6 +148,7 @@ export default function Payment({
           {canPay && (
             <StyledPressable
               flex={1} backgroundColor={t.successColor}
+              alignItems='center' justifyContent='center'
               paddingHorizontal={30} paddingVertical={10}
               borderRadius={12} onPress={handleSubmit} disabled={loading}>
               <StyledText fontFamily={fontStyles.Roboto_Regular} color={t.bgCard}>

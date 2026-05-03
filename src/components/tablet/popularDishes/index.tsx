@@ -3,17 +3,13 @@ import {
   StyledSpacer,
   Stack,
   StyleShape,
-  StyledDivider,
 } from 'fluent-styles';
 import Text from '../../../components/text';
 import {StyledIcon} from '../../../components/package/icon';
-import {ScrollView} from 'react-native';
 import {useQueryPopularMenuItems} from '../../../hooks/useOrderItems';
 import PosIcon from '../../pos-icon';
 import {useAppContext} from '../../../hooks/appContext';
-import EmptyView from '@components/utils/empty';
 import {useAppTheme} from '../../../theme';
-
 
 const PopularDishes = () => {
   const {shop} = useAppContext();
@@ -28,7 +24,7 @@ const PopularDishes = () => {
       borderColor={t.borderDefault}
       backgroundColor={t.bgCard}
       paddingHorizontal={16}
-      paddingVertical={16}
+      paddingVertical={12}
       justifyContent="flex-start"
       alignItems="flex-start"
       shadowColor="#000"
@@ -40,6 +36,8 @@ const PopularDishes = () => {
         width="100%"
         justifyContent="space-between"
         alignItems="center"
+        paddingVertical={8}
+        paddingHorizontal={4}
         gap={12}>
         <Text
           color={t.textPrimary}
@@ -51,7 +49,7 @@ const PopularDishes = () => {
 
       <StyledSpacer
         borderWidth={1}
-        borderColor={t.borderDefault}
+        borderColor={`${t.borderDefault}55`}
         width={'100%'}
         marginVertical={12}
       />
@@ -75,54 +73,64 @@ const PopularDishes = () => {
         </>
       ) : (
         <>
-          <ScrollView showsVerticalScrollIndicator={false}>
             {data?.map((dish, index) => (
-              <Stack
-                key={index}
-                horizontal
-                width="100%"
-                justifyContent="flex-start"
-                alignItems="center"
-                gap={12}
-                marginBottom={16}>
-                {/* Icon box */}
-                <StyleShape
-                  size={36}
-                  borderRadius={30}
-                  backgroundColor={t.bgPage}
+              <React.Fragment key={index}>
+                <Stack
+                  horizontal
+                  width="100%"
+                  justifyContent="flex-start"
                   alignItems="center"
-                  justifyContent="center">
-                  <PosIcon
-                    name={dish?.menu_icon_name}
-                    size={15}
-                    color={t.brandPrimary}
-                  />
-                </StyleShape>
+                  gap={12}
+                  paddingVertical={8}>
+                  {/* Icon box */}
+                  <StyleShape
+                    size={44}
+                    borderRadius={14}
+                    backgroundColor={t.bgInput}
+                    alignItems="center"
+                    justifyContent="center">
+                    <PosIcon
+                      name={dish?.menu_icon_name}
+                      size={18}
+                      color={t.brandPrimary}
+                    />
+                  </StyleShape>
 
-                {/* Text content */}
-                <Stack vertical>
-                  <Text
-                    color={t.textPrimary}
-                    variant="label">
-                    {dish?.menu_name}
-                  </Text>
-                  <Stack horizontal gap={4} alignItems="center">
+                  {/* Text content */}
+                  <Stack vertical gap={3}>
                     <Text
-                      color={t.textSecondary}
-                      variant="caption">
-                      Orders:
+                      color={t.textPrimary}
+                      variant="body"
+                      fontWeight="600">
+                      {dish?.menu_name}
                     </Text>
-                    <Text
-                      color={t.successColor}
-                      variant="caption">
-                      {dish?.order_count || 0}
-                    </Text>
+                    <Stack horizontal gap={4} alignItems="center">
+                      <Text
+                        color={t.textSecondary}
+                        variant="caption">
+                        Orders:
+                      </Text>
+                      <Text
+                        color={t.successColor}
+                        variant="caption"
+                        fontWeight="600">
+                        {dish?.order_count || 0}
+                      </Text>
+                    </Stack>
                   </Stack>
                 </Stack>
-                
-              </Stack>
+                {index < data.length - 1 && (
+                  <Stack
+                  horizontal
+                    width="80%"
+                    height={1}
+                    backgroundColor={`${t.borderDefault}`}
+                    marginLeft={56}
+                  />
+                )}
+              </React.Fragment>
             ))}
-          </ScrollView>
+    
         </>
       )}
     </Stack>
