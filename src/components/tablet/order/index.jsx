@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+
 import React, {useState} from 'react';
 import {Pressable} from 'react-native';
 import {
@@ -16,11 +16,10 @@ import {
   statusOptions,
 } from '../../../utils/help';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {StyledCycle} from 'fluent-styles';
 import {useAppContext} from '../../../hooks/appContext';
-import EmptyView from '../../utils/empty';
 import useOrderTable from '../../../hooks/useOrderTable';
 import {useAppTheme} from '../../../theme';
+import { useNavigation } from '@react-navigation/native';
 
 // ─── Status chip colours ──────────────────────────────────────────────────────
 const STATUS_STYLE = {
@@ -174,6 +173,7 @@ export default function OrderCard({onOrderChange, onHandleFilter}) {
   const {updateSelectedOrder, date_filter, updateDateFilter, shop} =
     useAppContext();
   const {t} = useAppTheme();
+  const navigation = useNavigation();
 
   // Active chip label — UI only, actual filtering done via setStatusFilter
   const [activeChip, setActiveChip] = useState('All');
@@ -236,6 +236,17 @@ export default function OrderCard({onOrderChange, onHandleFilter}) {
               </StyleShape>
             </Pressable>
           )}
+          <Pressable onPress={() => navigation.navigate('big-kitchen')}>
+            <StyleShape
+              paddingHorizontal={10}
+              borderWidth={1}
+              cycle
+              size={48}
+              backgroundColor={t.bgPage}
+              borderColor={t.textMuted}>
+              <MaterialIcon size={24} name="restaurant" color={t.textPrimary} />
+            </StyleShape>
+          </Pressable>
           <Pressable onPress={() => onHandleFilter('filter')}>
             <StyleShape
               paddingHorizontal={10}

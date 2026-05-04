@@ -65,9 +65,9 @@ const CurrencySelect: React.FC<Props> = ({selected, onSelect}) => {
     
       <StyledScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{gap: 8, paddingBottom: 16}}>
-          <StyledTextInput
-        flex={0}
+        contentContainerStyle={{gap: 14, paddingBottom: 16}}>
+        <StyledTextInput
+          flex={0}
           variant="outline"
           placeholder="Search currency..."
           value={search}
@@ -82,37 +82,33 @@ const CurrencySelect: React.FC<Props> = ({selected, onSelect}) => {
           return (
             <StyledPressable key={c.code} onPress={() => onSelect(c.symbol)}>
               <StyledCard
-                padding={14}
-                borderRadius={12}
-                backgroundColor={
-                  active ? theme.colors.teal[50] : theme.colors.white
-                }
+                padding={20}
+                borderRadius={16}
+                backgroundColor={active ? `${t.brandPrimary}15` : t.bgCard}
                 borderWidth={2}
-                borderColor={
-                  active ? theme.colors.teal[500] : t.borderDefault
-                }>
+                borderColor={active ? t.brandPrimary : t.borderDefault}
+                shadow="light">
                 <Stack horizontal alignItems="center" gap={12}>
                   {/* Flag + symbol */}
                   <Stack
                     width={48}
                     height={48}
                     borderRadius={12}
-                    backgroundColor={
-                      active ? theme.colors.teal[100] : t.bgPage
-                    }
+                    backgroundColor={active ? `${t.brandPrimary}25` : t.bgInput}
                     alignItems="center"
                     justifyContent="center">
                     <Text variant="header">{c.flag}</Text>
                   </Stack>
                   <Stack flex={1}>
                     <Text
-                      variant="label"
-                      color={t.textPrimary}>
+                      variant="title"
+                      color={t.textPrimary}
+                      fontWeight="600">
                       {c.name}
                     </Text>
                     <Text
                       variant="caption"
-                      color={t.textMuted}>
+                      color={t.textSecondary}>
                       {c.code} · {c.symbol}
                     </Text>
                   </Stack>
@@ -122,10 +118,10 @@ const CurrencySelect: React.FC<Props> = ({selected, onSelect}) => {
                       width={28}
                       height={28}
                       borderRadius={14}
-                      backgroundColor={theme.colors.teal[500]}
+                      backgroundColor={t.brandPrimary}
                       alignItems="center"
                       justifyContent="center">
-                      <Icon name="check" size={16} color="#fff" />
+                      <Icon name="check" size={16} color="#ffffff" />
                     </Stack>
                   )}
                 </Stack>

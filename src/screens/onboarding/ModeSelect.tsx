@@ -13,18 +13,12 @@ const MODES = [
     icon:  'silverware-fork-knife',
     label: 'Restaurant',
     desc:  'Cafes, restaurants, bars and food service',
-    color: theme.colors.amber[500],
-    bg:    theme.colors.orange[50],
-    border:theme.colors.orange[200],
   },
   {
     value: 'shop',
     icon:  'storefront-outline',
     label: 'Retail Shop',
     desc:  'Boutiques, supermarkets and general stores',
-    color: theme.colors.blue[600],
-    bg:    theme.colors.blue[50],
-    border:theme.colors.blue[200],
   },
 ];
 
@@ -51,32 +45,55 @@ const ModeSelect: React.FC<Props> = ({ selected, onSelect }) => {
       return (
         <StyledPressable key={m.value} onPress={() => onSelect(m.value)}>
           <StyledCard
-            padding={20} borderRadius={16}
-            backgroundColor={active ? m.bg : theme.colors.white}
+            padding={20}
+            borderRadius={16}
+            backgroundColor={active ? t.bgCard : t.bgCard}
             borderWidth={2}
-            borderColor={active ? m.color : t.borderDefault}
+            borderColor={active ? t.brandPrimary : t.borderDefault}
             shadow={active ? 'light' : undefined}>
             <Stack horizontal alignItems="center" gap={16}>
-              <Stack width={56} height={56} borderRadius={16}
-                backgroundColor={active ? m.color : t.bgPage}
-                alignItems="center" justifyContent="center">
-                <Icon name={m.icon} size={28} color={active ? '#fff' : t.textSecondary} />
+              {/* Icon Background */}
+              <Stack
+                width={56}
+                height={56}
+                borderRadius={16}
+                backgroundColor={active ? t.brandPrimary : t.bgInput}
+                alignItems="center"
+                justifyContent="center">
+                <Icon
+                  name={m.icon}
+                  size={28}
+                  color={active ? (t.brandPrimary || '#ffffff') : t.textSecondary}
+                />
               </Stack>
+              
+              {/* Text Content */}
               <Stack flex={1}>
-                <Text variant="label" color={t.textPrimary}>
+                <Text
+                  variant="label"
+                  color={active ? t.textPrimary : t.textPrimary}
+                  fontWeight={active ? '600' : '500'}>
                   {m.label}
                 </Text>
-                <Text variant="body" color={t.textSecondary}
+                <Text
+                  variant="body"
+                  color={t.textSecondary}
                   marginTop={2}>
                   {m.desc}
                 </Text>
               </Stack>
-              <Stack width={24} height={24} borderRadius={12}
+              
+              {/* Selection Checkmark */}
+              <Stack
+                width={24}
+                height={24}
+                borderRadius={12}
                 borderWidth={2}
-                borderColor={active ? m.color : t.textMuted}
-                backgroundColor={active ? m.color : 'transparent'}
-                alignItems="center" justifyContent="center">
-                {active && <Icon name="check" size={14} color="#fff" />}
+                borderColor={active ? t.brandPrimary : t.textMuted}
+                backgroundColor={active ? t.brandPrimary : 'transparent'}
+                alignItems="center"
+                justifyContent="center">
+                {active && <Icon name="check" size={14} color={t.brandPrimary || '#ffffff'} />}
               </Stack>
             </Stack>
           </StyledCard>

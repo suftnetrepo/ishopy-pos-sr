@@ -30,59 +30,98 @@ const TemplateSelect: React.FC<Props> = ({ mode, selected, onSelect }) => {
       </Stack>
 
       <StyledScrollView showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ gap: 10, paddingBottom: 16 }}>
-        {templates.map(t => {
-          const active = selected === t.id;
+        contentContainerStyle={{ gap: 14, paddingBottom: 16 }}>
+        {templates.map(template => {
+          const active = selected === template.id;
+          const bgColor = active ? `${t.brandPrimary}12` : t.bgCard;
           return (
-            <StyledPressable key={t.id} onPress={() => onSelect(t.id)}>
+            <StyledPressable key={template.id} onPress={() => onSelect(template.id)}>
               <StyledCard
-                padding={16} borderRadius={14}
-                backgroundColor={active ? theme.colors.violet[50] : theme.colors.white}
+                padding={20}
+                borderRadius={16}
+                backgroundColor={bgColor}
                 borderWidth={2}
-                borderColor={active ? theme.colors.violet[500] : t.borderDefault}
-                shadow={active ? 'light' : undefined}>
-                <Stack horizontal alignItems="center" gap={14}>
+                borderColor={active ? t.brandPrimary : t.borderDefault}
+                shadow="light">
+                <Stack horizontal alignItems="center" gap={16}>
                   {/* Emoji badge */}
-                  <Stack width={48} height={48} borderRadius={14}
-                    backgroundColor={active ? theme.colors.violet[100] : t.bgPage}
-                    alignItems="center" justifyContent="center">
-                    <Text variant="header">{t.emoji}</Text>
+                  <Stack
+                    width={56}
+                    height={56}
+                    borderRadius={16}
+                    backgroundColor={active ? t.brandPrimary : t.bgInput}
+                    alignItems="center"
+                    justifyContent="center">
+                    <Text variant="header" fontSize={28}>
+                      {template.emoji}
+                    </Text>
                   </Stack>
 
                   <Stack flex={1}>
-                    <Text variant="label" color={t.textPrimary}>
-                      {t.label}
+                    {/* Title */}
+                    <Text
+                      variant="subtitle"
+                      color={t.textPrimary}
+                      fontWeight="600"
+                      marginBottom={4}>
+                      {template.label}
                     </Text>
-                    <Text variant="body" color={t.textSecondary}
-                      marginTop={2}>
-                      {t.description}
+                    
+                    {/* Description */}
+                    <Text
+                      variant="body"
+                      color={t.textSecondary}
+                      marginBottom={8}
+                      numberOfLines={2}>
+                      {template.description}
                     </Text>
-                    {/* Item count pill */}
-                    <Stack horizontal gap={8} marginTop={6}>
-                      <Stack paddingHorizontal={8} paddingVertical={3} borderRadius={99}
-                        backgroundColor={active ? theme.colors.violet[100] : t.bgPage}>
-                        <Text variant="caption" color={active ? theme.colors.violet[700] : t.textSecondary}>
-                          {t.categories.length} categories
+                    
+                    {/* Item count chips */}
+                    <Stack horizontal gap={8}>
+                      <Stack
+                        paddingHorizontal={11}
+                        paddingVertical={5}
+                        borderRadius={999}
+                        backgroundColor={active ? `${t.brandPrimary}15` : `${t.textMuted}12`}>
+                        <Text
+                          variant="caption"
+                          color={t.textSecondary}
+                          fontWeight="500">
+                          {template.categories.length} categories
                         </Text>
                       </Stack>
-                      <Stack paddingHorizontal={8} paddingVertical={3} borderRadius={99}
-                        backgroundColor={active ? theme.colors.violet[100] : t.bgPage}>
-                        <Text variant="caption" color={active ? theme.colors.violet[700] : t.textSecondary}>
-                          {t.items.length} items
+                      <Stack
+                        paddingHorizontal={11}
+                        paddingVertical={5}
+                        borderRadius={999}
+                        backgroundColor={active ? `${t.brandPrimary}15` : `${t.textMuted}12`}>
+                        <Text
+                          variant="caption"
+                          color={t.textSecondary}
+                          fontWeight="500">
+                          {template.items.length} items
                         </Text>
                       </Stack>
                     </Stack>
                   </Stack>
 
-                  {/* Radio dot */}
-                  <Stack width={22} height={22} borderRadius={11}
+                  {/* Selection Radio */}
+                  <Stack
+                    width={24}
+                    height={24}
+                    borderRadius={12}
                     borderWidth={2}
-                    borderColor={active ? theme.colors.violet[500] : t.textMuted}
-                    backgroundColor={active ? theme.colors.violet[500] : 'transparent'}
-                    alignItems="center" justifyContent="center">
+                    borderColor={active ? t.brandPrimary : t.textMuted}
+                    backgroundColor={active ? t.brandPrimary : 'transparent'}
+                    alignItems="center"
+                    justifyContent="center">
                     {active && (
-                      <Stack width={8} height={8} borderRadius={4}
-                        backgroundColor={theme.colors.white} />
+                      <Stack
+                        width={10}
+                        height={10}
+                        borderRadius={5}
+                        backgroundColor="#ffffff"
+                      />
                     )}
                   </Stack>
                 </Stack>

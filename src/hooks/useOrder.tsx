@@ -17,6 +17,7 @@ import {printReceipt} from '../utils/printReceipt';
 import {OrderStatusAggregate} from '../model/orders';
 import {printerStore} from '../store/printerStore';
 import {formatReceiptData} from '../utils/receiptFormatter';
+import {createKitchenTicket} from '../model/kitchen';
 
 interface Initialize {
   data: Order[] | null | Order | [] | boolean | OrderStatusAggregate | null;
@@ -227,7 +228,6 @@ const useInsertOrder = (table_id: string, table_name: string) => {
 
   const insertHandler = async (order: Order) => {
     setData(prev => ({...prev, loading: true}));
-
     try {
       const result = await insertOrder(order);
       setData({
@@ -263,9 +263,18 @@ const useInsertOrder = (table_id: string, table_name: string) => {
       const orderResult = await insertOrder(order);
 
       if (orderResult) {
+        // Collect items with their real detail_ids for kitchen ticket
+        const kitchenItems: Array<{
+          detail_id: string;
+          menu_name: string;
+          quantity: number;
+          addOns: string;
+        }> = [];
+
         for (const item of items?.items || []) {
+          const detail_id = guid(); // generate once, use for both OrderItem and KitchenItem
           const orderItem: OrderItem = {
-            detail_id: guid(),
+            detail_id,
             order_id: orderResult.order_id,
             price: item.price,
             menu_id: item.id,
@@ -278,7 +287,25 @@ const useInsertOrder = (table_id: string, table_name: string) => {
           };
 
           await insertOrderItem(orderItem);
+
+          kitchenItems.push({
+            detail_id,
+            menu_name: item.name,
+            quantity: 1,
+            addOns:
+              (item.addOns || []).length > 0 ? JSON.stringify(item.addOns) : '',
+          });
         }
+
+        // Create kitchen ticket using the same detail_ids — non-blocking
+        createKitchenTicket(
+          orderResult.order_id,
+          table_name,
+          0,
+          kitchenItems,
+        ).catch(e => {
+          if (__DEV__) console.warn('Kitchen ticket creation failed:', e);
+        });
       }
 
       setData({
@@ -368,84 +395,85 @@ const useInsertOrder = (table_id: string, table_name: string) => {
   };
 
   const shareReceipt = async (table_name: string, order: Order) => {
-  try {
-    const receiptData = await formatReceiptData({
-      order,
-      tableName: table_name,
-      shop,
-      user,
-      businessType: shop?.mode as any,
-      footerMessage: 'Your satisfaction is our priority. Thank you for shopping with us!',
-    });
+    try {
+      const receiptData = await formatReceiptData({
+        order,
+        tableName: table_name,
+        shop,
+        user,
+        businessType: shop?.mode as any,
+        footerMessage:
+          'Your satisfaction is our priority. Thank you for shopping with us!',
+      });
 
-    const {
-      name,
-      address,
-      phone,
-      email,
-      cashier,
-      date,
-      orderNumber,
-      subtotal,
-      tax,
-      discount,
-      total,
-      footerMessage,
-      items = [],
-      receiptType,
-      orderLabel,
-      tableLabel,
-      table_name: receiptTableName,
-    } = receiptData;
+      const {
+        name,
+        address,
+        phone,
+        email,
+        cashier,
+        date,
+        orderNumber,
+        subtotal,
+        tax,
+        discount,
+        total,
+        footerMessage,
+        items = [],
+        receiptType,
+        orderLabel,
+        tableLabel,
+        table_name: receiptTableName,
+      } = receiptData;
 
-    const isRestaurant = receiptType === 'restaurant';
+      const isRestaurant = receiptType === 'restaurant';
 
-    const receiptText =
-      `Receipt from ${name}\n\n` +
-      `${orderLabel || 'Receipt #'}: ${orderNumber}\n` +
-      (isRestaurant ? `${tableLabel || 'Table #'}: ${receiptTableName}\n` : '') +
-      `Date: ${date}\n` +
-      `Cashier: ${cashier}\n\n` +
-      `Items:\n` +
-      items
-        .map((item: any) => {
-          const itemTotal = Number(item.price || 0).toFixed(2);
+      const receiptText =
+        `Receipt from ${name}\n\n` +
+        `${orderLabel || 'Receipt #'}: ${orderNumber}\n` +
+        (isRestaurant
+          ? `${tableLabel || 'Table #'}: ${receiptTableName}\n`
+          : '') +
+        `Date: ${date}\n` +
+        `Cashier: ${cashier}\n\n` +
+        `Items:\n` +
+        items
+          .map((item: any) => {
+            const itemTotal = Number(item.price || 0).toFixed(2);
+            const addOnsText =
+              item.addOns
+                ?.map(
+                  (addOn: any) =>
+                    `  ${addOn.quantity} ${addOn.name} - ${Number(
+                      addOn.price || 0,
+                    ).toFixed(2)}\n`,
+                )
+                .join('') || '';
+            return `${item.quantity} ${item.name} - ${itemTotal}\n${addOnsText}`;
+          })
+          .join('') +
+        `\nSubtotal: ${Number(subtotal || 0).toFixed(2)}\n` +
+        `Tax: ${Number(tax || 0).toFixed(2)}\n` +
+        `Discount: ${Number(discount || 0).toFixed(2)}\n` +
+        `Total: ${Number(total || 0).toFixed(2)}\n\n` +
+        `Address: ${address}\n` +
+        `Phone: ${phone}\n` +
+        `Email: ${email}\n\n` +
+        `${footerMessage}`;
 
-          const addOnsText =
-            item.addOns
-              ?.map(
-                (addOn: any) =>
-                  `  ${addOn.quantity} ${addOn.name} - ${Number(
-                    addOn.price || 0
-                  ).toFixed(2)}\n`
-              )
-              .join('') || '';
-
-          return `${item.quantity} ${item.name} - ${itemTotal}\n${addOnsText}`;
-        })
-        .join('') +
-      `\nSubtotal: ${Number(subtotal || 0).toFixed(2)}\n` +
-      `Tax: ${Number(tax || 0).toFixed(2)}\n` +
-      `Discount: ${Number(discount || 0).toFixed(2)}\n` +
-      `Total: ${Number(total || 0).toFixed(2)}\n\n` +
-      `Address: ${address}\n` +
-      `Phone: ${phone}\n` +
-      `Email: ${email}\n\n` +
-      `${footerMessage}`;
-
-    await Share.share({
-      title: 'Receipt',
-      message: receiptText,
-    });
-  } catch (error) {
-    setData({
-      data: null,
-      error: error as Error,
-      loading: false,
-      success: false,
-    });
-  }
-};
+      await Share.share({
+        title: 'Receipt',
+        message: receiptText,
+      });
+    } catch (error) {
+      setData({
+        data: null,
+        error: error as Error,
+        loading: false,
+        success: false,
+      });
+    }
+  };
 
   const resetHandler = () => {
     setData({
@@ -503,7 +531,7 @@ const useDeleteOrder = () => {
   };
 };
 
-const updataStatusHandler = async (order_id: string, status: string) => {
+const updateStatusHandler = async (order_id: string, status: string) => {
   try {
     const result = await updateOrderStatus(order_id, status);
     return true;
@@ -521,5 +549,5 @@ export {
   useQueryOrderById,
   useOrders,
   useOrderStatusAggregate,
-  updataStatusHandler,
+  updateStatusHandler,
 };

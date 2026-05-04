@@ -64,7 +64,14 @@ const SideBar = ({ collapse = false, selectedMenu = 1, showMenu }) => {
       name: 'big-settings',
       show: true,
     },
-   
+    {
+      id: 8,
+      label: 'FAQ',
+      icon: 'help-circle-outline',
+      active: false,
+      name: 'faq',
+      show: true,
+    },
   ];
 
  return items

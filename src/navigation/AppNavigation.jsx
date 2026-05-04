@@ -24,6 +24,7 @@ import HelpCenter from '../screens/helpCenter';
 import Start from '../screens/start';
 import PaywallScreen from '../screens/paywall';
 import WaitlistScreen from '../screens/waitlist';
+import Kitchen from '../screens/kitchen';
 
 const Stack = createStackNavigator();
 function Navigator() {
@@ -48,9 +49,16 @@ function Navigator() {
           cardStyle: {borderTopLeftRadius: 20, borderTopRightRadius: 20},
         }}
       />
-      <Stack.Screen
+       <Stack.Screen
         name="big-waitlist"
         component={WaitlistScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="big-kitchen"
+        component={Kitchen}
         options={{
           headerShown: false,
         }}

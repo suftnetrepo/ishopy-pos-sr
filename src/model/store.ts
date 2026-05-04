@@ -220,6 +220,32 @@ export const WaitlistSchema: ObjectSchema = {
   },
 };
 
+export const KitchenTicketSchema: ObjectSchema = {
+  name: 'KitchenTicket',
+  primaryKey: 'ticket_id',
+  properties: {
+    ticket_id:      'string',
+    table_name:     'string',
+    guest_count:    {type: 'int', default: 0},
+    order_time:     'string',
+    kitchen_status: {type: 'string', default: 'new'},
+    bumped_at:      'string?',
+  },
+};
+
+export const KitchenItemSchema : ObjectSchema = {
+  name: 'KitchenItem',
+  primaryKey: 'ki_id',
+  properties: {
+    ki_id:       'string',
+    ticket_id:   'string',
+    menu_name:   'string',
+    quantity:    {type: 'int', default: 1},
+    addOns:      {type: 'string', default: ''},
+    item_status: {type: 'string', default: 'pending'},
+  },
+};
+
 const {useRealm, useQuery, RealmProvider} = createRealmContext({
   schema: [
     PaymentSchema,
@@ -234,7 +260,9 @@ const {useRealm, useQuery, RealmProvider} = createRealmContext({
     DiscountSchema,
     TaxSchema,
     AddOnSchema,
-    WaitlistSchema
+    WaitlistSchema,
+    KitchenTicketSchema,
+    KitchenItemSchema
   ],
   deleteRealmIfMigrationNeeded: true,
 });
@@ -254,11 +282,13 @@ const schema = [
   TableSchema,
   AddOnSchema,
   WaitlistSchema,
+  KitchenTicketSchema,
+  KitchenItemSchema
 ];
 
 const RealmOptions = () => {
   return {
-    path: '__store____.realm',
+    path: '_____store_____.realm',
     schema: schema,
     schemaVersion: SCHEMA_VERSION,
     migration 
