@@ -15,6 +15,7 @@ import {
   StyledPressable,
   StyledChip,
   StyledTextInput,
+  StyledShape,
 } from 'fluent-styles';
 import {ThemedStyledTextInput} from '../../../../components/form';
 import {fontStyles} from '../../../../configs/theme';
@@ -24,6 +25,7 @@ import ColorPicker from '../../../../components/colorPicker';
 import {useCategories} from '../../../../hooks/useCategory';
 import {Stack} from '../../../../components/package/stack';
 import PosIconPicker from '../../../../components/pos-icon-picker';
+import ItemIcon from '../../../../components/item-icon';
 import {useLoaderAndError} from '../../../../hooks/useLoaderAndError';
 import {useAppTheme} from '../../../../theme';
 
@@ -222,6 +224,30 @@ const ItemForm = ({item, onClose}) => {
                 selected={fields?.icon_name}
                 onSelect={icon => setFields({...fields, icon_name: icon})}
               />
+
+              {/* Icon Preview */}
+              <Stack marginTop={12} alignItems="center" gap={8}>
+                <StyledText
+                  fontSize={theme.fontSize.small}
+                  fontWeight={theme.fontWeight.normal}
+                  color={t.textMuted}>
+                  Preview
+                </StyledText>
+                <StyledShape
+                  size={56}
+                  cycle
+                  backgroundColor={`${fields?.color_code || t.brandPrimary}15`}
+                  borderWidth={1}
+                  borderColor={`${fields?.color_code || t.brandPrimary}40`}
+                  alignItems="center"
+                  justifyContent="center">
+                  <ItemIcon
+                    iconName={fields?.icon_name}
+                    color={fields?.color_code || t.brandPrimary}
+                    size={32}
+                  />
+                </StyledShape>
+              </Stack>
             </Stack>
 
             <XStack

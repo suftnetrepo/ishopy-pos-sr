@@ -5,7 +5,7 @@ import Text from '../../../components/text';
 import {StyledIcon} from '../../../components/package/icon';
 import {ScrollView} from 'react-native';
 import {useQueryGetLowerStock} from '../../../hooks/useStock';
-import {Icon} from '../icon/icon';
+import ItemIcon from '../../../components/item-icon';
 import {useAppTheme} from '../../../theme';
 
 const LowStockItems = () => {
@@ -77,7 +77,11 @@ const LowStockItems = () => {
                 alignItems="center"
                 gap={12}
                 marginBottom={16}>
-                <Icon name={dish?.icon_name} isSelected={false} />
+                <ItemIcon
+                  iconName={dish?.icon_name}
+                  color={dish?.color_code || t.brandPrimary}
+                  size={22}
+                />
                 <Stack vertical>
                   <Text
                     color={t.textPrimary}

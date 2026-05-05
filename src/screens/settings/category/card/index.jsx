@@ -1,11 +1,12 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import {FlatList} from 'react-native';
-import {StyledText, StyledPressable, Stack} from 'fluent-styles';
+import {StyledText, StyledPressable, Stack, StyledShape} from 'fluent-styles';
 import {theme} from '../../../../configs/theme';
 import {toWordCase} from '../../../../utils/help';
 import {useAppTheme} from '../../../../theme';
 import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import CategoryIcon from '../../../../components/category-icon';
 
 const RenderCard = ({item, onEdit, onDelete, idKey, label, t}) => {
   const isActive = item.status === 1;
@@ -32,7 +33,24 @@ const RenderCard = ({item, onEdit, onDelete, idKey, label, t}) => {
         shadowOpacity={0.04}
         shadowRadius={3}
         elevation={1}
-        gap={12}>
+        gap={12}
+        alignItems="center">
+
+        {/* Icon */}
+        <StyledShape
+          size={48}
+          cycle
+          backgroundColor={`${item.color_code || t.brandPrimary}15`}
+          borderWidth={1}
+          borderColor={`${item.color_code || t.brandPrimary}40`}
+          alignItems="center"
+          justifyContent="center">
+          <CategoryIcon
+            iconName={item.icon_name}
+            color={item.color_code || t.brandPrimary}
+            size={24}
+          />
+        </StyledShape>
 
         {/* Left Content: Title + Metadata */}
         <Stack flex={1} vertical gap={8}>

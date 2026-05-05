@@ -117,9 +117,9 @@ const cafe: RestaurantTemplate = {
     { name: 'Desserts',     color_code: '#be185d', icon_name: 'cake-variant'      },
   ],
   items: [
-    { name: 'Espresso',           price: 2.50,  category: 'Hot Drinks',  icon_name: 'espresso',        color_code: '#92400e', stock: 99 },
-    { name: 'Americano',          price: 3.00,  category: 'Hot Drinks',  icon_name: 'americano',       color_code: '#92400e', stock: 99 },
-    { name: 'Cappuccino',         price: 3.50,  category: 'Hot Drinks',  icon_name: 'cappuccino',      color_code: '#92400e', stock: 99,
+    { name: 'Espresso',           price: 2.50,  category: 'Hot Drinks',  icon_name: 'coffee',        color_code: '#92400e', stock: 99 },
+    { name: 'Americano',          price: 3.00,  category: 'Hot Drinks',  icon_name: 'coffee',       color_code: '#92400e', stock: 99 },
+    { name: 'Cappuccino',         price: 3.50,  category: 'Hot Drinks',  icon_name: 'coffee',      color_code: '#92400e', stock: 99,
       addOnGroups: [
         { name: 'Milk Type', required: true, options: [
           { name: 'Regular Milk', price: 0 }, { name: 'Oat Milk', price: 0.50 }, { name: 'Almond Milk', price: 0.50 }, { name: 'Soya Milk', price: 0.50 }
@@ -132,7 +132,7 @@ const cafe: RestaurantTemplate = {
         ]},
       ]
     },
-    { name: 'Flat White',         price: 3.80,  category: 'Hot Drinks',  icon_name: 'flat-white',      color_code: '#92400e', stock: 99,
+    { name: 'Flat White',         price: 3.80,  category: 'Hot Drinks',  icon_name: 'coffee',      color_code: '#92400e', stock: 99,
       addOnGroups: [
         { name: 'Milk Type', required: true, options: [
           { name: 'Regular Milk', price: 0 }, { name: 'Oat Milk', price: 0.50 }, { name: 'Almond Milk', price: 0.50 }, { name: 'Soya Milk', price: 0.50 }
@@ -142,7 +142,7 @@ const cafe: RestaurantTemplate = {
         ]},
       ]
     },
-    { name: 'Latte',              price: 4.00,  category: 'Hot Drinks',  icon_name: 'latte',           color_code: '#92400e', stock: 99,
+    { name: 'Latte',              price: 4.00,  category: 'Hot Drinks',  icon_name: 'coffee',           color_code: '#92400e', stock: 99,
       addOnGroups: [
         { name: 'Milk Type', required: true, options: [
           { name: 'Regular Milk', price: 0 }, { name: 'Oat Milk', price: 0.50 }, { name: 'Almond Milk', price: 0.50 }, { name: 'Soya Milk', price: 0.50 }
@@ -155,7 +155,7 @@ const cafe: RestaurantTemplate = {
         ]},
       ]
     },
-    { name: 'Hot Chocolate',      price: 3.50,  category: 'Hot Drinks',  icon_name: 'hot-chocolate',   color_code: '#92400e', stock: 99,
+    { name: 'Hot Chocolate',      price: 3.50,  category: 'Hot Drinks',  icon_name: 'cup',   color_code: '#92400e', stock: 99,
       addOnGroups: [
         { name: 'Extras', multi: true, options: [
           { name: 'Whipped Cream', price: 0.50 }, { name: 'Marshmallows', price: 0.50 }
@@ -163,27 +163,27 @@ const cafe: RestaurantTemplate = {
       ]
     },
     { name: 'English Breakfast Tea', price: 2.50, category: 'Hot Drinks', icon_name: 'tea',            color_code: '#92400e', stock: 99 },
-    { name: 'Iced Latte',         price: 4.50,  category: 'Cold Drinks', icon_name: 'iced-latte',      color_code: '#0369a1', stock: 99 },
-    { name: 'Iced Americano',     price: 4.00,  category: 'Cold Drinks', icon_name: 'iced-americano',  color_code: '#0369a1', stock: 99 },
-    { name: 'Frappuccino',        price: 5.00,  category: 'Cold Drinks', icon_name: 'frappuccino',     color_code: '#0369a1', stock: 99 },
-    { name: 'Fresh Orange Juice', price: 3.50,  category: 'Cold Drinks', icon_name: 'juice',           color_code: '#0369a1', stock: 50 },
-    { name: 'Sparkling Water',    price: 2.00,  category: 'Cold Drinks', icon_name: 'sparkling-water', color_code: '#0369a1', stock: 50 },
-    { name: 'Butter Croissant',   price: 2.80,  category: 'Pastries',    icon_name: 'croissant',       color_code: '#b45309', stock: 20 },
-    { name: 'Almond Croissant',   price: 3.20,  category: 'Pastries',    icon_name: 'croissant',       color_code: '#b45309', stock: 20 },
-    { name: 'Blueberry Muffin',   price: 2.50,  category: 'Pastries',    icon_name: 'muffin',          color_code: '#b45309', stock: 20 },
-    { name: 'Cinnamon Roll',      price: 3.50,  category: 'Pastries',    icon_name: 'cinnamon-roll',   color_code: '#b45309', stock: 15 },
-    { name: 'Pain au Chocolat',   price: 3.00,  category: 'Pastries',    icon_name: 'croissant',       color_code: '#b45309', stock: 15 },
-    { name: 'Full English',       price: 9.50,  category: 'Breakfast',   icon_name: 'full-english',    color_code: '#15803d', stock: 30 },
-    { name: 'Avocado Toast',      price: 8.50,  category: 'Breakfast',   icon_name: 'avocado-toast',   color_code: '#15803d', stock: 30 },
-    { name: 'Eggs Benedict',      price: 10.00, category: 'Breakfast',   icon_name: 'eggs-benedict',   color_code: '#15803d', stock: 20 },
-    { name: 'Granola & Yoghurt',  price: 6.50,  category: 'Breakfast',   icon_name: 'granola-bowl',    color_code: '#15803d', stock: 25 },
-    { name: 'Smashed Avocado',    price: 9.00,  category: 'Breakfast',   icon_name: 'avocado-toast',   color_code: '#15803d', stock: 20 },
+    { name: 'Iced Latte',         price: 4.50,  category: 'Cold Drinks', icon_name: 'coffee',      color_code: '#0369a1', stock: 99 },
+    { name: 'Iced Americano',     price: 4.00,  category: 'Cold Drinks', icon_name: 'coffee',  color_code: '#0369a1', stock: 99 },
+    { name: 'Frappuccino',        price: 5.00,  category: 'Cold Drinks', icon_name: 'cup',     color_code: '#0369a1', stock: 99 },
+    { name: 'Fresh Orange Juice', price: 3.50,  category: 'Cold Drinks', icon_name: 'cup',           color_code: '#0369a1', stock: 50 },
+    { name: 'Sparkling Water',    price: 2.00,  category: 'Cold Drinks', icon_name: 'cup', color_code: '#0369a1', stock: 50 },
+    { name: 'Butter Croissant',   price: 2.80,  category: 'Pastries',    icon_name: 'cupcake',       color_code: '#b45309', stock: 20 },
+    { name: 'Almond Croissant',   price: 3.20,  category: 'Pastries',    icon_name: 'cupcake',       color_code: '#b45309', stock: 20 },
+    { name: 'Blueberry Muffin',   price: 2.50,  category: 'Pastries',    icon_name: 'cupcake',          color_code: '#b45309', stock: 20 },
+    { name: 'Cinnamon Roll',      price: 3.50,  category: 'Pastries',    icon_name: 'cupcake',   color_code: '#b45309', stock: 15 },
+    { name: 'Pain au Chocolat',   price: 3.00,  category: 'Pastries',    icon_name: 'cupcake',       color_code: '#b45309', stock: 15 },
+    { name: 'Full English',       price: 9.50,  category: 'Breakfast',   icon_name: 'food',    color_code: '#15803d', stock: 30 },
+    { name: 'Avocado Toast',      price: 8.50,  category: 'Breakfast',   icon_name: 'bread-slice',   color_code: '#15803d', stock: 30 },
+    { name: 'Eggs Benedict',      price: 10.00, category: 'Breakfast',   icon_name: 'food',   color_code: '#15803d', stock: 20 },
+    { name: 'Granola & Yoghurt',  price: 6.50,  category: 'Breakfast',   icon_name: 'bowl-mix',    color_code: '#15803d', stock: 25 },
+    { name: 'Smashed Avocado',    price: 9.00,  category: 'Breakfast',   icon_name: 'carrot',   color_code: '#15803d', stock: 20 },
     { name: 'Club Sandwich',      price: 9.50,  category: 'Sandwiches',  icon_name: 'sandwich',        color_code: '#7c3aed', stock: 25 },
     { name: 'BLT Sandwich',       price: 8.50,  category: 'Sandwiches',  icon_name: 'sandwich',        color_code: '#7c3aed', stock: 25 },
     { name: 'Tuna Melt Panini',   price: 8.00,  category: 'Sandwiches',  icon_name: 'sandwich',        color_code: '#7c3aed', stock: 20 },
-    { name: 'Cheesecake Slice',   price: 5.50,  category: 'Desserts',    icon_name: 'cheesecake',      color_code: '#be185d', stock: 15 },
-    { name: 'Chocolate Brownie',  price: 4.00,  category: 'Desserts',    icon_name: 'brownie',         color_code: '#be185d', stock: 20 },
-    { name: 'Carrot Cake',        price: 4.50,  category: 'Desserts',    icon_name: 'carrot-cake',     color_code: '#be185d', stock: 15 },
+    { name: 'Cheesecake Slice',   price: 5.50,  category: 'Desserts',    icon_name: 'cake',      color_code: '#be185d', stock: 15 },
+    { name: 'Chocolate Brownie',  price: 4.00,  category: 'Desserts',    icon_name: 'cake',         color_code: '#be185d', stock: 20 },
+    { name: 'Carrot Cake',        price: 4.50,  category: 'Desserts',    icon_name: 'cake',     color_code: '#be185d', stock: 15 },
   ],
 };
 
@@ -204,7 +204,7 @@ const burger: RestaurantTemplate = {
     { name: 'Desserts',    color_code: '#7c3aed', icon_name: 'ice-cream'    },
   ],
   items: [
-    { name: 'Classic Burger',       price: 9.50,  category: 'Burgers',  icon_name: 'classic-burger',    color_code: '#b45309', stock: 50,
+    { name: 'Classic Burger',       price: 9.50,  category: 'Burgers',  icon_name: 'hamburger',    color_code: '#b45309', stock: 50,
       addOnGroups: [
         { name: 'Meal Upgrade', options: [
           { name: 'Burger Only', price: 0 }, { name: 'Add Fries & Drink', price: 3.50 }
@@ -217,7 +217,7 @@ const burger: RestaurantTemplate = {
         ]},
       ]
     },
-    { name: 'Double Smash Burger',  price: 12.50, category: 'Burgers',  icon_name: 'cheeseburger',      color_code: '#b45309', stock: 50,
+    { name: 'Double Smash Burger',  price: 12.50, category: 'Burgers',  icon_name: 'hamburger',      color_code: '#b45309', stock: 50,
       addOnGroups: [
         { name: 'Meal Upgrade', options: [
           { name: 'Burger Only', price: 0 }, { name: 'Add Fries & Drink', price: 3.50 }
@@ -230,7 +230,7 @@ const burger: RestaurantTemplate = {
         ]},
       ]
     },
-    { name: 'Cheeseburger',         price: 10.50, category: 'Burgers',  icon_name: 'cheeseburger',      color_code: '#b45309', stock: 50,
+    { name: 'Cheeseburger',         price: 10.50, category: 'Burgers',  icon_name: 'hamburger',      color_code: '#b45309', stock: 50,
       addOnGroups: [
         { name: 'Meal Upgrade', options: [
           { name: 'Burger Only', price: 0 }, { name: 'Add Fries & Drink', price: 3.50 }
@@ -243,7 +243,7 @@ const burger: RestaurantTemplate = {
         ]},
       ]
     },
-    { name: 'Bacon BBQ Burger',     price: 13.00, category: 'Burgers',  icon_name: 'classic-burger',    color_code: '#b45309', stock: 40,
+    { name: 'Bacon BBQ Burger',     price: 13.00, category: 'Burgers',  icon_name: 'hamburger',    color_code: '#b45309', stock: 40,
       addOnGroups: [
         { name: 'Meal Upgrade', options: [
           { name: 'Burger Only', price: 0 }, { name: 'Add Fries & Drink', price: 3.50 }
@@ -256,7 +256,7 @@ const burger: RestaurantTemplate = {
         ]},
       ]
     },
-    { name: 'Mushroom Swiss Burger',price: 12.00, category: 'Burgers',  icon_name: 'classic-burger',    color_code: '#b45309', stock: 40,
+    { name: 'Mushroom Swiss Burger',price: 12.00, category: 'Burgers',  icon_name: 'hamburger',    color_code: '#b45309', stock: 40,
       addOnGroups: [
         { name: 'Meal Upgrade', options: [
           { name: 'Burger Only', price: 0 }, { name: 'Add Fries & Drink', price: 3.50 }
@@ -269,7 +269,7 @@ const burger: RestaurantTemplate = {
         ]},
       ]
     },
-    { name: 'Veggie Burger',        price: 10.00, category: 'Burgers',  icon_name: 'burger',            color_code: '#b45309', stock: 30,
+    { name: 'Veggie Burger',        price: 10.00, category: 'Burgers',  icon_name: 'hamburger',            color_code: '#b45309', stock: 30,
       addOnGroups: [
         { name: 'Meal Upgrade', options: [
           { name: 'Burger Only', price: 0 }, { name: 'Add Fries & Drink', price: 3.50 }
@@ -282,7 +282,7 @@ const burger: RestaurantTemplate = {
         ]},
       ]
     },
-    { name: 'Chicken Burger',       price: 10.50, category: 'Chicken',  icon_name: 'chicken-burger',    color_code: '#d97706', stock: 50,
+    { name: 'Chicken Burger',       price: 10.50, category: 'Chicken',  icon_name: 'chicken-leg',    color_code: '#d97706', stock: 50,
       addOnGroups: [
         { name: 'Meal Upgrade', options: [
           { name: 'Burger Only', price: 0 }, { name: 'Add Fries & Drink', price: 3.50 }
@@ -295,7 +295,7 @@ const burger: RestaurantTemplate = {
         ]},
       ]
     },
-    { name: 'Spicy Chicken Burger', price: 11.00, category: 'Chicken',  icon_name: 'chicken-burger',    color_code: '#d97706', stock: 50,
+    { name: 'Spicy Chicken Burger', price: 11.00, category: 'Chicken',  icon_name: 'chicken-leg',    color_code: '#d97706', stock: 50,
       addOnGroups: [
         { name: 'Meal Upgrade', options: [
           { name: 'Burger Only', price: 0 }, { name: 'Add Fries & Drink', price: 3.50 }
@@ -308,7 +308,7 @@ const burger: RestaurantTemplate = {
         ]},
       ]
     },
-    { name: 'Buffalo Wings (6)',    price: 9.00,  category: 'Chicken',  icon_name: 'wings',             color_code: '#d97706', stock: 40,
+    { name: 'Buffalo Wings (6)',    price: 9.00,  category: 'Chicken',  icon_name: 'chicken-leg',             color_code: '#d97706', stock: 40,
       addOnGroups: [
         { name: 'Sauce', required: true, options: [
           { name: 'BBQ', price: 0 }, { name: 'Buffalo', price: 0 }, { name: 'Peri Peri', price: 0 }, { name: 'Lemon & Herb', price: 0 }
@@ -318,7 +318,7 @@ const burger: RestaurantTemplate = {
         ]},
       ]
     },
-    { name: 'Buffalo Wings (12)',   price: 16.00, category: 'Chicken',  icon_name: 'wings',             color_code: '#d97706', stock: 40,
+    { name: 'Buffalo Wings (12)',   price: 16.00, category: 'Chicken',  icon_name: 'chicken-leg',             color_code: '#d97706', stock: 40,
       addOnGroups: [
         { name: 'Sauce', required: true, options: [
           { name: 'BBQ', price: 0 }, { name: 'Buffalo', price: 0 }, { name: 'Peri Peri', price: 0 }, { name: 'Lemon & Herb', price: 0 }
@@ -328,19 +328,19 @@ const burger: RestaurantTemplate = {
         ]},
       ]
     },
-    { name: 'Chicken Strips (4)',   price: 8.50,  category: 'Chicken',  icon_name: 'chicken-strips',    color_code: '#d97706', stock: 40 },
-    { name: 'Regular Fries',        price: 3.50,  category: 'Sides',    icon_name: 'fries',             color_code: '#ca8a04', stock: 99 },
-    { name: 'Large Fries',          price: 4.50,  category: 'Sides',    icon_name: 'fries',             color_code: '#ca8a04', stock: 99 },
-    { name: 'Cheese Fries',         price: 5.00,  category: 'Sides',    icon_name: 'fries',             color_code: '#ca8a04', stock: 80 },
-    { name: 'Onion Rings',          price: 4.00,  category: 'Sides',    icon_name: 'onion-rings',       color_code: '#ca8a04', stock: 60 },
-    { name: 'Coleslaw',             price: 2.50,  category: 'Sides',    icon_name: 'coleslaw',          color_code: '#ca8a04', stock: 60 },
-    { name: 'Classic Hot Dog',      price: 7.50,  category: 'Hot Dogs', icon_name: 'hotdog',            color_code: '#dc2626', stock: 40 },
-    { name: 'Chilli Cheese Dog',    price: 8.50,  category: 'Hot Dogs', icon_name: 'hotdog',            color_code: '#dc2626', stock: 40 },
-    { name: 'Cola',                 price: 2.50,  category: 'Drinks',   icon_name: 'soda-drink',        color_code: '#0284c7', stock: 99 },
-    { name: 'Lemonade',             price: 3.00,  category: 'Drinks',   icon_name: 'lemonade',          color_code: '#0284c7', stock: 99 },
-    { name: 'Milkshake',            price: 5.50,  category: 'Drinks',   icon_name: 'milkshake',         color_code: '#0284c7', stock: 50 },
+    { name: 'Chicken Strips (4)',   price: 8.50,  category: 'Chicken',  icon_name: 'chicken-leg',    color_code: '#d97706', stock: 40 },
+    { name: 'Regular Fries',        price: 3.50,  category: 'Sides',    icon_name: 'french-fries',             color_code: '#ca8a04', stock: 99 },
+    { name: 'Large Fries',          price: 4.50,  category: 'Sides',    icon_name: 'french-fries',             color_code: '#ca8a04', stock: 99 },
+    { name: 'Cheese Fries',         price: 5.00,  category: 'Sides',    icon_name: 'french-fries',             color_code: '#ca8a04', stock: 80 },
+    { name: 'Onion Rings',          price: 4.00,  category: 'Sides',    icon_name: 'french-fries',       color_code: '#ca8a04', stock: 60 },
+    { name: 'Coleslaw',             price: 2.50,  category: 'Sides',    icon_name: 'carrot',          color_code: '#ca8a04', stock: 60 },
+    { name: 'Classic Hot Dog',      price: 7.50,  category: 'Hot Dogs', icon_name: 'food',            color_code: '#dc2626', stock: 40 },
+    { name: 'Chilli Cheese Dog',    price: 8.50,  category: 'Hot Dogs', icon_name: 'food',            color_code: '#dc2626', stock: 40 },
+    { name: 'Cola',                 price: 2.50,  category: 'Drinks',   icon_name: 'bottle-soda',        color_code: '#0284c7', stock: 99 },
+    { name: 'Lemonade',             price: 3.00,  category: 'Drinks',   icon_name: 'cup',          color_code: '#0284c7', stock: 99 },
+    { name: 'Milkshake',            price: 5.50,  category: 'Drinks',   icon_name: 'cup',         color_code: '#0284c7', stock: 50 },
     { name: 'Chocolate Sundae',     price: 4.50,  category: 'Desserts', icon_name: 'ice-cream',         color_code: '#7c3aed', stock: 30 },
-    { name: 'Apple Pie',            price: 4.00,  category: 'Desserts', icon_name: 'apple-pie',         color_code: '#7c3aed', stock: 25 },
+    { name: 'Apple Pie',            price: 4.00,  category: 'Desserts', icon_name: 'cake',         color_code: '#7c3aed', stock: 25 },
   ],
 };
 
@@ -361,7 +361,7 @@ const pizza: RestaurantTemplate = {
     { name: 'Desserts',    color_code: '#9333ea', icon_name: 'cake-variant'  },
   ],
   items: [
-    { name: 'Margherita',          price: 11.00, category: 'Pizzas',   icon_name: 'margherita',     color_code: '#dc2626', stock: 40,
+    { name: 'Margherita',          price: 11.00, category: 'Pizzas',   icon_name: 'pizza',     color_code: '#dc2626', stock: 40,
       addOnGroups: [
         { name: 'Size', required: true, options: [
           { name: 'Small', price: 0 }, { name: 'Medium', price: 2.00 }, { name: 'Large', price: 4.00 }
@@ -374,7 +374,7 @@ const pizza: RestaurantTemplate = {
         ]},
       ]
     },
-    { name: 'Pepperoni',           price: 13.00, category: 'Pizzas',   icon_name: 'pepperoni-pizza', color_code: '#dc2626', stock: 40,
+    { name: 'Pepperoni',           price: 13.00, category: 'Pizzas',   icon_name: 'pizza', color_code: '#dc2626', stock: 40,
       addOnGroups: [
         { name: 'Size', required: true, options: [
           { name: 'Small', price: 0 }, { name: 'Medium', price: 2.00 }, { name: 'Large', price: 4.00 }
@@ -477,17 +477,17 @@ const pizza: RestaurantTemplate = {
         ]},
       ]
     },
-    { name: 'Garlic Bread',        price: 4.50,  category: 'Starters', icon_name: 'garlic-bread',    color_code: '#16a34a', stock: 50 },
-    { name: 'Bruschetta',          price: 6.50,  category: 'Starters', icon_name: 'bruschetta',      color_code: '#16a34a', stock: 40 },
-    { name: 'Arancini',            price: 7.50,  category: 'Starters', icon_name: 'arancini',        color_code: '#16a34a', stock: 30 },
-    { name: 'Burrata',             price: 9.00,  category: 'Starters', icon_name: 'burrata',         color_code: '#16a34a', stock: 25 },
-    { name: 'Caesar Salad',        price: 9.50,  category: 'Salads',   icon_name: 'salad',           color_code: '#15803d', stock: 30 },
-    { name: 'Caprese Salad',       price: 8.50,  category: 'Salads',   icon_name: 'salad',           color_code: '#15803d', stock: 30 },
-    { name: 'House Lemonade',      price: 3.50,  category: 'Drinks',   icon_name: 'lemonade',        color_code: '#0284c7', stock: 99 },
-    { name: 'San Pellegrino',      price: 3.00,  category: 'Drinks',   icon_name: 'sparkling-water', color_code: '#0284c7', stock: 99 },
-    { name: 'Tiramisu',            price: 6.50,  category: 'Desserts', icon_name: 'tiramisu',        color_code: '#9333ea', stock: 20 },
-    { name: 'Panna Cotta',         price: 6.00,  category: 'Desserts', icon_name: 'panna-cotta',     color_code: '#9333ea', stock: 20 },
-    { name: 'Gelato (2 Scoops)',   price: 5.00,  category: 'Desserts', icon_name: 'gelato',          color_code: '#9333ea', stock: 30 },
+    { name: 'Garlic Bread',        price: 4.50,  category: 'Starters', icon_name: 'bread-slice',     color_code: '#16a34a', stock: 50 },
+    { name: 'Bruschetta',          price: 6.50,  category: 'Starters', icon_name: 'bread-slice',     color_code: '#16a34a', stock: 40 },
+    { name: 'Arancini',            price: 7.50,  category: 'Starters', icon_name: 'food',        color_code: '#16a34a', stock: 30 },
+    { name: 'Burrata',             price: 9.00,  category: 'Starters', icon_name: 'food',         color_code: '#16a34a', stock: 25 },
+    { name: 'Caesar Salad',        price: 9.50,  category: 'Salads',   icon_name: 'carrot',          color_code: '#15803d', stock: 30 },
+    { name: 'Caprese Salad',       price: 8.50,  category: 'Salads',   icon_name: 'carrot',          color_code: '#15803d', stock: 30 },
+    { name: 'House Lemonade',      price: 3.50,  category: 'Drinks',   icon_name: 'cup',        color_code: '#0284c7', stock: 99 },
+    { name: 'San Pellegrino',      price: 3.00,  category: 'Drinks',   icon_name: 'bottle-soda', color_code: '#0284c7', stock: 99 },
+    { name: 'Tiramisu',            price: 6.50,  category: 'Desserts', icon_name: 'cake',        color_code: '#9333ea', stock: 20 },
+    { name: 'Panna Cotta',         price: 6.00,  category: 'Desserts', icon_name: 'cake',     color_code: '#9333ea', stock: 20 },
+    { name: 'Gelato (2 Scoops)',   price: 5.00,  category: 'Desserts', icon_name: 'ice-cream',          color_code: '#9333ea', stock: 30 },
   ],
 };
 
@@ -508,31 +508,31 @@ const asian: RestaurantTemplate = {
     { name: 'Drinks',      color_code: '#0891b2', icon_name: 'cup-water'     },
   ],
   items: [
-    { name: 'Salmon Nigiri (2pc)',  price: 6.50,  category: 'Sushi',       icon_name: 'sushi',         color_code: '#e11d48', stock: 30 },
-    { name: 'Tuna Nigiri (2pc)',    price: 7.00,  category: 'Sushi',       icon_name: 'sushi',         color_code: '#e11d48', stock: 30 },
-    { name: 'California Roll',      price: 9.50,  category: 'Sushi',       icon_name: 'sushi',         color_code: '#e11d48', stock: 25,
+    { name: 'Salmon Nigiri (2pc)',  price: 6.50,  category: 'Sushi',       icon_name: 'food',          color_code: '#e11d48', stock: 30 },
+    { name: 'Tuna Nigiri (2pc)',    price: 7.00,  category: 'Sushi',       icon_name: 'food',          color_code: '#e11d48', stock: 30 },
+    { name: 'California Roll',      price: 9.50,  category: 'Sushi',       icon_name: 'food',          color_code: '#e11d48', stock: 25,
       addOnGroups: [
         { name: 'Extras', multi: true, options: [
           { name: 'Soy Sauce', price: 0 }, { name: 'Wasabi', price: 0 }, { name: 'Ginger', price: 0 }
         ]},
       ]
     },
-    { name: 'Dragon Roll',          price: 12.00, category: 'Sushi',       icon_name: 'sushi',         color_code: '#e11d48', stock: 25,
+    { name: 'Dragon Roll',          price: 12.00, category: 'Sushi',       icon_name: 'food',          color_code: '#e11d48', stock: 25,
       addOnGroups: [
         { name: 'Extras', multi: true, options: [
           { name: 'Extra Salmon', price: 3.00 }, { name: 'Extra Tuna', price: 3.50 }
         ]},
       ]
     },
-    { name: 'Spicy Tuna Roll',      price: 10.50, category: 'Sushi',       icon_name: 'sushi',         color_code: '#e11d48', stock: 25,
+    { name: 'Spicy Tuna Roll',      price: 10.50, category: 'Sushi',       icon_name: 'food',          color_code: '#e11d48', stock: 25,
       addOnGroups: [
         { name: 'Extras', multi: true, options: [
           { name: 'Extra Tuna', price: 3.50 }, { name: 'Sriracha', price: 0 }
         ]},
       ]
     },
-    { name: 'Sashimi Platter',      price: 18.00, category: 'Sushi',       icon_name: 'sushi',         color_code: '#e11d48', stock: 15 },
-    { name: 'Ramen',                price: 13.00, category: 'Noodles',     icon_name: 'ramen',         color_code: '#d97706', stock: 30,
+    { name: 'Sashimi Platter',      price: 18.00, category: 'Sushi',       icon_name: 'food',          color_code: '#e11d48', stock: 15 },
+    { name: 'Ramen',                price: 13.00, category: 'Noodles',     icon_name: 'noodle',        color_code: '#d97706', stock: 30,
       addOnGroups: [
         { name: 'Protein', options: [
           { name: 'Chicken', price: 2.50 }, { name: 'Beef', price: 3.00 }, { name: 'Prawns', price: 3.50 }, { name: 'Tofu', price: 2.00 }
@@ -545,7 +545,7 @@ const asian: RestaurantTemplate = {
         ]},
       ]
     },
-    { name: 'Pad Thai',             price: 12.50, category: 'Noodles',     icon_name: 'pad-thai',      color_code: '#d97706', stock: 30,
+    { name: 'Pad Thai',             price: 12.50, category: 'Noodles',     icon_name: 'noodle',        color_code: '#d97706', stock: 30,
       addOnGroups: [
         { name: 'Protein', options: [
           { name: 'Chicken', price: 2.50 }, { name: 'Beef', price: 3.00 }, { name: 'Prawns', price: 3.50 }, { name: 'Tofu', price: 2.00 }
@@ -555,7 +555,7 @@ const asian: RestaurantTemplate = {
         ]},
       ]
     },
-    { name: 'Udon Noodle Soup',     price: 12.00, category: 'Noodles',     icon_name: 'udon-noodles',  color_code: '#d97706', stock: 30,
+    { name: 'Udon Noodle Soup',     price: 12.00, category: 'Noodles',     icon_name: 'noodle',        color_code: '#d97706', stock: 30,
       addOnGroups: [
         { name: 'Protein', options: [
           { name: 'Chicken', price: 2.50 }, { name: 'Beef', price: 3.00 }, { name: 'Tofu', price: 2.00 }
@@ -565,25 +565,25 @@ const asian: RestaurantTemplate = {
         ]},
       ]
     },
-    { name: 'Soba Noodles',         price: 11.00, category: 'Noodles',     icon_name: 'soba-noodles',  color_code: '#d97706', stock: 25,
+    { name: 'Soba Noodles',         price: 11.00, category: 'Noodles',     icon_name: 'noodle',        color_code: '#d97706', stock: 25,
       addOnGroups: [
         { name: 'Protein', options: [
           { name: 'Chicken', price: 2.50 }, { name: 'Shrimp', price: 3.00 }
         ]},
       ]
     },
-    { name: 'Char Siu Bao (3pc)',   price: 7.50,  category: 'Dim Sum',     icon_name: 'dim-sum',       color_code: '#9333ea', stock: 30 },
-    { name: 'Har Gau (4pc)',        price: 8.00,  category: 'Dim Sum',     icon_name: 'dim-sum',       color_code: '#9333ea', stock: 30 },
-    { name: 'Spring Rolls (3pc)',   price: 6.50,  category: 'Dim Sum',     icon_name: 'spring-roll',   color_code: '#9333ea', stock: 35 },
-    { name: 'Gyoza (6pc)',          price: 8.50,  category: 'Dim Sum',     icon_name: 'gyoza',         color_code: '#9333ea', stock: 30 },
-    { name: 'Chicken Fried Rice',   price: 11.00, category: 'Rice Dishes', icon_name: 'fried-rice',    color_code: '#16a34a', stock: 35 },
-    { name: 'Nasi Goreng',          price: 12.00, category: 'Rice Dishes', icon_name: 'fried-rice',    color_code: '#16a34a', stock: 30 },
-    { name: 'Bibimbap',             price: 13.00, category: 'Rice Dishes', icon_name: 'bibimbap',      color_code: '#16a34a', stock: 25 },
-    { name: 'Miso Soup',            price: 3.50,  category: 'Soups',       icon_name: 'miso-soup',     color_code: '#0284c7', stock: 50 },
-    { name: 'Tom Yum Soup',         price: 8.50,  category: 'Soups',       icon_name: 'tom-yum-soup',  color_code: '#0284c7', stock: 30 },
-    { name: 'Green Tea',            price: 2.50,  category: 'Drinks',      icon_name: 'tea',           color_code: '#0891b2', stock: 99 },
-    { name: 'Sake (100ml)',         price: 6.00,  category: 'Drinks',      icon_name: 'sake',          color_code: '#0891b2', stock: 50 },
-    { name: 'Japanese Lemonade',    price: 3.50,  category: 'Drinks',      icon_name: 'lemonade',      color_code: '#0891b2', stock: 60 },
+    { name: 'Char Siu Bao (3pc)',   price: 7.50,  category: 'Dim Sum',     icon_name: 'food',          color_code: '#9333ea', stock: 30 },
+    { name: 'Har Gau (4pc)',        price: 8.00,  category: 'Dim Sum',     icon_name: 'food',          color_code: '#9333ea', stock: 30 },
+    { name: 'Spring Rolls (3pc)',   price: 6.50,  category: 'Dim Sum',     icon_name: 'food',          color_code: '#9333ea', stock: 35 },
+    { name: 'Gyoza (6pc)',          price: 8.50,  category: 'Dim Sum',     icon_name: 'food',          color_code: '#9333ea', stock: 30 },
+    { name: 'Chicken Fried Rice',   price: 11.00, category: 'Rice Dishes', icon_name: 'rice',          color_code: '#16a34a', stock: 35 },
+    { name: 'Nasi Goreng',          price: 12.00, category: 'Rice Dishes', icon_name: 'rice',          color_code: '#16a34a', stock: 30 },
+    { name: 'Bibimbap',             price: 13.00, category: 'Rice Dishes', icon_name: 'rice',          color_code: '#16a34a', stock: 25 },
+    { name: 'Miso Soup',            price: 3.50,  category: 'Soups',       icon_name: 'pot-steam',     color_code: '#0284c7', stock: 50 },
+    { name: 'Tom Yum Soup',         price: 8.50,  category: 'Soups',       icon_name: 'pot-steam',     color_code: '#0284c7', stock: 30 },
+    { name: 'Green Tea',            price: 2.50,  category: 'Drinks',      icon_name: 'cup',           color_code: '#0891b2', stock: 99 },
+    { name: 'Sake (100ml)',         price: 6.00,  category: 'Drinks',      icon_name: 'cup',           color_code: '#0891b2', stock: 50 },
+    { name: 'Japanese Lemonade',    price: 3.50,  category: 'Drinks',      icon_name: 'bottle-soda',   color_code: '#0891b2', stock: 60 },
   ],
 };
 
@@ -596,16 +596,16 @@ const bar: RestaurantTemplate = {
   emoji: '🍺',
   description: 'Steaks, grills, pub food and bar drinks',
   categories: [
-    { name: 'Grills',      color_code: '#b45309', icon_name: 'grill'         },
+    { name: 'Grills',      color_code: '#b45309', icon_name: 'food-steak'    },
     { name: 'Starters',    color_code: '#16a34a', icon_name: 'food'          },
     { name: 'Pub Grub',    color_code: '#d97706', icon_name: 'food'          },
     { name: 'Sides',       color_code: '#ca8a04', icon_name: 'french-fries'  },
     { name: 'Beers',       color_code: '#d97706', icon_name: 'beer'          },
     { name: 'Cocktails',   color_code: '#be185d', icon_name: 'glass-cocktail'},
-    { name: 'Soft Drinks', color_code: '#0284c7', icon_name: 'cup-water'     },
+    { name: 'Soft Drinks', color_code: '#0284c7', icon_name: 'cup'           },
   ],
   items: [
-    { name: '8oz Sirloin Steak',    price: 22.00, category: 'Grills',     icon_name: 'steak',           color_code: '#b45309', stock: 20,
+    { name: '8oz Sirloin Steak',    price: 22.00, category: 'Grills',     icon_name: 'food-steak',      color_code: '#b45309', stock: 20,
       addOnGroups: [
         { name: 'Cooking Level', required: true, options: [
           { name: 'Rare', price: 0 }, { name: 'Medium Rare', price: 0 }, { name: 'Medium', price: 0 }, { name: 'Medium Well', price: 0 }, { name: 'Well Done', price: 0 }
@@ -621,7 +621,7 @@ const bar: RestaurantTemplate = {
         ]},
       ]
     },
-    { name: '10oz Ribeye',          price: 28.00, category: 'Grills',     icon_name: 'steak',           color_code: '#b45309', stock: 20,
+    { name: '10oz Ribeye',          price: 28.00, category: 'Grills',     icon_name: 'food-steak',      color_code: '#b45309', stock: 20,
       addOnGroups: [
         { name: 'Cooking Level', required: true, options: [
           { name: 'Rare', price: 0 }, { name: 'Medium Rare', price: 0 }, { name: 'Medium', price: 0 }, { name: 'Medium Well', price: 0 }, { name: 'Well Done', price: 0 }
@@ -637,7 +637,7 @@ const bar: RestaurantTemplate = {
         ]},
       ]
     },
-    { name: 'Grilled Chicken',      price: 15.00, category: 'Grills',     icon_name: 'grilled-chicken', color_code: '#b45309', stock: 25,
+    { name: 'Grilled Chicken',      price: 15.00, category: 'Grills',     icon_name: 'chicken-leg',     color_code: '#b45309', stock: 25,
       addOnGroups: [
         { name: 'Sauce', required: true, options: [
           { name: 'BBQ', price: 0 }, { name: 'Peri Peri', price: 0 }, { name: 'Garlic Butter', price: 0 }
@@ -647,7 +647,7 @@ const bar: RestaurantTemplate = {
         ]},
       ]
     },
-    { name: 'BBQ Ribs (Half Rack)', price: 20.00, category: 'Grills',     icon_name: 'ribs',            color_code: '#b45309', stock: 15,
+    { name: 'BBQ Ribs (Half Rack)', price: 20.00, category: 'Grills',     icon_name: 'food-steak',      color_code: '#b45309', stock: 15,
       addOnGroups: [
         { name: 'Sauce', required: true, options: [
           { name: 'BBQ', price: 0 }, { name: 'Honey Garlic', price: 0 }
@@ -676,7 +676,7 @@ const bar: RestaurantTemplate = {
     { name: 'Fish & Chips',         price: 14.00, category: 'Pub Grub',   icon_name: 'fish-chips',      color_code: '#d97706', stock: 30 },
     { name: 'Pie of the Day',       price: 13.00, category: 'Pub Grub',   icon_name: 'pie',             color_code: '#d97706', stock: 20 },
     { name: 'Scampi & Chips',       price: 13.50, category: 'Pub Grub',   icon_name: 'scampi-chips',    color_code: '#d97706', stock: 20 },
-    { name: 'Garlic Bread',         price: 4.00,  category: 'Sides',      icon_name: 'garlic-bread',    color_code: '#ca8a04', stock: 50 },
+    { name: 'Garlic Bread',         price: 4.00,  category: 'Sides',      icon_name: 'bread-slice',     color_code: '#ca8a04', stock: 50 },
     { name: 'Onion Rings',          price: 4.50,  category: 'Sides',      icon_name: 'onion-rings',     color_code: '#ca8a04', stock: 50 },
     { name: 'Chunky Chips',         price: 4.00,  category: 'Sides',      icon_name: 'fries',           color_code: '#ca8a04', stock: 60 },
     { name: 'Lager (Pint)',         price: 5.50,  category: 'Beers',      icon_name: 'beer',            color_code: '#d97706', stock: 99 },
@@ -707,7 +707,7 @@ const healthy: RestaurantTemplate = {
     { name: 'Snacks',      color_code: '#0284c7', icon_name: 'food'          },
   ],
   items: [
-    { name: 'Caesar Salad',          price: 10.50, category: 'Salads',   icon_name: 'salad',           color_code: '#16a34a', stock: 30,
+    { name: 'Caesar Salad',          price: 10.50, category: 'Salads',   icon_name: 'carrot',          color_code: '#16a34a', stock: 30,
       addOnGroups: [
         { name: 'Protein', options: [
           { name: 'Chicken', price: 2.50 }, { name: 'Salmon', price: 4.00 }, { name: 'Falafel', price: 2.00 }, { name: 'Tofu', price: 2.00 }
@@ -720,7 +720,7 @@ const healthy: RestaurantTemplate = {
         ]},
       ]
     },
-    { name: 'Greek Salad',           price: 10.00, category: 'Salads',   icon_name: 'salad',           color_code: '#16a34a', stock: 30,
+    { name: 'Greek Salad',           price: 10.00, category: 'Salads',   icon_name: 'carrot',          color_code: '#16a34a', stock: 30,
       addOnGroups: [
         { name: 'Protein', options: [
           { name: 'Chicken', price: 2.50 }, { name: 'Salmon', price: 4.00 }, { name: 'Falafel', price: 2.00 }
@@ -730,7 +730,7 @@ const healthy: RestaurantTemplate = {
         ]},
       ]
     },
-    { name: 'Superfood Salad',       price: 12.00, category: 'Salads',   icon_name: 'salad',           color_code: '#16a34a', stock: 25,
+    { name: 'Superfood Salad',       price: 12.00, category: 'Salads',   icon_name: 'carrot',          color_code: '#16a34a', stock: 25,
       addOnGroups: [
         { name: 'Protein', options: [
           { name: 'Chicken', price: 2.50 }, { name: 'Salmon', price: 4.00 }
@@ -740,7 +740,7 @@ const healthy: RestaurantTemplate = {
         ]},
       ]
     },
-    { name: 'Niçoise Salad',         price: 12.50, category: 'Salads',   icon_name: 'salad',           color_code: '#16a34a', stock: 25,
+    { name: 'Niçoise Salad',         price: 12.50, category: 'Salads',   icon_name: 'carrot',          color_code: '#16a34a', stock: 25,
       addOnGroups: [
         { name: 'Protein', required: true, options: [
           { name: 'Tuna', price: 0 }, { name: 'Salmon', price: 2.00 }
@@ -827,20 +827,20 @@ const african: RestaurantTemplate = {
   emoji: '🌍',
   description: 'West African, East African and pan-African cuisine',
   categories: [
-    {name: 'Soups & Stews', color_code: '#b45309', icon_name: 'soup'},
-    {name: 'Rice & Grains', color_code: '#d97706', icon_name: 'rice-bowl'},
-    {name: 'Grills & BBQ', color_code: '#dc2626', icon_name: 'grill'},
-    {name: 'Snacks', color_code: '#16a34a', icon_name: 'snacks'},
-    {name: 'Breads & Sides', color_code: '#7c3aed', icon_name: 'sides'},
-    {name: 'Drinks', color_code: '#0891b2', icon_name: 'drink'},
-    {name: 'Desserts', color_code: '#be185d', icon_name: 'dessert'},
+    {name: 'Soups & Stews', color_code: '#b45309', icon_name: 'pot-steam'},
+    {name: 'Rice & Grains', color_code: '#d97706', icon_name: 'rice'},
+    {name: 'Grills & BBQ', color_code: '#dc2626', icon_name: 'food-steak'},
+    {name: 'Snacks', color_code: '#16a34a', icon_name: 'hamburger'},
+    {name: 'Breads & Sides', color_code: '#7c3aed', icon_name: 'bread-slice'},
+    {name: 'Drinks', color_code: '#0891b2', icon_name: 'bottle-soda'},
+    {name: 'Desserts', color_code: '#be185d', icon_name: 'cake'},
   ],
   items: [
     {
       name: 'Egusi Soup',
       price: 13.0,
       category: 'Soups & Stews',
-      icon_name: 'egusi-soup',
+      icon_name: 'pot-steam',
       color_code: '#b45309',
       stock: 20,
       addOnGroups: [
@@ -853,7 +853,7 @@ const african: RestaurantTemplate = {
       name: 'Okra Soup',
       price: 12.5,
       category: 'Soups & Stews',
-      icon_name: 'okra-soup',
+      icon_name: 'pot-steam',
       color_code: '#b45309',
       stock: 20,
       addOnGroups: [
@@ -866,7 +866,7 @@ const african: RestaurantTemplate = {
       name: 'Peanut Groundnut Soup',
       price: 13.5,
       category: 'Soups & Stews',
-      icon_name: 'groundnut-soup',
+      icon_name: 'peanut',
       color_code: '#b45309',
       stock: 20,
       addOnGroups: [
@@ -879,7 +879,7 @@ const african: RestaurantTemplate = {
       name: 'Ofe Onugbu (Bitter Leaf)',
       price: 13.0,
       category: 'Soups & Stews',
-      icon_name: 'bitterleaf-soup',
+      icon_name: 'pot-steam',
       color_code: '#b45309',
       stock: 15,
       addOnGroups: [
@@ -892,7 +892,7 @@ const african: RestaurantTemplate = {
       name: 'Pepper Soup',
       price: 10.0,
       category: 'Soups & Stews',
-      icon_name: 'pepper-soup',
+      icon_name: 'pot-steam',
       color_code: '#b45309',
       stock: 20,
       addOnGroups: [
@@ -910,7 +910,7 @@ const african: RestaurantTemplate = {
       name: 'Miyan Kuka',
       price: 11.0,
       category: 'Soups & Stews',
-      icon_name: 'miyan-kuka',
+      icon_name: 'pot-steam',
       color_code: '#b45309',
       stock: 15,
       addOnGroups: [
@@ -924,7 +924,7 @@ const african: RestaurantTemplate = {
       name: 'Jollof Rice',
       price: 12.0,
       category: 'Rice & Grains',
-      icon_name: 'jollof-rice',
+      icon_name: 'rice',
       color_code: '#d97706',
       stock: 30,
       addOnGroups: [
@@ -936,7 +936,7 @@ const african: RestaurantTemplate = {
       name: 'Fried Rice & Chicken',
       price: 14.0,
       category: 'Rice & Grains',
-      icon_name: 'fried-rice',
+      icon_name: 'rice',
       color_code: '#d97706',
       stock: 25,
       addOnGroups: [
@@ -951,7 +951,7 @@ const african: RestaurantTemplate = {
       name: 'Fufu',
       price: 4.0,
       category: 'Rice & Grains',
-      icon_name: 'fufu',
+      icon_name: 'bowl-mix',
       color_code: '#d97706',
       stock: 30,
     },
@@ -959,7 +959,7 @@ const african: RestaurantTemplate = {
       name: 'Eba (Garri)',
       price: 3.5,
       category: 'Rice & Grains',
-      icon_name: 'eba',
+      icon_name: 'rice',
       color_code: '#d97706',
       stock: 30,
     },
@@ -967,7 +967,7 @@ const african: RestaurantTemplate = {
       name: 'Pounded Yam',
       price: 5.0,
       category: 'Rice & Grains',
-      icon_name: 'pounded-yam',
+      icon_name: 'carrot',
       color_code: '#d97706',
       stock: 25,
     },
@@ -975,7 +975,7 @@ const african: RestaurantTemplate = {
       name: 'Ugali',
       price: 3.5,
       category: 'Rice & Grains',
-      icon_name: 'ugali',
+      icon_name: 'rice',
       color_code: '#d97706',
       stock: 30,
     },
@@ -983,7 +983,7 @@ const african: RestaurantTemplate = {
       name: 'Injera',
       price: 4.0,
       category: 'Rice & Grains',
-      icon_name: 'injera',
+      icon_name: 'bread-slice',
       color_code: '#d97706',
       stock: 25,
     },
@@ -992,7 +992,7 @@ const african: RestaurantTemplate = {
       name: 'Suya (Beef)',
       price: 12.0,
       category: 'Grills & BBQ',
-      icon_name: 'suya',
+      icon_name: 'food-steak',
       color_code: '#dc2626',
       stock: 25,
       addOnGroups: [
@@ -1004,7 +1004,7 @@ const african: RestaurantTemplate = {
       name: 'Suya (Chicken)',
       price: 11.0,
       category: 'Grills & BBQ',
-      icon_name: 'chicken-suya',
+      icon_name: 'chicken-leg',
       color_code: '#dc2626',
       stock: 25,
       addOnGroups: [
@@ -1016,7 +1016,7 @@ const african: RestaurantTemplate = {
       name: 'Nyama Choma',
       price: 16.0,
       category: 'Grills & BBQ',
-      icon_name: 'nyama-choma',
+      icon_name: 'food-steak',
       color_code: '#dc2626',
       stock: 20,
       addOnGroups: [
@@ -1028,7 +1028,7 @@ const african: RestaurantTemplate = {
       name: 'Tilapia Grill',
       price: 15.0,
       category: 'Grills & BBQ',
-      icon_name: 'grilled-fish',
+      icon_name: 'fish',
       color_code: '#dc2626',
       stock: 20,
       addOnGroups: [
@@ -1040,7 +1040,7 @@ const african: RestaurantTemplate = {
       name: 'Asun (Goat)',
       price: 14.0,
       category: 'Grills & BBQ',
-      icon_name: 'asun',
+      icon_name: 'food-steak',
       color_code: '#dc2626',
       stock: 15,
       addOnGroups: [
@@ -1049,25 +1049,25 @@ const african: RestaurantTemplate = {
       ],
     },
 
-    {name: 'Puff Puff', price: 4.5, category: 'Snacks', icon_name: 'puff-puff', color_code: '#16a34a', stock: 30},
-    {name: 'Chin Chin', price: 3.5, category: 'Snacks', icon_name: 'chin-chin', color_code: '#16a34a', stock: 40},
-    {name: 'Akara (Bean Cakes)', price: 5.0, category: 'Snacks', icon_name: 'akara', color_code: '#16a34a', stock: 30},
-    {name: 'Bofrot (Doughnuts)', price: 4.0, category: 'Snacks', icon_name: 'bofrot', color_code: '#16a34a', stock: 30},
-    {name: 'Samosa', price: 4.5, category: 'Snacks', icon_name: 'samosa', color_code: '#16a34a', stock: 35},
+    {name: 'Puff Puff', price: 4.5, category: 'Snacks', icon_name: 'cupcake', color_code: '#16a34a', stock: 30},
+    {name: 'Chin Chin', price: 3.5, category: 'Snacks', icon_name: 'food', color_code: '#16a34a', stock: 40},
+    {name: 'Akara (Bean Cakes)', price: 5.0, category: 'Snacks', icon_name: 'food', color_code: '#16a34a', stock: 30},
+    {name: 'Bofrot (Doughnuts)', price: 4.0, category: 'Snacks', icon_name: 'cupcake', color_code: '#16a34a', stock: 30},
+    {name: 'Samosa', price: 4.5, category: 'Snacks', icon_name: 'sandwich', color_code: '#16a34a', stock: 35},
 
-    {name: 'Plantain (Fried)', price: 4.5, category: 'Breads & Sides', icon_name: 'plantain', color_code: '#7c3aed', stock: 40},
-    {name: 'Fried Yam', price: 5.0, category: 'Breads & Sides', icon_name: 'fried-yam', color_code: '#7c3aed', stock: 35},
-    {name: 'Coleslaw', price: 3.0, category: 'Breads & Sides', icon_name: 'coleslaw', color_code: '#7c3aed', stock: 30},
+    {name: 'Plantain (Fried)', price: 4.5, category: 'Breads & Sides', icon_name: 'carrot', color_code: '#7c3aed', stock: 40},
+    {name: 'Fried Yam', price: 5.0, category: 'Breads & Sides', icon_name: 'carrot', color_code: '#7c3aed', stock: 35},
+    {name: 'Coleslaw', price: 3.0, category: 'Breads & Sides', icon_name: 'carrot', color_code: '#7c3aed', stock: 30},
 
-    {name: 'Zobo (Hibiscus)', price: 3.5, category: 'Drinks', icon_name: 'zobo', color_code: '#0891b2', stock: 40},
-    {name: 'Kunu', price: 3.0, category: 'Drinks', icon_name: 'kunu', color_code: '#0891b2', stock: 40},
-    {name: 'Palm Wine', price: 5.0, category: 'Drinks', icon_name: 'palm-wine', color_code: '#0891b2', stock: 30},
-    {name: 'Chapman', price: 5.5, category: 'Drinks', icon_name: 'chapman', color_code: '#0891b2', stock: 30},
-    {name: 'Tamarind Juice', price: 3.5, category: 'Drinks', icon_name: 'tamarind-juice', color_code: '#0891b2', stock: 35},
+    {name: 'Zobo (Hibiscus)', price: 3.5, category: 'Drinks', icon_name: 'cup', color_code: '#0891b2', stock: 40},
+    {name: 'Kunu', price: 3.0, category: 'Drinks', icon_name: 'cup', color_code: '#0891b2', stock: 40},
+    {name: 'Palm Wine', price: 5.0, category: 'Drinks', icon_name: 'beer', color_code: '#0891b2', stock: 30},
+    {name: 'Chapman', price: 5.5, category: 'Drinks', icon_name: 'glass-cocktail', color_code: '#0891b2', stock: 30},
+    {name: 'Tamarind Juice', price: 3.5, category: 'Drinks', icon_name: 'cup', color_code: '#0891b2', stock: 35},
 
-    {name: 'Beignets', price: 5.0, category: 'Desserts', icon_name: 'beignets', color_code: '#be185d', stock: 20},
-    {name: 'Mandazi', price: 4.5, category: 'Desserts', icon_name: 'mandazi', color_code: '#be185d', stock: 20},
-    {name: 'Malva Pudding', price: 6.0, category: 'Desserts', icon_name: 'malva-pudding', color_code: '#be185d', stock: 15},
+    {name: 'Beignets', price: 5.0, category: 'Desserts', icon_name: 'cupcake', color_code: '#be185d', stock: 20},
+    {name: 'Mandazi', price: 4.5, category: 'Desserts', icon_name: 'cupcake', color_code: '#be185d', stock: 20},
+    {name: 'Malva Pudding', price: 6.0, category: 'Desserts', icon_name: 'cake', color_code: '#be185d', stock: 15},
   ],
 };
 

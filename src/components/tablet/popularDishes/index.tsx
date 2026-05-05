@@ -7,7 +7,7 @@ import {
 import Text from '../../../components/text';
 import {StyledIcon} from '../../../components/package/icon';
 import {useQueryPopularMenuItems} from '../../../hooks/useOrderItems';
-import PosIcon from '../../pos-icon';
+import ItemIcon from '../../item-icon';
 import {useAppContext} from '../../../hooks/appContext';
 import {useAppTheme} from '../../../theme';
 
@@ -93,10 +93,10 @@ const PopularDishes = () => {
                     backgroundColor={iconColor ? `${iconColor}18` : t.bgInput}
                     alignItems="center"
                     justifyContent="center">
-                    <PosIcon
-                      name={dish?.menu_icon_name}
-                      size={18}
+                    <ItemIcon
+                      iconName={dish?.menu_icon_name}
                       color={iconColor}
+                      size={20}
                     />
                   </StyleShape>
 

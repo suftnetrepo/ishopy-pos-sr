@@ -4,8 +4,7 @@ import {Stack} from '../../../package/stack';
 import {fontStyles, theme} from '../../../../utils/theme';
 import {Pressable} from 'react-native';
 import {useAppContext} from '../../../../hooks/appContext';
-import {StyledIcon} from '../../../package/icon';
-import PosIcon from '../../../pos-icon';
+import CategoryIcon from '../../../category-icon';
 import {useAppTheme} from '../../../../theme';
 
 const CategoryCard = ({name,
@@ -20,9 +19,6 @@ const CategoryCard = ({name,
 
   const menuText = total_menu === 1 ? 'item' : 'items';
   const isSelected = selected_category_id === category_id;
-  
-  // Safe icon validation - only render if icon_name is valid
-  const hasValidIcon = Boolean(icon_name) && icon_name !== 'undefined' && String(icon_name).trim().length > 0;
 
   return (
     <Pressable onTouchStart={() => onPress(category_id)} style={{flex: 1}}>
@@ -44,19 +40,23 @@ const CategoryCard = ({name,
         elevation={3}>
         <StyledShape
           size={48}
-          backgroundColor={t.bgInput}
+          backgroundColor={
+            isSelected ? `${color_code || t.brandPrimary}18` : t.bgInput
+          }
+          borderWidth={isSelected ? 2 : 1}
+          borderColor={
+            isSelected ? color_code || t.brandPrimary : t.borderDefault
+          }
           justifyContent="center"
           alignItems="center"
           cycle
           marginHorizontal={4}
           padding={4}>
-          {hasValidIcon ? (
-            <PosIcon
-              name={icon_name}
-              size={32}
-              color={color_code || t.textSecondary}
-            />
-          ) : null}
+          <CategoryIcon
+            iconName={icon_name}
+            color={color_code || t.brandPrimary}
+            size={28}
+          />
         </StyledShape>
 
         <Stack vertical flex={1} justifyContent="center">

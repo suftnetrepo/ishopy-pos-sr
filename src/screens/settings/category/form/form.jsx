@@ -12,6 +12,7 @@ import {
   StyledPressable,
   StyledTextInput,
   toastService,
+  StyledShape,
 } from 'fluent-styles';
 import {ThemedStyledTextInput} from '../../../../components/form';
 import {fontStyles} from '../../../../configs/theme';
@@ -22,6 +23,7 @@ import {
 } from '../../../../hooks/useCategory';
 import ColorPicker from '../../../../components/colorPicker';
 import PosIconPicker from '../../../../components/pos-icon-picker';
+import CategoryIcon from '../../../../components/category-icon';
 import {useLoaderAndError} from '../../../../hooks/useLoaderAndError';
 import {useAppTheme} from '../../../../theme';
 
@@ -135,6 +137,32 @@ const CategoryForm = ({category, onClose}) => {
               selected={fields?.icon_name}
               onSelect={icon => setFields({...fields, icon_name: icon})}
             />
+            {/* Icon Preview */}
+            <Stack
+              marginTop={12}
+              alignItems="center"
+              gap={8}>
+              <StyledText
+                fontSize={theme.fontSize.small}
+                fontWeight={theme.fontWeight.normal}
+                color={t.textMuted}>
+                Preview
+              </StyledText>
+              <StyledShape
+                size={56}
+                cycle
+                backgroundColor={`${fields?.color_code || t.brandPrimary}15`}
+                borderWidth={1}
+                borderColor={`${fields?.color_code || t.brandPrimary}40`}
+                alignItems="center"
+                justifyContent="center">
+                <CategoryIcon
+                  iconName={fields?.icon_name}
+                  color={fields?.color_code || t.brandPrimary}
+                  size={32}
+                />
+              </StyledShape>
+            </Stack>
           </Stack>
 
           <XStack
