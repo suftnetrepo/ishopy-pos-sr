@@ -116,10 +116,12 @@ const seedFromTemplate = async (
     });
   });
 
-  console.log('Seeding with template:', template.label);
-  console.log('Categories:', categories);
-  console.log('Menu Items:', menus);
-  console.log('Add-ons:', allAddOns);
+  if (__DEV__) {
+    console.log('Seeding with template:', template.label);
+    console.log('Categories:', categories);
+    console.log('Menu Items:', menus);
+    console.log('Add-ons:', allAddOns);
+  }
 
   // Default tables for restaurant mode
   const tables = mode === 'restaurant'

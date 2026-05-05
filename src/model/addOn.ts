@@ -56,7 +56,7 @@ const queryAddonByMenuId = async (menu_id: string): Promise<AddOn[]> => {
           group_id: addOn.group_id
         }));
 
-        console.log('addOns', addOns);
+        if (__DEV__) console.log('addOns', addOns);
       resolve(addOns);
     } catch (error) {
       reject(error);

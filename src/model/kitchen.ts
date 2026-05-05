@@ -72,19 +72,19 @@ export const queryActiveTickets = async (): Promise<{
       // Kitchen-active statuses (matches Orders screen)
       const KDS_STATUSES = ['progress', 'pending', 'preparing', 'active'];
 
-      console.log('🔍 KDS: Fetching active orders from Order table...');
+      if (__DEV__) console.log('🔍 KDS: Fetching active orders from Order table...');
 
       // Query main Order table (source of truth)
       const allOrders = Array.from(
         realm.objects<Order>('Order')
       );
-      console.log('📊 Orders screen orders total:', allOrders.length, allOrders.map(o => ({id: o.order_id, status: o.status})));
+      if (__DEV__) console.log('📊 Orders screen orders total:', allOrders.length, allOrders.map(o => ({id: o.order_id, status: o.status})));
 
       // Filter by active kitchen status
       const activeOrders = allOrders.filter(order =>
         KDS_STATUSES.includes(normalizeStatus(order.status))
       );
-      console.log('✅ KDS raw orders (filtered):', activeOrders.length, activeOrders.map(o => ({id: o.order_id, status: o.status, table: o.table_name})));
+      if (__DEV__) console.log('✅ KDS raw orders (filtered):', activeOrders.length, activeOrders.map(o => ({id: o.order_id, status: o.status, table: o.table_name})));
 
       // Transform to KitchenTicket/KitchenItem format
       const result = activeOrders.map(order => {
@@ -112,10 +112,10 @@ export const queryActiveTickets = async (): Promise<{
         return {ticket, items};
       });
 
-      console.log('🎫 Kitchen tickets to display:', result.length);
+      if (__DEV__) console.log('🎫 Kitchen tickets to display:', result.length);
       resolve(result);
     } catch (e) {
-      console.error('❌ queryActiveTickets error:', e);
+      if (__DEV__) console.error('❌ queryActiveTickets error:', e);
       reject(e);
     }
   });
@@ -132,9 +132,9 @@ export const updateItemStatus = async (
     try {
       realm.write(() => {
         const item = realm.objectForPrimaryKey<KitchenItem>('KitchenItem', ki_id);
-        console.log('DEBUG updateItemStatus:', ki_id, '->', status, 'found:', !!item);
+        if (__DEV__) console.log('DEBUG updateItemStatus:', ki_id, '->', status, 'found:', !!item);
         if (item) item.item_status = status;
-        else console.warn('KitchenItem not found for ki_id:', ki_id);
+        else if (__DEV__) console.warn('KitchenItem not found for ki_id:', ki_id);
       });
       resolve();
     } catch (e) { reject(e); }

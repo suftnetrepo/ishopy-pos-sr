@@ -17,8 +17,6 @@ const Start = () => {
     const [showPaywall, setShowPaywall]       = useState(false);
     const [hasPurchased, setHasPurchased]     = useState(false);
 
-   // clearStore(); // Clear storage for testing purposes; remove in production!
-
     useEffect(() => {
         const checkOnboarding = async () => {
             try {
@@ -27,8 +25,7 @@ const Start = () => {
                 setHasOnboarded(onboardingStatus === true || onboardingStatus === 'true');
                 setHasPurchased(purchaseStatus === 1 || purchaseStatus === '1');
             } catch (error) {
-                if(__DEV__)
-                console.error('Error checking onboarding status:', error);
+                if (__DEV__) console.error('Error checking onboarding status:', error);
             } finally {
                 setIsLoading(false);
             }

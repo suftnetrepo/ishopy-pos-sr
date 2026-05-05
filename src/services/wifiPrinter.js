@@ -43,7 +43,7 @@ const disconnectPrinter = client => {
   try {
     client.destroy();
   } catch (error) {
-    console.log('disconnectPrinter error', error);
+    if (__DEV__) console.log('disconnectPrinter error', error);
   }
 };
 

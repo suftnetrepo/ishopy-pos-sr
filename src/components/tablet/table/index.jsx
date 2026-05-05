@@ -144,21 +144,43 @@ const Card = ({table, onPress, t, waitlistEntry}) => {
           </Stack>
         </Stack>
 
-        {/* Status badge */}
-        <Stack
-          paddingHorizontal={8}
-          paddingVertical={3}
-          borderRadius={20}
-          backgroundColor={s.label === 'Available' ? t.bgPage : s.badgeBg}
-          borderWidth={0.5}
-          borderColor={s.label === 'Available' ? t.borderDefault : s.badgeBg}
-          alignSelf="flex-start">
-          <StyledText
-            fontSize={10}
-            fontWeight={theme.fontWeight.semiBold}
-            color={s.label === 'Available' ? t.textMuted : s.badgeColor}>
-            {s.label}
-          </StyledText>
+        {/* Status badge + Size */}
+        <Stack horizontal alignItems="center" gap={8}>
+          <Stack
+            paddingHorizontal={8}
+            paddingVertical={3}
+            borderRadius={20}
+            backgroundColor={s.label === 'Available' ? t.bgPage : s.badgeBg}
+            borderWidth={0.5}
+            borderColor={s.label === 'Available' ? t.borderDefault : s.badgeBg}
+            alignSelf="flex-start">
+            <StyledText
+              fontSize={10}
+              fontWeight={theme.fontWeight.semiBold}
+              color={s.label === 'Available' ? t.textMuted : s.badgeColor}>
+              {s.label}
+            </StyledText>
+          </Stack>
+
+          {/* Size */}
+          <Stack
+            paddingHorizontal={8}
+            paddingVertical={3}
+            borderRadius={20}
+            backgroundColor={t.bgPage}
+            borderWidth={0.5}
+            borderColor={t.borderDefault}
+            horizontal
+            alignItems="center"
+            gap={3}>
+            <StyledIcon name="people" size={12} color={t.textMuted} />
+            <StyledText
+              fontSize={10}
+              fontWeight={theme.fontWeight.semiBold}
+              color={t.textMuted}>
+              {table.size || 0}
+            </StyledText>
+          </Stack>
         </Stack>
       </Stack>
 

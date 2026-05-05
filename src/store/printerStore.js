@@ -8,7 +8,7 @@ const printerStore = {
       const value = await AsyncStorage.getItem(SELECTED_PRINTER_KEY);
       return value ? JSON.parse(value) : null;
     } catch (error) {
-      console.log('getSelectedPrinter error:', error);
+      if (__DEV__) console.log('getSelectedPrinter error:', error);
       return null;
     }
   },
@@ -21,7 +21,7 @@ const printerStore = {
       );
       return printer;
     } catch (error) {
-      console.log('saveSelectedPrinter error:', error);
+      if (__DEV__) console.log('saveSelectedPrinter error:', error);
       throw error;
     }
   },
@@ -31,7 +31,7 @@ const printerStore = {
       await AsyncStorage.removeItem(SELECTED_PRINTER_KEY);
       return true;
     } catch (error) {
-      console.log('clearSelectedPrinter error:', error);
+      if (__DEV__) console.log('clearSelectedPrinter error:', error);
       return false;
     }
   },
