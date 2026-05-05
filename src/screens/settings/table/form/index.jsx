@@ -107,12 +107,16 @@ const TableForm = ({table, onClose}) => {
           onPress={color => setFields({...fields, color_code: color})}
         />
 
-        <ThemedStyledTextInput
+        <StyledTextInput
           label="Name"
           keyboardType="default"
           placeholder="Enter table name"
           returnKeyType="next"
           maxLength={50}
+           backgroundColor={t.bgInput}
+            color={t.textPrimary}
+            placeholderTextColor={t.textMuted}
+            borderColor={t.borderDefault}
           fontSize={theme.fontSize.small}
           value={fields.tableName}
           onChangeText={text => setFields({...fields, tableName: text})}
@@ -120,12 +124,16 @@ const TableForm = ({table, onClose}) => {
           errorMessage={errorMessages?.tableName?.message}
         />
 
-        <ThemedStyledTextInput
+        <StyledTextInput
           label="Size"
           keyboardType="number-pad"
           placeholder="Enter table size"
           returnKeyType="next"
           maxLength={3}
+           backgroundColor={t.bgInput}
+            color={t.textPrimary}
+            placeholderTextColor={t.textMuted}
+            borderColor={t.borderDefault}
           fontSize={theme.fontSize.small}
           value={fields.size?.toString()}
           onChangeText={text => setFields({...fields, size: parseInt(text) || 0})}

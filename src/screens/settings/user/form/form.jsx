@@ -1,8 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { validate, theme, StyledPressable, YStack, toastService, StyledCard, XStack, StyledSpacer, StyledText, StyledForm, Switch } from 'fluent-styles';
-import { StyledInput, ThemedStyledTextInput } from '../../../../components/form';
-import { fontStyles } from "../../../../configs/theme";
+import { validate, theme, StyledPressable, YStack, toastService, StyledCard, StyledTextInput, StyledText, StyledForm } from 'fluent-styles';
 import { userRules } from "./validatorRules";
 import { useUpdateUser, useInsertUser } from "../../../../hooks/useUser";
 import { useLoaderAndError } from "../../../../hooks/useLoaderAndError";
@@ -25,15 +23,6 @@ const UserForm = ({user, onClose}) => {
       }
     })
   }, [user])
-
-  const inputProps = {
-    fontSize: theme.fontSize.small,
-    borderColor: t.borderDefault,
-    backgroundColor: t.bgInput,
-    color: t.textPrimary,
-    paddingHorizontal: 8,
-    placeholderTextColor: t.textMuted,
-  };
 
   const onNotify = ({status, t}) => {
     toastService.show({
@@ -83,61 +72,81 @@ const UserForm = ({user, onClose}) => {
 
 
         <StyledForm >
-          <ThemedStyledTextInput
+          <StyledTextInput
             label={'FirstName'}
             keyboardType='default'
             placeholder='Enter your firstname'
             returnKeyType='next'
             maxLength={50}
+             backgroundColor={t.bgInput}
+            color={t.textPrimary}
+            placeholderTextColor={t.textMuted}
+            borderColor={t.borderDefault}
             fontSize={theme.fontSize.small}
             value={fields.first_name}
             onChangeText={(text) => setFields({ ...fields, first_name: text })}
             error={!!errorMessages?.first_name}
             errorMessage={errorMessages?.first_name?.message}
           />
-          <ThemedStyledTextInput
+          <StyledTextInput
             label={'LastName'}
             keyboardType='default'
             placeholder='Enter your lastname'
             returnKeyType='next'
             maxLength={50}
+             backgroundColor={t.bgInput}
+            color={t.textPrimary}
+            placeholderTextColor={t.textMuted}
+            borderColor={t.borderDefault}
             fontSize={theme.fontSize.small}
             value={fields.last_name}
             onChangeText={(text) => setFields({ ...fields, last_name: text })}
             error={!!errorMessages?.last_name}
             errorMessage={errorMessages?.last_name?.message}
           />
-          <ThemedStyledTextInput
+          <StyledTextInput
             label={'Username'}
             keyboardType='default'
             placeholder='Enter your username'
             returnKeyType='next'
             maxLength={50}
             fontSize={theme.fontSize.small}
+            backgroundColor={t.bgInput}
+            color={t.textPrimary}
+            placeholderTextColor={t.textMuted}
+            borderColor={t.borderDefault}
             value={fields.username}
             onChangeText={(text) => setFields({ ...fields, username: text })}
             error={!!errorMessages?.username}
             errorMessage={errorMessages?.username?.message}
           />
-          <ThemedStyledTextInput
+          <StyledTextInput
             label={'Password'}
             keyboardType='default'
             secureTextEntry={true}
             placeholder='Enter your password'
             returnKeyType='done'
             maxLength={8}
+             backgroundColor={t.bgInput}
+            color={t.textPrimary}
+            placeholderTextColor={t.textMuted}
+            borderColor={t.borderDefault}
             fontSize={theme.fontSize.small}
             value={fields.password}
             onChangeText={(text) => setFields({ ...fields, password: text })}
             error={!!errorMessages?.password}
             errorMessage={errorMessages?.password?.message}
           />
-          <ThemedStyledTextInput
+          <StyledTextInput
             label={'Pass code'}
             keyboardType='numeric'
             placeholder='Enter your pass code'
             returnKeyType='done'
             maxLength={4}
+             backgroundColor={t.bgInput}
+            color={t.textPrimary}
+            placeholderTextColor={t.textMuted}
+            borderColor={t.borderDefault}
             fontSize={theme.fontSize.small}
             value={fields.pass_code}
             onChangeText={(text) => setFields({ ...fields, pass_code: text })}

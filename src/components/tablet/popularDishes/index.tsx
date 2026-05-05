@@ -51,7 +51,7 @@ const PopularDishes = () => {
         borderWidth={1}
         borderColor={`${t.borderDefault}55`}
         width={'100%'}
-        marginVertical={12}
+        marginVertical={4}
       />
 
       {data.length === 0 ? (
