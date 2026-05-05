@@ -1,0 +1,9 @@
+# Matchfile — certificate sync
+
+git_url         ENV['MATCH_GIT_URL']
+storage_mode    'git'
+type            'appstore'
+app_identifier  ['com.suftnet.shop.sr']
+username        ENV['APPLE_ID']
+
+clone_branch_directly true

@@ -1,0 +1,10 @@
+# Appfile — ishopy POS
+
+# iOS
+app_identifier  'com.suftnet.shop.sr'
+apple_id        ENV['APPLE_ID']
+team_id         ENV['APPLE_TEAM_ID']
+
+# Android
+json_key_file   '/tmp/google-play-key.json'
+package_name    'com.suftnet.shop.sr'

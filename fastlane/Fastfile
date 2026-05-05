@@ -1,0 +1,204 @@
+# Fastfile — ishopy POS (Kursa)
+# Bundle ID:    com.suftnet.shop.sr (iOS)
+# Package:      com.suftnet.shop.sr (Android)
+# Workspace:    ios/ishopyPos.xcworkspace
+# Scheme:       ishopyPos
+
+default_platform(:ios)
+
+# ─────────────────────────────────────────────────────────────────────────────
+# HELPERS
+# ─────────────────────────────────────────────────────────────────────────────
+def apple_api_key
+  app_store_connect_api_key(
+    key_id:                  ENV['APPLE_API_KEY_ID'],
+    issuer_id:               ENV['APPLE_API_ISSUER_ID'],
+    key_content:             ENV['APPLE_API_KEY_CONTENT'],
+    is_key_content_base64:   false,
+    in_house:                false,
+  )
+end
+
+def notify_slack(message, success: true)
+  return unless ENV['SLACK_WEBHOOK_URL']
+  slack(
+    message:          message,
+    success:          success,
+    webhook_url:      ENV['SLACK_WEBHOOK_URL'],
+    default_payloads: [:git_branch, :git_author, :last_git_commit_message],
+  )
+end
+
+# ─────────────────────────────────────────────────────────────────────────────
+# iOS
+# ─────────────────────────────────────────────────────────────────────────────
+platform :ios do
+
+  # ── Sync certificates only ──────────────────────────────────────────────────
+  lane :certificates do
+    match(
+      type:           'appstore',
+      readonly:       true,
+      app_identifier: 'com.suftnet.shop.sr',
+      api_key:        apple_api_key,
+    )
+  end
+
+  # ── develop → TestFlight internal testers ──────────────────────────────────
+  lane :deploy_beta do
+    api_key = apple_api_key
+
+    increment_build_number(
+      build_number: Time.now.strftime('%Y%m%d%H%M'),
+      xcodeproj:    'ios/ishopyPos.xcodeproj',
+    )
+
+    match(
+      type:           'appstore',
+      readonly:       true,
+      app_identifier: 'com.suftnet.shop.sr',
+      api_key:        api_key,
+    )
+
+    build_app(
+      workspace:        'ios/ishopyPos.xcworkspace',
+      scheme:           'ishopyPos',
+      configuration:    'Release',
+      export_method:    'app-store',
+      output_directory: './build/ios',
+      output_name:      'ishopyPos.ipa',
+      clean:            true,
+      export_options: {
+        provisioningProfiles: {
+          'com.suftnet.shop.sr' => 'match AppStore com.suftnet.shop.sr',
+        },
+      },
+    )
+
+    upload_to_testflight(
+      api_key:                           api_key,
+      skip_waiting_for_build_processing: true,
+      distribute_external:               false,
+      changelog:                         "Beta — #{last_git_commit[:message]}",
+    )
+
+    notify_slack("✅ iOS beta uploaded to TestFlight (#{lane_context[SharedValues::BUILD_NUMBER]})")
+  end
+
+  # ── main → TestFlight external testers ─────────────────────────────────────
+  lane :deploy_production do
+    api_key = apple_api_key
+
+    increment_build_number(
+      build_number: Time.now.strftime('%Y%m%d%H%M'),
+      xcodeproj:    'ios/ishopyPos.xcodeproj',
+    )
+
+    match(
+      type:           'appstore',
+      readonly:       true,
+      app_identifier: 'com.suftnet.shop.sr',
+      api_key:        api_key,
+    )
+
+    build_app(
+      workspace:        'ios/ishopyPos.xcworkspace',
+      scheme:           'ishopyPos',
+      configuration:    'Release',
+      export_method:    'app-store',
+      output_directory: './build/ios',
+      output_name:      'ishopyPos.ipa',
+      clean:            true,
+      export_options: {
+        provisioningProfiles: {
+          'com.suftnet.shop.sr' => 'match AppStore com.suftnet.shop.sr',
+        },
+      },
+    )
+
+    upload_to_testflight(
+      api_key:                           api_key,
+      skip_waiting_for_build_processing: false,
+      distribute_external:               true,
+      groups:                            ['External Testers'],
+      changelog:                         last_git_commit[:message],
+    )
+
+    notify_slack("🚀 iOS production uploaded to TestFlight (#{lane_context[SharedValues::BUILD_NUMBER]})")
+  end
+
+  error do |lane, exception|
+    notify_slack("❌ iOS #{lane} failed: #{exception.message}", success: false)
+  end
+end
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ANDROID
+# ─────────────────────────────────────────────────────────────────────────────
+platform :android do
+
+  # Shared signing properties
+  def signing_props
+    {
+      'android.injected.signing.store.file'     =>
+        "#{File.expand_path('.')}/android/app/ishopyPos.keystore",
+      'android.injected.signing.store.password' => ENV['ANDROID_STORE_PASSWORD'],
+      'android.injected.signing.key.alias'      => ENV['ANDROID_KEY_ALIAS'],
+      'android.injected.signing.key.password'   => ENV['ANDROID_KEY_PASSWORD'],
+    }
+  end
+
+  # ── develop → Play internal track ──────────────────────────────────────────
+  lane :deploy_beta do
+    gradle(
+      task:          'bundle',
+      build_type:    'Release',
+      project_dir:   'android/',
+      print_command: false,
+      properties:    signing_props,
+    )
+
+    upload_to_play_store(
+      track:                    'internal',
+      aab:                      'android/app/build/outputs/bundle/release/app-release.aab',
+      json_key:                 '/tmp/google-play-key.json',
+      package_name:             'com.suftnet.shop.sr',
+      skip_upload_apk:          true,
+      skip_upload_metadata:     true,
+      skip_upload_changelogs:   true,
+      skip_upload_images:       true,
+      skip_upload_screenshots:  true,
+    )
+
+    notify_slack("✅ Android beta uploaded to Play internal track")
+  end
+
+  # ── main → Play beta track ──────────────────────────────────────────────────
+  lane :deploy_production do
+    gradle(
+      task:          'bundle',
+      build_type:    'Release',
+      project_dir:   'android/',
+      print_command: false,
+      properties:    signing_props,
+    )
+
+    upload_to_play_store(
+      track:                    'beta',
+      aab:                      'android/app/build/outputs/bundle/release/app-release.aab',
+      json_key:                 '/tmp/google-play-key.json',
+      package_name:             'com.suftnet.shop.sr',
+      skip_upload_apk:          true,
+      skip_upload_metadata:     true,
+      skip_upload_changelogs:   true,
+      skip_upload_images:       true,
+      skip_upload_screenshots:  true,
+    )
+
+    notify_slack("🚀 Android production uploaded to Play beta track")
+  end
+
+  error do |lane, exception|
+    notify_slack("❌ Android #{lane} failed: #{exception.message}", success: false)
+  end
+end

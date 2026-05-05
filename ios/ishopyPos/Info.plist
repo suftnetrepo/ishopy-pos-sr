@@ -56,6 +56,14 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>This app needs Bluetooth access to connect to thermal printers</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>This app needs Bluetooth access to connect to thermal printers</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We use the camera to allow users to capture images for product uploads or profile images.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>This app uses your local network to connect to WiFi printers.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>CrimsonText-Bold.ttf</string>
@@ -78,7 +86,6 @@
 	</array>
 	<key>UIDeviceFamily</key>
 	<array>
-		<integer>1</integer>
 		<integer>2</integer>
 	</array>
 	<key>UILaunchStoryboardName</key>
@@ -87,7 +94,7 @@
 	<array>
 		<string>arm64</string>
 	</array>
-	<key>UISupportedInterfaceOrientations</key>
+	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
@@ -96,13 +103,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>This app needs Bluetooth access to connect to thermal printers</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>This app needs Bluetooth access to connect to thermal printers</string>
-	<key>NSCameraUsageDescription</key>
-	<string>We use the camera to allow users to capture images for product uploads or profile images.</string>
-	<key>NSLocalNetworkUsageDescription</key>
-	<string>This app uses your local network to connect to WiFi printers.</string>
 </dict>
 </plist>
