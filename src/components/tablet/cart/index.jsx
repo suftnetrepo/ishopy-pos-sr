@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
-import React, {Fragment, useState, useEffect} from 'react';
-import {ScrollView} from 'react-native';
+import React, {Fragment, useState, useEffect, useRef} from 'react';
+import {ScrollView, PanResponder, Animated, View} from 'react-native';
 import {
   StyledSpacer, Drawer, StyledPressable,
   XStack, YStack, Stack,
@@ -15,15 +15,23 @@ import {useInsertOrder, updataStatusHandler} from '../../../hooks/useOrder';
 import EmptyView from '../../../components/utils/empty';
 import {useNavigation} from '@react-navigation/native';
 import {useAppTheme} from '../../../theme';
+import {StyledMIcon} from '../../../components/icon';
+import AddOn from '../cards/menu/addOn';
 
 export default function Cart({table_id, table_name}) {
   const navigation = useNavigation();
-  const {updateOrderId, getItems, shop, removeItem, getTotalTax, clearItem, getTotal, getTotalPrice} = useAppContext();
+  const {updateOrderId, getItems, shop, removeItem, getTotalTax, clearItem, getTotal, getTotalPrice, updateItem} = useAppContext();
   const {t} = useAppTheme();
   const {orderHandler, printHandler, shareReceipt, deleteHandler, queryOrderByIdhandler, data} = useInsertOrder(table_id, table_name);
 
   const [paymentMethod, setPaymentMethod] = useState('');
   const [showPayment,   setShowPayment]   = useState(false);
+  const [swipedItemKey, setSwipedItemKey] = useState(null);
+  const [showAddOnModal, setShowAddOnModal] = useState(false);
+  const [editingItem, setEditingItem] = useState(null);
+  
+  // Refs for swipe animation values (keyed by item id, not index)
+  const swipePanRefs = useRef({});
 
   const items        = getItems(table_id);
   const totalPrice   = getTotalPrice(table_id);
@@ -35,11 +43,34 @@ export default function Cart({table_id, table_name}) {
     if (items?.order_id) queryOrderByIdhandler(items.order_id);
   }, [items?.order_id]);
 
+  // Clear swipe state when items list changes (prevents index shifting issues)
+  useEffect(() => {
+    setSwipedItemKey(null);
+    Object.values(swipePanRefs.current).forEach(value => {
+      if (value instanceof Animated.Value) {
+        value.setValue(0);
+      }
+    });
+  }, [items?.items?.length]);
+
   const calculateItemPrice = item => {
-    const addOnsTotal = [item?.addOns || []].reduce((total, addOn) =>
+    const addOnsTotal = (item?.addOns || []).reduce((total, addOn) =>
       total + parseFloat(addOn.price || 0) * parseInt(addOn.quantity || 0), 0) || 0;
     return addOnsTotal + (item?.price || 0);
   };
+
+  const calculateBasePrice = item => item?.price || 0;
+
+  const calculateAddOnsTotal = item => {
+    return (item?.addOns || []).reduce((total, addOn) =>
+      total + parseFloat(addOn.price || 0) * parseInt(addOn.quantity || 0), 0) || 0;
+  };
+
+  const hasAddOns = item => (item?.addOns || []).length > 0;
+
+  // Generate stable key for cart item (based on id, not index)
+  const getCartItemKey = (item, index) =>
+    String(item?.cartItemId || item?.id || item?.menu_id || `${item?.name}-${index}`);
 
   const handleOrder = async () => {
     if (!hasItems) return;
@@ -61,41 +92,250 @@ export default function Cart({table_id, table_name}) {
   const handlePrint = () => { if (data && table_name) printHandler(table_name, data); };
 
   // ── Cart items ────────────────────────────────────────────────────────────
-  const renderCartItems = () => (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      {items?.items?.map((item, index) => (
-        <Fragment key={`${item.id}-${index}`}>
-          <Stack
-            borderRadius={8} paddingHorizontal={12} paddingVertical={4}
-            backgroundColor={t.bgInput}
-            borderWidth={1} borderColor={t.borderDefault}
-            horizontal flex={1} justifyContent="space-between" alignItems="center">
-            <Text
-              flex={1} color={t.textPrimary}
-              variant="body">
-              {item.name}
-            </Text>
-            <Stack horizontal alignItems="center" gap={12}>
-              <Text variant="body" color={t.textSecondary}>
-                {formatCurrency(shop?.currency || '£', calculateItemPrice(item))}
-              </Text>
-              <Stack
-                width={20} height={30} borderRadius={15}
-                backgroundColor={t.bgInput}
-                justifyContent="center" alignItems="center">
-                <Icons
-                  name="cancel" size={24} color={t.textMuted}
-                  onPress={() => removeItem(item.index, table_id)}
-                />
-              </Stack>
-            </Stack>
-          </Stack>
-          <StyledSpacer marginVertical={1} />
-        </Fragment>
-      ))}
-    </ScrollView>
-  );
+const DELETE_WIDTH = 84;
+const SWIPE_THRESHOLD = 45;
 
+  // Get or create animated value for a row (by stable key, not index)
+  const getSwipeAnimValue = (key) => {
+    if (!swipePanRefs.current[key]) {
+      swipePanRefs.current[key] = new Animated.Value(0);
+    }
+    return swipePanRefs.current[key];
+  };
+
+  // Create PanResponder for swipe gesture on a specific row
+  const createSwipeResponder = (itemKey, item) => {
+    const animValue = getSwipeAnimValue(itemKey);
+    
+    return PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: (evt, gestureState) => {
+        // Only respond to horizontal swipes
+        return Math.abs(gestureState.dx) > Math.abs(gestureState.dy);
+      },
+      onPanResponderMove: (evt, {dx}) => {
+        // Limit swipe to left only (negative dx)
+        const limitedDx = Math.min(0, dx);
+        animValue.setValue(limitedDx);
+      },
+      onPanResponderRelease: (evt, {dx}) => {
+        // If swiped far enough, lock to delete position
+        if (dx < -SWIPE_THRESHOLD) {
+          setSwipedItemKey(itemKey);
+          Animated.spring(animValue, {
+            toValue: -DELETE_WIDTH,
+            useNativeDriver: true,
+          }).start();
+        } else {
+          // Otherwise snap back
+          setSwipedItemKey(null);
+          Animated.spring(animValue, {
+            toValue: 0,
+            useNativeDriver: true,
+          }).start();
+        }
+      },
+    });
+  };
+
+  // Close swipe animation with optional key override
+  const closeSwipe = (key = swipedItemKey) => {
+    if (key && swipePanRefs.current[key]) {
+      Animated.spring(swipePanRefs.current[key], {
+        toValue: 0,
+        useNativeDriver: true,
+      }).start();
+    }
+    setSwipedItemKey(null);
+  };
+
+  const handleEditItem = (item) => {
+    setEditingItem(item);
+    setShowAddOnModal(true);
+    closeSwipe();
+  };
+
+  const handleCloseAddOnModal = () => {
+    setShowAddOnModal(false);
+    setEditingItem(null);
+  };
+
+  const handleAddOnModalSubmit = (updatedItem) => {
+    if (editingItem) {
+      // Update existing cart item
+      updateItem(updatedItem, table_id);
+    }
+    handleCloseAddOnModal();
+  };
+
+  // Close swipe panel when tapping anywhere on the main row
+  const handleRowPress = (item) => {
+    if (swipedItemKey !== null) {
+      // Reset swipe state
+      closeSwipe();
+    } else if (hasAddOns(item)) {
+      // Tap to edit if has add-ons and not swiped
+      handleEditItem(item);
+    }
+  };
+
+const renderCartItems = () => (
+  <ScrollView showsVerticalScrollIndicator={false}>
+    {items?.items?.map((item, index) => {
+      const itemKey = getCartItemKey(item, index);
+      const isSwiped = swipedItemKey === itemKey;
+      const animValue = getSwipeAnimValue(itemKey);
+      const addOnsCount = item?.addOns?.length || 0;
+      const basePrice = calculateBasePrice(item);
+      const addOnsTotal = calculateAddOnsTotal(item);
+      const lineTotal = calculateItemPrice(item);
+      const showAddOnBreakdown = hasAddOns(item) && addOnsTotal > 0;
+
+      const panResponder = PanResponder.create({
+        onStartShouldSetPanResponder: () => false,
+        onMoveShouldSetPanResponder: (_, gesture) =>
+          Math.abs(gesture.dx) > 12 && Math.abs(gesture.dx) > Math.abs(gesture.dy),
+
+        onPanResponderMove: (_, gesture) => {
+          const dx = Math.max(-DELETE_WIDTH, Math.min(0, gesture.dx));
+          animValue.setValue(dx);
+        },
+
+        onPanResponderRelease: (_, gesture) => {
+          const shouldOpen = gesture.dx < -SWIPE_THRESHOLD;
+
+          setSwipedItemKey(shouldOpen ? itemKey : null);
+
+          Animated.spring(animValue, {
+            toValue: shouldOpen ? -DELETE_WIDTH : 0,
+            useNativeDriver: true,
+          }).start();
+        },
+      });
+
+      const handleDeletePress = () => {
+        closeSwipe(itemKey);
+        removeItem(item.index ?? index, table_id);
+        delete swipePanRefs.current[itemKey];
+      };
+
+      return (
+        <View
+          key={`${item.id}-${index}`}
+          style={{
+            position: 'relative',
+            marginBottom: 8,
+            borderRadius: 10,
+            overflow: 'hidden',
+            backgroundColor: t.bgInput,
+          }}>
+          {/* Delete action behind row */}
+          <View
+            style={{
+              position: 'absolute',
+              right: 0,
+              top: 0,
+              bottom: 0,
+              width: DELETE_WIDTH,
+              backgroundColor: t.dangerColor,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderTopRightRadius: 10,
+              borderBottomRightRadius: 10,
+            }}>
+            <StyledPressable
+              width="100%"
+              height="100%"
+              alignItems="center"
+              justifyContent="center"
+              onPress={handleDeletePress}>
+              <StyledMIcon pointerEvents="none" name="delete-outline" size={22} color={t.textInverse} />
+             
+            </StyledPressable>
+          </View>
+
+          {/* Main row */}
+          <Animated.View
+            {...panResponder.panHandlers}
+            style={{
+              transform: [{translateX: animValue}],
+              backgroundColor: t.bgCard,
+              borderRadius: 10,
+            }}>
+            <StyledPressable
+              paddingHorizontal={12}
+              paddingVertical={10}
+              backgroundColor={t.bgCard}
+              borderWidth={1}
+              borderColor={t.borderDefault}
+              borderRadius={10}
+              onPress={() => {
+                if (swipedItemKey !== null) {
+                  closeSwipe();
+                  return;
+                }
+
+                if (hasAddOns(item)) {
+                  handleEditItem(item);
+                }
+              }}>
+              <YStack gap={6}>
+                <XStack justifyContent="space-between" alignItems="flex-start" gap={8}>
+                  <YStack flex={1} gap={4}>
+                    <Text
+                      color={t.textPrimary}
+                      variant="body"
+                      fontWeight="700"
+                      numberOfLines={1}>
+                      {item.name}
+                    </Text>
+
+                    {hasAddOns(item) && (
+                      <XStack alignItems="center" gap={4}>
+                        <StyledMIcon name="tune" size={14} color={t.brandPrimary} />
+                        <Text variant="caption" color={t.textSecondary}>
+                          {addOnsCount} add-on{addOnsCount !== 1 ? 's' : ''}
+                        </Text>
+                      </XStack>
+                    )}
+                  </YStack>
+
+                  <Text variant="body" fontWeight="700" color={t.textPrimary}>
+                    {formatCurrency(shop?.currency || '£', lineTotal)}
+                  </Text>
+                </XStack>
+
+                {showAddOnBreakdown && (
+                  <XStack
+                    paddingHorizontal={8}
+                    paddingVertical={5}
+                    backgroundColor={`${t.brandPrimary}08`}
+                    borderRadius={8}
+                    justifyContent="space-between"
+                    alignItems="center">
+                    <XStack gap={6} flex={1}>
+                      <Text variant="caption" color={t.textSecondary}>
+                        Base {formatCurrency(shop?.currency || '£', basePrice)}
+                      </Text>
+                      <Text variant="caption" color={t.textMuted}>•</Text>
+                      <Text variant="caption" color={t.brandPrimary} fontWeight="600">
+                        {addOnsCount} add-on{addOnsCount !== 1 ? 's' : ''}
+                      </Text>
+                    </XStack>
+
+                    <Text variant="caption" color={t.brandPrimary} fontWeight="700">
+                      +{formatCurrency(shop?.currency || '£', addOnsTotal)}
+                    </Text>
+                  </XStack>
+                )}
+              </YStack>
+            </StyledPressable>
+          </Animated.View>
+        </View>
+      );
+    })}
+  </ScrollView>
+);
   // ── Order summary ─────────────────────────────────────────────────────────
   const renderOrderSummary = () => (
     <Stack
@@ -228,6 +468,29 @@ export default function Cart({table_id, table_name}) {
           printHandler={printHandler} shareReceipt={shareReceipt}
           onClose={() => setShowPayment(false)} />
       </Drawer>
+
+      {/* ── AddOn Modal for editing existing items ── */}
+      {showAddOnModal && editingItem && (
+        <Stack
+          position="absolute"
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          backgroundColor="rgba(0, 0, 0, 0.55)"
+          alignItems="center"
+          justifyContent="center"
+          zIndex={999}>
+          <AddOn
+            table_id={table_id}
+            onClose={handleCloseAddOnModal}
+            item={editingItem}
+            setItem={setEditingItem}
+            mode="edit"
+            onSubmit={handleAddOnModalSubmit}
+          />
+        </Stack>
+      )}
     </Stack>
   );
 }
