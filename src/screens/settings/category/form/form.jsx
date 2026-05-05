@@ -129,6 +129,7 @@ const CategoryForm = ({category, onClose}) => {
             </StyledText>
             <StyledSpacer marginVertical={4} />
             <PosIconPicker
+              type="category"
               color={fields?.color_code || t.textSecondary}
               size={18}
               selected={fields?.icon_name}
