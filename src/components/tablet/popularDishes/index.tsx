@@ -73,7 +73,11 @@ const PopularDishes = () => {
         </>
       ) : (
         <>
-            {data?.map((dish, index) => (
+            {data?.map((dish, index) => {
+              // Extract icon colour from item data with fallback chain
+              const iconColor = dish?.color_code || t.brandPrimary;
+              
+              return (
               <React.Fragment key={index}>
                 <Stack
                   horizontal
@@ -86,13 +90,13 @@ const PopularDishes = () => {
                   <StyleShape
                     size={44}
                     borderRadius={14}
-                    backgroundColor={t.bgInput}
+                    backgroundColor={iconColor ? `${iconColor}18` : t.bgInput}
                     alignItems="center"
                     justifyContent="center">
                     <PosIcon
                       name={dish?.menu_icon_name}
                       size={18}
-                      color={t.brandPrimary}
+                      color={iconColor}
                     />
                   </StyleShape>
 
@@ -129,7 +133,8 @@ const PopularDishes = () => {
                   />
                 )}
               </React.Fragment>
-            ))}
+            );
+            })}
     
         </>
       )}

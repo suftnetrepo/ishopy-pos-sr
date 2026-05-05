@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import {getRealmInstance} from './store';
 import {Order} from './orders';
-import { getMenuIconById } from './menu';
+import { getMenuIconById, getMenuColorById } from './menu';
 
 type RecentOrderWithItemCount = {
   order: Order;
@@ -32,6 +32,7 @@ export interface PopularMenuItem {
   menu_id: string;
   menu_name: string;
   menu_icon_name? : string;
+  color_code?: string;
   total_quantity: number;
   order_count: number;
   total_revenue: number;
@@ -157,6 +158,7 @@ const getMostPopularMenuByQuantity = async (limit: number = 10): Promise<Popular
         const existing = menuStats[key];
 
         const menuIconData = await getMenuIconById(item.menu_id);
+        const menuColorData = await getMenuColorById(item.menu_id);
         const iconName = menuIconData ? menuIconData.icon_name : item.menu_icon_name;
         
         if (existing) {
@@ -168,6 +170,7 @@ const getMostPopularMenuByQuantity = async (limit: number = 10): Promise<Popular
             menu_id: item.menu_id,
             menu_name: item.menu_name,
             menu_icon_name: iconName,
+            color_code: menuColorData?.color_code,
             total_quantity: item.quantity,
             order_count: 1,
             total_revenue: item.price * item.quantity,

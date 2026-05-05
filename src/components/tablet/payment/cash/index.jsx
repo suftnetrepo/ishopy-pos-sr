@@ -96,11 +96,23 @@ export default function Payment({
         {/* Quick amounts */}
         <Stack marginHorizontal={8} horizontal gap={8} marginTop={16} flexWrap="wrap">
           {QUICK_AMOUNTS.map((amount, i) => (
-            <StyledChip
-              key={i} onPress={() => handleQuickAmount(amount)}
-              label={`${formatCurrency(cur, amount)}`}
-              variant="filled" selected={false}
-            />
+            <StyledPressable
+              key={i}
+              onPress={() => handleQuickAmount(amount)}
+              paddingHorizontal={12}
+              paddingVertical={8}
+              borderRadius={8}
+              backgroundColor={t.bgInput}
+              borderWidth={1}
+              borderColor={t.borderDefault}>
+              <StyledText
+                fontFamily={fontStyles.Roboto_Regular}
+                color={t.textPrimary}
+                fontWeight={theme.fontWeight.medium}
+                fontSize={theme.fontSize.normal}>
+                {formatCurrency(cur, amount)}
+              </StyledText>
+            </StyledPressable>
           ))}
         </Stack>
 
@@ -114,7 +126,7 @@ export default function Payment({
               onPress={() => handleKeyPress(num)}
               width="30%" margin="1.5%" height={70}
               borderRadius={10}
-              backgroundColor={t.bgPage}
+              backgroundColor={t.bgCard}
               borderWidth={1} borderColor={t.borderDefault}
               alignItems="center" justifyContent="center">
               <StyledText
@@ -135,24 +147,40 @@ export default function Payment({
           gap={12} borderTopWidth={1} borderColor={t.borderDefault}>
           {hasInput && (
             <StyledPressable
-              flex={1} backgroundColor={t.bgPage}
-                alignItems='center'
-              borderWidth={1} borderColor={t.textMuted}
-              paddingHorizontal={20} paddingVertical={10}
-              borderRadius={12} onPress={handleClear}>
-              <StyledText fontFamily={fontStyles.Roboto_Regular} color={t.textSecondary}>
+              flex={1}
+              height={44}
+              backgroundColor={t.bgInput}
+              borderWidth={1}
+              borderColor={t.borderDefault}
+              alignItems="center"
+              justifyContent="center"
+              borderRadius={12}
+              onPress={handleClear}>
+              <StyledText
+                fontFamily={fontStyles.Roboto_Regular}
+                fontWeight={theme.fontWeight.medium}
+                color={t.textSecondary}
+                fontSize={theme.fontSize.normal}>
                 Clear
               </StyledText>
             </StyledPressable>
           )}
           {canPay && (
             <StyledPressable
-              flex={1} backgroundColor={t.successColor}
-              alignItems='center' justifyContent='center'
-              paddingHorizontal={30} paddingVertical={10}
-              borderRadius={12} onPress={handleSubmit} disabled={loading}>
-              <StyledText fontFamily={fontStyles.Roboto_Regular} color={t.bgCard}>
-                Pay
+              flex={1}
+              height={44}
+              backgroundColor={t.successColor}
+              alignItems="center"
+              justifyContent="center"
+              borderRadius={12}
+              onPress={handleSubmit}
+              disabled={loading}>
+              <StyledText
+                fontFamily={fontStyles.Roboto_Regular}
+                fontWeight={theme.fontWeight.medium}
+                color={t.textInverse}
+                fontSize={theme.fontSize.normal}>
+                Pay {formatCurrency(cur, baseTotal)}
               </StyledText>
             </StyledPressable>
           )}

@@ -1,98 +1,173 @@
-
 import React from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { YStack, XStack, StyledSpacer, StyledText, StyledButton } from 'fluent-styles';
-import { StyledMIcon } from '../../icon';
-import { useAppContext } from '../../../hooks/appContext';
-import { fontStyles } from '../../../utils/fontStyles';
-import { theme } from '../../../utils/theme';
-import { updateOccupancy } from '../../../hooks/useTable';
+import {useNavigation} from '@react-navigation/native';
+import {
+  YStack,
+  XStack,
+  StyledSpacer,
+  StyledText,
+  StyleShape,
+  StyledPressable,
+} from 'fluent-styles';
+import {StyledMIcon} from '../../icon';
+import {useAppContext} from '../../../hooks/appContext';
+import {fontStyles} from '../../../utils/fontStyles';
+import {theme} from '../../../utils/theme';
+import {updateOccupancy} from '../../../hooks/useTable';
 import {useAppTheme} from '../../../theme';
+import {formatCurrency} from '../../../utils/help';
 
-const CheckOut = ({table_id, table_name, order, printHandler, shareReceipt, onClose}) => {
-    const {t} = useAppTheme();
-    const { clearItem, shop } = useAppContext()
-    const navigator = useNavigation()
+const CheckOut = ({
+  table_id,
+  table_name,
+  order,
+  printHandler,
+  shareReceipt,
+  onClose,
+}) => {
+  const {t} = useAppTheme();
+  const {clearItem, shop} = useAppContext();
+  const navigator = useNavigation();
 
-    const close = async () => {
-        clearItem(table_id)
-        await updateOccupancy(table_id, 0, 0, '', '');
+  const close = async () => {
+    clearItem(table_id);
+    await updateOccupancy(table_id, 0, 0, '', '');
 
-        if (shop.mode === 'restaurant') {
-            navigator.navigate("big-table")
-        }else {
-            onClose()
-        }
+    if (shop.mode === 'restaurant') {
+      navigator.navigate('big-table');
+    } else {
+      onClose();
     }
+  };
 
-    const print = () => {
-        printHandler(table_name, order)
-    }
+  const print = () => {
+    printHandler(table_name, order);
+  };
 
-    const share = () => {
-        shareReceipt(table_name, order)
-    }
+  const share = () => {
+    shareReceipt(table_name, order);
+  };
 
-    return (
-        <YStack justifyContent='center' alignItems='center' flex={1} transparent>
-            <YStack borderRadius={16} justifyContent='center' alignItems='center' width='45%' backgroundColor={t.bgCard} paddingHorizontal={16} paddingVertical={8}>
-                <XStack justifyContent='flex-end' alignItems='center' >
-                    <StyledSpacer flex={1}></StyledSpacer>
-                    <StyledMIcon
-                        name="cancel"
-                        size={48}
-                        color={t.textSecondary}
-                        onPress={() => close()}
-                    />
-                </XStack>
-                <StyledSpacer marginVertical={8}></StyledSpacer>
-                <StyledMIcon
-                    name="check-circle"
-                    size={120}
-                    color={t.successColor}
-                />
-                <StyledSpacer marginVertical={8}></StyledSpacer>
-                <StyledText
-                    fontFamily={fontStyles.Roboto_Regular}
-                    color={t.textPrimary}
-                    fontWeight={theme.fontWeight.normal}
-                    fontSize={theme.fontSize.large}
-                    textAlign="center"
-                >
-                    Payment Succeefull !
-                </StyledText>
-                <StyledSpacer marginVertical={48}></StyledSpacer>
-                <XStack justifyContent='flex-end' alignItems='flex-end'>
-                    <StyledButton secondary borderRadius={8} color={theme.colors.cyan[500]} borderColor={theme.colors.cyan[500]} backgroundColor={t.bgCard} flex={1} onPress={() => {
-                        share()
-                    }} >
-                        <XStack justifyContent='flex-end' alignItems='center' gap={4}>
-                            <StyledMIcon
-                                name="email"
-                                size={32}
-                                color={theme.colors.cyan[100]}
-                            />
-                            <StyledText fontFamily={fontStyles.Roboto_Regular} paddingVertical={8} fontWeight={theme.fontWeight.normal} color={t.bgCard} fontSize={theme.fontSize.normal}>Email Receipt</StyledText>
-                        </XStack>
-                    </StyledButton>
-                    <StyledSpacer marginHorizontal={8}></StyledSpacer>
-                    <StyledButton primary borderRadius={8} color={t.successColor} borderColor={t.successColor} backgroundColor={t.bgCard} flex={1} onPress={() => {
-                        print();
-                    }} >
-                        <XStack justifyContent='flex-end' alignItems='center' gap={4}>
-                            <StyledMIcon
-                                name="print"
-                                size={32}
-                                color={theme.colors.green[100]}
-                            />
-                            <StyledText fontFamily={fontStyles.Roboto_Regular} paddingVertical={8} fontWeight={theme.fontWeight.normal} color={t.bgCard} fontSize={theme.fontSize.normal}>Print Receipt</StyledText>
-                        </XStack>
-                    </StyledButton>
-                </XStack>
-                <StyledSpacer marginVertical={4}></StyledSpacer>
-            </YStack>
+  return (
+    <YStack
+      flex={1}
+      justifyContent="center"
+      alignItems="center"
+      backgroundColor="rgba(0, 0, 0, 0.7)">
+      <YStack
+        maxWidth={480}
+        width="90%"
+        padding={24}
+        borderRadius={16}
+        backgroundColor={t.bgCard}
+        borderWidth={1}
+        borderColor={t.borderDefault}
+        alignItems="center"
+        shadowColor="black"
+        shadowOffset={{width: 0, height: 12}}
+        shadowOpacity={0.22}
+        shadowRadius={24}
+        elevation={16}>
+        {/* Close Button */}
+        <StyledPressable width="100%" justifyContent="flex-end" marginBottom={12}   onPress={() => close()}>
+          <StyleShape cycle size={48} borderWidth={1} borderColor={t.borderDefault}>
+            <StyledMIcon
+            pointerEvents="none"
+              name="close"
+              size={24}
+              color={t.textSecondary}
+              hitSlop={{top: 8, bottom: 8, left: 8, right: 8}}
+            />
+          </StyleShape>
+        </StyledPressable>
+
+        {/* Success Icon with Shadow */}
+        <YStack
+          width={100}
+          height={100}
+          borderRadius={50}
+          alignItems="center"
+          justifyContent="center"
+          marginTop={16}
+          marginBottom={20}
+          shadowColor={t.successColor}
+          shadowOffset={{width: 0, height: 8}}
+          shadowOpacity={0.2}
+          shadowRadius={12}
+          elevation={8}>
+          <StyledMIcon name="check-circle" size={100} color={t.successColor} />
         </YStack>
-    )
-}
 
-export default CheckOut
+        {/* Title */}
+        <StyledText
+          fontFamily={fontStyles.Roboto_Regular}
+          color={t.textPrimary}
+          fontWeight="700"
+          fontSize={24}
+          textAlign="center"
+          marginTop={16}>
+          Payment Successful
+        </StyledText>
+
+        {/* Subtitle */}
+        <StyledText
+          fontFamily={fontStyles.Roboto_Regular}
+          color={t.textSecondary}
+          fontWeight="400"
+          fontSize={14}
+          textAlign="center"
+          marginTop={6}>
+          {formatCurrency(shop?.currency || '£', order?.amount || 0)} received
+        </StyledText>
+
+        <StyledSpacer marginVertical={20} />
+
+        {/* Buttons */}
+        <XStack width="100%" gap={12} horizontal>
+          <StyledPressable
+            flex={1}
+            height={44}
+            borderRadius={12}
+            backgroundColor={t.bgInput}
+            borderWidth={1}
+            borderColor={t.borderDefault}
+            justifyContent="center"
+            alignItems="center"
+            flexDirection="row"
+            gap={8}
+            onPress={() => share()}>
+            <StyledMIcon name="email" size={20} color={t.textPrimary} />
+            <StyledText
+              fontFamily={fontStyles.Roboto_Regular}
+              fontWeight="600"
+              color={t.textPrimary}
+              fontSize={14}>
+              Email Receipt
+            </StyledText>
+          </StyledPressable>
+
+          <StyledPressable
+            flex={1}
+            height={44}
+            borderRadius={12}
+            backgroundColor={t.brandPrimary}
+            justifyContent="center"
+            alignItems="center"
+            flexDirection="row"
+            gap={8}
+            onPress={() => print()}>
+            <StyledMIcon name="print" size={20} color={t.textInverse} />
+            <StyledText
+              fontFamily={fontStyles.Roboto_Regular}
+              fontWeight="600"
+              color={t.textInverse}
+              fontSize={14}>
+              Print Receipt
+            </StyledText>
+          </StyledPressable>
+        </XStack>
+      </YStack>
+    </YStack>
+  );
+};
+
+export default CheckOut;

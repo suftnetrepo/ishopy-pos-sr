@@ -57,7 +57,7 @@ const Logo = () => {
         fontFamily="System"
         fontSize="22"
         fontWeight="700"
-        fill={t.textPrimary}
+        fill={t.textInverse}
         letterSpacing="-0.5">
         Kursa
       </SvgText>

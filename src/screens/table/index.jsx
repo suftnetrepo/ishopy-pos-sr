@@ -1,10 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
-import {
-  StyledPage,
-  StyledDialog,
-  theme,
-} from 'fluent-styles';
+import {StyledPage, StyledDialog, theme} from 'fluent-styles';
 import SideBarAdapter from '../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../components/tablet/header';
 import {StyledSearchBar} from '../../components/searchBar';
@@ -22,7 +18,7 @@ import {updateWaitlistStatus} from '../../model/waitlist';
 const BigTable = () => {
   const navigation = useNavigation();
   const focused = useFocus();
-  const route   = useRoute();
+  const route = useRoute();
   const {updateMenuQuery} = useAppContext();
   const {t} = useAppTheme();
   const [table, setTable] = useState(null);
@@ -40,7 +36,7 @@ const BigTable = () => {
     // Auto-remove from waitlist if this came from Seat now
     if (waitlistEntry) {
       await updateWaitlistStatus(waitlistEntry.waitlist_id, 'removed');
-         navigation.goBack();
+      navigation.navigate('big-waitlist');
     }
   };
 
@@ -51,9 +47,11 @@ const BigTable = () => {
           showBackButton={true}
           showLogo={false}
           showTitle={true}
-          title={waitlistEntry
-            ? `Seating ${waitlistEntry.guest_name || 'Guest'}`
-            : 'Tables'}>
+          title={
+            waitlistEntry
+              ? `Seating ${waitlistEntry.guest_name || 'Guest'}`
+              : 'Tables'
+          }>
           <StyledSearchBar
             placeholder="Search tables..."
             flex={1}
@@ -78,10 +76,14 @@ const BigTable = () => {
           <KeyCard
             table_name={table.tableName}
             table_id={table.table_id}
-            prefill={waitlistEntry ? {
-              guest_name:  waitlistEntry.guest_name || 'Guest',
-              guest_count: waitlistEntry.party_size,
-            } : null}
+            prefill={
+              waitlistEntry
+                ? {
+                    guest_name: waitlistEntry.guest_name || 'Guest',
+                    guest_count: waitlistEntry.party_size,
+                  }
+                : null
+            }
             onSubmit={body => onSubmit(body)}
             onClose={() => setTable(null)}
           />

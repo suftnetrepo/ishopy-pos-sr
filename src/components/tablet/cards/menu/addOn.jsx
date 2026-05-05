@@ -2,28 +2,49 @@
 import React, {useMemo, useState} from 'react';
 import {useWindowDimensions, ScrollView} from 'react-native';
 import {
-  YStack, XStack, StyledText, StyledPressable, CollapseGroup, CollapseItem,
+  YStack, XStack, StyledPressable, CollapseGroup, CollapseItem,
 } from 'fluent-styles';
-import {fontStyles, theme} from '../../../../utils/theme';
-import {useAppContext} from '../../../../hooks/appContext';
 import {formatCurrency} from '../../../../utils/help';
 import {StyledMIcon} from '../../../../components/icon';
 import {useAppTheme} from '../../../../theme';
+import {useAppContext} from '../../../../hooks/appContext';
+import Text from '../../../../components/text';
 
-export default function AddOn({table_id, onClose, item, setItem}) {
+export default function AddOn({table_id, onClose, item, setItem, mode = 'add', onSubmit}) {
   const {shop, addItem} = useAppContext();
   const {t} = useAppTheme();
   const {height, width} = useWindowDimensions();
   const [validationError, setValidationError] = useState('');
+  
+  // Initialize selections from item.addOns if in edit mode
+  const initializeSelections = () => {
+    if (mode === 'edit' && item?.addOns) {
+      const initial = {};
+      (item.addOns || []).forEach(addon => {
+        initial[addon.addOn_id] = addon.quantity || 0;
+      });
+      return initial;
+    }
+    return {};
+  };
+  
+  const [selections, setSelections] = useState(initializeSelections());
 
   // ── Split addOns into two buckets by group_id ────────────────
   const {requiredAddOns, optionalAddOns} = useMemo(() => {
-    const all = item?.addOns ?? [];
+    const all = (item?.addOns ?? []).map(a => ({
+      ...a,
+      quantity: selections[a.addOn_id] ?? 0,
+    }));
+    
+    const required = all.filter(a => a.group_id === 'required');
+    const optional = all.filter(a => a.group_id === 'optional' || a.group_id === null);
+        
     return {
-      requiredAddOns: all.filter(a => a.group_id === 'required'),
-      optionalAddOns: all.filter(a => a.group_id === 'optional'),
+      requiredAddOns: required,
+      optionalAddOns: optional,
     };
-  }, [item?.addOns]);
+  }, [item?.addOns, selections]);
 
   const hasRequired           = requiredAddOns.length > 0;
   const hasOptional           = optionalAddOns.length > 0;
@@ -32,66 +53,94 @@ export default function AddOn({table_id, onClose, item, setItem}) {
 
   // ── Helpers ──────────────────────────────────────────────────
   function qty(addOn) {
-    return parseInt(String(addOn.quantity ?? 0), 10);
+    return parseInt(String(selections[addOn.addOn_id] ?? 0), 10);
   }
-
-  const patchAddOns = fn =>
-    setItem(prev => ({...prev, addOns: prev?.addOns?.map(fn) ?? []}));
 
   // Required = single-select radio: selecting one clears the rest
   const toggleRequired = addOn => {
     setValidationError('');
-    patchAddOns(a =>
-      a.group_id === 'required'
-        ? {...a, quantity: a.addOn_id === addOn.addOn_id ? 1 : 0}
-        : a,
-    );
+    setSelections(prev => {
+      const isCurrentlySelected = prev[addOn.addOn_id] ? 1 : 0;
+      const newSelections = { ...prev }; // Preserve optional selections
+      
+      // Clear all required selections
+      requiredAddOns.forEach(a => {
+        newSelections[a.addOn_id] = 0;
+      });
+      
+      // Toggle the selected one
+      newSelections[addOn.addOn_id] = isCurrentlySelected ? 0 : 1;
+      
+      return newSelections;
+    });
   };
 
   // Optional = multi-select with qty stepper
   const increaseOptional = addOn => {
     setValidationError('');
-    patchAddOns(a => a.addOn_id === addOn.addOn_id ? {...a, quantity: qty(a) + 1} : a);
+    setSelections(prev => ({
+      ...prev,
+      [addOn.addOn_id]: (prev[addOn.addOn_id] ?? 0) + 1,
+    }));
   };
 
   const decreaseOptional = addOn => {
     setValidationError('');
-    patchAddOns(a => a.addOn_id === addOn.addOn_id ? {...a, quantity: Math.max(0, qty(a) - 1)} : a);
+    setSelections(prev => ({
+      ...prev,
+      [addOn.addOn_id]: Math.max(0, (prev[addOn.addOn_id] ?? 0) - 1),
+    }));
   };
 
   // ── Pricing ──────────────────────────────────────────────────
   const calculateTotal = () => {
     const sum = (item?.addOns ?? []).reduce(
-      (t, a) => t + parseFloat(String(a.price ?? 0)) * qty(a), 0,
+      (t, a) => t + parseFloat(String(a.price ?? 0)) * (selections[a.addOn_id] ?? 0), 0,
     );
     return sum + Number(item?.price ?? 0);
   };
 
   // ── Validation & submit ───────────────────────────────────────
-  const onSubmit = () => {
+  const handleSubmit = () => {
     if (hasRequired && !anyRequiredSelected) {
       setValidationError('Please select a required option');
       return;
     }
-    const index = `${Date.now()}${Math.random().toString(36).slice(2, 8)}`;
+    
     const selectedAddOns = (item?.addOns ?? [])
-      .filter(a => qty(a) > 0)
+      .filter(a => selections[a.addOn_id] > 0)
       .map(a => ({
         addOnName:   a.addOnName,
-        quantity:    qty(a),
+        quantity:    selections[a.addOn_id] ?? 0,
         price:       a.price,
-        groupName:   a.group_id,
+        groupName:   a.group_id || 'optional',
         displayName: a.addOnName,
+        addOn_id:    a.addOn_id,
       }));
-    addItem(index, item.menu_id, item.name, item.price, 1, table_id, selectedAddOns).then(() => {});
-    onClose();
+    
+    if (mode === 'edit') {
+      // In edit mode, call the onSubmit callback with updated item
+      const updatedItem = {
+        ...item,
+        addOns: selectedAddOns,
+      };
+      onSubmit?.(updatedItem);
+    } else {
+      // In add mode, create new cart item
+      const index = `${Date.now()}${Math.random().toString(36).slice(2, 8)}`;
+      addItem(index, item.menu_id, item.name, item.price, 1, table_id, selectedAddOns).then(() => {});
+      onClose();
+    }
   };
 
   // ── Derived UI state ─────────────────────────────────────────
   const addButtonDisabled = hasRequired && !anyRequiredSelected;
   const cur               = shop?.currency || '£';
+  const isEditMode        = mode === 'edit';
   const addButtonText     = addButtonDisabled
     ? 'Select a required option'
+    : isEditMode
+    ? `Update ${formatCurrency(cur, calculateTotal())}`
     : `Add ${formatCurrency(cur, calculateTotal())}`;
   const modalWidth        = width > 768 ? 660 : Math.round(width * 0.92);
   const modalMaxHeight    = Math.min(height * 0.82, 740);
@@ -107,20 +156,20 @@ export default function AddOn({table_id, onClose, item, setItem}) {
         flexDirection="row"
         alignItems="center"
         paddingHorizontal={16}
-        paddingVertical={14}
+        paddingVertical={12}
         minHeight={56}
         borderBottomWidth={1}
-        borderBottomColor={t.bgPage}
-        backgroundColor={isSelected ? t.infoBg : t.bgCard}
-        borderLeftWidth={4}
-        borderLeftColor={isSelected ? theme.colors.blue[500] : 'transparent'}>
+        borderBottomColor={`${t.borderDefault}60`}
+        backgroundColor={isSelected ? `${t.brandPrimary}10` : t.bgCard}
+        borderLeftWidth={3}
+        borderLeftColor={isSelected ? t.brandPrimary : 'transparent'}>
 
         {/* Radio dot */}
         <YStack
           width={22} height={22} borderRadius={11}
           borderWidth={2}
-          borderColor={isSelected ? theme.colors.blue[500] : t.textMuted}
-          backgroundColor={isSelected ? theme.colors.blue[500] : 'transparent'}
+          borderColor={isSelected ? t.brandPrimary : t.textMuted}
+          backgroundColor={isSelected ? t.brandPrimary : 'transparent'}
           alignItems="center" justifyContent="center"
           marginRight={14}>
           {isSelected && (
@@ -129,26 +178,24 @@ export default function AddOn({table_id, onClose, item, setItem}) {
         </YStack>
 
         <YStack flex={1}>
-          <StyledText
-            fontFamily={fontStyles.Roboto_Regular}
-            fontSize={theme.fontSize.normal}
-            fontWeight={isSelected ? theme.fontWeight.semiBold : theme.fontWeight.normal}
-            color={isSelected ? t.infoColor : t.textPrimary}>
+          <Text
+            variant="body"
+            fontWeight={isSelected ? "600" : "400"}
+            color={t.textPrimary}>
             {option.addOnName}
-          </StyledText>
+          </Text>
           {parseFloat(String(option.price)) > 0 && (
-            <StyledText
-              fontFamily={fontStyles.Roboto_Regular}
-              fontSize={theme.fontSize.small}
+            <Text
+              variant="bodySmall"
               color={t.textSecondary}
               marginTop={2}>
               +{formatCurrency(cur, option.price)}
-            </StyledText>
+            </Text>
           )}
         </YStack>
 
         {isSelected && (
-          <StyledMIcon name="check-circle" size={22} color={theme.colors.blue[500]} />
+          <StyledMIcon name="check-circle" size={22} color={t.brandPrimary} />
         )}
       </StyledPressable>
     );
@@ -166,72 +213,71 @@ export default function AddOn({table_id, onClose, item, setItem}) {
         paddingVertical={12}
         minHeight={64}
         borderBottomWidth={1}
-        borderBottomColor={t.bgPage}
-        backgroundColor={isSelected ? t.successBg : t.bgCard}
-        borderLeftWidth={4}
-        borderLeftColor={isSelected ? t.successColor : 'transparent'}
+        borderBottomColor={`${t.borderDefault}60`}
+        backgroundColor={isSelected ? `${t.brandPrimary}10` : t.bgCard}
+        borderLeftWidth={3}
+        borderLeftColor={isSelected ? t.brandPrimary : 'transparent'}
         flexDirection="row"
         alignItems="center">
 
         <YStack flex={1}>
-          <StyledText
-            fontFamily={fontStyles.Roboto_Regular}
-            fontSize={theme.fontSize.normal}
-            fontWeight={isSelected ? theme.fontWeight.semiBold : theme.fontWeight.normal}
-            color={isSelected ? theme.colors.green[800] : t.textPrimary}>
+          <Text
+            variant="body"
+            fontWeight={isSelected ? "600" : "400"}
+            color={t.textPrimary}>
             {option.addOnName}
-          </StyledText>
+          </Text>
           {parseFloat(String(option.price ?? 0)) > 0 && (
-            <StyledText
-              fontFamily={fontStyles.Roboto_Regular}
-              fontSize={theme.fontSize.small}
+            <Text
+              variant="bodySmall"
               color={t.textSecondary}
               marginTop={2}>
               +{formatCurrency(cur, option.price)}
-            </StyledText>
+            </Text>
           )}
         </YStack>
 
         {isSelected ? (
           <XStack gap={8} alignItems="center">
             <YStack
-              paddingHorizontal={12} paddingVertical={6}
-              borderRadius={20}
-              backgroundColor={theme.colors.green[100]}>
-              <StyledText
-                fontFamily={fontStyles.Roboto_Regular}
-                fontSize={theme.fontSize.small}
-                fontWeight={theme.fontWeight.bold}
-                color={theme.colors.green[700]}>
+              paddingHorizontal={10} height={28}
+              borderRadius={999}
+              backgroundColor={`${t.brandPrimary}18`}
+              justifyContent="center" alignItems="center">
+              <Text
+                variant="bodySmall"
+                fontWeight="700"
+                color={t.brandPrimary}>
                 ×{quantity}
-              </StyledText>
+              </Text>
             </YStack>
 
             <StyledPressable
-              paddingHorizontal={14} paddingVertical={8}
-              borderRadius={30}
-              backgroundColor={t.dangerBg}
-              borderWidth={1} borderColor={t.dangerBg}
+              paddingHorizontal={14} height={32}
+              borderRadius={999}
+              backgroundColor={`${t.dangerColor}12`}
+              justifyContent="center" alignItems="center"
               onPress={e => { e?.stopPropagation?.(); decreaseOptional(option); }}>
-              <StyledText
-                fontFamily={fontStyles.Roboto_Regular}
-                fontSize={theme.fontSize.small}
+              <Text
+                variant="caption"
+                fontWeight="600"
                 color={t.dangerColor}>
                 Remove
-              </StyledText>
+              </Text>
             </StyledPressable>
           </XStack>
         ) : (
           <YStack
-            paddingHorizontal={18} paddingVertical={8}
-            borderRadius={30}
-            backgroundColor={t.brandPrimary}>
-            <StyledText
-              fontFamily={fontStyles.Roboto_Regular}
-              fontSize={theme.fontSize.small}
-              color={t.bgCard}>
+            paddingHorizontal={16} height={36}
+            borderRadius={999}
+            backgroundColor={t.brandPrimary}
+            justifyContent="center" alignItems="center">
+            <Text
+              variant="bodySmall"
+              fontWeight="600"
+              color={t.textInverse}>
               + Add
-            </StyledText>
+            </Text>
           </YStack>
         )}
       </StyledPressable>
@@ -241,14 +287,16 @@ export default function AddOn({table_id, onClose, item, setItem}) {
   // ── Render ────────────────────────────────────────────────────
   return (
     <YStack
-      backgroundColor={theme.colors.transparent05}
+      backgroundColor="rgba(0, 0, 0, 0.55)"
       flex={1} justifyContent="center" alignItems="center">
 
       <YStack
         width={modalWidth}
         maxHeight={modalMaxHeight}
         backgroundColor={t.bgCard}
-        borderRadius={20}
+        borderRadius={18}
+        borderWidth={1}
+        borderColor={t.borderDefault}
         overflow="hidden"
         shadowColor="black"
         shadowOffset={{width: 0, height: 12}}
@@ -260,29 +308,28 @@ export default function AddOn({table_id, onClose, item, setItem}) {
         <XStack
           paddingHorizontal={20} paddingVertical={16}
           borderBottomWidth={1} borderBottomColor={t.borderDefault}
-          backgroundColor={t.bgPage}
+          backgroundColor={t.bgCard}
           alignItems="center">
           <YStack flex={1}>
-            <StyledText
-              fontFamily={fontStyles.Roboto_Regular}
-              fontSize={theme.fontSize.large}
-              fontWeight={theme.fontWeight.bold}
+            <Text
+              variant="title"
+              fontWeight="700"
               color={t.textPrimary}>
               {item.name}
-            </StyledText>
-            <StyledText
-              fontFamily={fontStyles.Roboto_Regular}
-              fontSize={theme.fontSize.normal}
+            </Text>
+            <Text
+              variant="body"
               color={t.textSecondary}
               marginTop={2}>
               Base price: {formatCurrency(cur, item.price)}
-            </StyledText>
+            </Text>
           </YStack>
           <StyledPressable
             width={36} height={36} borderRadius={18}
-            backgroundColor={t.borderDefault}
+            backgroundColor={t.bgInput}
             alignItems="center" justifyContent="center"
-            onPress={onClose}>
+            onPress={onClose}
+            hitSlop={{top: 8, bottom: 8, left: 8, right: 8}}>
             <StyledMIcon name="close" size={20} color={t.textSecondary} />
           </StyledPressable>
         </XStack>
@@ -291,14 +338,22 @@ export default function AddOn({table_id, onClose, item, setItem}) {
         <ScrollView
           showsVerticalScrollIndicator={false}
           nestedScrollEnabled
-          style={{maxHeight: modalMaxHeight - 152}}
-          contentContainerStyle={{paddingHorizontal: 12, paddingVertical: 12, paddingBottom: 16}}>
+          style={{maxHeight: modalMaxHeight - 152, backgroundColor: t.bgCard}}
+          contentContainerStyle={{paddingHorizontal: 12, paddingVertical: 12, paddingBottom: 16, backgroundColor: t.bgCard}}>
 
           {hasRequired || hasOptional ? (
             <CollapseGroup
               variant="bordered"
               defaultActiveKey={hasRequired ? 'required' : 'optional'}
-              style={{gap: 10}}>
+              style={{gap: 10}}
+              colors={{
+                background: t.bgCard,
+                border: t.borderDefault,
+                titleColor: t.textPrimary,
+                subtitleColor: t.textSecondary,
+                iconColor: t.textSecondary,
+                activeHeaderBg: t.bgInput,
+              }}>
 
               {hasRequired && (
                 <CollapseItem
@@ -313,10 +368,10 @@ export default function AddOn({table_id, onClose, item, setItem}) {
                       <YStack
                         paddingHorizontal={8} paddingVertical={3}
                         borderRadius={6}
-                        backgroundColor={theme.colors.orange[100]}>
-                        <StyledText fontSize={10} fontWeight="700" color={theme.colors.orange[700]}>
+                        backgroundColor={t.brandPrimary}>
+                        <Text variant="caption" fontWeight="700" color={t.onBrandPrimary || t.bgCard}>
                           Required
-                        </StyledText>
+                        </Text>
                       </YStack>
                     ) : null
                   }>
@@ -338,12 +393,11 @@ export default function AddOn({table_id, onClose, item, setItem}) {
           ) : (
             <YStack padding={32} alignItems="center" gap={8}>
               <StyledMIcon name="info-outline" size={32} color={t.textMuted} />
-              <StyledText
-                fontFamily={fontStyles.Roboto_Regular}
-                fontSize={theme.fontSize.normal}
+              <Text
+                variant="body"
                 color={t.textMuted}>
                 No add-ons available
-              </StyledText>
+              </Text>
             </YStack>
           )}
 
@@ -355,12 +409,11 @@ export default function AddOn({table_id, onClose, item, setItem}) {
               borderWidth={1} borderColor={t.dangerBg}
               alignItems="center" gap={8}>
               <StyledMIcon name="error-outline" size={18} color={t.dangerColor} />
-              <StyledText
-                fontFamily={fontStyles.Roboto_Regular}
-                fontSize={theme.fontSize.small}
+              <Text
+                variant="bodySmall"
                 color={t.dangerColor} flex={1}>
                 {validationError}
-              </StyledText>
+              </Text>
             </XStack>
           ) : null}
         </ScrollView>
@@ -368,62 +421,59 @@ export default function AddOn({table_id, onClose, item, setItem}) {
         {/* ── Footer ───────────────────────────────────────────── */}
         <XStack
           paddingHorizontal={16} paddingVertical={14}
-          borderTopWidth={1} borderTopColor={t.borderDefault}
-          backgroundColor={t.bgPage}
+          borderTopWidth={1} borderTopColor={`${t.borderDefault}80`}
+          backgroundColor={t.bgCard}
           alignItems="center" gap={12}>
 
           <YStack>
-            <StyledText
-              fontSize={10} fontWeight="700"
+            <Text
+              variant="caption"
+              fontWeight="700"
               color={t.textMuted}
               style={{letterSpacing: 0.8}}>
               TOTAL
-            </StyledText>
-            <StyledText
-              fontFamily={fontStyles.Roboto_Regular}
-              fontSize={theme.fontSize.large}
-              fontWeight={theme.fontWeight.bold}
+            </Text>
+            <Text
+              variant="title"
+              fontWeight="700"
               color={t.textPrimary}>
               {formatCurrency(cur, calculateTotal())}
-            </StyledText>
+            </Text>
           </YStack>
 
           <XStack flex={1} gap={10}>
             <StyledPressable
-              flex={1} height={52} borderRadius={30}
-              borderWidth={1} borderColor={t.textMuted}
-              backgroundColor={t.bgPage}
+              flex={1} height={52} borderRadius={999}
+              borderWidth={1} borderColor={t.borderDefault}
+              backgroundColor={t.bgInput}
               justifyContent="center" alignItems="center"
               onPress={onClose}>
-              <StyledText
-                fontFamily={fontStyles.Roboto_Regular}
-                fontSize={theme.fontSize.normal}
-                fontWeight={theme.fontWeight.semiBold}
-                color={t.textSecondary}>
+              <Text
+                variant="button"
+                color={t.textPrimary}>
                 Cancel
-              </StyledText>
+              </Text>
             </StyledPressable>
 
             <StyledPressable
-              flex={2} height={52} borderRadius={30}
-              backgroundColor={addButtonDisabled ? t.borderDefault : t.successColor}
+              flex={2} height={52} borderRadius={999}
+              backgroundColor={addButtonDisabled ? t.borderDefault : isEditMode ? t.brandPrimary : t.successColor}
               justifyContent="center" alignItems="center"
               flexDirection="row" gap={8}
-              onPress={addButtonDisabled ? undefined : onSubmit}
+              onPress={addButtonDisabled ? undefined : handleSubmit}
               disabled={addButtonDisabled}>
               <StyledMIcon
                 pointerEvents={'none'}
-                name="add-shopping-cart"
+                name={isEditMode ? 'check' : 'add-shopping-cart'}
                 size={20}
-                color={addButtonDisabled ? t.textMuted : t.bgCard}
+                color={addButtonDisabled ? t.textMuted : '#fff'}
               />
-              <StyledText
-                fontFamily={fontStyles.Roboto_Regular}
-                fontSize={theme.fontSize.normal}
-                fontWeight={theme.fontWeight.bold}
-                color={addButtonDisabled ? t.textMuted : t.bgCard}>
+              <Text
+                variant="button"
+                fontWeight="700"
+                color={addButtonDisabled ? t.textMuted : '#fff'}>
                 {addButtonText}
-              </StyledText>
+              </Text>
             </StyledPressable>
           </XStack>
         </XStack>

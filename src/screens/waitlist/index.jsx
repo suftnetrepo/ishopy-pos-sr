@@ -11,7 +11,6 @@ import {useNavigation} from '@react-navigation/native';
 import useWaitlist from '../../hooks/useWaitlist';
 import { useFocus } from '../../hooks/useFocus';
 
-
 const PREFERENCES = [
   {key: 'none',    label: 'No pref.'},
   {key: 'window',  label: 'Window'},
@@ -107,32 +106,63 @@ const QueueCard = ({entry, position, onSeatNow, onNotify, onRemove, t}) => {
         </Stack>
       )}
 
-      {/* Actions */}
-      <Stack horizontal gap={5}>
+      {/* Actions — Compact chips */}
+      <Stack horizontal gap={8} flexShrink={0}>
+        {/* Seat now — Primary chip */}
         <StyledPressable
           onPress={() => onSeatNow(entry)}
-          backgroundColor={t.brandPrimary}
-          paddingHorizontal={12} paddingVertical={5} borderRadius={20}>
-          <StyledText fontSize={11} fontWeight={theme.fontWeight.semiBold} color={t.textOnAmber}>
+          backgroundColor={`${t.brandPrimary}20`}
+          borderWidth={1}
+          borderColor={t.brandPrimary}
+          borderRadius={999}
+          paddingHorizontal={10}
+          paddingVertical={6}
+          alignItems="center"
+          justifyContent="center">
+          <StyledText
+            fontSize={11}
+            fontWeight={theme.fontWeight.medium}
+            color={t.brandPrimary}>
             Seat now
           </StyledText>
         </StyledPressable>
+
+        {/* SMS — Neutral chip */}
         <StyledPressable
           onPress={() => onNotify(entry)}
-          borderWidth={0.5}
-          borderColor={entry.notify_sms ? t.brandPrimary : t.borderDefault}
-          backgroundColor={entry.notify_sms ? `${t.brandPrimary}15` : t.bgPage}
-          paddingHorizontal={10} paddingVertical={5} borderRadius={20}>
-          <StyledText fontSize={11} color={entry.notify_sms ? t.brandPrimary : t.textSecondary}>
-            {entry.notify_sms ? '📱 SMS' : 'Notify'}
+          backgroundColor={t.bgInput}
+          borderWidth={1}
+          borderColor={t.borderDefault}
+          borderRadius={999}
+          paddingHorizontal={10}
+          paddingVertical={6}
+          alignItems="center"
+          justifyContent="center">
+          <StyledText
+            fontSize={11}
+            fontWeight={theme.fontWeight.medium}
+            color={t.textSecondary}>
+            SMS
           </StyledText>
         </StyledPressable>
+
+        {/* Remove — Danger chip */}
         <StyledPressable
           onPress={() => onRemove(entry.waitlist_id)}
-          borderWidth={0.5} borderColor={t.dangerBg}
-          backgroundColor={t.dangerBg}
-          paddingHorizontal={10} paddingVertical={5} borderRadius={20}>
-          <StyledText fontSize={11} color={t.dangerColor}>Remove</StyledText>
+          backgroundColor={`${t.dangerColor}15`}
+          borderWidth={1}
+          borderColor={`${t.dangerColor}40`}
+          borderRadius={999}
+          paddingHorizontal={10}
+          paddingVertical={6}
+          alignItems="center"
+          justifyContent="center">
+          <StyledText
+            fontSize={11}
+            fontWeight={theme.fontWeight.medium}
+            color={t.dangerColor}>
+            Remove
+          </StyledText>
         </StyledPressable>
       </Stack>
     </Stack>

@@ -417,7 +417,7 @@ const renderCartItems = () => (
       return (
         <XStack flex={1}  gap={8}>
           <ActionBtn onPress={handlePrint} bg={t.bgInput} borderCol={t.borderDefault} textColor={t.textSecondary} label="Print" flex={1} />
-          <ActionBtn onPress={() => navigation.navigate('big-table')} bg={t.bgCard} borderCol={t.borderDefault} textColor={t.textSecondary} label="Hold" flex={1} />
+          <ActionBtn onPress={() => navigation.navigate('big-table')} bg={`${t.brandPrimary}12`} borderCol={t.brandPrimary} textColor={t.brandPrimary} label="Hold" flex={1} />
           <ActionBtn onPress={handlePaymentPress} disabled={!paymentMethod} bg={t.successColor} textColor={t.textInverse} label="Pay" flex={1} />
           <ActionBtn onPress={handleVoid} bg={t.dangerColor} textColor={t.textInverse} label="Void" flex={1} />
         </XStack>

@@ -265,6 +265,24 @@ const getMenuIconById = async (menu_id: string): Promise<{menu_id: string; name:
   }
 };
 
+const getMenuColorById = async (menu_id: string): Promise<{menu_id: string; color_code?: string} | null> => {
+  try {
+    const realm = await getRealmInstance();
+    const menu = realm.objectForPrimaryKey<Menu>('Menu', menu_id);
+
+    if (!menu) {
+      return null;
+    }
+
+    return {
+      menu_id: menu.menu_id,
+      color_code: menu.color_code,
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
 const queryMenuById = async (menu_id: string): Promise<Menu | null> => {
   try {
     const realm = await getRealmInstance();
@@ -383,5 +401,6 @@ export {
   queryMenuById,
   queryMenuByName,
   queryMenuByNamePrefix,
-  getMenuIconById
+  getMenuIconById,
+  getMenuColorById
 };

@@ -168,7 +168,7 @@ const ItemAddOn = ({menu_id}) => {
         marginTop={16}
         paddingVertical={16}>
         <StyledForm>
-          <ThemedStyledTextInput
+          <StyledTextInput
             label={'Name'}
             keyboardType="default"
             placeholder="Enter your addOn name"
@@ -180,7 +180,7 @@ const ItemAddOn = ({menu_id}) => {
             error={!!errorMessages?.addOnName}
             errorMessage={errorMessages?.addOnName?.message}
           />
-          <ThemedStyledTextInput
+          <StyledTextInput
             label={'Price'}
             keyboardType="default"
             placeholder="Enter your addOn price"

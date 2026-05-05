@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React, {useEffect, useState, useMemo} from 'react';
 import {FlatList} from 'react-native';
-import {StyledSpacer, StyledText, StyledChip} from 'fluent-styles';
+import { StyledText, StyledChip} from 'fluent-styles';
 import {ScrollView} from 'react-native';
 import {useAppContext} from '../../../hooks/appContext';
 import {Stack} from '../../package/stack';
@@ -9,7 +9,6 @@ import {theme, fontStyles} from '../../../utils/theme';
 import {StyledIcon} from '../../package/icon';
 import {useNavigation} from '@react-navigation/native';
 import {useFocus} from '../../../hooks/useFocus';
-import {guid} from '../../../utils/help';
 import {useAppTheme} from '../../../theme';
 
 // ─── Status config ────────────────────────────────────────────────────────────
@@ -272,7 +271,7 @@ export default function TableCard({data, onTableSelect, waitlistEntry}) {
       )}
 
       {/* Summary counts */}
-      <Stack horizontal gap={16} marginBottom={10} marginHorizontal={4}>
+      <Stack width='100%' horizontal gap={16} marginBottom={10} marginHorizontal={4}>
         {[
           {label: 'Occupied',  count: filteredData.filter(t => t.isOccupied === 1).length, color: t.successColor},
           {label: 'Available', count: filteredData.filter(t => t.isOccupied !== 1).length, color: t.textSecondary},

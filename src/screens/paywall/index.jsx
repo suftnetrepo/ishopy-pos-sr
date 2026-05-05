@@ -90,7 +90,7 @@ const PaywallScreen = ({onDismiss}) => {
   const price = product?.localizedPrice || '£39.99';
 
   return (
-    <StyledPage edges={['top']} backgroundColor={t.bgPage}>
+    <StyledPage hideStatusBarOnIOS backgroundColor={t.bgPage}>
       <Stack flex={1} >
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -109,7 +109,7 @@ const PaywallScreen = ({onDismiss}) => {
               width="100%"
               alignItems="center"
               justifyContent="space-between"
-              marginBottom={20}>
+              marginBottom={8}>
               <Stack width={36} />
               <Stack
                 width={36}
@@ -136,13 +136,9 @@ const PaywallScreen = ({onDismiss}) => {
 
             <Logo />
             <StyledSpacer marginVertical={8} />
-
             <Text variant="display" color="#fafafa" letterSpacing={-0.5}>
               Kursa Premium
             </Text>
-
-            <StyledSpacer marginVertical={4} />
-
             <Text
               variant="caption"
               color="rgba(255,255,255,0.55)"
@@ -150,7 +146,7 @@ const PaywallScreen = ({onDismiss}) => {
               The complete POS for restaurants & shops
             </Text>
 
-            <StyledSpacer marginVertical={12} />
+            <StyledSpacer marginVertical={4} />
 
             {/* Trial badge */}
             <Stack
@@ -183,13 +179,11 @@ const PaywallScreen = ({onDismiss}) => {
             </Text>
 
             {/* Features */}
-            <Stack vertical marginBottom={20}>
+            <Stack vertical marginBottom={8}>
               {FEATURES.map((f, i) => (
                 <Feature key={i} text={f} t={t} />
               ))}
             </Stack>
-
-            <StyledDivider marginBottom={20} />
 
             {/* CTA */}
             <StyledPressable
@@ -200,7 +194,7 @@ const PaywallScreen = ({onDismiss}) => {
               paddingVertical={16}
               alignItems="center"
               justifyContent="center"
-              marginBottom={12}>
+              >
               <Text
                 variant="button"
                 color={isLoading ? t.textMuted : t.textOnAmber}>
@@ -220,7 +214,7 @@ const PaywallScreen = ({onDismiss}) => {
             </StyledPressable>
 
             {/* Legal */}
-            <Stack paddingTop={8}>
+            <Stack >
               <Text
                 variant="caption"
                 color={t.textMuted}
