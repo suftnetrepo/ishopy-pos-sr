@@ -49,10 +49,39 @@ const ItemRow = ({item, onPress}) => {
             style={isDone ? {textDecorationLine: 'line-through'} : {}}>
             {item.menu_name}{item.quantity > 1 ? `  ×${item.quantity}` : ''}
           </StyledText>
-          {!!item.addOns && (
-            <StyledText fontSize={11} color={K.subtext} marginTop={2}>
-              {item.addOns}
-            </StyledText>
+          {Array.isArray(item.addOns) && item.addOns.length > 0 && (
+            <Stack
+              marginTop={8}
+              gap={6}
+              padding={8}
+              borderRadius={10}
+              backgroundColor="rgba(255,255,255,0.04)"
+              borderWidth={1}
+              borderColor="rgba(255,255,255,0.08)">
+              
+              <StyledText fontSize={11} color={K.subtext} fontWeight={theme.fontWeight.bold}>
+                Add-ons
+              </StyledText>
+
+              {item.addOns.map((addon, index) => (
+                <Stack
+                  key={addon.addOn_id ?? `${addon.addOnName}-${index}`}
+                  horizontal
+                  justifyContent="space-between"
+                  alignItems="center">
+                  
+                  <StyledText fontSize={12} color={K.text}>
+                    {addon.displayName || addon.addOnName}
+                  </StyledText>
+
+                  {addon.quantity > 1 && (
+                    <StyledText fontSize={11} color={K.subtext}>
+                      ×{addon.quantity}
+                    </StyledText>
+                  )}
+                </Stack>
+              ))}
+            </Stack>
           )}
         </Stack>
       </Stack>
