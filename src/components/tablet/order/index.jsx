@@ -1,12 +1,13 @@
 
 import React, {useState} from 'react';
-import {Pressable} from 'react-native';
+import {Pressable, ScrollView, useWindowDimensions} from 'react-native';
 import {
   StyledText,
   StyledTable,
   StyledChip,
   Stack,
   StyleShape,
+  StyledCard,
 } from 'fluent-styles';
 import {theme} from '../../../utils/theme';
 import {
@@ -37,6 +38,81 @@ const getStatusStyle = status =>
 
 const formatStatus = status =>
   status ? status.charAt(0).toUpperCase() + status.slice(1).toLowerCase() : '';
+
+// ─── Compact Order Card (Portrait Layout) ────────────────────────────────────
+const CompactOrderCard = ({order, symbol, onPress, t}) => {
+  const statusStyle = getStatusStyle(order.status);
+  return (
+    <StyledCard
+      padding={16}
+      marginHorizontal={12}
+      marginBottom={12}
+      borderRadius={16}
+      borderWidth={1}
+      borderColor={theme.colors.gray[200]}
+      backgroundColor="#ffffff"
+      shadow="light"
+      pressable
+      pressableProps={{onPress}}>
+      
+      <Stack horizontal gap={16}>
+        {/* Left column — Order details */}
+        <Stack vertical flex={1} gap={10}>
+          <StyledText
+            fontSize={theme.fontSize.medium}
+            fontWeight={theme.fontWeight.bold}
+            color={theme.colors.blueGray[600]}>
+            #{getLastChars(order.order_id, 8)}
+          </StyledText>
+          
+          <StyledText
+            fontSize={theme.fontSize.small}
+            color={theme.colors.gray[500]}>
+            {order.table_name || '—'}
+          </StyledText>
+          
+          <Stack horizontal alignItems="center" gap={6}>
+            <MaterialIcon
+              name="access-time"
+              size={14}
+              color={theme.colors.gray[400]}
+            />
+            <StyledText
+              fontSize={theme.fontSize.small}
+              color={theme.colors.gray[500]}>
+              {formatDate(order.date)}
+            </StyledText>
+          </Stack>
+        </Stack>
+
+        {/* Right column — Status & Total */}
+        <Stack vertical alignItems="flex-end" gap={10}>
+          <Stack
+            paddingHorizontal={10}
+            paddingVertical={4}
+            borderRadius={16}
+            backgroundColor={statusStyle.bg}
+            alignItems="center"
+            justifyContent="center">
+            <StyledText
+              fontSize={theme.fontSize.small}
+              fontWeight={theme.fontWeight.semiBold}
+              color={statusStyle.color}>
+              {formatStatus(order.status)}
+            </StyledText>
+          </Stack>
+          
+          <StyledText
+            fontSize={theme.fontSize.medium}
+            fontWeight={theme.fontWeight.bold}
+            color={theme.colors.gray[900]}>
+            {formatCurrency(symbol, order.total_price)}
+          </StyledText>
+        </Stack>
+      </Stack>
+    </StyledCard>
+  );
+};
 
 // ─── Column builder ───────────────────────────────────────────────────────────
 const buildColumns = symbol => [
@@ -174,6 +250,7 @@ export default function OrderCard({onOrderChange, onHandleFilter}) {
     useAppContext();
   const {t} = useAppTheme();
   const navigation = useNavigation();
+  const {width} = useWindowDimensions();
 
   // Active chip label — UI only, actual filtering done via setStatusFilter
   const [activeChip, setActiveChip] = useState('All');
@@ -186,6 +263,7 @@ export default function OrderCard({onOrderChange, onHandleFilter}) {
   });
 
   const hasActiveFilter = date_filter?.startDate && date_filter?.endDate;
+  const isPortrait = width < 1000;
 
   const handleFilter = status => {
     setActiveChip(status);
@@ -196,6 +274,11 @@ export default function OrderCard({onOrderChange, onHandleFilter}) {
     updateDateFilter({startDate: '', endDate: ''});
     setActiveChip('All');
     setStatusFilter('All');
+  };
+
+  const handleOrderPress = row => {
+    updateSelectedOrder(row);
+    onOrderChange('basket');
   };
 
   return (
@@ -265,18 +348,38 @@ export default function OrderCard({onOrderChange, onHandleFilter}) {
         </Stack>
       </Stack>
 
-      <StyledTable
-        columns={columns}
-        {...tableProps}
-        showDivider
-        bordered
-        forceTable
-        onRowPress={row => {
-          updateSelectedOrder(row);
-          onOrderChange('basket');
-        }}
-        emptyNode={<></>}
-      />
+      {/* Responsive rendering: table for landscape, cards for portrait */}
+      {isPortrait ? (
+        <ScrollView
+          flex={1}
+          contentContainerStyle={{paddingTop: 8, paddingBottom: 20}}>
+          {tableProps.data && tableProps.data.length > 0 ? (
+            tableProps.data.map(order => (
+              <CompactOrderCard
+                key={order.id}
+                order={order}
+                symbol={symbol}
+                onPress={() => handleOrderPress(order)}
+                t={t}
+              />
+            ))
+          ) : (
+            <Stack flex={1} alignItems="center" justifyContent="center">
+              <StyledText color={t.textMuted}>No orders found</StyledText>
+            </Stack>
+          )}
+        </ScrollView>
+      ) : (
+        <StyledTable
+          columns={columns}
+          {...tableProps}
+          showDivider
+          bordered
+          forceTable
+          onRowPress={handleOrderPress}
+          emptyNode={<></>}
+        />
+      )}
     </Stack>
   );
 }
