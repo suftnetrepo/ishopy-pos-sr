@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {useWindowDimensions} from 'react-native';
 import {
   YStack,
   XStack,
@@ -8,9 +9,10 @@ import {
   StyledSpacer,
   StyledSpinner,
   StyledButton,
+  Drawer,
 } from 'fluent-styles';
 import Text from '../components/text';
-import {fontStyles, theme} from '../configs/theme';
+import {theme} from '../configs/theme';
 import {usePin} from '../hooks/useUser';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -19,7 +21,6 @@ import {useSelector} from '@legendapp/state/react';
 import {state} from '../store';
 import {StyledMIcon} from '../components/icon';
 import {useAppContext} from '../hooks/appContext';
-import Drawer from '../components/package/drawer';
 import HelpScreen from '../components/help';
 import {useAppTheme} from '../theme';
 
@@ -30,8 +31,11 @@ const Keypad = () => {
   const {error, loading, loginByPin, resetHandler, recoveryHandler} = usePin();
   const [pin, setPin] = useState('');
   const {t} = useAppTheme();
+  const {width} = useWindowDimensions();
   const [recovery_password, setRecovery_password] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
+
+  const drawerWidth = width < 768 ? '90%' : width < 1024 ? '60%' : '45%';
 
   useEffect(() => {
     recovery_password && recoveryHandler();
@@ -111,18 +115,14 @@ const Keypad = () => {
               borderColor={pin[index] ? t.brandPrimary : t.borderStrong}
               justifyContent="center"
               alignItems="center">
-              <Text
-                variant="header"
-                color={t.textPrimary}>
+              <Text variant="header" color={t.textPrimary}>
                 {pin[index]}
               </Text>
             </YStack>
           ))}
         </XStack>
         {(!purchase_status || recovery_password) && (
-          <Text
-            variant="body"
-            color={t.textMuted}>
+          <Text variant="body" color={t.textMuted}>
             1234
           </Text>
         )}
@@ -148,9 +148,7 @@ const Keypad = () => {
                   backgroundColor={t.bgCard}
                   borderColor={t.borderStrong}
                   onPress={() => handlePress(num.toString())}>
-                  <Text
-                    variant="header"
-                    color={t.textPrimary}>
+                  <Text variant="header" color={t.textPrimary}>
                     {num}
                   </Text>
                 </StyledButton>
@@ -176,9 +174,18 @@ const Keypad = () => {
       {loading && <StyledSpinner />}
       {error && handleError()}
       <Drawer
-        direction="right"
-        isOpen={showPayment}
-        onClose={() => setShowPayment(false)}>
+        visible={showPayment}
+        onClose={() => setShowPayment(false)}
+        title="Help Center"
+        width={drawerWidth}
+        colors={{
+          background: t.bgPage,
+          headerBg: theme.colors.transparent,
+          headerTitle: t.textPrimary,
+          headerSubtitle: t.textSecondary,
+          headerBorder: t.bgPage,
+        }}
+        side="right">
         <HelpScreen onClose={() => setShowPayment(false)} />
       </Drawer>
     </StyledSafeAreaView>

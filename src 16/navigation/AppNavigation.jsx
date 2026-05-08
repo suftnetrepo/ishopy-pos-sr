@@ -1,0 +1,206 @@
+/* eslint-disable prettier/prettier */
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import Login from '../screens/login';
+import Keypad from '../screens/lock';
+
+import SignUp from '../screens/signUp';
+import Printer from '../screens/settings/printer';
+import Dashboard from '../screens/dashboard';
+import BigMenu from '../screens/menu';
+import BigTable from '../screens/table';
+import BigOrder from '../screens/order';
+import BigSettings from '../screens/settings';
+import BigCategory from '../screens/settings/category';
+import BigTax from '../screens/settings/tax';
+import BigDiscount from '../screens/settings/discount';
+import BigItem from '../screens/settings/item';
+import BigUser from '../screens/settings/user';
+import BigPayment from '../screens/settings/payment';
+import BigTableScreen from '../screens/settings/table';
+import BackupScreen from '../screens/settings/backup';
+import FAQ from '../screens/faq';
+import HelpCenter from '../screens/helpCenter';
+import Start from '../screens/start';
+import PaywallScreen from '../screens/paywall';
+import WaitlistScreen from '../screens/waitlist';
+import Kitchen from '../screens/kitchen';
+
+const Stack = createStackNavigator();
+function Navigator() {
+
+  return (
+    <Stack.Navigator initialRouteName={"big-start"}>
+      <Stack.Screen
+        name="big-dashboard"
+        component={Dashboard}
+        options={{
+          headerShown: false,
+        }}
+      />
+       <Stack.Screen
+        name="big-purchase"
+        component={PaywallScreen}
+        options={{
+          headerShown: false,
+          presentation: 'modal',
+          gestureEnabled: true,
+          gestureDirection: 'vertical',
+          cardStyle: {borderTopLeftRadius: 20, borderTopRightRadius: 20},
+        }}
+      />
+       <Stack.Screen
+        name="big-waitlist"
+        component={WaitlistScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="big-kitchen"
+        component={Kitchen}
+        options={{
+          headerShown: false,
+        }}
+      />
+       <Stack.Screen
+        name="big-start"
+        component={Start}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="big-payment"
+        component={BigPayment}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="big-user"
+        component={BigUser}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="big-item"
+        component={BigItem}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="big-table"
+        component={BigTable}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="big-menu"
+        component={BigMenu}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="big-orders"
+        component={BigOrder}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="big-settings"
+        component={BigSettings}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="big-category"
+        component={BigCategory}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="big-tax"
+        component={BigTax}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="big-discount"
+        component={BigDiscount}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="table-settings"
+        component={BigTableScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="faq"
+        component={FAQ}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="help-center"
+        component={HelpCenter}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="login"
+        component={Login}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="keypad"
+        component={Keypad}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="sign-up"
+        component={SignUp}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="printer"
+        component={Printer}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+
+      <Stack.Screen
+        name="big-backup"
+        component={BackupScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+export { Navigator }

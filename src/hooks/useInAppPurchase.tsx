@@ -307,11 +307,6 @@ const useInAppPurchase = () => {
             }));
         }
 
-        console.log('Attempting purchase', {
-            connected,
-            products,
-            sku: PRODUCT_SKU,
-        });
 
     }, [connected, products, requestPurchase]);
 

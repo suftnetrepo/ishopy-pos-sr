@@ -1,0 +1,397 @@
+import React, {FC} from 'react';
+import {
+  YStack,
+  XStack,
+  StyledSpacer,
+  StyledCard,
+  StyledDivider,
+  StyledBadge,
+  StyledPressable,
+} from 'fluent-styles';
+import {StyledMIcon} from '../../../components/icon';
+import {theme} from '../../../configs/theme';
+import {Text} from '../../../components/text';
+import {useAppContext} from '../../../hooks/appContext';
+import {useQueryOrderItemByOrder} from '../../../hooks/useOrderItems';
+import {
+  formatCurrency,
+  colorCodeStatus,
+  getLastChars,
+} from '../../../utils/help';
+import {ScrollView} from 'react-native';
+import {Stack} from '../../../components/package/stack';
+import {formatReceiptData} from '../../../utils/receiptFormatter';
+import {printerStore} from '../../../store/printerStore';
+import {printReceipt} from '../../../utils/printReceipt';
+import {useAppTheme} from '../../../theme';
+
+interface AddOn {
+  addOnName: string;
+  quantity: number;
+  price: number;
+}
+
+interface OrderItem {
+  menu_name: string;
+  quantity: number;
+  price: number;
+  addOns?: string;
+}
+
+interface Order {
+  order_id: string;
+  table_name: string;
+  status: string;
+  date: string;
+  total: number;
+  discount: number;
+  tax: number;
+  total_price: number;
+}
+
+interface Shop {
+  currency: string;
+}
+
+interface OrderCartProps {
+  onClose: () => void;
+}
+
+const OrderCart: FC<OrderCartProps> = ({onClose}) => {
+  const {shop, order, user} = useAppContext();
+  const {t} = useAppTheme();
+  const {data} = useQueryOrderItemByOrder(order?.order_id || '');
+
+  const handlePrint = async () => {
+    try {
+        console.log('Order data for receipt:', {
+          order,
+          tableName: order?.table_name,
+          shop,
+          user,
+        });
+      const selectedPrinter = await printerStore.getSelectedPrinter();
+
+      console.log('Selected printer:', selectedPrinter);
+
+      if (!selectedPrinter) {
+        throw new Error('No printer selected');
+      }
+      const receiptData = await formatReceiptData({
+        order,
+        tableName: order?.table_name,
+        shop,
+        user,
+        businessType: shop?.mode as any,
+      });
+
+      await printReceipt(selectedPrinter, receiptData);
+    } catch (error) {
+      console.error('Error printing receipt:', error);
+    }
+  };
+
+  const Card: FC<{order: Order}> = ({order}) => {
+    const formatDate = (dateString: string): string => {
+      const date = new Date(dateString);
+      return date.toLocaleString('en-US', {
+        day: 'numeric',
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+      });
+    };
+
+    return (
+      <Stack
+        vertical
+        width={'100%'}
+        backgroundColor={t.bgCard}
+        borderRadius={16}
+        paddingHorizontal={16}
+        paddingVertical={16}
+        shadowColor="black"
+        shadowOffset={{width: 0, height: 1}}
+        shadowOpacity={0.1}
+        shadowRadius={2}
+        elevation={3}
+        borderWidth={1}
+        borderColor={t.borderDefault}
+        borderLeftWidth={4}
+        borderLeftColor={t.brandPrimary}
+        status={colorCodeStatus(order?.status) as any}>
+        <XStack
+          marginBottom={2}
+          justifyContent="space-between"
+          alignItems="center">
+          <XStack gap={4} alignItems="center">
+            <Text
+              color={t.textPrimary}
+              variant="body">
+              {order?.table_name}
+            </Text>
+          </XStack>
+          <Text
+            variant="caption"
+            color={t.textSecondary}>
+            #{getLastChars(order?.order_id, 3)}
+          </Text>
+        </XStack>
+
+        <YStack>
+          <XStack gap={4} alignItems="center">
+            <StyledMIcon
+              {...({name: 'access-time'} as any)}
+              size={18}
+              color={t.textSecondary}
+            />
+            <Text
+              color={t.textSecondary}
+              variant="caption">
+              {formatDate(order?.date)}
+            </Text>
+          </XStack>
+        </YStack>
+      </Stack>
+    );
+  };
+
+  const RenderAddOn: FC<{addOn: AddOn}> = ({addOn}) => {
+    return (
+      <XStack
+        flex={1}
+        paddingVertical={8}
+        paddingLeft={32}
+        paddingRight={16}
+        alignItems="flex-end"
+        backgroundColor="transparent"
+        gap={6}>
+        <Text
+          flex={1}
+          color={t.textSecondary}
+          variant="caption"
+          numberOfLines={1}>
+          {addOn.addOnName}
+        </Text>
+        <Text
+          width={28}
+          textAlign="center"
+          color={t.textMuted}
+          variant="caption"
+          style={{opacity: 0.6}}>
+          {addOn.quantity}
+        </Text>
+        <Text
+          width={80}
+          textAlign="right"
+          color={t.textSecondary}
+          variant="caption"
+          fontWeight="600">
+          {formatCurrency(shop?.currency || '£', addOn?.price || 0)}
+        </Text>
+      </XStack>
+    );
+  };
+
+  const RenderItem: FC<{item: OrderItem}> = ({item}) => {
+    return (
+      <>
+        <XStack
+          backgroundColor="transparent"
+          paddingVertical={12}
+          paddingHorizontal={16}
+          alignItems="flex-end"
+          gap={6}>
+          <Text
+            flex={1}
+            color={t.textPrimary}
+            variant="bodySmall"
+            fontWeight="600"
+            numberOfLines={1}>
+            {item.menu_name}
+          </Text>
+          <Text
+            width={28}
+            textAlign="center"
+            color={t.textSecondary}
+            variant="caption"
+            style={{opacity: 0.7}}>
+            {item.quantity}
+          </Text>
+          <Text
+            width={80}
+            textAlign="right"
+            color={t.textPrimary}
+            variant="body"
+            fontWeight="600">
+            {formatCurrency(shop?.currency || '£', item?.price || 0)}
+          </Text>
+        </XStack>
+        {(item?.addOns ? JSON.parse(item.addOns) : []).length > 0 && (
+          <YStack paddingHorizontal={16} paddingVertical={2} gap={0}>
+            {(item?.addOns ? JSON.parse(item.addOns) : []).map(
+              (addOn: AddOn, addOnIndex: number) => (
+                <RenderAddOn addOn={addOn} key={addOnIndex} />
+              )
+            )}
+          </YStack>
+        )}
+      </>
+    );
+  };
+
+  const RenderOrderItems: FC = () => {
+    return (
+      <StyledCard
+        shadow="dark"
+        borderColor={t.borderDefault}
+        borderRadius={12}
+        borderWidth={1}
+        backgroundColor={t.bgCard}
+        paddingVertical={6}
+        paddingHorizontal={0}
+        overflow="hidden">
+        <YStack gap={0}>
+          {(Array.isArray(data) ? (data as OrderItem[]) : []).map(
+            (item: OrderItem, index: number) => (
+              <React.Fragment key={index}>
+                <RenderItem item={item} />
+                {index < (Array.isArray(data) ? data.length - 1 : 0) && (
+                  <Stack
+                    height={0.5}
+                    backgroundColor={`${t.textMuted}`}
+                    marginHorizontal={16}
+                  />
+                )}
+              </React.Fragment>
+            )
+          )}
+        </YStack>
+      </StyledCard>
+    );
+  };
+
+  return (
+    <YStack
+      flex={1}
+     
+      borderRadius={8}
+      justifyContent="flex-start"
+      alignItems="flex-start"
+      backgroundColor={t.bgPage}
+      paddingHorizontal={16}
+      paddingVertical={8}>
+   
+      <Card order={order} />
+      <StyledSpacer marginVertical={8} />
+      <ScrollView showsVerticalScrollIndicator={false} style={{width: '100%'}}>
+        <RenderOrderItems />
+        <StyledCard
+          backgroundColor={t.bgCard}
+          borderColor={t.borderDefault}
+          borderWidth={1}
+          borderRadius={16}
+          paddingHorizontal={16}
+          paddingVertical={16}
+          marginTop={16}
+          marginHorizontal={0}
+          gap={10}>
+          <XStack
+            paddingVertical={6}
+            alignItems="flex-end"
+            gap={6}>
+            <Text
+              flex={1}
+              color={t.textSecondary}
+              variant="body">
+              Subtotal
+            </Text>
+            <Stack width={28} />
+            <Text
+              width={80}
+              textAlign="right"
+              color={t.textPrimary}
+              variant="body"
+              fontWeight="600">
+              {formatCurrency(shop?.currency || '£', order?.total || 0)}
+            </Text>
+          </XStack>
+
+          <XStack
+            paddingVertical={1}
+            alignItems="flex-end"
+            gap={6}>
+            <Text
+              flex={1}
+              color={t.textSecondary}
+              variant="body">
+              Discount
+            </Text>
+            <Stack width={28} />
+            <Text
+              width={80}
+              textAlign="right"
+              color={t.textPrimary}
+              variant="body"
+              fontWeight="600">
+              {formatCurrency(shop?.currency || '£', order?.discount || 0)}
+            </Text>
+          </XStack>
+
+          <XStack
+            paddingVertical={1}
+            alignItems="flex-end"
+            gap={6}>
+            <Text
+              flex={1}
+              color={t.textSecondary}
+              variant="body">
+              Tax
+            </Text>
+            <Stack width={28} />
+            <Text
+              width={80}
+              textAlign="right"
+              color={t.textPrimary}
+              variant="body"
+              fontWeight="600">
+              {formatCurrency(shop?.currency || '£', order?.tax || 0)}
+            </Text>
+          </XStack>
+
+          <Stack
+            height={1}
+            backgroundColor={`${t.textMuted}35`}
+            marginVertical={6}
+            style={{borderStyle: 'dashed', borderTopWidth: 1, borderTopColor: `${t.textMuted}35`}}
+          />
+
+          <XStack
+            paddingVertical={12}
+            alignItems="flex-end"
+            gap={6}>
+            <Text
+              flex={1}
+              color={t.textPrimary}
+              variant="title"
+              fontWeight="700">
+              Total
+            </Text>
+            <Stack width={28} />
+            <Text
+              width={80}
+              textAlign="right"
+              color={t.textPrimary}
+              variant="title"
+              fontWeight="700">
+              {formatCurrency(shop?.currency || '£', order?.total_price || 0)}
+            </Text>
+          </XStack>
+        </StyledCard>
+      </ScrollView>
+    </YStack>
+  );
+};
+
+export default OrderCart;

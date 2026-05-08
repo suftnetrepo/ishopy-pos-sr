@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
+import {useWindowDimensions} from 'react-native';
 import {Stack} from '../../../components/package/stack';
 import {Text} from '../../../components/text';
 import {theme} from '../../../utils/theme';
@@ -67,14 +68,12 @@ const createSparklinePath = (data: number[] = []): string => {
   const minValue = Math.min(...data);
   const range = maxValue - minValue || 1;
 
-  // Scale data to fit in chart area
   const points = data.map((value, index) => {
     const x = (index / (data.length - 1)) * width;
     const y = height - ((value - minValue) / range) * height;
     return {x, y};
   });
 
-  // Create smooth curve using quadratic bezier
   let pathData = `M ${points[0].x} ${points[0].y}`;
 
   for (let i = 1; i < points.length; i++) {
@@ -143,18 +142,15 @@ const Tile = ({
   sparklineColorKey,
   sparkline,
   orderKey,
-}: TileProps) => {
+  isCompact,
+}: TileProps & {isCompact?: boolean}) => {
   const sparklineColor = t[sparklineColorKey];
 
-  // Safe sparkline fallback
   const safeSparkline =
     sparkline && Array.isArray(sparkline) && sparkline.length >= 2
       ? sparkline
       : DEFAULT_SPARKLINE;
 
-  const hasSparklineData = safeSparkline.length >= 2;
-
-  // Get delta indicator
   const delta = orderKey ? DELTA_DATA[orderKey] : {change: 0, percentage: 0};
   const isDeltaPositive = delta.change > 0;
   const isDeltaNeutral = delta.change === 0;
@@ -165,57 +161,70 @@ const Tile = ({
     : t.dangerColor;
   const deltaArrow = isDeltaPositive ? '↑' : isDeltaNeutral ? '→' : '↓';
 
+  // Phase 1: Responsive sizing (no hardcoded values)
+  const contentPadH = isCompact ? 12 : 14;
+  const contentPadV = isCompact ? 14 : 16;
+  const sparklineW = isCompact ? 45 : 56;
+  const sparklineH = isCompact ? 22 : 28;
+  const spacingGap = isCompact ? 2 : 3;
+
   return (
     <Stack
       flex={1}
       horizontal
-      borderRadius={16}
-      overflow="hidden"
+      borderRadius={14}
+      overflow="visible"
       borderWidth={1}
       borderColor={t.borderDefault}
       backgroundColor={t.bgCard}
       shadowColor="#000"
-      shadowOpacity={0.06}
-      shadowRadius={12}
-      elevation={3}
+      shadowOpacity={0.04}
+      shadowRadius={8}
+      elevation={2}
       alignItems="center"
       justifyContent="space-between">
-      {/* Content area with number and label */}
+      {/* Phase 3: Better composition - metric, label, delta on left */}
       <Stack
         vertical
-        paddingHorizontal={16}
-        paddingVertical={16}
-        gap={4}
+        paddingHorizontal={contentPadH}
+        paddingVertical={contentPadV}
+        gap={spacingGap}
         flex={1}
-        justifyContent="space-between">
-        {/* Number (large, bold, primary) — metric variant */}
-        <Text variant="metric" color={t.textPrimary}>
+        justifyContent="center">
+        {/* Metric: large, bold, primary text - using default metric lineHeight (40) */}
+        <Text
+          variant="metric"
+          color={t.textPrimary}>
           {value}
         </Text>
 
-        {/* Label (smaller, secondary) — subLabel variant */}
-        <Text variant="subLabel" color={t.textSecondary}>
+        {/* Label: smaller, secondary text, semi-bold weight */}
+        <Text
+          variant="subLabel"
+          color={t.textSecondary}
+          style={{fontSize: isCompact ? 11 : 12, fontWeight: '500'}}>
           {label}
         </Text>
 
-        {/* Delta indicator: change vs previous period */}
-        <Stack horizontal gap={6} alignItems="center">
-          <Text variant="caption" color={deltaColor}>
+        {/* Delta: change percentage with directional indicator */}
+        <Stack horizontal gap={4} alignItems="center" marginTop={2}>
+          <Text variant="caption" color={deltaColor} style={{fontSize: 10, fontWeight: '600'}}>
             {deltaArrow}
           </Text>
-          <Text variant="caption" color={deltaColor}>
+          <Text variant="caption" color={deltaColor} style={{fontSize: 10, fontWeight: '500'}}>
             {Math.abs(delta.change)} ({Math.abs(delta.percentage)}%)
           </Text>
         </Stack>
       </Stack>
 
-      <Stack marginRight={16}>
+      {/* Phase 3: Sparkline on right, vertically centered */}
+      <Stack marginRight={contentPadH} alignItems="center" justifyContent="center">
         <Sparkline
           data={safeSparkline}
           color={sparklineColor}
-          opacity={0.8}
-          width={50}
-          height={26}
+          opacity={0.85}
+          width={sparklineW}
+          height={sparklineH}
         />
       </Stack>
     </Stack>
@@ -225,22 +234,36 @@ const Tile = ({
 const Tiles = () => {
   const {t} = useAppTheme();
   const {data} = useOrderStatusAggregate();
+  const {width} = useWindowDimensions();
+  const isCompact = width < 900;
+  const isMedium = width >= 900 && width < 1180;
+  
+  // Phase 1: Responsive layout - no hardcoded values
+  const tileWidth = isCompact ? '100%' : isMedium ? '48%' : '31.5%';
+  const tileMinHeight = isCompact ? 125 : isMedium ? 135 : 145;
+  const tileGap = isCompact ? 12 : 14;
+  const tilesMarginBottom = isCompact ? 12 : 16;
 
   return (
     <Stack
       horizontal
-      gap={16}
-      paddingHorizontal={16}
+      gap={tileGap}
+      flexWrap="wrap"
       alignItems="stretch"
-      marginBottom={16}>
-      {TILES.map(({key, ...tile}) => (
-        <Tile
-          key={key}
-          {...tile}
-          t={t}
-          value={data ? (data as OrderStatusAggregate)[key] : 0}
-          orderKey={key}
-        />
+      marginBottom={tilesMarginBottom}>
+      {TILES.map(tile => (
+        <Stack key={tile.key} width={tileWidth} minHeight={tileMinHeight}>
+          <Tile
+            key={tile.key}
+            label={tile.label}
+            sparklineColorKey={tile.sparklineColorKey}
+            sparkline={tile.sparkline}
+            t={t}
+            value={data ? (data as OrderStatusAggregate)[tile.key] : 0}
+            orderKey={tile.key}
+            isCompact={isCompact}
+          />
+        </Stack>
       ))}
     </Stack>
   );

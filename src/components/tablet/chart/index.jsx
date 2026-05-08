@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
-import {ActivityIndicator} from 'react-native';
+import {ActivityIndicator, useWindowDimensions} from 'react-native';
 import {StyledSpacer, StyledPressable} from 'fluent-styles';
 import {Stack} from '../../package/stack';
 import Text from '../../../components/text';
@@ -112,7 +112,7 @@ const DayPanel = ({containerWidth, symbol, t, isDark}) => {
       {containerWidth > 0 && (
         <BarChart
           data={data}
-          width={containerWidth - 32}
+          width={Math.max(containerWidth - 8, 240)}
           height={250}
           fromZero
           chartConfig={barChartConfig}
@@ -124,8 +124,11 @@ const DayPanel = ({containerWidth, symbol, t, isDark}) => {
 };
 
 // ─── Trend panel — Week / Month / Year ───────────────────────────────────────
-const TrendPanel = ({period, containerWidth, symbol, data, labels, total, loading, error, t}) => {
+const TrendPanel = ({period, containerWidth, symbol, data, labels, total, loading, error, t, isCompact}) => {
   const style = TREND_STYLE[period];
+
+  // Phase 4: Responsive chart height
+  const chartHeight = isCompact ? 200 : 220;
 
   const formatYLabel = v =>
     v >= 1000 ? `${symbol}${(v / 1000).toFixed(1)}k` : `${symbol}${Math.round(v)}`;
@@ -140,7 +143,7 @@ const TrendPanel = ({period, containerWidth, symbol, data, labels, total, loadin
 
   if (loading) {
     return (
-      <Stack vertical alignItems="center" justifyContent="center" height={250}>
+      <Stack vertical alignItems="center" justifyContent="center" height={chartHeight}>
         <ActivityIndicator color={style.line} />
       </Stack>
     );
@@ -148,7 +151,7 @@ const TrendPanel = ({period, containerWidth, symbol, data, labels, total, loadin
 
   if (error) {
     return (
-      <Stack vertical alignItems="center" justifyContent="center" height={250}>
+      <Stack vertical alignItems="center" justifyContent="center" height={chartHeight}>
         <Text variant="caption" color={t.textMuted}>
           Unable to load data
         </Text>
@@ -157,14 +160,15 @@ const TrendPanel = ({period, containerWidth, symbol, data, labels, total, loadin
   }
 
   return (
-    <Stack vertical gap={12}>
+    <Stack vertical gap={8}>
       <Stack horizontal justifyContent="space-between" alignItems="center">
-        <Text variant="caption" color={t.textSecondary}>
+        <Text variant="caption" color={t.textSecondary} style={{fontSize: 11}}>
           {periodLabel}
         </Text>
         <Text
           variant="label"
-          color={style.line}>
+          color={style.line}
+          style={{fontWeight: '600'}}>
           {formattedTotal}
         </Text>
       </Stack>
@@ -172,15 +176,15 @@ const TrendPanel = ({period, containerWidth, symbol, data, labels, total, loadin
         <SvgTrendLine
           data={data}
           labels={labels}
-          width={containerWidth}
-          height={250}
+          width={Math.max(containerWidth - 8, 240)}
+          height={chartHeight}
           lineColor={style.line}
           gradientFrom={style.gradFrom}
           gradientTo={style.gradTo}
           dotColor={style.line}
           showDots={data.length <= 14}
           labelColor={t.textMuted}
-          gridColor={t.borderDefault}
+          gridColor={`${t.borderDefault}80`}
           gridLines={4}
           formatLabel={formatYLabel}
         />
@@ -190,40 +194,41 @@ const TrendPanel = ({period, containerWidth, symbol, data, labels, total, loadin
 };
 
 // Each panel owns its hook — only the active one mounts
-const WeekPanel  = ({t, ...props}) => { const s = useWeekTrend();  return <TrendPanel period="week"  {...s} {...props} t={t} />; };
-const MonthPanel = ({t, ...props}) => { const s = useMonthTrend(); return <TrendPanel period="month" {...s} {...props} t={t} />; };
-const YearPanel  = ({t, ...props}) => { const s = useYearTrend();  return <TrendPanel period="year"  {...s} {...props} t={t} />; };
+const WeekPanel  = ({t, isCompact, ...props}) => { const s = useWeekTrend();  return <TrendPanel period="week"  {...s} {...props} t={t} isCompact={isCompact} />; };
+const MonthPanel = ({t, isCompact, ...props}) => { const s = useMonthTrend(); return <TrendPanel period="month" {...s} {...props} t={t} isCompact={isCompact} />; };
+const YearPanel  = ({t, isCompact, ...props}) => { const s = useYearTrend();  return <TrendPanel period="year"  {...s} {...props} t={t} isCompact={isCompact} />; };
 
 // ─── Main component ───────────────────────────────────────────────────────────
 const DailyTransactionChart = () => {
   const [activePeriod, setActivePeriod] = useState('day');
+  const {width} = useWindowDimensions();
+  const isCompact = width < 900;
   const [containerWidth, setContainerWidth] = useState(0);
   const {shop} = useAppContext();
   const {t, isDark} = useAppTheme();
   const symbol = shop?.currency || '£';
-  const sharedProps = {containerWidth, symbol, t, isDark};
+  const sharedProps = {containerWidth, symbol, t, isDark, isCompact};
 
   const activeTitle = PERIODS.find(p => p.key === activePeriod)?.title;
 
   return (
     <Stack
       vertical
-      marginLeft={16}
       marginTop={0}
       backgroundColor={t.bgCard}
-      borderRadius={16}
+      borderRadius={14}
       borderWidth={1}
       borderColor={t.borderDefault}
-      paddingHorizontal={16}
-      paddingVertical={16}
+      paddingHorizontal={isCompact ? 12 : 14}
+      paddingVertical={isCompact ? 12 : 14}
       shadowColor="#000"
-      shadowOpacity={0.06}
-      shadowRadius={12}
-      elevation={3}>
+      shadowOpacity={0.04}
+      shadowRadius={8}
+      elevation={2}>
 
-      {/* Chips left, dynamic title right */}
-      <Stack horizontal justifyContent="space-between" alignItems="center">
-        <Stack horizontal gap={8} alignItems="center">
+      {/* Phase 4: Improved header spacing and layout */}
+      <Stack horizontal={!isCompact} gap={isCompact ? 8 : 12} justifyContent="space-between" alignItems={isCompact ? 'flex-start' : 'center'} marginBottom={8}>
+        <Stack horizontal gap={6} flexWrap="wrap" alignItems="center">
           {PERIODS.map(p => (
             <PeriodChip
               key={p.key}
@@ -236,15 +241,14 @@ const DailyTransactionChart = () => {
           ))}
         </Stack>
         <Text
-          variant="caption"
-          color={t.textPrimary}>
+          variant="subLabel"
+          color={t.textSecondary}
+          style={{fontSize: 11, fontWeight: '500'}}>
           {activeTitle}
         </Text>
       </Stack>
 
-      <StyledSpacer marginVertical={8} />
-
-      <Stack vertical onLayout={e => setContainerWidth(e.nativeEvent.layout.width)}>
+      <Stack vertical onLayout={e => setContainerWidth(e.nativeEvent.layout.width)} gap={4}>
         {activePeriod === 'day'   && <DayPanel   {...sharedProps} />}
         {activePeriod === 'week'  && <WeekPanel  {...sharedProps} />}
         {activePeriod === 'month' && <MonthPanel {...sharedProps} />}

@@ -1,8 +1,4 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable no-undef */
-/* eslint-disable prettier/prettier */
-/* eslint-disable react/prop-types */
-/* eslint-disable prettier/prettier */
+
 import React from 'react';
 import { 
     XStack,
@@ -12,7 +8,7 @@ import {
 import Text from '../../components/text';
 import { StyledMIcon } from '../../components/icon';
 import { theme } from '../../configs/theme';
-import { useInAppPurchase } from '../../hooks/_useInAppPurchase';
+import { useInAppPurchase } from '../../hooks/useInAppPurchase';
 import {useAppTheme} from '../../theme';
 
 const PurchaseButton = () => {

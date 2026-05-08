@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, {useEffect, useState, useMemo} from 'react';
-import {FlatList} from 'react-native';
+import {FlatList, useWindowDimensions} from 'react-native';
 import { StyledText, StyledChip} from 'fluent-styles';
 import {ScrollView} from 'react-native';
 import {useAppContext} from '../../../hooks/appContext';
@@ -211,6 +211,25 @@ export default function TableCard({data, onTableSelect, waitlistEntry}) {
   const {t} = useAppTheme();
   const navigation = useNavigation();
   const [activeLocation, setActiveLocation] = useState('All');
+  const {width} = useWindowDimensions();
+
+  // Task 1: Responsive columns based on available width
+  // Sidebar is always collapsed (84px) on Tables screen
+  const sidebarWidth = 84;
+  const horizontalPadding = 16; // contentView paddingHorizontal = 8 * 2
+  const contentWidth = width - sidebarWidth - horizontalPadding;
+  
+  // Determine columns and card width based on content width
+  const columns = useMemo(() => {
+    return contentWidth >= 1200 ? 4 :
+           contentWidth >= 900 ? 3 :
+           contentWidth >= 700 ? 2 : 1;
+  }, [contentWidth]);
+
+  const gap = 8; // matching marginHorizontal={4} * 2 per card
+  const cardWidth = useMemo(() => {
+    return (contentWidth - gap * (columns - 1)) / columns;
+  }, [contentWidth, columns]);
 
   useEffect(() => {
     updateCurrentMenu(4);
@@ -310,10 +329,11 @@ export default function TableCard({data, onTableSelect, waitlistEntry}) {
       {/* Table grid */}
       <ScrollView flex={1} showsVerticalScrollIndicator={false}>
         <FlatList
+          key={`tables-grid-${columns}`}
           data={filteredData}
           keyExtractor={item => item.table_id}
           scrollEnabled={false}
-          numColumns={4}
+          numColumns={columns}
           showsVerticalScrollIndicator={false}
           renderItem={({item}) => (
             <Card

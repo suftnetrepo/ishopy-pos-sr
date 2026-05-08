@@ -1,10 +1,9 @@
-/* eslint-disable prettier/prettier */
+
 import React, {useState} from 'react';
-import {ScrollView, Alert} from 'react-native';
+import { Alert, useWindowDimensions} from 'react-native';
 import {
   Stack,
   StyledPressable,
-  StyledSpacer,
   StyledSpinner,
 } from 'fluent-styles';
 import Text from '../../components/text';
@@ -12,7 +11,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {store} from '../../utils/asyncStorage';
 import {seedFromTemplate, clearSeedData} from '../../model/seed';
 import {useAppContext} from '../../hooks/appContext';
-import {useAppTheme, fonts, textStyles} from '../../theme';
+import {useAppTheme } from '../../theme';
 import ModeSelect from './ModeSelect';
 import TemplateSelect from './TemplateSelect';
 import CurrencySelect from './CurrencySelect';
@@ -26,12 +25,15 @@ const STEPS = [
 const OnboardingScreen = ({onChange}) => {
   const {t} = useAppTheme();
   const {updateShop} = useAppContext();
+  const {width} = useWindowDimensions();
 
   const [step,     setStep]     = useState(1);
   const [mode,     setMode]     = useState('restaurant');
   const [template, setTemplate] = useState('cafe');
   const [currency, setCurrency] = useState('£');
   const [loading,  setLoading]  = useState(false);
+
+  const containerWidth = width < 768 ? '90%' : width < 1024 ? '70%' : '50%';
 
   const handleModeChange = m => {
     setMode(m);
@@ -100,7 +102,7 @@ const OnboardingScreen = ({onChange}) => {
       paddingVertical={48}>
 
       <Stack
-        width="50%"
+        width={containerWidth}
         flex={1}
         vertical
         paddingHorizontal={24}
@@ -127,8 +129,7 @@ const OnboardingScreen = ({onChange}) => {
           {STEPS.map((s, i) => (
             <React.Fragment key={s.id}>
               <Stack alignItems="center" gap={6}>
-                <StepDot n={s.id} 
-                        t={t}/>
+                <StepDot n={s.id} t={t} />
                 <Text
                   variant="caption"
                   color={step >= s.id ? t.brandPrimaryText : t.textMuted}>

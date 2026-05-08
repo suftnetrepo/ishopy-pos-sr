@@ -33,7 +33,7 @@ const LowStockItems = () => {
         width="100%"
         justifyContent="space-between"
         alignItems="center"
-        gap={12}>
+        gap={10}>
         <Text
           color={t.textPrimary}
           variant="title">
@@ -43,28 +43,33 @@ const LowStockItems = () => {
       </Stack>
       <StyledSpacer
         borderWidth={1}
-        borderColor={t.borderDefault}
+        borderColor={`${t.borderDefault}33`}
         width={'100%'}
-        marginVertical={12}
+        marginVertical={8}
       />
 
       {data?.length === 0 ? (
-        <>
-          <Stack
-            width="100%" vertical alignItems="center" justifyContent="center"
-            paddingVertical={24} gap={12}
-            backgroundColor={t.bgCard} borderRadius={12}>
-            <Text fontSize={32}>🔔</Text>
-            <Text
-              variant="title"
-              color={t.textMuted}>
-              Nothing here yet
-            </Text>
-            <Text variant="caption" color={t.textMuted} textAlign="center">
-              Lower stock items will appear here.
-            </Text>
-          </Stack>
-        </>
+        <Stack
+          width="100%"
+          vertical
+          alignItems="center"
+          justifyContent="center"
+          paddingVertical={10}
+          gap={6}
+          backgroundColor={t.bgPage}
+          borderRadius={0}>
+          {/* Phase 3 (Task): Compact empty state - smaller icon, reduced spacing */}
+          <Text style={{fontSize: 18}}>🔔</Text>
+          <Text
+            variant="subLabel"
+            color={t.textSecondary}
+            style={{fontWeight: '500'}}>
+            Inventory healthy
+          </Text>
+          <Text variant="caption" color={t.textMuted} textAlign="center" style={{fontSize: 11}}>
+            Low stock alerts appear here
+          </Text>
+        </Stack>
       ) : (
         <>
           <ScrollView showsVerticalScrollIndicator={false}>

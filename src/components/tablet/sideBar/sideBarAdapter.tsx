@@ -17,18 +17,22 @@ const SideBarAdapter: React.FC<SideBarAdapterProps> = ({
   showMenu = '',
 }) => {
   const {t} = useAppTheme();
+  const sidebarWidth = collapse ? 84 : 210;
+
   return (
     <Stack
-      paddingBottom={16}
+      width={sidebarWidth}
+      minWidth={sidebarWidth}
+      maxWidth={sidebarWidth}
+      paddingBottom={12}
       borderRadius={12}
-      flex={collapse ? 0.3 : 0.6}
       alignItems="center"
-      justifyContent="center"
+      justifyContent="flex-start"
       vertical
-      marginLeft={16}
-      paddingHorizontal={16}
+      paddingHorizontal={collapse ? 6 : 12}
+      paddingTop={10}
+      gap={4}
       backgroundColor={t.bgCard}>
-      <StyledSpacer marginVertical={7} />
       <SideBar
         selectedMenu={selectedMenu}
         collapse={collapse}

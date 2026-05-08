@@ -1,8 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import {
-  Stack, StyledPressable, StyledCard, theme,
-} from 'fluent-styles';
+import {Stack, StyledPressable, StyledCard, theme} from 'fluent-styles';
 import Text from '../../components/text';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useAppTheme} from '../../theme';
@@ -10,15 +8,15 @@ import {useAppTheme} from '../../theme';
 const MODES = [
   {
     value: 'restaurant',
-    icon:  'silverware-fork-knife',
+    icon: 'silverware-fork-knife',
     label: 'Restaurant',
-    desc:  'Cafes, restaurants, bars and food service',
+    desc: 'Cafes, restaurants, bars and food service',
   },
   {
     value: 'shop',
-    icon:  'storefront-outline',
+    icon: 'storefront-outline',
     label: 'Retail Shop',
-    desc:  'Boutiques, supermarkets and general stores',
+    desc: 'Boutiques, supermarkets and general stores',
   },
 ];
 
@@ -27,7 +25,7 @@ interface Props {
   onSelect: (mode: string) => void;
 }
 
-const ModeSelect: React.FC<Props> = ({ selected, onSelect }) => {
+const ModeSelect: React.FC<Props> = ({selected, onSelect}) => {
   const {t} = useAppTheme();
   return (
     <Stack gap={16}>
@@ -41,67 +39,66 @@ const ModeSelect: React.FC<Props> = ({ selected, onSelect }) => {
       </Stack>
 
       {MODES.map(m => {
-      const active = selected === m.value;
-      return (
-        <StyledPressable key={m.value} onPress={() => onSelect(m.value)}>
-          <StyledCard
-            padding={20}
-            borderRadius={16}
-            backgroundColor={active ? t.bgCard : t.bgCard}
-            borderWidth={2}
-            borderColor={active ? t.brandPrimary : t.borderDefault}
-            shadow={active ? 'light' : undefined}>
-            <Stack horizontal alignItems="center" gap={16}>
-              {/* Icon Background */}
-              <Stack
-                width={56}
-                height={56}
-                borderRadius={16}
-                backgroundColor={active ? t.brandPrimary : t.bgInput}
-                alignItems="center"
-                justifyContent="center">
-                <Icon
-                  name={m.icon}
-                  size={28}
-                  color={active ? (t.brandPrimary || '#ffffff') : t.textSecondary}
-                />
+        const active = selected === m.value;
+        return (
+          <StyledPressable key={m.value} onPress={() => onSelect(m.value)}>
+            <StyledCard
+              padding={20}
+              borderRadius={16}
+              backgroundColor={t.bgCard}
+              borderWidth={2}
+              borderColor={active ? t.brandPrimary : t.borderDefault}
+              shadow={active ? 'light' : undefined}>
+              <Stack horizontal alignItems="center" gap={16}>
+                {/* Icon Background */}
+                <Stack
+                  width={56}
+                  height={56}
+                  borderRadius={16}
+                  backgroundColor={active ? t.brandPrimary : t.bgInput}
+                  alignItems="center"
+                  justifyContent="center">
+                  <Icon
+                    name={m.icon}
+                    size={28}
+                    color={active ? t.textOnAmber : t.textSecondary}
+                  />
+                </Stack>
+
+                {/* Text Content */}
+                <Stack flex={1}>
+                  <Text
+                    variant="label"
+                    color={t.textPrimary}
+                    fontWeight={active ? '600' : '500'}>
+                    {m.label}
+                  </Text>
+                  <Text variant="body" color={t.textSecondary} marginTop={2}>
+                    {m.desc}
+                  </Text>
+                </Stack>
+
+                {/* Selection Checkmark */}
+                <Stack
+                  width={24}
+                  height={24}
+                  borderRadius={12}
+                  borderWidth={2}
+                  borderColor={active ? t.brandPrimary : t.textMuted}
+                  backgroundColor={active ? t.brandPrimary : 'transparent'}
+                  alignItems="center"
+                  justifyContent="center">
+                  {active && (
+                    <Icon name="check" size={14} color={t.textOnAmber} />
+                  )}
+                </Stack>
               </Stack>
-              
-              {/* Text Content */}
-              <Stack flex={1}>
-                <Text
-                  variant="label"
-                  color={active ? t.textPrimary : t.textPrimary}
-                  fontWeight={active ? '600' : '500'}>
-                  {m.label}
-                </Text>
-                <Text
-                  variant="body"
-                  color={t.textSecondary}
-                  marginTop={2}>
-                  {m.desc}
-                </Text>
-              </Stack>
-              
-              {/* Selection Checkmark */}
-              <Stack
-                width={24}
-                height={24}
-                borderRadius={12}
-                borderWidth={2}
-                borderColor={active ? t.brandPrimary : t.textMuted}
-                backgroundColor={active ? t.brandPrimary : 'transparent'}
-                alignItems="center"
-                justifyContent="center">
-                {active && <Icon name="check" size={14} color={t.brandPrimary || '#ffffff'} />}
-              </Stack>
-            </Stack>
-          </StyledCard>
-        </StyledPressable>
-      );
-    })}
-  </Stack>
-);
+            </StyledCard>
+          </StyledPressable>
+        );
+      })}
+    </Stack>
+  );
 };
 
 export default ModeSelect;

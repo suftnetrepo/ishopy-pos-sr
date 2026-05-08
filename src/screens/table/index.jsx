@@ -41,7 +41,7 @@ const BigTable = () => {
   };
 
   return (
-    <StyledPage backgroundColor={t.bgPage}>
+    <StyledPage paddingHorizontal={16} backgroundColor={t.bgPage}>
       <StyledPage.Header.Full>
         <RenderHeader
           showBackButton={true}

@@ -29,7 +29,6 @@ const RecentOrder = () => {
       backgroundColor={t.bgCard}
       paddingHorizontal={16}
       paddingVertical={16}
-      marginLeft={16}
       shadowColor="#000"
       shadowOpacity={0.06}
       shadowRadius={12}
@@ -44,25 +43,35 @@ const RecentOrder = () => {
           variant="title">
           Recent Orders
         </Text>
-        <StyledIcon size={24} name="share" color={t.textMuted} />
+        <StyledIcon size={20} name="share" color={t.textMuted} />
       </Stack>
       <StyledSpacer
         borderWidth={1}
-        borderColor={t.borderDefault}
+        borderColor={`${t.borderDefault}33`}
         width={'100%'}
-        marginVertical={12}
+        marginVertical={8}
       />
 
       {data.length === 0 ? (
-        <>
-          <Stack width={'100%'} vertical gap={4}>
-            <EmptyView
-              color={t.textMuted}
-              title="Your Recent Orders list is empty"
-              description="Once you place an order, it will appear here. "
-            />
-          </Stack>
-        </>
+        <Stack
+          width="100%"
+          vertical
+          alignItems="center"
+          justifyContent="center"
+          paddingVertical={10}
+          gap={4}>
+          {/* Phase 3 (Task): Compact empty state - smaller icon, reduced spacing */}
+          <Text style={{fontSize: 16}}>📋</Text>
+          <Text
+            variant="subLabel"
+            color={t.textSecondary}
+            style={{fontWeight: '500'}}>
+            No orders yet
+          </Text>
+          <Text variant="caption" color={t.textMuted} textAlign="center" style={{fontSize: 11}}>
+            Orders will appear here
+          </Text>
+        </Stack>
       ) : (
         <>
           <ScrollView showsVerticalScrollIndicator={false}>

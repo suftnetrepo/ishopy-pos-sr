@@ -1,0 +1,137 @@
+/* eslint-disable prettier/prettier */
+import React, {useState} from 'react';
+import {
+  Stack,
+  StyledPressable,
+  StyledCard,
+  StyledTextInput,
+  StyledScrollView,
+  theme,
+} from 'fluent-styles';
+import Text from '../../components/text';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useAppTheme} from '../../theme';
+
+const CURRENCIES = [
+  {symbol: '£', code: 'GBP', name: 'British Pound', flag: '🇬🇧'},
+  {symbol: '$', code: 'USD', name: 'US Dollar', flag: '🇺🇸'},
+  {symbol: '€', code: 'EUR', name: 'Euro', flag: '🇪🇺'},
+  {symbol: '₦', code: 'NGN', name: 'Nigerian Naira', flag: '🇳🇬'},
+  {symbol: 'GH₵', code: 'GHS', name: 'Ghanaian Cedi', flag: '🇬🇭'},
+  {symbol: 'KSh', code: 'KES', name: 'Kenyan Shilling', flag: '🇰🇪'},
+  {symbol: 'R', code: 'ZAR', name: 'South African Rand', flag: '🇿🇦'},
+  {symbol: 'ETB', code: 'ETB', name: 'Ethiopian Birr', flag: '🇪🇹'},
+  {symbol: 'CFA', code: 'XOF', name: 'West African CFA', flag: '🌍'},
+  {symbol: 'USh', code: 'UGX', name: 'Ugandan Shilling', flag: '🇺🇬'},
+  {symbol: 'TZS', code: 'TZS', name: 'Tanzanian Shilling', flag: '🇹🇿'},
+  {symbol: 'C$', code: 'CAD', name: 'Canadian Dollar', flag: '🇨🇦'},
+  {symbol: 'A$', code: 'AUD', name: 'Australian Dollar', flag: '🇦🇺'},
+  {symbol: '₹', code: 'INR', name: 'Indian Rupee', flag: '🇮🇳'},
+  {symbol: '¥', code: 'JPY', name: 'Japanese Yen', flag: '🇯🇵'},
+  {symbol: 'د.إ', code: 'AED', name: 'UAE Dirham', flag: '🇦🇪'},
+];
+
+interface Props {
+  selected: string;
+  onSelect: (symbol: string) => void;
+}
+
+const CurrencySelect: React.FC<Props> = ({selected, onSelect}) => {
+  const [search, setSearch] = useState('');
+  const {t} = useAppTheme();
+
+  const filtered = CURRENCIES.filter(
+    c =>
+      c.name.toLowerCase().includes(search.toLowerCase()) ||
+      c.code.toLowerCase().includes(search.toLowerCase()) ||
+      c.symbol.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <Stack gap={16} flex={1}>
+      <Stack gap={4} marginBottom={4}>
+        <Text
+          variant="header"
+          color={t.textPrimary}>
+          Select your currency
+        </Text>
+        <Text
+          variant="body"
+          color={t.textSecondary}>
+          Used on receipts, menus and reports. You can change this later in
+          Settings.
+        </Text>
+      </Stack>
+    
+      <StyledScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{gap: 14, paddingBottom: 16}}>
+        <StyledTextInput
+          flex={0}
+          variant="outline"
+          placeholder="Search currency..."
+          value={search}
+          onChangeText={setSearch}
+          clearable
+          leftIcon={
+            <Icon name="magnify" size={18} color={t.textMuted} />
+          }
+        />
+        {filtered.map(c => {
+          const active = selected === c.symbol;
+          return (
+            <StyledPressable key={c.code} onPress={() => onSelect(c.symbol)}>
+              <StyledCard
+                padding={20}
+                borderRadius={16}
+                backgroundColor={active ? `${t.brandPrimary}15` : t.bgCard}
+                borderWidth={2}
+                borderColor={active ? t.brandPrimary : t.borderDefault}
+                shadow="light">
+                <Stack horizontal alignItems="center" gap={12}>
+                  {/* Flag + symbol */}
+                  <Stack
+                    width={48}
+                    height={48}
+                    borderRadius={12}
+                    backgroundColor={active ? `${t.brandPrimary}25` : t.bgInput}
+                    alignItems="center"
+                    justifyContent="center">
+                    <Text variant="header">{c.flag}</Text>
+                  </Stack>
+                  <Stack flex={1}>
+                    <Text
+                      variant="title"
+                      color={t.textPrimary}
+                      fontWeight="600">
+                      {c.name}
+                    </Text>
+                    <Text
+                      variant="caption"
+                      color={t.textSecondary}>
+                      {c.code} · {c.symbol}
+                    </Text>
+                  </Stack>
+                  {/* Check */}
+                  {active && (
+                    <Stack
+                      width={28}
+                      height={28}
+                      borderRadius={14}
+                      backgroundColor={t.brandPrimary}
+                      alignItems="center"
+                      justifyContent="center">
+                      <Icon name="check" size={16} color="#ffffff" />
+                    </Stack>
+                  )}
+                </Stack>
+              </StyledCard>
+            </StyledPressable>
+          );
+        })}
+      </StyledScrollView>
+    </Stack>
+  );
+};
+
+export default CurrencySelect;
