@@ -55,26 +55,6 @@ export default function HelpScreen({onClose}) {
     <ScrollView
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{paddingBottom: 40, paddingTop: 20, backgroundColor: t.bgPage}}>
-
-      {/* Header */}
-      <Stack horizontal paddingHorizontal={24} paddingVertical={16} alignItems="center">
-        <StyledPressable
-          width={40} height={40} borderRadius={20}
-          backgroundColor={t.bgPage}
-          alignItems="center" justifyContent="center"
-          onPress={() => onClose()}>
-          <Icon name="arrow-left" size={20} color={t.textPrimary} />
-        </StyledPressable>
-        <Stack vertical marginLeft={16}>
-          <Text variant="hero">
-            Help Center
-          </Text>
-          <Text variant="caption" color={t.textSecondary}>
-            Get support and learn more
-          </Text>
-        </Stack>
-      </Stack>
-
       {/* Hero image */}
       <Stack paddingHorizontal={24} paddingVertical={8} alignItems="center">
         <Stack borderRadius={24} overflow="hidden" marginBottom={24} width="100%">
