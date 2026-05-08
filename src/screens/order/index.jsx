@@ -25,7 +25,7 @@ const BigOrder = () => {
   const [showCalendar, setCalendarShow] = useState(null);
 
   return (
-    <StyledPage backgroundColor={t.bgPage}>
+    <StyledPage backgroundColor={t.bgPage} paddingHorizontal={16}>
       <StyledPage.Header.Full>
         <RenderHeader
           showBackButton={true}
@@ -42,7 +42,7 @@ const BigOrder = () => {
 
       <Stack key={focus} flex={1.5} horizontal>
         <SideBarAdapter selectedMenu={4} showMenu={false} collapse={true} />
-        <Stack flex={3} paddingHorizontal={8} vertical>
+        <Stack flex={3} paddingHorizontal={8}  vertical>
           <OrderCard
             onOrderChange={j => setShow(j)}
             onHandleFilter={i => setCalendarShow(i)}

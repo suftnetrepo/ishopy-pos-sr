@@ -3,7 +3,7 @@ import {Drawer, StyledPage, StyleShape, theme} from 'fluent-styles';
 import {Stack} from '../../../components/package/stack';
 import SideBarAdapter from '../../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../../components/tablet/header';
-
+import {useWindowDimensions} from 'react-native';
 import TaxCard from '../tax/card';
 import TaxForm from '../tax/form/form';
 import { useDeleteTax, useTaxes } from '../../../hooks/useTax';
@@ -16,6 +16,8 @@ import {useAppTheme} from '../../../theme';
 
 const BigTax = () => {
   const navigationFocus = useFocus();
+     const {width} = useWindowDimensions();
+    const drawerWidth = width < 768 ? '90%' : width < 1024 ? '60%' : '45%';
   const dialogue = useDialogue();
   const { deleteTax } = useDeleteTax();
   const { data, error, loading, resetHandler, loadTaxes } = useTaxes(true);
@@ -123,8 +125,8 @@ const BigTax = () => {
        <Drawer
         visible={shouldOpen ? true : false}
         onClose={() => reset()}
-        title={`${state.tag === 'Edit' ? 'Edit' : 'Add'} Category `}
-        width={'30%'}
+        title={`${state.tag === 'Edit' ? 'Edit' : 'Add'} Tax `}
+        width={drawerWidth}
         colors={{
           background: t.bgPage,
           headerBg: theme.colors.transparent,

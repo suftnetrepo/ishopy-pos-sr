@@ -23,6 +23,7 @@ import {useAppContext} from '../../../../hooks/appContext';
 import usePremium from '../../../../hooks/usePremium';
 import {useAppTheme} from '../../../../theme';
 import {useLoaderAndError} from '../../../../hooks/useLoaderAndError';
+import { useResponsiveGrid } from '../../../../hooks/useResponsiveGrid';
 
 const ItemCard = forwardRef(
   (
@@ -36,6 +37,7 @@ const ItemCard = forwardRef(
     },
     ref
   ) => {
+    const { columns, cardWidth } = useResponsiveGrid();
     const {menuQuery} = useAppContext();
     const {t} = useAppTheme();
     const {checkLimit} = usePremium();
@@ -277,11 +279,12 @@ const ItemCard = forwardRef(
 
         {/* Items Grid */}
         <FlatList
+        key={`item-${columns}`}
           data={data}
           initialNumToRender={100}
           showsVerticalScrollIndicator={false}
           keyExtractor={item => item.menu_id}
-          numColumns={3}
+          numColumns={columns}
           columnWrapperStyle={{justifyContent: 'space-between'}}
           renderItem={({item, index}) => (
             <RenderCard item={item} key={index} t={t} />

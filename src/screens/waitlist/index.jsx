@@ -295,7 +295,7 @@ const WaitlistScreen = () => {
   };
 
   return (
-    <StyledPage backgroundColor={t.bgPage}>
+ <StyledPage backgroundColor={t.bgPage} paddingHorizontal={16}>
       <StyledPage.Header.Full>
         <RenderHeader showBackButton showLogo={false} showTitle title="Waitlist" />
       </StyledPage.Header.Full>
@@ -339,7 +339,7 @@ const WaitlistScreen = () => {
         </Stack>
 
         {/* Form */}
-        <Stack flex={1.2}  paddingBottom={16} marginRight={16}>
+        <Stack flex={1.2}  paddingBottom={16} >
           <ScrollView showsVerticalScrollIndicator={false}>
             <AddForm onAdd={addToQueue} t={t} />
           </ScrollView>

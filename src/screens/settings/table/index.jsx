@@ -8,6 +8,7 @@ import {
   toastService,
   useDialogue,
 } from 'fluent-styles';
+import {useWindowDimensions} from 'react-native';
 import SideBarAdapter from '../../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../../components/tablet/header';
 import TableCard from './card';
@@ -34,6 +35,8 @@ const BigTableScreen = () => {
   const isFocused = navigationFocus && screenFocus;
   const {checkLimit} = usePremium();
   const {data, error, loading, resetHandler, loadTables} = useTables(isFocused);
+  const {width} = useWindowDimensions();
+  const drawerWidth = width < 768 ? '90%' : width < 1024 ? '60%' : '45%';
 
   useLoaderAndError(loading, error, resetHandler);
 
@@ -127,7 +130,7 @@ const BigTableScreen = () => {
 
       <Stack flex={1.5} horizontal>
         <SideBarAdapter selectedMenu={5} showMenu={false} collapse={true} />
-        <Stack flex={3} gap={8} marginHorizontal={16} vertical>
+        <Stack flex={3} gap={8} paddingHorizontal={8} vertical>
           <TableCard
             data={data}
             onTableDelete={async j => await onDelete(j)}
@@ -141,7 +144,7 @@ const BigTableScreen = () => {
         visible={shouldOpen ? true : false}
         onClose={() => reset()}
         title={`${state.tag === 'Edit' ? 'Edit' : 'Add'} Table `}
-        width={'30%'}
+        width={drawerWidth}
         colors={{
           background: t.bgPage,
           headerBg: theme.colors.transparent,

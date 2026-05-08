@@ -99,9 +99,9 @@ export default function Payment({
             <StyledPressable
               key={i}
               onPress={() => handleQuickAmount(amount)}
-              paddingHorizontal={12}
+              paddingHorizontal={8}
               paddingVertical={8}
-              borderRadius={8}
+              borderRadius={30}
               backgroundColor={t.bgInput}
               borderWidth={1}
               borderColor={t.borderDefault}>
@@ -143,7 +143,7 @@ export default function Payment({
         {/* Footer */}
         <Stack
           horizontal justifyContent="center"
-          paddingHorizontal={16} paddingVertical={16}
+          paddingHorizontal={16} paddingVertical={8}
           gap={12} borderTopWidth={1} borderColor={t.borderDefault}>
           {hasInput && (
             <StyledPressable

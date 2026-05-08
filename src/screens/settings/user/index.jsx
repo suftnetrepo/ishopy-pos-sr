@@ -8,6 +8,7 @@ import {
   toastService,
   useDialogue
 } from 'fluent-styles';
+import {useWindowDimensions} from 'react-native';
 import SideBarAdapter from '../../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../../components/tablet/header';
 import UserCard from '../user/card';
@@ -22,6 +23,7 @@ import usePremium from '../../../hooks/usePremium';
 import {useAppTheme} from '../../../theme';
 
 const BigUser = () => {
+     const {width} = useWindowDimensions();
   const dialogue = useDialogue();
   const {user} = useAppContext();
   const {t} = useAppTheme();
@@ -33,6 +35,7 @@ const BigUser = () => {
   const [screenFocus, setScreenFocus] = useState(true);
   const shouldOpen = state.tag === 'Edit' || state.tag === 'Add';
   const isFocused = navigationFocus && screenFocus;
+     const drawerWidth = width < 768 ? '90%' : width < 1024 ? '60%' : '45%';
 
   const {checkLimit} = usePremium();
   const {data, error, loading, resetHandler, loadUsers} = useUsers(isFocused);
@@ -135,7 +138,7 @@ const BigUser = () => {
         visible={shouldOpen ? true : false}
         onClose={() => reset()}
         title={`${state.tag === 'Edit' ? 'Edit' : 'Add'} User `}
-        width={'30%'}
+        width={drawerWidth}
         colors={{
          background: t.bgPage,
           headerBg: theme.colors.transparent,

@@ -9,6 +9,7 @@ import {
   toastService, StyleShape
 } from 'fluent-styles';
 import {Animated, Pressable} from 'react-native';
+import {useWindowDimensions} from 'react-native';
 import SideBarAdapter from '../../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../../components/tablet/header';
 import {StyledSearchBar} from '../../../components/searchBar';
@@ -37,6 +38,8 @@ const BigItem = () => {
   const [addButtonScale] = useState(new Animated.Value(1));
   const shouldOpen = state.tag === 'Edit' || state.tag === 'Add';
   const isFocused = navigationFocus && screenFocus;
+  const {width} = useWindowDimensions();
+  const drawerWidth = width < 768 ? '90%' : width < 1024 ? '60%' : '45%';
 
   useEffect(() => {
     if (state.tag) {
@@ -171,7 +174,7 @@ const BigItem = () => {
         visible={shouldOpen ? true : false}
         onClose={() => reset()}
         title={`${state.tag === 'Edit' ? 'Edit' : 'Add'} Item `}
-        width={'30%'}
+        width={drawerWidth}
          colors={{
           background: t.bgPage,
           headerBg: theme.colors.transparent,
@@ -187,7 +190,7 @@ const BigItem = () => {
         onClose={() => setShowAddOn(false)}
         title={`${showAddOn?.name} `}
         subtitle={'AddOns'}
-        width={'30%'}
+           width={drawerWidth}
         side="right"
         colors={{
           background: t.bgCard,

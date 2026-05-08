@@ -45,7 +45,7 @@ const CompactOrderCard = ({order, symbol, onPress, t}) => {
   return (
     <StyledCard
       padding={16}
-      marginHorizontal={12}
+     
       marginBottom={12}
       borderRadius={16}
       borderWidth={1}
@@ -289,8 +289,7 @@ export default function OrderCard({onOrderChange, onHandleFilter}) {
         justifyContent="space-between"
         alignItems="center"
         marginBottom={12}
-        marginLeft={8}
-        marginRight={8}>
+        paddingHorizontal={8}>
         <Stack horizontal gap={6} flexWrap="wrap" alignItems="center">
           {statusOptions.map(status => (
             <StyledChip

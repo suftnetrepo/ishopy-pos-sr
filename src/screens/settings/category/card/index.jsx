@@ -7,16 +7,14 @@ import {toWordCase} from '../../../../utils/help';
 import {useAppTheme} from '../../../../theme';
 import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import CategoryIcon from '../../../../components/category-icon';
+import {useResponsiveGrid} from '../../../../hooks/useResponsiveGrid';
 
 const RenderCard = ({item, onEdit, onDelete, idKey, label, t}) => {
   const isActive = item.status === 1;
   const itemCount = item.itemCount || 0;
-  
+
   return (
-    <StyledPressable
-      onPress={onEdit}
-      style={{flex: 1}}
-      activeOpacity={0.7}>
+    <StyledPressable onPress={onEdit} style={{flex: 1}} activeOpacity={0.7}>
       <Stack
         flex={1}
         horizontal
@@ -35,7 +33,6 @@ const RenderCard = ({item, onEdit, onDelete, idKey, label, t}) => {
         elevation={1}
         gap={12}
         alignItems="center">
-
         {/* Icon */}
         <StyledShape
           size={48}
@@ -70,7 +67,9 @@ const RenderCard = ({item, onEdit, onDelete, idKey, label, t}) => {
               paddingHorizontal={10}
               paddingVertical={4}
               borderRadius={999}
-              backgroundColor={isActive ? `${t.successColor}15` : `${t.dangerColor}15`}>
+              backgroundColor={
+                isActive ? `${t.successColor}15` : `${t.dangerColor}15`
+              }>
               <StyledText
                 fontSize={10}
                 fontWeight={theme.fontWeight.semiBold}
@@ -93,7 +92,7 @@ const RenderCard = ({item, onEdit, onDelete, idKey, label, t}) => {
         <Stack horizontal alignItems="flex-start" gap={8}>
           {/* Edit Icon Button */}
           <StyledPressable
-            onPress={(e) => {
+            onPress={e => {
               e.stopPropagation?.();
               onEdit();
             }}
@@ -114,7 +113,7 @@ const RenderCard = ({item, onEdit, onDelete, idKey, label, t}) => {
 
           {/* Delete Icon Button */}
           <StyledPressable
-            onPress={(e) => {
+            onPress={e => {
               e.stopPropagation?.();
               onDelete();
             }}
@@ -140,15 +139,19 @@ const RenderCard = ({item, onEdit, onDelete, idKey, label, t}) => {
 
 const CategoryCard = ({onCategoryChange, onCategoryDelete, data}) => {
   const {t} = useAppTheme();
+  const {columns, cardWidth} = useResponsiveGrid();
   return (
     <FlatList
-      data={data} initialNumToRender={100}
+      key={`category-${columns}`}
+      data={data}
+      initialNumToRender={100}
       showsVerticalScrollIndicator={false}
       keyExtractor={item => item.category_id}
-      numColumns={3}
+      numColumns={columns}
       renderItem={({item, index}) => (
         <RenderCard
-          key={index} item={item}
+          key={index}
+          item={item}
           label={toWordCase(item.name)}
           onEdit={() => onCategoryChange({data: item, tag: 'Edit'})}
           onDelete={() => onCategoryDelete(item?.category_id)}

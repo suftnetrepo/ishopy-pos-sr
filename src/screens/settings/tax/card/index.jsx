@@ -6,6 +6,7 @@ import Text from '../../../../components/text';
 import {toWordCase} from '../../../../utils/help';
 import {useAppTheme} from '../../../../theme';
 import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useResponsiveGrid} from '../../../../hooks/useResponsiveGrid';
 
 const RenderCard = ({item, onEdit, onDelete, t}) => {
   const isActive = item.status === 1;
@@ -118,12 +119,14 @@ const RenderCard = ({item, onEdit, onDelete, t}) => {
 
 const TaxCard = ({data, onTaxChange, onTaxDelete}) => {
   const {t} = useAppTheme();
+  const {columns, cardWidth} = useResponsiveGrid();
   return (
     <FlatList
+        key={`tax-${columns}`}
       data={data} initialNumToRender={100}
       showsVerticalScrollIndicator={false}
       keyExtractor={item => item.tax_id}
-      numColumns={3}
+      numColumns={columns}
       renderItem={({item, index}) => (
         <RenderCard key={index} item={item}
           onEdit={() => onTaxChange({data: item, tag: 'Edit'})}

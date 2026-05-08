@@ -11,6 +11,7 @@ import SideBarAdapter from '../../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../../components/tablet/header';
 import DiscountCard from '../discount/card';
 import DiscountForm from '../discount/form/form';
+import {useWindowDimensions} from 'react-native';
 import {useDeleteDiscount, useDiscounts} from '../../../hooks/useDiscount';
 import {useLoaderAndError} from '../../../hooks/useLoaderAndError';
 import {toastService, useDialogue} from 'fluent-styles';
@@ -21,6 +22,8 @@ import {useAppTheme} from '../../../theme';
 
 const BigDiscount = () => {
   const navigationFocus = useFocus();
+   const {width} = useWindowDimensions();
+  const drawerWidth = width < 768 ? '90%' : width < 1024 ? '60%' : '45%';
   const dialogue = useDialogue();
   const {deleteDiscount} = useDeleteDiscount();
   const {data, error, loading, resetHandler, loadDiscount} =
@@ -131,8 +134,8 @@ const BigDiscount = () => {
       <Drawer
         visible={shouldOpen ? true : false}
         onClose={() => reset()}
-        title={`${state.tag === 'Edit' ? 'Edit' : 'Add'} Category `}
-        width={'30%'}
+        title={`${state.tag === 'Edit' ? 'Edit' : 'Add'} Discount `}
+        width={drawerWidth}
         colors={{
       background: t.bgPage,
                 headerBg: theme.colors.transparent,

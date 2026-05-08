@@ -171,7 +171,7 @@ const BigItem = () => {
         visible={shouldOpen ? true : false}
         onClose={() => reset()}
         title={`${state.tag === 'Edit' ? 'Edit' : 'Add'} Item `}
-        width={'30%'}
+        width={'40%'}
          colors={{
           background: t.bgPage,
           headerBg: theme.colors.transparent,
@@ -187,7 +187,7 @@ const BigItem = () => {
         onClose={() => setShowAddOn(false)}
         title={`${showAddOn?.name} `}
         subtitle={'AddOns'}
-        width={'30%'}
+        width={'40%'}
         side="right"
         colors={{
           background: t.bgCard,

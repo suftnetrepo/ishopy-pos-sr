@@ -6,13 +6,20 @@ import Text from '../../../../components/text';
 import {toWordCase} from '../../../../utils/help';
 import {useAppTheme} from '../../../../theme';
 import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useResponsiveGrid} from '../../../../hooks/useResponsiveGrid';
 
 // ─── Location pill config with theme-aware tokens ────────────────
 const getLocationStyle = (loc, t) => {
   const styles = {
-    'Bar':      { bg: t.colors?.purple[50] || '#faf5ff',  color: t.colors?.purple[600] || '#9333ea' },
-    'Takeaway': { bg: t.colors?.amber[50] || '#fffbeb',   color: t.colors?.amber[700] || '#b45309' },
-    'Dine In':  { bg: t.bgInput, color: t.textSecondary },
+    Bar: {
+      bg: t.colors?.purple[50] || '#faf5ff',
+      color: t.colors?.purple[600] || '#9333ea',
+    },
+    Takeaway: {
+      bg: t.colors?.amber[50] || '#fffbeb',
+      color: t.colors?.amber[700] || '#b45309',
+    },
+    'Dine In': {bg: t.bgInput, color: t.textSecondary},
   };
   return styles[loc] || styles['Dine In'];
 };
@@ -20,6 +27,7 @@ const getLocationStyle = (loc, t) => {
 // ─── Table card ───────────────────────────────────────────────────────────────
 const TableCard = ({onTableChange, onTableDelete, data}) => {
   const {t} = useAppTheme();
+  const {columns, cardWidth} = useResponsiveGrid();
   const RenderCard = ({item, t}) => {
     const isActive = item.status === 1;
     const location = item.location || 'Dine In';
@@ -47,7 +55,7 @@ const TableCard = ({onTableChange, onTableDelete, data}) => {
       <Animated.View
         style={{
           flex: 1,
-          transform: [{ scale: cardScale }],
+          transform: [{scale: cardScale}],
         }}>
         <StyledPressable
           onPress={() => onTableChange({data: item, tag: 'Edit'})}
@@ -61,7 +69,7 @@ const TableCard = ({onTableChange, onTableDelete, data}) => {
             borderRadius={18}
             backgroundColor={t.bgCard}
             borderWidth={0.2}
-          borderColor={t.borderSubtle}
+            borderColor={t.borderSubtle}
             marginHorizontal={4}
             marginBottom={12}
             paddingHorizontal={20}
@@ -72,7 +80,6 @@ const TableCard = ({onTableChange, onTableDelete, data}) => {
             shadowRadius={6}
             elevation={2}
             gap={12}>
-
             {/* Left Content: Title + Metadata */}
             <Stack flex={1} vertical gap={5}>
               {/* Title */}
@@ -88,19 +95,29 @@ const TableCard = ({onTableChange, onTableDelete, data}) => {
               {/* Metadata Row: Size • Status • Location (if not Dine In) */}
               <Stack horizontal alignItems="center" gap={5}>
                 {/* Size */}
-                <Text variant="bodySmall" color={t.textMuted} style={{opacity: 0.75}}>
+                <Text
+                  variant="bodySmall"
+                  color={t.textMuted}
+                  style={{opacity: 0.75}}>
                   Size {item.size}
                 </Text>
 
                 {/* Separator dot */}
-                <Stack width={3} height={3} borderRadius={1.5} backgroundColor={t.borderSubtle} />
+                <Stack
+                  width={3}
+                  height={3}
+                  borderRadius={1.5}
+                  backgroundColor={t.borderSubtle}
+                />
 
                 {/* Status Badge */}
                 <Stack
                   paddingHorizontal={8}
                   paddingVertical={3}
                   borderRadius={999}
-                  backgroundColor={isActive ? `${t.successColor}14` : `${t.dangerColor}14`}
+                  backgroundColor={
+                    isActive ? `${t.successColor}14` : `${t.dangerColor}14`
+                  }
                   shadowColor={isActive ? t.successColor : t.dangerColor}
                   shadowOffset={{width: 0, height: 1}}
                   shadowOpacity={0.15}
@@ -117,13 +134,21 @@ const TableCard = ({onTableChange, onTableDelete, data}) => {
                 {/* Location Badge (if not Dine In) */}
                 {location !== 'Dine In' && (
                   <>
-                    <Stack width={3} height={3} borderRadius={1.5} backgroundColor={t.borderSubtle} />
+                    <Stack
+                      width={3}
+                      height={3}
+                      borderRadius={1.5}
+                      backgroundColor={t.borderSubtle}
+                    />
                     <Stack
                       paddingHorizontal={8}
                       paddingVertical={3}
                       borderRadius={999}
                       backgroundColor={locStyle.bg}>
-                      <Text variant="caption" fontWeight="600" color={locStyle.color}>
+                      <Text
+                        variant="caption"
+                        fontWeight="600"
+                        color={locStyle.color}>
                         {location}
                       </Text>
                     </Stack>
@@ -133,10 +158,15 @@ const TableCard = ({onTableChange, onTableDelete, data}) => {
             </Stack>
 
             {/* Right Content: Action Icons */}
-            <Stack horizontal alignItems="flex-start" gap={8} paddingRight={4} marginTop={4}>
+            <Stack
+              horizontal
+              alignItems="flex-start"
+              gap={8}
+              paddingRight={4}
+              marginTop={4}>
               {/* Edit Icon Button */}
               <StyledPressable
-                onPress={(e) => {
+                onPress={e => {
                   e.stopPropagation?.();
                   onTableChange({data: item, tag: 'Edit'});
                 }}
@@ -157,7 +187,7 @@ const TableCard = ({onTableChange, onTableDelete, data}) => {
 
               {/* Delete Icon Button */}
               <StyledPressable
-                onPress={(e) => {
+                onPress={e => {
                   e.stopPropagation?.();
                   onTableDelete(item?.table_id);
                 }}
@@ -168,7 +198,9 @@ const TableCard = ({onTableChange, onTableDelete, data}) => {
                 borderRadius={18}
                 alignItems="center"
                 justifyContent="center"
-                backgroundColor={deletePressed ? `${t.dangerColor}10` : "transparent"}
+                backgroundColor={
+                  deletePressed ? `${t.dangerColor}10` : 'transparent'
+                }
                 activeOpacity={0.6}>
                 <MIcon
                   pointerEvents="none"
@@ -186,14 +218,16 @@ const TableCard = ({onTableChange, onTableDelete, data}) => {
 
   return (
     <FlatList
+      key={`table-${columns}`}
       data={data}
       initialNumToRender={100}
       showsVerticalScrollIndicator={false}
       keyExtractor={item => item.table_id}
-      numColumns={3}
+      numColumns={columns}
       columnWrapperStyle={{gap: 4}}
-      renderItem={({item, index}) => <RenderCard item={item} key={index} 
-                        t={t}/>}
+      renderItem={({item, index}) => (
+        <RenderCard item={item} key={index} t={t} />
+      )}
     />
   );
 };

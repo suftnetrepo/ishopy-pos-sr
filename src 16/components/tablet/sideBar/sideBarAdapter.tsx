@@ -1,7 +1,6 @@
 import React from 'react';
 import {StyledSpacer} from 'fluent-styles';
 import {Stack} from '../../../components/package/stack';
-
 import SideBar from '../../../components/tablet/sideBar';
 import {useAppTheme} from '../../../theme';
 

@@ -27,7 +27,7 @@ const Dashboard = () => {
   const contentPadding = isCompact ? 12 : 16;
 
   return (
-    <StyledPage backgroundColor={t.bgPage} marginHorizontal={16}>
+    <StyledPage backgroundColor={t.bgPage} paddingHorizontal={16}>
       <StyledPage.Header.Full>
         <RenderHeader showLogo={true} />
       </StyledPage.Header.Full>

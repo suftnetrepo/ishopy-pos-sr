@@ -29,7 +29,7 @@ const BigPayment = () => {
   };
 
   return (
-    <StyledPage backgroundColor={t.bgPage}>
+      <StyledPage backgroundColor={t.bgPage} paddingHorizontal={16}>
       <StyledPage.Header.Full>
         <RenderHeader
           showBackButton={true}
@@ -65,7 +65,7 @@ const BigPayment = () => {
           }
         />
       </StyledPage.Header.Full>
-
+      <StyledSpacer marginVertical={4} />
       <Stack key={focus} flex={1.5} horizontal>
         <SideBarAdapter selectedMenu={5} showMenu={false} collapse={true} />
         <Stack flex={3} paddingHorizontal={8} vertical>

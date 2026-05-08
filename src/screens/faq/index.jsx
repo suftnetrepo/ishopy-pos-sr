@@ -65,7 +65,7 @@ const FAQScreen = () => {
     filteredSections.some(s => s.items.length > 0)
 
   return (
-    <StyledPage backgroundColor={t.bgPage} flex={1}>
+     <StyledPage backgroundColor={t.bgPage} paddingHorizontal={16}>
       {/* Header */}
       <StyledPage.Header.Full>
         <RenderHeader

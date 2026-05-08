@@ -6,6 +6,7 @@ import Text from '../../../../components/text';
 import {toWordCase} from '../../../../utils/help';
 import {useAppTheme} from '../../../../theme';
 import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useResponsiveGrid} from '../../../../hooks/useResponsiveGrid';
 
 const RenderCard = ({item, user_id, onEdit, onDelete, t}) => {
   const isActive = item.status === 1;
@@ -120,12 +121,14 @@ const RenderCard = ({item, user_id, onEdit, onDelete, t}) => {
 
 const UserCard = ({data, user_id, onUserChange, onUserDelete}) => {
   const {t} = useAppTheme();
+  const {columns, cardWidth} = useResponsiveGrid();
   return (
     <FlatList
+         key={`user-${columns}`}
       data={data} initialNumToRender={100}
       showsVerticalScrollIndicator={false}
       keyExtractor={item => item.user_id}
-      numColumns={3}
+      numColumns={columns}
       renderItem={({item, index}) => (
         <RenderCard key={index} item={item} user_id={user_id}
           onEdit={() => onUserChange({data: item, tag: 'Edit'})}

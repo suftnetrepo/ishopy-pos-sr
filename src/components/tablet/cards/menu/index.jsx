@@ -1,16 +1,16 @@
-import React, {useEffect} from 'react';
-import {FlatList} from 'react-native';
-import {StyledSpacer, StyledText, YStack, StyledShape} from 'fluent-styles';
-import {ScrollView} from 'react-native';
+import React, {useEffect, useMemo} from 'react';
+import {FlatList, ScrollView, useWindowDimensions} from 'react-native';
+import {StyledSpacer, StyledText, YStack} from 'fluent-styles';
 import {useQueryMenuByCategory} from '../../../../hooks/useMenu';
 import {useAppContext} from '../../../../hooks/appContext';
 import {Stack} from '../../../package/stack';
 import {theme, fontStyles} from '../../../../utils/theme';
 import {StyledIcon} from '../../../package/icon';
 import {formatCurrency} from '../../../../utils/help';
-import PosIcon from '../../../pos-icon';
 import EmptyView from '../../../utils/empty';
 import {useAppTheme} from '../../../../theme';
+
+const GAP = 8;
 
 export default function ItemCard({onChangeItem, table_id}) {
   const {
@@ -21,34 +21,44 @@ export default function ItemCard({onChangeItem, table_id}) {
     addItem,
     menuQuery,
   } = useAppContext();
+
   const {t} = useAppTheme();
+  const {width} = useWindowDimensions();
   const {data, handleQueryMemu} = useQueryMenuByCategory(category_id);
 
   useEffect(() => {
     handleQueryMemu(menuQuery);
   }, [menuQuery]);
 
+  const columns = useMemo(() => {
+    if (width >= 1000) return 3;
+    if (width >= 700) return 2;
+    return 1;
+  }, [width]);
+
+  const available = useMemo(() => {
+    if (width >= 1000) return width - 104 - 280 - 58;
+    if (width >= 700) return width - 104 - 227;
+    return 1;
+  }, [width]);
+
+  const availableWidth = available;
+  const safeWidth = Math.max(320, availableWidth);
+  const cardWidth = (safeWidth - GAP * (columns - 1)) / columns;
+
   const handleAddItem = async item => {
-    // Check if item has add-ons available
     const hasAddons = Array.isArray(item?.addOns) && item?.addOns.length > 0;
-    
+
     if (hasAddons) {
-      // Open add-on modal for items with add-ons
       onChangeItem(item);
       return;
     }
-    
-    // Add item directly to cart without modal for items with no add-ons
+
     const index = `${Date.now()}${Math.random().toString(36).slice(2, 8)}`;
-    addItem(
-      index,
-      item.menu_id,
-      item.name,
-      item.price,
-      1,
-      table_id,
-      []
-    ).then(() => {});
+
+    addItem(index, item.menu_id, item.name, item.price, 1, table_id, []).then(
+      () => {}
+    );
   };
 
   const handleTouchStart = async item => {
@@ -56,7 +66,7 @@ export default function ItemCard({onChangeItem, table_id}) {
     await handleAddItem(item);
   };
 
-   if (data.length === 0) {
+  if (data.length === 0) {
     return (
       <YStack
         flex={1}
@@ -78,18 +88,20 @@ export default function ItemCard({onChangeItem, table_id}) {
     );
   }
 
-  const Card = ({item, t}) => {
+  const Card = ({item, index}) => {
     const isSelected = selectedItem?.menu_id === item.menu_id;
+
     return (
       <Stack
-        flex={1}
+        width={cardWidth}
+        minHeight={86}
         backgroundColor={isSelected ? t.brandPrimaryBg : t.bgCard}
-        borderRadius={16}
+        borderRadius={8}
         borderWidth={1}
         borderColor={isSelected ? t.brandPrimary : t.borderDefault}
         padding={12}
-        marginVertical={4}
-        marginHorizontal={4}
+        marginRight={(index + 1) % columns === 0 ? 0 : GAP}
+        marginBottom={GAP}
         shadowColor="black"
         shadowOffset={{width: 0, height: 1}}
         shadowOpacity={0.1}
@@ -97,26 +109,11 @@ export default function ItemCard({onChangeItem, table_id}) {
         elevation={3}
         vertical
         onTouchStart={() => handleTouchStart(item)}>
-        {/* <StyledShape
-          size={48}
-          backgroundColor={t.bgPage}
-          justifyContent="center"
-          alignItems="center"
-          cycle
-          marginHorizontal={4}
-          padding={4}>
-          <PosIcon
-            name={item?.icon_name}
-            size={32}
-            color={item?.color_code || t.textSecondary}
-          />
-        </StyledShape> */}
-
         {isSelected && (
           <StyledIcon
             position="absolute"
-            right={1}
-            top={1}
+            right={6}
+            top={6}
             name="check-circle"
             size={32}
             color={t.brandPrimary}
@@ -127,10 +124,13 @@ export default function ItemCard({onChangeItem, table_id}) {
           fontFamily={fontStyles.Roboto_Regular}
           fontSize={theme.fontSize.medium}
           fontWeight={theme.fontWeight.medium}
-          color={t.textPrimary}>
+          color={t.textPrimary}
+          numberOfLines={1}>
           {item.name}
         </StyledText>
+
         <StyledSpacer marginVertical={2} />
+
         <StyledText
           fontFamily={fontStyles.Roboto_Regular}
           fontSize={theme.fontSize.normal}
@@ -145,13 +145,13 @@ export default function ItemCard({onChangeItem, table_id}) {
   return (
     <ScrollView flex={3} showsVerticalScrollIndicator={false}>
       <FlatList
+        key={`item-grid-${columns}`}
         data={data}
         keyExtractor={item => item.menu_id}
         scrollEnabled={false}
-        numColumns={3}
+        numColumns={columns}
         showsVerticalScrollIndicator={false}
-        renderItem={({item}) => <Card key={item.menu_id} item={item} 
-                        t={t}/>}
+        renderItem={({item, index}) => <Card item={item} index={index} />}
       />
     </ScrollView>
   );

@@ -6,6 +6,7 @@ import {theme} from '../../../../configs/theme';
 import {toWordCase} from '../../../../utils/help';
 import {useAppTheme} from '../../../../theme';
 import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useResponsiveGrid} from '../../../../hooks/useResponsiveGrid';
 
 const RenderCard = ({item, onEdit, onDelete, t}) => {
   const isActive = item.status === 1;
@@ -121,12 +122,14 @@ const RenderCard = ({item, onEdit, onDelete, t}) => {
 
 const DiscountCard = ({data, onDiscountChange, onDiscountDelete}) => {
   const {t} = useAppTheme();
+  const {columns, cardWidth} = useResponsiveGrid();
   return (
     <FlatList
+      key={`discount-${columns}`}
       data={data} initialNumToRender={100}
       showsVerticalScrollIndicator={false}
       keyExtractor={item => item.discount_id}
-      numColumns={3}
+      numColumns={columns}
       renderItem={({item, index}) => (
         <RenderCard key={index} item={item}
           onEdit={() => onDiscountChange({data: item, tag: 'Edit'})}

@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, {Fragment, useState, useEffect, useRef} from 'react';
-import {ScrollView, PanResponder, Animated, View} from 'react-native';
+import {ScrollView, PanResponder, Animated, View, useWindowDimensions} from 'react-native';
 import {
   StyledSpacer, Drawer, StyledPressable,
   XStack, YStack, Stack,
@@ -23,6 +23,18 @@ export default function Cart({table_id, table_name}) {
   const {updateOrderId, getItems, shop, removeItem, getTotalTax, clearItem, getTotal, getTotalPrice, updateItem} = useAppContext();
   const {t} = useAppTheme();
   const {orderHandler, printHandler, shareReceipt, deleteHandler, queryOrderByIdhandler, data} = useInsertOrder(table_id, table_name);
+  const {width: screenWidth} = useWindowDimensions();
+
+  // ── Responsive cart width detection ────────────────────────────────────────
+  // Cart typically takes ~35% on large screens, ~40% on medium, ~50% on small
+  // Threshold: if calculated cart width < 360px, use stacked layout for add-ons
+  const cartWidth = screenWidth < 900 
+    ? Math.min(screenWidth * 0.92, 420)  // compact: ~82-420px
+    : screenWidth < 1100
+      ? Math.min(screenWidth * 0.48, 460) // medium: ~336-460px
+      : Math.min(screenWidth * 0.36, 500); // large: ~323-500px
+  
+  const isNarrowCart = cartWidth < 360;
 
   const [paymentMethod, setPaymentMethod] = useState('');
   const [showPayment,   setShowPayment]   = useState(false);
@@ -306,27 +318,83 @@ const renderCartItems = () => (
                 </XStack>
 
                 {showAddOnBreakdown && (
-                  <XStack
-                    paddingHorizontal={8}
-                    paddingVertical={5}
-                    backgroundColor={`${t.brandPrimary}08`}
-                    borderRadius={8}
-                    justifyContent="space-between"
-                    alignItems="center">
-                    <XStack gap={6} flex={1}>
-                      <Text variant="caption" color={t.textSecondary}>
-                        Base {formatCurrency(shop?.currency || '£', basePrice)}
+                  isNarrowCart ? (
+                    // Narrow layout: stacked with price aligned right below
+                    <YStack
+                      paddingHorizontal={8}
+                      paddingVertical={5}
+                      backgroundColor={`${t.brandPrimary}08`}
+                      borderRadius={8}
+                      gap={6}>
+                      {/* First line: Base price · add-ons count */}
+                      <XStack
+                        gap={6}
+                        flex={1}
+                        minWidth={0}
+                        flexShrink={1}>
+                        <Text 
+                          variant="caption" 
+                          color={t.textSecondary}
+                          numberOfLines={1}
+                          flexShrink={1}
+                          minWidth={0}>
+                          Base {formatCurrency(shop?.currency || '£', basePrice)}
+                        </Text>
+                        <Text variant="caption" color={t.textMuted}>•</Text>
+                        <Text 
+                          variant="caption" 
+                          color={t.brandPrimary} 
+                          fontWeight="600"
+                          numberOfLines={1}
+                          flexShrink={1}
+                          minWidth={0}>
+                          {addOnsCount} add-on{addOnsCount !== 1 ? 's' : ''}
+                        </Text>
+                      </XStack>
+                      {/* Second line: add-ons total, right-aligned */}
+                      <Text 
+                        variant="caption" 
+                        color={t.brandPrimary} 
+                        fontWeight="700"
+                        alignSelf="flex-end">
+                        +{formatCurrency(shop?.currency || '£', addOnsTotal)}
                       </Text>
-                      <Text variant="caption" color={t.textMuted}>•</Text>
-                      <Text variant="caption" color={t.brandPrimary} fontWeight="600">
-                        {addOnsCount} add-on{addOnsCount !== 1 ? 's' : ''}
+                    </YStack>
+                  ) : (
+                    // Wide layout: original horizontal layout
+                    <XStack
+                      paddingHorizontal={8}
+                      paddingVertical={5}
+                      backgroundColor={`${t.brandPrimary}08`}
+                      borderRadius={8}
+                      justifyContent="space-between"
+                      alignItems="center">
+                      <XStack gap={6} flex={1} minWidth={0} flexShrink={1}>
+                        <Text 
+                          variant="caption" 
+                          color={t.textSecondary}
+                          numberOfLines={1}
+                          flexShrink={1}
+                          minWidth={0}>
+                          Base {formatCurrency(shop?.currency || '£', basePrice)}
+                        </Text>
+                        <Text variant="caption" color={t.textMuted}>•</Text>
+                        <Text 
+                          variant="caption" 
+                          color={t.brandPrimary} 
+                          fontWeight="600"
+                          numberOfLines={1}
+                          flexShrink={1}
+                          minWidth={0}>
+                          {addOnsCount} add-on{addOnsCount !== 1 ? 's' : ''}
+                        </Text>
+                      </XStack>
+
+                      <Text variant="caption" color={t.brandPrimary} fontWeight="700">
+                        +{formatCurrency(shop?.currency || '£', addOnsTotal)}
                       </Text>
                     </XStack>
-
-                    <Text variant="caption" color={t.brandPrimary} fontWeight="700">
-                      +{formatCurrency(shop?.currency || '£', addOnsTotal)}
-                    </Text>
-                  </XStack>
+                  )
                 )}
               </YStack>
             </StyledPressable>

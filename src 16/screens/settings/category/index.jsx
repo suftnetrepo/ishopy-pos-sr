@@ -133,7 +133,7 @@ const BigCategory = () => {
         visible={shouldOpen ? true : false}
         onClose={() => reset()}
         title={`${state.tag === 'Edit' ? 'Edit' : 'Add'} Category `}
-        width={'30%'}
+        width={'40%'}
         colors={{
           background: t.bgPage,
           headerBg: theme.colors.transparent,

@@ -24,11 +24,10 @@ const CategoryCard = ({name,
     <Pressable onTouchStart={() => onPress(category_id)} style={{flex: 1}}>
       <Stack
         padding={8}
-        gap={8}
+        
         flex={1}
         horizontal
-        marginVertical={4}
-        marginHorizontal={4}
+     
         borderRadius={8}
         borderWidth={1}
         borderColor={isSelected ? t.brandPrimary : t.borderDefault}

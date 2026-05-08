@@ -8,6 +8,7 @@ import {
   toastService,
   useDialogue,
 } from 'fluent-styles';
+import {useWindowDimensions} from 'react-native';
 import SideBarAdapter from '../../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../../components/tablet/header';
 import CategoryCard from './card';
@@ -21,6 +22,7 @@ import {useAppTheme} from '../../../theme';
 
 const BigCategory = () => {
   const dialogue = useDialogue();
+   const {width} = useWindowDimensions();
   const {deleteCategory} = useDeleteCategory();
   const navigationFocus = useFocus();
   const [state, setState] = useState({
@@ -32,6 +34,7 @@ const BigCategory = () => {
   const shouldOpen = state.tag === 'Edit' || state.tag === 'Add';
   const isFocused = navigationFocus && screenFocus;
   const {data, error, loading,  resetHandler, loadCategories} = useCategory(isFocused);
+   const drawerWidth = width < 768 ? '90%' : width < 1024 ? '60%' : '45%';
 
   useLoaderAndError(loading, error, resetHandler);
 
@@ -133,7 +136,7 @@ const BigCategory = () => {
         visible={shouldOpen ? true : false}
         onClose={() => reset()}
         title={`${state.tag === 'Edit' ? 'Edit' : 'Add'} Category `}
-        width={'30%'}
+        width={drawerWidth}
         colors={{
           background: t.bgPage,
           headerBg: theme.colors.transparent,

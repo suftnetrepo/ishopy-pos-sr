@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React, {useState, useCallback} from 'react';
 import {StyledPage, StyledPressable, Stack, theme, Drawer} from 'fluent-styles';
+import {useWindowDimensions} from 'react-native';
 import Text from '../../components/text';
 import SideBarAdapter from '../../components/tablet/sideBar/sideBarAdapter';
 import RenderHeader from '../../components/tablet/header';
@@ -143,8 +144,10 @@ const SettingsCard = ({icon, id, name, sub, onPress, t}) => {
 
 const BigSettings = () => {
   const navigation = useNavigation();
+    const {width} = useWindowDimensions();
   const {t} = useAppTheme();
   const [show, setShow] = useState({data: null, id: '', tag: ''});
+   const drawerWidth = width < 768 ? '90%' : width < 1024 ? '60%' : '45%';
 
   const handlePress = useCallback(id => {
     switch (id) {
@@ -235,7 +238,7 @@ const BigSettings = () => {
         visible={['shop', 'printer'].includes(show.tag)}
         onClose={close}
         title={capitalize(show.tag)}
-        width="30%"
+        width={drawerWidth}
         colors={{
           background: t.bgPage,
           headerBg: theme.colors.transparent,
