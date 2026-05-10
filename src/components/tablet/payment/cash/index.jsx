@@ -182,9 +182,9 @@ export default function Payment({
               <StyledPressable
                 key={`quick-${amount}`}
                 onPress={() => handleQuickAmount(amount)}
-                width={quickAmountButtonSize}
-                height={44}
-                borderRadius={10}
+                paddingHorizontal={16}
+                paddingVertical={8}
+                borderRadius={30}
                 backgroundColor={t.bgInput}
                 borderWidth={1}
                 borderColor={t.borderDefault}
@@ -193,7 +193,7 @@ export default function Payment({
                 <StyledText
                   fontFamily={fontStyles.Roboto_Regular}
                   color={t.textPrimary}
-                  fontWeight={theme.fontWeight.medium}
+                  fontWeight={theme.fontWeight.normal}
                   fontSize={theme.fontSize.small}>
                   {formatCurrency(cur, amount)}
                 </StyledText>
@@ -205,22 +205,21 @@ export default function Payment({
         {/* Keypad: 3-column centered grid */}
         <Stack
           alignItems="center"
-          marginBottom={24}
+          marginBottom={8}
           flex={1}>
           <Stack
-            width={keypadGridWidth}
             horizontal
-            gap={keypadGap}
             justifyContent="center"
             flexWrap="wrap">
             {KEYPAD.map((num, index) => (
               <StyledPressable
                 key={`key-${num}-${index}`}
                 onPress={() => handleKeyPress(num)}
-                width={keypadButtonSize}
-                height={keypadButtonSize}
+                paddingHorizontal={32}
+                paddingVertical={16}
                 borderRadius={12}
                 backgroundColor={t.bgInput}
+                margin={8}
                 borderWidth={1}
                 borderColor={t.borderDefault}
                 alignItems="center"
@@ -236,9 +235,7 @@ export default function Payment({
             ))}
           </Stack>
         </Stack>
-      </ScrollView>
-
-      <Stack
+         <Stack
         horizontal
         paddingHorizontal={isCompact ? 16 : 24}
         paddingVertical={16}
@@ -284,6 +281,9 @@ export default function Payment({
           </StyledText>
         </StyledPressable>
       </Stack>
+      </ScrollView>
+
+     
 
       {loading && <StyledSpinner />}
 

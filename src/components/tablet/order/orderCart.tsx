@@ -64,16 +64,7 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
 
   const handlePrint = async () => {
     try {
-        console.log('Order data for receipt:', {
-          order,
-          tableName: order?.table_name,
-          shop,
-          user,
-        });
       const selectedPrinter = await printerStore.getSelectedPrinter();
-
-      console.log('Selected printer:', selectedPrinter);
-
       if (!selectedPrinter) {
         throw new Error('No printer selected');
       }
@@ -87,7 +78,9 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
 
       await printReceipt(selectedPrinter, receiptData);
     } catch (error) {
-      console.error('Error printing receipt:', error);
+      if (__DEV__) {
+        console.error('Error printing receipt:', error);
+      }
     }
   };
 
@@ -162,8 +155,6 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
       <XStack
         flex={1}
         paddingVertical={8}
-        paddingLeft={32}
-        paddingRight={16}
         alignItems="flex-end"
         backgroundColor="transparent"
         gap={6}>

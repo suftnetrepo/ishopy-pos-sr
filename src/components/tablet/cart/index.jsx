@@ -52,7 +52,8 @@ export default function Cart({table_id, table_name}) {
     queryOrderByIdhandler,
     data,
   } = useInsertOrder(table_id, table_name);
-
+ 
+  const drawerWidth = width < 768 ? '90%' : width < 1024 ? '60%' : '45%';
   const [paymentMethod, setPaymentMethod] = useState('');
   const [showPayment, setShowPayment] = useState(false);
   const [swipedItemKey, setSwipedItemKey] = useState(null);
@@ -150,40 +151,6 @@ export default function Cart({table_id, table_name}) {
     return swipePanRefs.current[key];
   };
 
-  // Create PanResponder for swipe gesture on a specific row
-  const createSwipeResponder = (itemKey, item) => {
-    const animValue = getSwipeAnimValue(itemKey);
-
-    return PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponder: (evt, gestureState) => {
-        // Only respond to horizontal swipes
-        return Math.abs(gestureState.dx) > Math.abs(gestureState.dy);
-      },
-      onPanResponderMove: (evt, {dx}) => {
-        // Limit swipe to left only (negative dx)
-        const limitedDx = Math.min(0, dx);
-        animValue.setValue(limitedDx);
-      },
-      onPanResponderRelease: (evt, {dx}) => {
-        // If swiped far enough, lock to delete position
-        if (dx < -SWIPE_THRESHOLD) {
-          setSwipedItemKey(itemKey);
-          Animated.spring(animValue, {
-            toValue: -DELETE_WIDTH,
-            useNativeDriver: true,
-          }).start();
-        } else {
-          // Otherwise snap back
-          setSwipedItemKey(null);
-          Animated.spring(animValue, {
-            toValue: 0,
-            useNativeDriver: true,
-          }).start();
-        }
-      },
-    });
-  };
 
   // Close swipe animation with optional key override
   const closeSwipe = (key = swipedItemKey) => {
@@ -638,7 +605,7 @@ return (
           headerBorder: t.bgPage,
         }}
         title="Cash Payment"
-        width="30%"
+        width={drawerWidth}
         side="right">
         <Payment
           order_id={items?.order_id}
