@@ -239,7 +239,7 @@ const Tiles = () => {
   const isMedium = width >= 900 && width < 1180;
   
   // Phase 1: Responsive layout - no hardcoded values
-  const tileWidth = isCompact ? '100%' : isMedium ? '48%' : '31.5%';
+  const tileWidth = isCompact ? '100%' : isMedium ? '45.5%' : '31.5%';
   const tileMinHeight = isCompact ? 125 : isMedium ? 135 : 145;
   const tileGap = isCompact ? 12 : 14;
   const tilesMarginBottom = isCompact ? 12 : 16;

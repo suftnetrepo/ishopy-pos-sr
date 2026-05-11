@@ -87,7 +87,7 @@ const PaywallScreen = ({onDismiss}) => {
     }
   }, [error]);
 
-  const price = product?.localizedPrice || '£39.99';
+  const price = '£19.99';
 
   return (
     <StyledPage hideStatusBarOnIOS backgroundColor={t.bgPage}>
@@ -148,7 +148,7 @@ const PaywallScreen = ({onDismiss}) => {
 
             <StyledSpacer marginVertical={4} />
 
-            {/* Trial badge */}
+            {/* One-time purchase badge */}
             <Stack
               paddingHorizontal={16}
               paddingVertical={6}
@@ -157,7 +157,7 @@ const PaywallScreen = ({onDismiss}) => {
               borderColor="rgba(245,158,11,0.45)"
               backgroundColor="rgba(245,158,11,0.12)">
               <Text variant="caption" color={t.brandPrimary}>
-                7 days free — no credit card needed
+                One-time purchase
               </Text>
             </Stack>
           </Stack>
@@ -198,7 +198,7 @@ const PaywallScreen = ({onDismiss}) => {
               <Text
                 variant="button"
                 color={isLoading ? t.textMuted : t.textOnAmber}>
-                {isLoading ? 'Processing...' : 'Start 7-day free trial'}
+                {isLoading ? 'Processing...' : 'Unlock Premium'}
               </Text>
             </StyledPressable>
 
@@ -220,11 +220,11 @@ const PaywallScreen = ({onDismiss}) => {
                 color={t.textMuted}
                 textAlign="center"
                 lineHeight={18}>
-                After the 7-day trial, {price} is charged as a one-time payment.
+               {price} charged once. No subscriptions, ever.
                 {'\n'}
                 Managed in your App Store settings.{' '}
               </Text>
-              <Stack horizontal justifyContent="center" gap={4}>
+              {/* <Stack horizontal justifyContent="center" gap={4}>
                 <StyledPressable
                   onPress={() => Linking.openURL('https://kursa.app/privacy')}>
                   <Text
@@ -246,7 +246,7 @@ const PaywallScreen = ({onDismiss}) => {
                     Terms
                   </Text>
                 </StyledPressable>
-              </Stack>
+              </Stack> */}
             </Stack>
           </Stack>
         </ScrollView>

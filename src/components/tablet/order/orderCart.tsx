@@ -4,12 +4,8 @@ import {
   XStack,
   StyledSpacer,
   StyledCard,
-  StyledDivider,
-  StyledBadge,
-  StyledPressable,
 } from 'fluent-styles';
 import {StyledMIcon} from '../../../components/icon';
-import {theme} from '../../../configs/theme';
 import {Text} from '../../../components/text';
 import {useAppContext} from '../../../hooks/appContext';
 import {useQueryOrderItemByOrder} from '../../../hooks/useOrderItems';
@@ -20,9 +16,6 @@ import {
 } from '../../../utils/help';
 import {ScrollView} from 'react-native';
 import {Stack} from '../../../components/package/stack';
-import {formatReceiptData} from '../../../utils/receiptFormatter';
-import {printerStore} from '../../../store/printerStore';
-import {printReceipt} from '../../../utils/printReceipt';
 import {useAppTheme} from '../../../theme';
 
 interface AddOn {
@@ -62,27 +55,6 @@ const OrderCart: FC<OrderCartProps> = ({onClose}) => {
   const {t} = useAppTheme();
   const {data} = useQueryOrderItemByOrder(order?.order_id || '');
 
-  const handlePrint = async () => {
-    try {
-      const selectedPrinter = await printerStore.getSelectedPrinter();
-      if (!selectedPrinter) {
-        throw new Error('No printer selected');
-      }
-      const receiptData = await formatReceiptData({
-        order,
-        tableName: order?.table_name,
-        shop,
-        user,
-        businessType: shop?.mode as any,
-      });
-
-      await printReceipt(selectedPrinter, receiptData);
-    } catch (error) {
-      if (__DEV__) {
-        console.error('Error printing receipt:', error);
-      }
-    }
-  };
 
   const Card: FC<{order: Order}> = ({order}) => {
     const formatDate = (dateString: string): string => {
