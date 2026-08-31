@@ -15,7 +15,7 @@ import {useAppContext} from '../../../../hooks/appContext';
 import {formatCurrency} from '../../../../utils/help';
 import CheckOut from '../../../../components/tablet/checkout';
 import {useInsertPayment} from '../../../../hooks/usePayment';
-import {updataStatusHandler} from '../../../../hooks/useOrder';
+import {updateStatusHandler} from '../../../../hooks/useOrder';
 import {useAppTheme} from '../../../../theme';
 
 const QUICK_AMOUNTS = [10, 20, 40, 60, 80, 100];
@@ -109,7 +109,7 @@ export default function Payment({
       amount: parseFloat(baseTotal),
       payment_method,
       date: new Date().toISOString(),
-    }).then(() => updataStatusHandler(order_id, 'Completed'));
+    }).then(() => updateStatusHandler(order_id, 'Completed'));
   };
 
   return (

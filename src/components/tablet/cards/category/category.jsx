@@ -23,20 +23,20 @@ const CategoryCard = ({name,
   return (
     <Pressable onTouchStart={() => onPress(category_id)} style={{flex: 1}}>
       <Stack
-        padding={8}
-        
+        padding={14}
+        gap={12}
         flex={1}
         horizontal
-     
-        borderRadius={8}
-        borderWidth={1}
+        alignItems="center"
+        borderRadius={14}
+        borderWidth={isSelected ? 1.5 : 1}
         borderColor={isSelected ? t.brandPrimary : t.borderDefault}
         backgroundColor={isSelected ? t.brandPrimaryBg : t.bgCard}
         shadowColor="black"
         shadowOffset={{width: 0, height: 1}}
-        shadowOpacity={0.1}
-        shadowRadius={2}
-        elevation={3}>
+        shadowOpacity={0.06}
+        shadowRadius={4}
+        elevation={2}>
         <StyledShape
           size={48}
           backgroundColor={
@@ -49,12 +49,11 @@ const CategoryCard = ({name,
           justifyContent="center"
           alignItems="center"
           cycle
-          marginHorizontal={4}
           padding={4}>
           <CategoryIcon
             iconName={icon_name}
             color={color_code || t.brandPrimary}
-            size={28}
+            size={26}
           />
         </StyledShape>
 
@@ -62,7 +61,7 @@ const CategoryCard = ({name,
           <StyledText
             fontFamily={fontStyles.Roboto_Regular}
             fontSize={theme.fontSize.medium}
-            fontWeight={theme.fontWeight.medium}
+            fontWeight={theme.fontWeight.bold}
             color={t.textPrimary}
             numberOfLines={1}
             ellipsizeMode="tail">

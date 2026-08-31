@@ -83,7 +83,9 @@ const useQueryGetLowerStock = () => {
 	useEffect(() => {
 		async function load() {
 			try {
-				const lowStock = await getLowStockItems(10, {
+				// Fetch more than the dashboard widget displays (5) so the share
+				// icon's CSV export has a genuinely fuller list to offer.
+				const lowStock = await getLowStockItems(20, {
 					warning : 10,
 					critical : 1,
 					low : 5

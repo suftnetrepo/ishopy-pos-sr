@@ -18,6 +18,7 @@ import {OrderStatusAggregate} from '../model/orders';
 import {printerStore} from '../store/printerStore';
 import {formatReceiptData} from '../utils/receiptFormatter';
 import {createKitchenTicket} from '../model/kitchen';
+import {getTableById} from '../model/table';
 
 interface Initialize {
   data: Order[] | null | Order | [] | boolean | OrderStatusAggregate | null;
@@ -56,7 +57,11 @@ const useOrderStatusAggregate = () => {
 
   async function load() {
     try {
-      const result = await getOrderStatusAggregate();
+      // Bypass the 30s module-level cache: this fires on every Dashboard
+      // mount/focus (see Dashboard's useFocusEffect remount), specifically
+      // so a just-completed order is reflected immediately, not up to 30s
+      // stale.
+      const result = await getOrderStatusAggregate(true);
       setData(prev => ({
         ...prev,
         data: result,
@@ -208,7 +213,7 @@ const useQueryOrderById = (order_id: string) => {
   };
 };
 
-const useInsertOrder = (table_id: string, table_name: string) => {
+const useInsertOrder = (table_id: string, table_name: string, order_type?: string) => {
   const {
     user,
     getItems,
@@ -297,15 +302,20 @@ const useInsertOrder = (table_id: string, table_name: string) => {
           });
         }
 
-        // Create kitchen ticket using the same detail_ids — non-blocking
-        createKitchenTicket(
-          orderResult.order_id,
-          table_name,
-          0,
-          kitchenItems,
-        ).catch(e => {
-          if (__DEV__) console.warn('Kitchen ticket creation failed:', e);
-        });
+        // Create kitchen ticket using the same detail_ids — non-blocking.
+        // Restaurant-only: shop/retail sales have no kitchen workflow.
+        if (shop?.mode === 'restaurant') {
+          const table = await getTableById(table_id);
+          createKitchenTicket(
+            orderResult.order_id,
+            table_name,
+            table?.guest_count || 0,
+            kitchenItems,
+            order_type,
+          ).catch(e => {
+            if (__DEV__) console.warn('Kitchen ticket creation failed:', e);
+          });
+        }
       }
 
       setData({

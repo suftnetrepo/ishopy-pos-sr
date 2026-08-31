@@ -24,6 +24,7 @@ import usePremium from '../../../../hooks/usePremium';
 import {useAppTheme} from '../../../../theme';
 import {useLoaderAndError} from '../../../../hooks/useLoaderAndError';
 import { useResponsiveGrid } from '../../../../hooks/useResponsiveGrid';
+import {convertJsonToCsv} from '../../../../utils/convertJsonToCsv';
 
 const ItemCard = forwardRef(
   (
@@ -66,8 +67,21 @@ const ItemCard = forwardRef(
       }
     };
 
+    const handleExportCsv = async () => {
+      if (!data?.length) return;
+      await convertJsonToCsv(
+        data.map(item => ({
+          Name: item?.name || '',
+          Price: formatCurrency(shop?.currency || '£', item?.price || 0),
+          Stock: item?.stock ?? '',
+          Status: item?.status === 1 ? 'Active' : 'Inactive',
+        })),
+      );
+    };
+
     useImperativeHandle(ref, () => ({
       requestAdd: handleRequestAdd,
+      exportCsv: handleExportCsv,
     }));
 
     const handleFilter = async category => {

@@ -14,6 +14,7 @@ import {
   XStack,
   YStack,
   Stack,
+  toastService,
 } from 'fluent-styles';
 import {Text} from '../../../components/text';
 import Icons from 'react-native-vector-icons/MaterialIcons';
@@ -21,14 +22,13 @@ import {useAppContext} from '../../../hooks/appContext';
 import {formatCurrency, paymentOptions} from '../../../utils/help';
 import {theme} from '../../../utils/theme';
 import Payment from '../payment/cash';
-import {useInsertOrder, updataStatusHandler} from '../../../hooks/useOrder';
-import EmptyView from '../../../components/utils/empty';
+import {useInsertOrder, updateStatusHandler} from '../../../hooks/useOrder';
 import {useNavigation} from '@react-navigation/native';
 import {useAppTheme} from '../../../theme';
 import {StyledMIcon} from '../../../components/icon';
 import AddOn from '../cards/menu/addOn';
 
-export default function Cart({table_id, table_name}) {
+export default function Cart({table_id, table_name, order_type}) {
   const navigation = useNavigation();
   const {
     updateOrderId,
@@ -51,7 +51,8 @@ export default function Cart({table_id, table_name}) {
     deleteHandler,
     queryOrderByIdhandler,
     data,
-  } = useInsertOrder(table_id, table_name);
+    loading: isOrderSubmitting,
+  } = useInsertOrder(table_id, table_name, order_type);
  
   const drawerWidth = width < 768 ? '90%' : width < 1024 ? '60%' : '45%';
   const [paymentMethod, setPaymentMethod] = useState('');
@@ -115,24 +116,53 @@ export default function Cart({table_id, table_name}) {
     );
 
   const handleOrder = async () => {
-    if (!hasItems) return;
+    // Guard against double-submission: orderHandler mints a fresh order_id
+    // on every call, so a rapid double-tap here would create two separate
+    // real Order records (and, in restaurant mode, two kitchen tickets) for
+    // the same cart.
+    if (!hasItems || isOrderSubmitting) return;
     const orderId = await orderHandler();
     if (orderId) updateOrderId(orderId, table_id);
   };
 
   const handleVoid = async () => {
     if (!hasOrderId) return;
-    updataStatusHandler(items?.order_id, 'Cancelled').then(() =>
+    updateStatusHandler(items?.order_id, 'Cancelled').then(() =>
       clearItem(table_id)
     );
   };
 
-  const handleUpdateOrder = () => {
-    if (!hasOrderId) return;
-    deleteHandler(items?.order_id).then(() => handleOrder());
+  const handleUpdateOrder = async () => {
+    if (!hasOrderId || isOrderSubmitting) return;
+    // Only proceed to recreate the order if the old one actually got
+    // cleared — previously this ran handleOrder() regardless of whether
+    // deleteHandler succeeded, which (combined with deleteOrder silently
+    // always failing) created a duplicate order instead of updating one.
+    const deleted = await deleteHandler(items?.order_id);
+    if (deleted) {
+      await handleOrder();
+    } else {
+      toastService.show({
+        message: 'Could not update order',
+        description: 'Please try again.',
+        variant: 'error',
+        duration: 2500,
+        theme: 'light',
+      });
+    }
   };
 
   const handlePaymentPress = () => {
+    if (!paymentMethod) {
+      toastService.show({
+        message: 'Select a payment method',
+        description: 'Choose Cash or Card above before completing payment.',
+        variant: 'warning',
+        duration: 2500,
+        theme: 'light',
+      });
+      return;
+    }
     if (paymentMethod === 'cash') setShowPayment(true);
   };
   const handlePrint = () => {
@@ -326,7 +356,7 @@ export default function Cart({table_id, table_name}) {
                       )}
                     </YStack>
 
-                    <Text variant="body" fontWeight="700" color={t.textPrimary}>
+                    <Text variant="body"  color={t.textPrimary}>
                       {formatCurrency(shop?.currency || '£', lineTotal)}
                     </Text>
                   </XStack>
@@ -509,9 +539,10 @@ export default function Cart({table_id, table_name}) {
       return (
         <ActionBtn
           onPress={handleUpdateOrder}
+          disabled={isOrderSubmitting}
           bg={t.brandPrimary}
           textColor={t.textInverse}
-          label="+ Order"
+          label={isOrderSubmitting ? 'Updating…' : '+ Order'}
         />
       );
 
@@ -520,21 +551,31 @@ export default function Cart({table_id, table_name}) {
         return (
           <ActionBtn
             onPress={handleOrder}
+            disabled={isOrderSubmitting}
             bg={t.brandPrimary}
             textColor={t.textInverse}
-            label="Place Order"
+            label={isOrderSubmitting ? 'Placing…' : 'Place Order'}
           />
         );
+
+    // "Hold" saves the order against its table and returns to the Tables
+    // overview to go serve someone else — a restaurant/multi-table concept.
+    // Shop mode has a single fixed register (table_id), so there's nothing
+    // to "come back to" and nowhere in shop mode's own navigation that
+    // 'big-table' is reachable from — don't offer it there.
+    const isRestaurant = shop?.mode === 'restaurant';
 
     if (isNarrowCart) {
   return (
     <YStack gap={10} width="100%">
       <XStack gap={8} width="100%">
         <ActionBtn onPress={handlePrint} bg={t.bgInput} borderCol={t.borderDefault} textColor={t.textSecondary} label="Print" flex={1} />
-        <ActionBtn onPress={() => navigation.navigate('big-table')} bg={`${t.brandPrimary}12`} borderCol={t.brandPrimary} textColor={t.brandPrimary} label="Hold" flex={1} />
+        {isRestaurant && (
+          <ActionBtn onPress={() => navigation.navigate('big-table')} bg={`${t.brandPrimary}12`} borderCol={t.brandPrimary} textColor={t.brandPrimary} label="Hold" flex={1} />
+        )}
       </XStack>
 
-      <ActionBtn onPress={handlePaymentPress} disabled={!paymentMethod} bg={t.successColor} textColor={t.textInverse} label="Pay" flex={0} />
+      <ActionBtn onPress={handlePaymentPress} bg={paymentMethod ? t.successColor : t.bgInput} borderCol={paymentMethod ? undefined : t.borderDefault} textColor={paymentMethod ? t.textInverse : t.textMuted} label="Pay" flex={0} />
       <ActionBtn onPress={handleVoid} bg={t.dangerColor} textColor={t.textInverse} label="Void" flex={0} />
     </YStack>
   );
@@ -543,11 +584,13 @@ export default function Cart({table_id, table_name}) {
 return (
   <XStack flex={1} gap={8}>
     <ActionBtn onPress={handlePrint} bg={t.bgInput} borderCol={t.borderDefault} textColor={t.textSecondary} label="Print" flex={1} />
-    <ActionBtn onPress={() => navigation.navigate('big-table')} bg={`${t.brandPrimary}12`} borderCol={t.brandPrimary} textColor={t.brandPrimary} label="Hold" flex={1} />
-    <ActionBtn onPress={handlePaymentPress} disabled={!paymentMethod} bg={t.successColor} textColor={t.textInverse} label="Pay" flex={1} />
+    {isRestaurant && (
+      <ActionBtn onPress={() => navigation.navigate('big-table')} bg={`${t.brandPrimary}12`} borderCol={t.brandPrimary} textColor={t.brandPrimary} label="Hold" flex={1} />
+    )}
+    <ActionBtn onPress={handlePaymentPress} bg={paymentMethod ? t.successColor : t.bgInput} borderCol={paymentMethod ? undefined : t.borderDefault} textColor={paymentMethod ? t.textInverse : t.textMuted} label="Pay" flex={1} />
     <ActionBtn onPress={handleVoid} bg={t.dangerColor} textColor={t.textInverse} label="Void" flex={1} />
   </XStack>
-);    
+);
     }
     return null;
   };
@@ -558,17 +601,56 @@ return (
         flex={1}
         paddingHorizontal={16}
         paddingVertical={16}
+        vertical
         backgroundColor={t.bgCard}
         borderRadius={16}
         borderWidth={1}
-        borderColor={t.borderDefault}
-        justifyContent="center"
-        alignItems="center">
-        <EmptyView
-          color={t.textMuted}
-          title="Your cart is empty"
-          description="Add items to your cart to see them here."
-        />
+        borderColor={t.borderDefault}>
+        <Stack flex={1} alignItems="center" justifyContent="center" gap={4}>
+          <Stack
+            width={72}
+            height={72}
+            borderRadius={36}
+            backgroundColor={`${t.brandPrimary}15`}
+            alignItems="center"
+            justifyContent="center"
+            marginBottom={8}>
+            <StyledMIcon name="shopping-cart" size={30} color={t.brandPrimary} />
+          </Stack>
+          <Text variant="label" fontSize={16} color={t.textPrimary} textAlign="center">
+            Your cart is empty
+          </Text>
+          <Text
+            variant="body"
+            color={t.textSecondary}
+            textAlign="center"
+            paddingHorizontal={12}>
+            Add items to your cart to see them here.
+          </Text>
+        </Stack>
+
+        <Stack vertical>
+          <Stack height={1} backgroundColor={t.borderDefault} marginBottom={16} />
+          <Stack horizontal justifyContent="space-between" marginBottom={16}>
+            <Text variant="label" color={t.textPrimary}>
+              Total
+            </Text>
+            <Text variant="label" color={t.textPrimary}>
+              {formatCurrency(shop?.currency || '£', 0)}
+            </Text>
+          </Stack>
+          <StyledPressable
+            disabled
+            paddingVertical={14}
+            borderRadius={12}
+            alignItems="center"
+            justifyContent="center"
+            backgroundColor={`${t.brandPrimary}22`}>
+            <Text variant="button" color={t.brandPrimary}>
+              View Cart
+            </Text>
+          </StyledPressable>
+        </Stack>
       </Stack>
     );
   }
@@ -586,13 +668,23 @@ return (
       <Stack flex={1} vertical marginBottom={16}>
         {renderCartItems()}
       </Stack>
-      <Stack flex={1} vertical>
-        {hasItems && renderOrderSummary()}
-        {hasOrderId && renderPaymentMethods()}
-        <Stack marginTop={16} width="100%">
-          {renderActionButtons()}
+      {/* Order summary + payment methods + action buttons (Pay/Hold/Void).
+          This used to share a rigid 50/50 flex split with the items list
+          above, regardless of actual content height — once payment methods
+          were showing too, it could overflow its half with nothing to
+          scroll it, silently clipping the action buttons off the bottom.
+          Capped + scrollable instead, so they're always reachable. */}
+      <ScrollView
+        style={{maxHeight: '55%'}}
+        showsVerticalScrollIndicator={false}>
+        <Stack vertical>
+          {hasItems && renderOrderSummary()}
+          {hasOrderId && renderPaymentMethods()}
+          <Stack marginTop={16} width="100%">
+            {renderActionButtons()}
+          </Stack>
         </Stack>
-      </Stack>
+      </ScrollView>
       <Drawer
         visible={showPayment}
         bodyStyle={{backgroundColor: t.bgPage}}

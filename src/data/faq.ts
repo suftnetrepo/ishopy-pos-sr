@@ -7,12 +7,16 @@
 export interface FAQItem {
   q: string
   a: string
+  /** Restricts this item to specific business modes. Omit to show in both. */
+  modes?: Array<'restaurant' | 'shop'>
 }
 
 export interface FAQSection {
   id: string
   title: string
   items: FAQItem[]
+  /** Restricts the whole section to specific business modes. Omit to show in both. */
+  modes?: Array<'restaurant' | 'shop'>
 }
 
 export const FAQ_SECTIONS: FAQSection[] = [
@@ -23,6 +27,7 @@ export const FAQ_SECTIONS: FAQSection[] = [
       {
         q: 'How do I create my first table?',
         a: 'Go to Settings > Tables, then tap Add Table. Enter the table name, size, and optional table type such as bar, dining, or takeaway.',
+        modes: ['restaurant'],
       },
       {
         q: 'How do I add menu items?',
@@ -49,10 +54,12 @@ export const FAQ_SECTIONS: FAQSection[] = [
       {
         q: 'How do I add more items to an existing table?',
         a: 'Open the table again and add more items. The cart updates automatically with the new total.',
+        modes: ['restaurant'],
       },
       {
         q: 'What does Hold mean?',
         a: 'Hold saves the order without taking payment. Use this when a customer is still dining or wants to continue ordering later.',
+        modes: ['restaurant'],
       },
       {
         q: 'How do I void an order?',
@@ -79,10 +86,12 @@ export const FAQ_SECTIONS: FAQSection[] = [
       {
         q: 'How do I add add-ons or modifiers?',
         a: 'Go to Items and tap the add-ons icon on an item. Add options such as size, toppings, extras, or preparation choices.',
+        modes: ['restaurant'],
       },
       {
         q: 'What happens if an item has no add-ons?',
         a: 'If an item has no add-ons, it should be added directly to the cart without opening the add-ons modal.',
+        modes: ['restaurant'],
       },
       {
         q: 'How do I mark an item unavailable?',
@@ -161,6 +170,7 @@ export const FAQ_SECTIONS: FAQSection[] = [
   {
     id: 'waitlist',
     title: 'Waitlist',
+    modes: ['restaurant'],
     items: [
       {
         q: 'How does the waitlist work?',

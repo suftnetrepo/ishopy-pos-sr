@@ -211,15 +211,31 @@ const deleteTable = async (table_id: number): Promise<boolean> => {
   });
 };
 
+// Returns the id of an existing table to use as the shop-mode "Counter",
+// reusing whichever table is already there (preferring one literally named
+// "Counter", e.g. from onboarding seed) instead of creating a new one each
+// time. Only creates a fresh table when none exist at all — this used to
+// unconditionally create a new, unnamed ("Table ") row on every call,
+// silently accumulating orphan tables whenever shop.table_id was unset
+// (e.g. every time a shop switched mode in Settings).
 const getTableId = async (): Promise<{ table_id: string }> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
+      const existing = realm.objects<Table>('Table');
+      const counter =
+        existing.filtered('tableName == "Counter"')[0] ?? existing[0];
+
+      if (counter) {
+        resolve({ table_id: counter.table_id });
+        return;
+      }
+
       realm.write(() => {
         const tableId = guid();
         const newTable: Table = {
           table_id: tableId,
-          tableName: `Table `,
+          tableName: 'Counter',
           status: 0,
           isOccupied: 0,
           size: 1,
@@ -239,6 +255,12 @@ const getTableId = async (): Promise<{ table_id: string }> => {
   });
 };
 
+const getTableById = async (table_id: string): Promise<Table | null> => {
+  const realm = await getRealmInstance();
+  const table = realm.objectForPrimaryKey<Table>('Table', table_id);
+  return table ? { ...table } : null;
+};
+
 export {
   insertTable,
   updateTable,
@@ -247,5 +269,6 @@ export {
   deleteTable,
   updateOccupancy,
   resetOccupancy,
-  getTableId
+  getTableId,
+  getTableById
 };

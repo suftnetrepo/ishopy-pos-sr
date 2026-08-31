@@ -10,11 +10,26 @@ import {useQueryPopularMenuItems} from '../../../hooks/useOrderItems';
 import ItemIcon from '../../item-icon';
 import {useAppContext} from '../../../hooks/appContext';
 import {useAppTheme} from '../../../theme';
+import {convertJsonToCsv} from '../../../utils/convertJsonToCsv';
+
+const VISIBLE_COUNT = 5;
 
 const PopularDishes = () => {
   const {shop} = useAppContext();
   const {t} = useAppTheme();
   const {data} = useQueryPopularMenuItems();
+  const visibleData = data?.slice(0, VISIBLE_COUNT) || [];
+  const isShop = shop?.mode === 'shop';
+
+  const handleShare = async () => {
+    if (!data?.length) return;
+    await convertJsonToCsv(
+      data.map(dish => ({
+        [isShop ? 'Item' : 'Dish']: dish?.menu_name || '',
+        Orders: dish?.order_count || 0,
+      })),
+    );
+  };
 
   return (
     <Stack
@@ -42,9 +57,14 @@ const PopularDishes = () => {
         <Text
           color={t.textPrimary}
           variant="title">
-          {shop?.mode === 'shop' ? 'Popular Items ' : 'Popular Dishes '}
+          {isShop ? 'Popular Items ' : 'Popular Dishes '}
         </Text>
-        <StyledIcon size={24} name="share" color={t.textMuted} />
+        <StyledIcon
+          size={24}
+          name="share"
+          color={data?.length ? t.brandPrimary : t.textMuted}
+          onPress={handleShare}
+        />
       </Stack>
 
       <StyledSpacer
@@ -64,8 +84,15 @@ const PopularDishes = () => {
           gap={6}
           backgroundColor={t.bgPage}
           borderRadius={0}>
-          {/* Phase 3 (Task): Compact empty state - smaller icon, reduced spacing */}
-          <Text style={{fontSize: 18}}>📢</Text>
+          <Stack
+            width={44}
+            height={44}
+            borderRadius={22}
+            backgroundColor={t.bgInput}
+            alignItems="center"
+            justifyContent="center">
+            <StyledIcon name="notifications-none" size={22} color={t.textMuted} />
+          </Stack>
           <Text
             variant="subLabel"
             color={t.textSecondary}
@@ -78,7 +105,7 @@ const PopularDishes = () => {
         </Stack>
       ) : (
         <>
-            {data?.map((dish, index) => {
+            {visibleData.map((dish, index) => {
               // Extract icon colour from item data with fallback chain
               const iconColor = dish?.color_code || t.brandPrimary;
               
@@ -128,7 +155,7 @@ const PopularDishes = () => {
                     </Stack>
                   </Stack>
                 </Stack>
-                {index < data.length - 1 && (
+                {index < visibleData.length - 1 && (
                   <Stack
                   horizontal
                     width="80%"

@@ -60,8 +60,15 @@ const RecentOrder = () => {
           justifyContent="center"
           paddingVertical={10}
           gap={4}>
-          {/* Phase 3 (Task): Compact empty state - smaller icon, reduced spacing */}
-          <Text style={{fontSize: 16}}>📋</Text>
+          <Stack
+            width={44}
+            height={44}
+            borderRadius={22}
+            backgroundColor={t.bgInput}
+            alignItems="center"
+            justifyContent="center">
+            <StyledIcon name="notifications-none" size={22} color={t.textMuted} />
+          </Stack>
           <Text
             variant="subLabel"
             color={t.textSecondary}

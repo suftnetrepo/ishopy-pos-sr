@@ -32,9 +32,13 @@ export const formatReceiptData = async ({
     email: shop?.email || '',
     orderNumber: order.order_id?.slice(0, 8) || '',
     receiptType: businessType || 'shop',
+    // Restaurant receipts show the real table (printed/shared only when
+    // receiptType === 'restaurant' — see bluetoothPrinter.js, wifiPrinter.js,
+    // shareReceipt's isRestaurant gate). Shop receipts have no table concept,
+    // so table_name here is just a harmless generic fallback.
     orderLabel: isShop ? 'Order #' : 'Receipt #',
-    tableLabel: isShop ? 'Table #' : 'Sale',
-    table_name: isShop ? tableName || order.table_name || '' : 'Shop',
+    tableLabel: isShop ? 'Sale' : 'Table #',
+    table_name: isShop ? 'Shop' : tableName || order.table_name || '',
     date: order.date
       ? new Date(order.date).toLocaleString()
       : new Date().toLocaleString(),

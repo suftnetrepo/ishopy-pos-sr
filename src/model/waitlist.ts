@@ -36,13 +36,18 @@ export const insertWaitlistEntry = async (
 };
 
 // ─── Query all waiting ────────────────────────────────────────────────────────
+// Includes 'notified' as well as 'waiting' — a guest who's been texted that
+// their table is ready still needs to show up in the active queue (with the
+// "Notified" badge) so staff can find them again to tap Seat now. Filtering
+// to 'waiting' only made them vanish from the list the instant they were
+// notified, with no way back in.
 export const queryWaiting = async (): Promise<WaitlistEntry[]> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
       const results = realm
         .objects<WaitlistEntry>('Waitlist')
-        .filtered("status == 'waiting'")
+        .filtered("status == 'waiting' OR status == 'notified'")
         .map(e => ({...e}))
         .sort((a, b) => a.joined_at.localeCompare(b.joined_at));
       resolve(results);

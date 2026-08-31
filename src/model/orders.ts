@@ -187,30 +187,45 @@ const queryOrderById = async (order_id: string): Promise<Order | null> => {
   });
 };
 
+// Deletes an order along with everything that references it (its
+// OrderItems, and — restaurant mode — its KitchenTicket/KitchenItems).
+//
+// This used to refuse to delete any order that still had OrderItems, which
+// is every real, placed order. The "+ Order" flow (add more items to an
+// already-placed order) calls this expecting it to clear the old order
+// before recreating it with the updated cart — but since it always failed
+// silently (the caller ignored the rejection and proceeded anyway), every
+// "add more items" actually left the original order + its kitchen ticket
+// orphaned in the database and created a brand-new duplicate order with the
+// same items instead of updating it. That duplicate never gets paid off or
+// closed out, so it sits inflating the "In progress" count and — in
+// restaurant mode — the kitchen would see the same food ticketed twice.
 const deleteOrder = async (order_id: string): Promise<boolean> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
-      const orderItemsCount = realm
-        .objects('OrderItem')
-        .filtered('order_id == $0', order_id).length;
-      if (orderItemsCount > 0) {
-        reject(
-          new Error(
-            'Cannot delete order: Order items are associated with this order.'
-          )
+      realm.write(() => {
+        const order = realm.objectForPrimaryKey<Order>('Order', order_id);
+        if (!order) {
+          throw new Error('Order not found');
+        }
+
+        realm.delete(
+          realm.objects('OrderItem').filtered('order_id == $0', order_id),
         );
-      } else {
-        realm.write(() => {
-          const order = realm.objectForPrimaryKey<Order>('Order', order_id);
-          if (order) {
-            realm.delete(order);
-            resolve(true);
-          } else {
-            reject(new Error('Order not found'));
-          }
-        });
-      }
+
+        // KitchenTicket.ticket_id === order_id (see createKitchenTicket).
+        const ticket = realm.objectForPrimaryKey('KitchenTicket', order_id);
+        if (ticket) {
+          realm.delete(
+            realm.objects('KitchenItem').filtered('ticket_id == $0', order_id),
+          );
+          realm.delete(ticket);
+        }
+
+        realm.delete(order);
+      });
+      resolve(true);
     } catch (error) {
       reject(error);
     }

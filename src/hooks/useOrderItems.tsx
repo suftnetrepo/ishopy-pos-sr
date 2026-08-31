@@ -92,7 +92,9 @@ const useQueryPopularMenuItems = () => {
   useEffect(() => {
     async function load() {
       try {
-        const result = await getMostPopularMenuByQuantity(8);
+        // Fetch more than the dashboard widget displays (5) so the share
+        // icon's CSV export has a genuinely fuller list to offer.
+        const result = await getMostPopularMenuByQuantity(20);
         setData(prev => ({
           ...prev,
           data: result,

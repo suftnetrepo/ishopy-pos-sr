@@ -160,7 +160,7 @@ export default function KeyCard({onSubmit, onClose, table_name, table_id, prefil
           alignItems="center"
           paddingHorizontal={20}
           paddingVertical={16}
-          borderTopWidth={1}
+          borderTopWidth={0.2}
           borderColor={t.borderDefault}>
           <StyledPressable
             borderWidth={1}

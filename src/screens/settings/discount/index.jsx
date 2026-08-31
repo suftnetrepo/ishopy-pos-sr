@@ -19,6 +19,7 @@ import {useFocus} from '../../../hooks/useFocus';
 import {StyledIcon} from '../../../components/package/icon';
 import {Pressable} from 'react-native';
 import {useAppTheme} from '../../../theme';
+import {convertJsonToCsv} from '../../../utils/convertJsonToCsv';
 
 const BigDiscount = () => {
   const navigationFocus = useFocus();
@@ -53,6 +54,17 @@ const BigDiscount = () => {
 
   const update = tag => {
     setState({...state, tag, data: null});
+  };
+
+  const handleShare = async () => {
+    if (!data?.length) return;
+    await convertJsonToCsv(
+      data.map(discount => ({
+        Name: discount?.name || '',
+        'Rate (%)': discount?.rate ?? 0,
+        Status: discount?.status === 1 ? 'Active' : 'Inactive',
+      })),
+    );
   };
 
   const onDiscountDelete = async discount_id => {
@@ -98,21 +110,38 @@ const BigDiscount = () => {
           showTitle={true}
           title="Discounts"
           CopyIcon={
-            <Pressable onTouchStart={() => update('Add')}>
-              <StyleShape
-                cycle
-                size={48}
-                borderWidth={1}
-                backgroundColor={t.brandPrimary}
-                borderColor={t.brandPrimary}>
-                <StyledIcon
-                  pointerEvents="none"
-                  size={24}
-                  name="add"
-                  color={t.textPrimary}
-                />
-              </StyleShape>
-            </Pressable>
+            <Stack horizontal alignItems="center" gap={10}>
+              <Pressable onPress={handleShare}>
+                <StyleShape
+                  cycle
+                  size={48}
+                  borderWidth={1}
+                  backgroundColor={t.bgPage}
+                  borderColor={data?.length ? t.brandPrimary : t.textMuted}>
+                  <StyledIcon
+                    pointerEvents="none"
+                    size={22}
+                    name="share"
+                    color={data?.length ? t.brandPrimary : t.textPrimary}
+                  />
+                </StyleShape>
+              </Pressable>
+              <Pressable onTouchStart={() => update('Add')}>
+                <StyleShape
+                  cycle
+                  size={48}
+                  borderWidth={1}
+                  backgroundColor={t.brandPrimary}
+                  borderColor={t.brandPrimary}>
+                  <StyledIcon
+                    pointerEvents="none"
+                    size={24}
+                    name="add"
+                    color={t.textPrimary}
+                  />
+                </StyleShape>
+              </Pressable>
+            </Stack>
           }
         />
       </StyledPage.Header.Full>

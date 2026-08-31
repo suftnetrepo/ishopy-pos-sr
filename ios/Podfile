@@ -5,7 +5,7 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
-platform :ios, min_ios_version_supported
+platform :ios, '16.0'
 prepare_react_native_project!
 
 # Disable new architecture
@@ -39,5 +39,20 @@ target 'ishopyPos' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+
+    # Force a deployment target of 16.0+ on every pod target. Below iOS
+    # 15.4/16, Xcode force-links Swift back-deployment shim libraries
+    # (swiftCompatibility56 / swiftCompatibilityConcurrency / etc.) for any
+    # pod with Swift sources (GTMAppAuth, RNIap). Recent Xcode toolchains no
+    # longer ship those shims for the x86_64 (Intel) simulator slice, which
+    # fails the link with "symbol(s) not found for architecture x86_64".
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        deployment_target = config.build_settings['IPHONEOS_DEPLOYMENT_TARGET']
+        if deployment_target.nil? || deployment_target.to_f < 16.0
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
+        end
+      end
+    end
   end
 end

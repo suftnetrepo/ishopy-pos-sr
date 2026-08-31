@@ -165,6 +165,23 @@ const CheckOut = ({
             </StyledText>
           </StyledPressable>
         </XStack>
+
+        <StyledPressable
+          width="100%"
+          height={44}
+          marginTop={12}
+          borderRadius={12}
+          justifyContent="center"
+          alignItems="center"
+          onPress={() => close()}>
+          <StyledText
+            fontFamily={fontStyles.Roboto_Regular}
+            fontWeight="600"
+            color={t.textSecondary}
+            fontSize={14}>
+            Close
+          </StyledText>
+        </StyledPressable>
       </YStack>
     </YStack>
   );

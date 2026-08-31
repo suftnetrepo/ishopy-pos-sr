@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import Realm from 'realm';
-const SCHEMA_VERSION = 1;
+const SCHEMA_VERSION = 2; // v2: added KitchenTicket.order_type (optional, no data migration needed)
 
 const migration1 = (oldRealm: Realm, newRealm: Realm) => {
   if (oldRealm.schemaVersion < SCHEMA_VERSION) {

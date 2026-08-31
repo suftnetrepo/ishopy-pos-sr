@@ -11,6 +11,7 @@ import {StyledIcon} from '../../package/icon';
 import {useNavigation} from '@react-navigation/native';
 import {useFocus} from '../../../hooks/useFocus';
 import {useAppTheme} from '../../../theme';
+import {updateWaitlistStatus} from '../../../model/waitlist';
 
 // ─── Status config ────────────────────────────────────────────────────────────
 const STATUS = {
@@ -223,8 +224,14 @@ export default function TableCard({data, onTableSelect, waitlistEntry}) {
   const handlePress = table => {
     const location = table?.location || 'Dine In';
 
-    // Bar & Takeaway — skip the guest dialog, go straight to menu
+    // Bar & Takeaway — skip the guest dialog, go straight to menu. This path
+    // never passes through the KeyCard/onSubmit flow that normally clears a
+    // waitlist entry on Seat now, so — same as that flow — mark it seated
+    // here instead of leaving the guest stuck showing as still waiting.
     if (location === 'Bar' || location === 'Takeaway') {
+      if (waitlistEntry) {
+        updateWaitlistStatus(waitlistEntry.waitlist_id, 'seated');
+      }
       navigation.navigate('big-menu', {
         table_id:   table.table_id,
         table_name: table.tableName,

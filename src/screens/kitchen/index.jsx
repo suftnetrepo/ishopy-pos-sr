@@ -114,12 +114,24 @@ const TicketCard = ({group, onItemPress, onBump, onServed, onRecall, elapsedMinu
         backgroundColor={headerBg}
         borderBottomWidth={1} borderColor={K.divider}>
         <Stack vertical gap={2}>
-          <StyledText fontSize={16} fontWeight={theme.fontWeight.bold} color={K.text}>
-            {ticket.table_name}
-          </StyledText>
-          <StyledText fontSize={11} color={K.subtext}>
-            {ticket.guest_count} {ticket.guest_count === 1 ? 'guest' : 'guests'}
-          </StyledText>
+          <Stack horizontal alignItems="center" gap={6}>
+            <StyledText fontSize={16} fontWeight={theme.fontWeight.bold} color={K.text}>
+              {ticket.table_name}
+            </StyledText>
+            {ticket.order_type && ticket.order_type !== 'Dine In' && (
+              <Stack paddingHorizontal={7} paddingVertical={2} borderRadius={20}
+                backgroundColor="rgba(255,255,255,0.08)">
+                <StyledText fontSize={10} fontWeight={theme.fontWeight.bold} color={K.subtext}>
+                  {ticket.order_type.toUpperCase()}
+                </StyledText>
+              </Stack>
+            )}
+          </Stack>
+          {ticket.guest_count > 0 && (
+            <StyledText fontSize={11} color={K.subtext}>
+              {ticket.guest_count} {ticket.guest_count === 1 ? 'guest' : 'guests'}
+            </StyledText>
+          )}
         </Stack>
         <Stack paddingHorizontal={12} paddingVertical={5} borderRadius={20}
           backgroundColor={timer.bg}>

@@ -1,13 +1,12 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
-import {useWindowDimensions} from 'react-native';
+import React, {useState} from 'react';
 import {Stack} from '../../../components/package/stack';
 import {Text} from '../../../components/text';
 import {theme} from '../../../utils/theme';
 import {useOrderStatusAggregate} from '../../../hooks/useOrder';
 import {OrderStatusAggregate} from '../../../model/orders';
 import {useAppTheme, ThemeTokens} from '../../../theme';
-import Svg, {Path} from 'react-native-svg';
+import Svg, {Path, Defs, LinearGradient, Stop} from 'react-native-svg';
 
 type OrderKey = 'Progress' | 'Completed' | 'Cancelled';
 
@@ -92,6 +91,7 @@ type SparklineProps = {
   opacity?: number;
   width?: number;
   height?: number;
+  gradientId: string;
 };
 
 const Sparkline = ({
@@ -100,6 +100,7 @@ const Sparkline = ({
   opacity = 0.8,
   width = 80,
   height = 32,
+  gradientId,
 }: SparklineProps) => {
   const safeData = Array.isArray(data) ? data : [];
 
@@ -109,12 +110,24 @@ const Sparkline = ({
 
   if (!path) return null;
 
+  // Close the line down to the baseline so the area beneath it can carry a
+  // soft gradient fill — reads as a premium "filled" sparkline rather than
+  // a bare line.
+  const areaPath = `${path} L 100 24 L 0 24 Z`;
+
   return (
     <Svg
       width={width}
       height={height}
       viewBox="0 0 100 24"
       preserveAspectRatio="none">
+      <Defs>
+        <LinearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+          <Stop offset="0" stopColor={color} stopOpacity={0.28} />
+          <Stop offset="1" stopColor={color} stopOpacity={0} />
+        </LinearGradient>
+      </Defs>
+      <Path d={areaPath} fill={`url(#${gradientId})`} stroke="none" />
       <Path
         d={path}
         stroke={color}
@@ -162,28 +175,34 @@ const Tile = ({
   const deltaArrow = isDeltaPositive ? '↑' : isDeltaNeutral ? '→' : '↓';
 
   // Phase 1: Responsive sizing (no hardcoded values)
-  const contentPadH = isCompact ? 12 : 14;
-  const contentPadV = isCompact ? 14 : 16;
-  const sparklineW = isCompact ? 45 : 56;
-  const sparklineH = isCompact ? 22 : 28;
-  const spacingGap = isCompact ? 2 : 3;
+  const contentPadH = isCompact ? 14 : 18;
+  const contentPadV = isCompact ? 16 : 20;
+  const sparklineW = isCompact ? 60 : 76;
+  const sparklineH = isCompact ? 40 : 52;
+  const spacingGap = isCompact ? 6 : 8;
+  const deltaBg = isDeltaNeutral
+    ? `${t.textMuted}18`
+    : isDeltaPositive
+    ? t.successBg
+    : t.dangerBg;
 
   return (
     <Stack
       flex={1}
       horizontal
-      borderRadius={14}
-      overflow="visible"
-      borderWidth={1}
-      borderColor={t.borderDefault}
+      borderRadius={16}
+      overflow="hidden"
+      borderLeftWidth={4}
+      borderLeftColor={sparklineColor}
       backgroundColor={t.bgCard}
       shadowColor="#000"
-      shadowOpacity={0.04}
-      shadowRadius={8}
-      elevation={2}
+      shadowOffset={{width: 0, height: 2}}
+      shadowOpacity={0.06}
+      shadowRadius={10}
+      elevation={3}
       alignItems="center"
       justifyContent="space-between">
-      {/* Phase 3: Better composition - metric, label, delta on left */}
+      {/* Metric, label, delta on left */}
       <Stack
         vertical
         paddingHorizontal={contentPadH}
@@ -191,10 +210,14 @@ const Tile = ({
         gap={spacingGap}
         flex={1}
         justifyContent="center">
-        {/* Metric: large, bold, primary text - using default metric lineHeight (40) */}
+        {/* Metric: large, bold, primary text */}
         <Text
-          variant="metric"
-          color={t.textPrimary}>
+          color={t.textPrimary}
+          fontWeight="800"
+          style={{
+            fontSize: isCompact ? 32 : 40,
+            lineHeight: isCompact ? 36 : 44,
+          }}>
           {value}
         </Text>
 
@@ -202,29 +225,39 @@ const Tile = ({
         <Text
           variant="subLabel"
           color={t.textSecondary}
-          style={{fontSize: isCompact ? 11 : 12, fontWeight: '500'}}>
+          style={{fontSize: isCompact ? 12 : 13, fontWeight: '600'}}>
           {label}
         </Text>
 
-        {/* Delta: change percentage with directional indicator */}
-        <Stack horizontal gap={4} alignItems="center" marginTop={2}>
-          <Text variant="caption" color={deltaColor} style={{fontSize: 10, fontWeight: '600'}}>
+        {/* Delta: change percentage as a tinted pill */}
+        <Stack
+          horizontal
+          gap={4}
+          alignItems="center"
+          alignSelf="flex-start"
+          paddingHorizontal={10}
+          paddingVertical={4}
+          borderRadius={20}
+          backgroundColor={deltaBg}
+          marginTop={2}>
+          <Text color={deltaColor} style={{fontSize: 12, fontWeight: '700'}}>
             {deltaArrow}
           </Text>
-          <Text variant="caption" color={deltaColor} style={{fontSize: 10, fontWeight: '500'}}>
+          <Text color={deltaColor} style={{fontSize: 12, fontWeight: '700'}}>
             {Math.abs(delta.change)} ({Math.abs(delta.percentage)}%)
           </Text>
         </Stack>
       </Stack>
 
-      {/* Phase 3: Sparkline on right, vertically centered */}
+      {/* Sparkline on right, vertically centered */}
       <Stack marginRight={contentPadH} alignItems="center" justifyContent="center">
         <Sparkline
           data={safeSparkline}
           color={sparklineColor}
-          opacity={0.85}
+          opacity={0.9}
           width={sparklineW}
           height={sparklineH}
+          gradientId={`tile-spark-${orderKey || label}`}
         />
       </Stack>
     </Stack>
@@ -234,13 +267,22 @@ const Tile = ({
 const Tiles = () => {
   const {t} = useAppTheme();
   const {data} = useOrderStatusAggregate();
-  const {width} = useWindowDimensions();
-  const isCompact = width < 900;
-  const isMedium = width >= 900 && width < 1180;
-  
-  // Phase 1: Responsive layout - no hardcoded values
-  const tileWidth = isCompact ? '100%' : isMedium ? '45.5%' : '31.5%';
-  const tileMinHeight = isCompact ? 125 : isMedium ? 135 : 145;
+
+  // Measure our own rendered width instead of reading the full window width
+  // (useWindowDimensions) — the sidebar eats a chunk of that (84–210px), so
+  // a window-width breakpoint drifts out of sync with what these tiles
+  // actually have to work with. On a real iPad in landscape (~1080pt window)
+  // that mismatch landed the row in a "medium" bucket meant for 2-per-row,
+  // wrapping to an awkward 2+1 layout instead of one clean row of three.
+  const [containerWidth, setContainerWidth] = useState(0);
+
+  // Only stack to a single column on genuinely phone-narrow widths — every
+  // iPad, portrait or landscape, mini through 13", keeps all three stats in
+  // one row.
+  const isCompact = containerWidth > 0 && containerWidth < 560;
+
+  const tileWidth = isCompact ? '100%' : '31.5%';
+  const tileMinHeight = isCompact ? 140 : 160;
   const tileGap = isCompact ? 12 : 14;
   const tilesMarginBottom = isCompact ? 12 : 16;
 
@@ -250,21 +292,23 @@ const Tiles = () => {
       gap={tileGap}
       flexWrap="wrap"
       alignItems="stretch"
-      marginBottom={tilesMarginBottom}>
-      {TILES.map(tile => (
-        <Stack key={tile.key} width={tileWidth} minHeight={tileMinHeight}>
-          <Tile
-            key={tile.key}
-            label={tile.label}
-            sparklineColorKey={tile.sparklineColorKey}
-            sparkline={tile.sparkline}
-            t={t}
-            value={data ? (data as OrderStatusAggregate)[tile.key] : 0}
-            orderKey={tile.key}
-            isCompact={isCompact}
-          />
-        </Stack>
-      ))}
+      marginBottom={tilesMarginBottom}
+      onLayout={e => setContainerWidth(e.nativeEvent.layout.width)}>
+      {containerWidth > 0 &&
+        TILES.map(tile => (
+          <Stack key={tile.key} width={tileWidth} minHeight={tileMinHeight}>
+            <Tile
+              key={tile.key}
+              label={tile.label}
+              sparklineColorKey={tile.sparklineColorKey}
+              sparkline={tile.sparkline}
+              t={t}
+              value={data ? (data as OrderStatusAggregate)[tile.key] : 0}
+              orderKey={tile.key}
+              isCompact={isCompact}
+            />
+          </Stack>
+        ))}
     </Stack>
   );
 };

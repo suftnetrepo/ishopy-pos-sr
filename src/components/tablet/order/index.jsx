@@ -21,6 +21,7 @@ import {useAppContext} from '../../../hooks/appContext';
 import useOrderTable from '../../../hooks/useOrderTable';
 import {useAppTheme} from '../../../theme';
 import { useNavigation } from '@react-navigation/native';
+import {convertJsonToCsv} from '../../../utils/convertJsonToCsv';
 
 // ─── Status chip colours ──────────────────────────────────────────────────────
 const STATUS_STYLE = {
@@ -281,6 +282,22 @@ export default function OrderCard({onOrderChange, onHandleFilter}) {
     onOrderChange('basket');
   };
 
+  const handleShare = async () => {
+    if (!tableProps.data?.length) return;
+    await convertJsonToCsv(
+      tableProps.data.map(order => ({
+        'Order ID': getLastChars(order.order_id, 8),
+        Table: order.table_name || '',
+        Subtotal: order.total || 0,
+        Total: order.total_price || 0,
+        Tax: order.tax || 0,
+        Discount: order.discount || 0,
+        Date: formatDate(order.date),
+        Status: formatStatus(order.status),
+      })),
+    );
+  };
+
   return (
     <Stack vertical flex={1}>
       {/* Filter chips */}
@@ -318,15 +335,32 @@ export default function OrderCard({onOrderChange, onHandleFilter}) {
               </StyleShape>
             </Pressable>
           )}
-          <Pressable onPress={() => navigation.navigate('big-kitchen')}>
+          {shop?.mode === 'restaurant' && (
+            <Pressable onPress={() => navigation.navigate('big-kitchen')}>
+              <StyleShape
+                paddingHorizontal={10}
+                borderWidth={1}
+                cycle
+                size={48}
+                backgroundColor={t.bgPage}
+                borderColor={t.textMuted}>
+                <MaterialIcon size={24} name="restaurant" color={t.textPrimary} />
+              </StyleShape>
+            </Pressable>
+          )}
+          <Pressable onPress={handleShare}>
             <StyleShape
               paddingHorizontal={10}
               borderWidth={1}
               cycle
               size={48}
               backgroundColor={t.bgPage}
-              borderColor={t.textMuted}>
-              <MaterialIcon size={24} name="restaurant" color={t.textPrimary} />
+              borderColor={tableProps.data?.length ? t.brandPrimary : t.textMuted}>
+              <MaterialIcon
+                size={24}
+                name="share"
+                color={tableProps.data?.length ? t.brandPrimary : t.textPrimary}
+              />
             </StyleShape>
           </Pressable>
           <Pressable onPress={() => onHandleFilter('filter')}>

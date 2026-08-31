@@ -1,7 +1,5 @@
 /* eslint-disable prettier/prettier */
 import {getRealmInstance} from './store';
-import type {Order} from './orders';
-import type {OrderItem} from './orderItems';
 
 export interface KitchenTicket {
   ticket_id:  string;  // same as order_id
@@ -10,6 +8,7 @@ export interface KitchenTicket {
   order_time: string;
   kitchen_status: string; // 'new' | 'cooking' | 'ready' | 'served'
   bumped_at?: string;
+  order_type?: string; // 'Dine In' | 'Bar' | 'Takeaway'
 }
 
 export interface KitchenItem {
@@ -17,9 +16,19 @@ export interface KitchenItem {
   ticket_id:      string;  // order_id
   menu_name:      string;
   quantity:       number;
-  addOns:         string;
+  addOns:         Array<Record<string, any>>;
   item_status:    string;  // 'pending' | 'cooking' | 'ready'
 }
+
+const safeParseAddOns = (raw?: string): Array<Record<string, any>> => {
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+};
 
 // ─── Create ticket when order is placed ──────────────────────────────────────
 export const createKitchenTicket = async (
@@ -27,6 +36,7 @@ export const createKitchenTicket = async (
   table_name: string,
   guest_count: number,
   items: Array<{detail_id: string; menu_name: string; quantity: number; addOns?: string}>,
+  order_type?: string,
 ): Promise<void> => {
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
@@ -38,6 +48,7 @@ export const createKitchenTicket = async (
           guest_count,
           order_time:     new Date().toISOString(),
           kitchen_status: 'new',
+          order_type,
         }, Realm.UpdateMode.Modified);
 
         items.forEach(item => {
@@ -57,7 +68,11 @@ export const createKitchenTicket = async (
 };
 
 // ─── Query active tickets ─────────────────────────────────────────────────────
-// CRITICAL: Queries the main Order table (not KitchenTicket schema which is unused)
+// Reads directly from the KitchenTicket/KitchenItem schema — the same records
+// that onItemPress/onBump/onServed/onRecall write to — so status changes made
+// on this screen actually persist and are reflected on the next refresh.
+// A ticket reaches a terminal state (and drops off the board) entirely on its
+// own kitchen_status, independent of the underlying Order's status.
 export const queryActiveTickets = async (): Promise<{
   ticket: KitchenTicket;
   items: KitchenItem[];
@@ -65,57 +80,41 @@ export const queryActiveTickets = async (): Promise<{
   const realm = await getRealmInstance();
   return new Promise((resolve, reject) => {
     try {
-      // Normalize status for comparison
-      const normalizeStatus = (status?: string) =>
-        String(status || '').trim().toLowerCase();
-
-      // Kitchen-active statuses (matches Orders screen)
-      const KDS_STATUSES = ['progress', 'pending', 'preparing', 'active'];
-
-      if (__DEV__) console.log('🔍 KDS: Fetching active orders from Order table...');
-
-      // Query main Order table (source of truth)
-      const allOrders = Array.from(
-        realm.objects<Order>('Order')
+      const tickets = Array.from(
+        realm.objects<KitchenTicket>('KitchenTicket')
+          .filtered('kitchen_status != "served"')
       );
-      if (__DEV__) console.log('📊 Orders screen orders total:', allOrders.length, allOrders.map(o => ({id: o.order_id, status: o.status})));
 
-      // Filter by active kitchen status
-      const activeOrders = allOrders.filter(order =>
-        KDS_STATUSES.includes(normalizeStatus(order.status))
-      );
-      if (__DEV__) console.log('✅ KDS raw orders (filtered):', activeOrders.length, activeOrders.map(o => ({id: o.order_id, status: o.status, table: o.table_name})));
-
-      // Transform to KitchenTicket/KitchenItem format
-      const result = activeOrders.map(order => {
-        // Fetch order items for this order
+      const result = tickets.map(ticket => {
         const items = Array.from(
-          realm.objects<OrderItem>('OrderItem')
-            .filtered('order_id == $0', order.order_id)
+          realm.objects<any>('KitchenItem')
+            .filtered('ticket_id == $0', ticket.ticket_id)
         ).map(item => ({
-          ki_id: item.detail_id,
-          ticket_id: order.order_id,
-          menu_name: item.menu_name,
-          quantity: item.quantity,
-          addOns: item.addOns || '',
-          item_status: 'pending' as const, // Default to pending (actual status stored in OrderItem if needed)
+          ki_id:       item.ki_id,
+          ticket_id:   item.ticket_id,
+          menu_name:   item.menu_name,
+          quantity:    item.quantity,
+          addOns:      safeParseAddOns(item.addOns),
+          item_status: item.item_status,
         }));
 
-        const ticket: KitchenTicket = {
-          ticket_id: order.order_id,
-          table_name: order.table_name || `Table ${order.table_id}`,
-          guest_count: 0, // TODO: get from order if available
-          order_time: order.date.toISOString(),
-          kitchen_status: 'new', // Status derived from Order.status in UI
+        return {
+          ticket: {
+            ticket_id:      ticket.ticket_id,
+            table_name:     ticket.table_name,
+            guest_count:    ticket.guest_count,
+            order_time:     ticket.order_time,
+            kitchen_status: ticket.kitchen_status,
+            bumped_at:      ticket.bumped_at,
+            order_type:     ticket.order_type,
+          },
+          items,
         };
-
-        return {ticket, items};
       });
 
-      if (__DEV__) console.log('🎫 Kitchen tickets to display:', result.length);
       resolve(result);
     } catch (e) {
-      if (__DEV__) console.error('❌ queryActiveTickets error:', e);
+      if (__DEV__) console.error('queryActiveTickets error:', e);
       reject(e);
     }
   });

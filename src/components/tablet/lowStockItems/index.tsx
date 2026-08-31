@@ -7,10 +7,24 @@ import {ScrollView} from 'react-native';
 import {useQueryGetLowerStock} from '../../../hooks/useStock';
 import ItemIcon from '../../../components/item-icon';
 import {useAppTheme} from '../../../theme';
+import {convertJsonToCsv} from '../../../utils/convertJsonToCsv';
+
+const VISIBLE_COUNT = 5;
 
 const LowStockItems = () => {
   const {t} = useAppTheme();
   const {data} = useQueryGetLowerStock();
+  const visibleData = data?.slice(0, VISIBLE_COUNT) || [];
+
+  const handleShare = async () => {
+    if (!data?.length) return;
+    await convertJsonToCsv(
+      data.map(item => ({
+        Item: item?.menu_name || '',
+        'Stock Available': item?.current_stock || 0,
+      })),
+    );
+  };
 
   return (
     <Stack
@@ -39,7 +53,12 @@ const LowStockItems = () => {
           variant="title">
           Low Stock Items
         </Text>
-        <StyledIcon size={24} name="share" color={t.textMuted} />
+        <StyledIcon
+          size={24}
+          name="share"
+          color={data?.length ? t.brandPrimary : t.textMuted}
+          onPress={handleShare}
+        />
       </Stack>
       <StyledSpacer
         borderWidth={1}
@@ -58,8 +77,15 @@ const LowStockItems = () => {
           gap={6}
           backgroundColor={t.bgPage}
           borderRadius={0}>
-          {/* Phase 3 (Task): Compact empty state - smaller icon, reduced spacing */}
-          <Text style={{fontSize: 18}}>🔔</Text>
+          <Stack
+            width={44}
+            height={44}
+            borderRadius={22}
+            backgroundColor={t.bgInput}
+            alignItems="center"
+            justifyContent="center">
+            <StyledIcon name="notifications-none" size={22} color={t.textMuted} />
+          </Stack>
           <Text
             variant="subLabel"
             color={t.textSecondary}
@@ -73,7 +99,7 @@ const LowStockItems = () => {
       ) : (
         <>
           <ScrollView showsVerticalScrollIndicator={false}>
-            {data.map((dish, index) => (
+            {visibleData.map((dish, index) => (
               <Stack
                 key={index}
                 horizontal

@@ -230,6 +230,7 @@ export const KitchenTicketSchema: ObjectSchema = {
     order_time:     'string',
     kitchen_status: {type: 'string', default: 'new'},
     bumped_at:      'string?',
+    order_type:     'string?', // 'Dine In' | 'Bar' | 'Takeaway'
   },
 };
 

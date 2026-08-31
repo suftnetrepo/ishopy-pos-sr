@@ -121,31 +121,48 @@ const BigItem = () => {
           showTitle={true}
           title="Items"
           CopyIcon={
-            <Animated.View style={{transform: [{scale: addButtonScale}]}}>
-              <Pressable 
-                onTouchStart={() => itemCardRef.current?.requestAdd()}
-                onPressIn={handleAddButtonPressIn}
-                onPressOut={handleAddButtonPressOut}>
+            <Stack horizontal alignItems="center" gap={10}>
+              <Pressable onPress={() => itemCardRef.current?.exportCsv()}>
                 <StyleShape
                   cycle
                   size={48}
-                  borderWidth={0}
-                  backgroundColor={t.brandPrimary}
-                  borderColor={t.brandPrimary}
-                  shadowColor={t.brandPrimary}
-                  shadowOffset={{width: 0, height: 3}}
-                  shadowOpacity={0.25}
-                  shadowRadius={8}
-                  elevation={4}>
+                  borderWidth={1}
+                  backgroundColor={t.bgPage}
+                  borderColor={t.brandPrimary}>
                   <StyledIcon
                     pointerEvents="none"
-                    size={24}
-                    name="add"
-                    color="#ffffff"
+                    size={22}
+                    name="share"
+                    color={t.brandPrimary}
                   />
                 </StyleShape>
               </Pressable>
-            </Animated.View>
+              <Animated.View style={{transform: [{scale: addButtonScale}]}}>
+                <Pressable
+                  onTouchStart={() => itemCardRef.current?.requestAdd()}
+                  onPressIn={handleAddButtonPressIn}
+                  onPressOut={handleAddButtonPressOut}>
+                  <StyleShape
+                    cycle
+                    size={48}
+                    borderWidth={0}
+                    backgroundColor={t.brandPrimary}
+                    borderColor={t.brandPrimary}
+                    shadowColor={t.brandPrimary}
+                    shadowOffset={{width: 0, height: 3}}
+                    shadowOpacity={0.25}
+                    shadowRadius={8}
+                    elevation={4}>
+                    <StyledIcon
+                      pointerEvents="none"
+                      size={24}
+                      name="add"
+                      color="#ffffff"
+                    />
+                  </StyleShape>
+                </Pressable>
+              </Animated.View>
+            </Stack>
           }>
           <StyledSearchBar
             marginRight={12}

@@ -8,6 +8,7 @@ import RenderHeader from '../../components/tablet/header'
 import { StyledIcon } from '../../components/package/icon'
 import { useAppTheme } from '../../theme'
 import { useNavigation } from '@react-navigation/native'
+import { useAppContext } from '../../hooks/appContext'
 import { FAQ_SECTIONS } from '../../data/faq'
 
 // ──────────────────────────────────────────────────────────────────────────────
@@ -43,14 +44,30 @@ const FAQItem = ({ item, t }) => {
 const FAQScreen = () => {
   const navigation = useNavigation()
   const { t } = useAppTheme()
+  const { shop } = useAppContext()
   const [searchText, setSearchText] = useState('')
+
+  // Drop content tagged for the other business mode (e.g. Waitlist, table
+  // setup) before search filtering, so a shop doesn't see restaurant-only
+  // help topics and vice versa. Untagged items/sections show in both modes.
+  const modeSections = useMemo(() => {
+    const mode = shop?.mode
+    const appliesToMode = modes => !modes || modes.includes(mode)
+
+    return FAQ_SECTIONS.filter(section => appliesToMode(section.modes))
+      .map(section => ({
+        ...section,
+        items: section.items.filter(item => appliesToMode(item.modes)),
+      }))
+      .filter(section => section.items.length > 0)
+  }, [shop?.mode])
 
   // Filter sections and items based on search
   const filteredSections = useMemo(() => {
-    if (!searchText.trim()) return FAQ_SECTIONS
+    if (!searchText.trim()) return modeSections
 
     const lowerSearch = searchText.toLowerCase()
-    return FAQ_SECTIONS.map(section => ({
+    return modeSections.map(section => ({
       ...section,
       items: section.items.filter(
         item =>
@@ -58,7 +75,7 @@ const FAQScreen = () => {
           item.a.toLowerCase().includes(lowerSearch)
       ),
     })).filter(section => section.items.length > 0)
-  }, [searchText])
+  }, [modeSections, searchText])
 
   // Empty state when search returns no results
   const hasResults = filteredSections.length > 0 && 

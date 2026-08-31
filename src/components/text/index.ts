@@ -22,6 +22,7 @@ type TextVariant =
   | 'metric'
   | 'metricSmall'
   | 'overline'
+  | 'bodylight'
 
 type AppTextProps = StyledTextProps & {
   variant?: TextVariant
@@ -68,6 +69,11 @@ const TEXT_VARIANTS: Record<TextVariant, any> = {
   body: {
     fontSize: 14,
     fontWeight: '400',
+    lineHeight: 22,
+  },
+   bodylight: {
+    fontSize: 14,
+    fontWeight: '100',
     lineHeight: 22,
   },
   bodySmall: {
