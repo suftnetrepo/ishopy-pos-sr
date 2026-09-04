@@ -141,7 +141,7 @@ platform :android do
   def signing_props
     {
       'android.injected.signing.store.file'     =>
-        "#{File.expand_path('.')}/android/app/ishopyPos.keystore",
+        "#{File.expand_path('.')}/android/app/irit.jks",
       'android.injected.signing.store.password' => ENV['ANDROID_STORE_PASSWORD'],
       'android.injected.signing.key.alias'      => ENV['ANDROID_KEY_ALIAS'],
       'android.injected.signing.key.password'   => ENV['ANDROID_KEY_PASSWORD'],
