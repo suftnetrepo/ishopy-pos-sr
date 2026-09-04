@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Privacy Policy for the ishopy app, published by Suftnet Limited.">
+<title>Privacy Policy — ishopy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f3f4f0;
+    --surface: #ffffff;
+    --ink: #161b18;
+    --muted: #5b6560;
+    --line: #d8dcd6;
+    --accent: #1e6f52;
+    --accent-ink: #ffffff;
+    --accent-soft: #e3eee7;
+    --accent-soft-line: #c7ddd0;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #14171a;
+      --surface: #1b1f1d;
+      --ink: #eceeea;
+      --muted: #9ca6a0;
+      --line: #2b322e;
+      --accent: #4bbd93;
+      --accent-ink: #0d1512;
+      --accent-soft: rgba(75, 189, 147, 0.14);
+      --accent-soft-line: rgba(75, 189, 147, 0.32);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #14171a;
+    --surface: #1b1f1d;
+    --ink: #eceeea;
+    --muted: #9ca6a0;
+    --line: #2b322e;
+    --accent: #4bbd93;
+    --accent-ink: #0d1512;
+    --accent-soft: rgba(75, 189, 147, 0.14);
+    --accent-soft-line: rgba(75, 189, 147, 0.32);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  .sheet {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 64px 28px 80px;
+  }
+
+  .kicker {
+    font-family: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin: 0 0 14px;
+  }
+
+  h1 {
+    font-family: "IBM Plex Serif", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(30px, 5vw, 40px);
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+    text-wrap: balance;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 15px;
+    margin: 0 0 32px;
+  }
+
+  /* --- identity strip: styled like a receipt tear-off --- */
+  .receipt {
+    background: var(--surface);
+    border-left: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+    border-top: 2px dashed var(--muted);
+    border-bottom: 2px dashed var(--muted);
+    border-radius: 4px;
+    padding: 22px 24px 24px;
+    margin: 0 0 40px;
+  }
+
+  .receipt-row {
+    display: grid;
+    grid-template-columns: 132px 1fr;
+    gap: 6px 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.5px;
+    padding: 5px 0;
+  }
+  .receipt-row:not(:last-child) { border-bottom: 1px dotted var(--line); }
+  .receipt-row dt { color: var(--muted); }
+  .receipt-row dd {
+    margin: 0;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .receipt dl { margin: 0; }
+
+  .lede {
+    font-size: 16.5px;
+    margin: 0 0 8px 0;
+  }
+  .lede strong { font-weight: 600; }
+
+  section.clause {
+    margin-top: 40px;
+    padding-top: 4px;
+  }
+
+  .clause-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+  .clause-num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-soft-line);
+    border-radius: 4px;
+    padding: 2px 7px;
+    line-height: 1.5;
+    flex: none;
+  }
+  h2 {
+    font-family: "IBM Plex Serif", Georgia, serif;
+    font-weight: 600;
+    font-size: 21px;
+    margin: 0;
+    letter-spacing: -0.005em;
+  }
+
+  h3 {
+    font-family: "IBM Plex Sans", sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    margin: 22px 0 8px;
+  }
+
+  p { margin: 0 0 12px; color: var(--ink); }
+  section.clause > p:first-of-type { margin-top: 10px; }
+
+  ul {
+    margin: 0 0 12px;
+    padding-left: 0;
+    list-style: none;
+  }
+  li {
+    position: relative;
+    padding-left: 18px;
+    margin-bottom: 5px;
+  }
+  li::before {
+    content: "–";
+    position: absolute;
+    left: 0;
+    color: var(--muted);
+  }
+
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-soft-line); }
+  a:hover, a:focus-visible { border-bottom-color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
+  .agree {
+    margin-top: 44px;
+    padding-top: 20px;
+    border-top: 1.5px dashed var(--line);
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  footer {
+    margin-top: 28px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .sheet { animation: rise 0.5s ease-out; }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <p class="kicker">Legal · Data Protection</p>
+  <h1>Privacy Policy</h1>
+  <p class="subtitle">Effective September 4, 2026</p>
+
+  <div class="receipt">
+    <dl>
+      <div class="receipt-row"><dt>App</dt><dd>ishopy</dd></div>
+      <div class="receipt-row"><dt>Developer</dt><dd>Suftnet Limited</dd></div>
+      <div class="receipt-row"><dt>Platforms</dt><dd>iOS App Store · Google Play</dd></div>
+      <div class="receipt-row"><dt>Bundle ID</dt><dd>com.suftnet.shop.sr</dd></div>
+    </dl>
+  </div>
+
+  <p class="lede">This Privacy Policy explains how <strong>Suftnet Limited</strong> ("we", "us", "our") collects, uses, and shares information through the <strong>ishopy</strong> app (the "App"), available on the Apple App Store and Google Play.</p>
+
+  <section class="clause">
+    <div class="clause-head">
+      <span class="clause-num">01</span>
+      <h2>Information We Collect</h2>
+    </div>
+
+    <h3>Personal information</h3>
+    <p>When you register and create an account on the App, we may collect the following personal information from you:</p>
+    <ul>
+      <li>Name</li>
+      <li>Email address</li>
+      <li>Contact number</li>
+      <li>Profile picture</li>
+      <li>Billing and shipping address</li>
+    </ul>
+
+    <h3>Transaction information</h3>
+    <p>We collect information about the transactions you make through the App, including the details of the goods traded, purchase history, and payment information.</p>
+  </section>
+
+  <section class="clause">
+    <div class="clause-head">
+      <span class="clause-num">02</span>
+      <h2>How We Use Your Information</h2>
+    </div>
+
+    <h3>Provide and improve services</h3>
+    <p>We use your personal information to provide, maintain, and improve the functionality of the App and the ishopy platform. This includes facilitating transactions, responding to your inquiries, and enhancing user experience.</p>
+
+    <h3>Communication</h3>
+    <p>We may use your email address or contact number to send you transactional or promotional messages related to the App and ishopy platform. You can opt out of promotional messages by following the unsubscribe instructions provided in those messages.</p>
+
+    <h3>Legal compliance</h3>
+    <p>We may use your personal information to comply with applicable laws, regulations, legal processes, or enforceable governmental requests. We may also use your information to protect our rights, privacy, safety, or property, or that of our users.</p>
+  </section>
+
+  <section class="clause">
+    <div class="clause-head">
+      <span class="clause-num">03</span>
+      <h2>Information Sharing and Disclosure</h2>
+    </div>
+
+    <h3>Service providers</h3>
+    <p>We may share your personal information with trusted third-party service providers who assist us in operating the App and providing the services. These service providers are obligated to handle your information securely and only use it for the purposes we specify.</p>
+
+    <h3>Business transfers</h3>
+    <p>In the event of a merger, acquisition, or sale of all or a portion of our assets, your personal information may be transferred as part of the transaction. We will notify you via email or a prominent notice on the App before your information becomes subject to a different privacy policy.</p>
+
+    <h3>Legal requirements</h3>
+    <p>We may disclose your personal information if required by law, court order, or governmental regulation, or if we believe disclosure is necessary to protect our rights, safety, or property, or that of our users.</p>
+  </section>
+
+  <section class="clause">
+    <div class="clause-head">
+      <span class="clause-num">04</span>
+      <h2>Data Security</h2>
+    </div>
+    <p>We take reasonable measures to protect your personal information from unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the internet or electronic storage is 100% secure, and we cannot guarantee absolute security.</p>
+  </section>
+
+  <section class="clause">
+    <div class="clause-head">
+      <span class="clause-num">05</span>
+      <h2>Children's Privacy</h2>
+    </div>
+    <p>The App is not intended for use by individuals under the age of 13. We do not knowingly collect personal information from children. If we become aware that we have inadvertently collected personal information from a child under 13, we will take steps to delete it as soon as possible.</p>
+  </section>
+
+  <section class="clause">
+    <div class="clause-head">
+      <span class="clause-num">06</span>
+      <h2>Changes to This Policy</h2>
+    </div>
+    <p>We may update this Privacy Policy from time to time; the most current version is effective as soon as it is posted here. We will notify you of material changes by email or a notice on the App. We encourage you to review this Privacy Policy periodically.</p>
+  </section>
+
+  <section class="clause">
+    <div class="clause-head">
+      <span class="clause-num">07</span>
+      <h2>Contact Us</h2>
+    </div>
+    <p>If you have questions or concerns about this Privacy Policy or our privacy practices, contact us at <a href="mailto:info@suftnet.com">info@suftnet.com</a>.</p>
+  </section>
+
+  <p class="agree">By using the ishopy App, you agree to the terms of this Privacy Policy.</p>
+
+  <footer>
+    <span>© 2026 Suftnet Limited</span>
+    <span>Peterborough, Cambridgeshire, UK</span>
+  </footer>
+
+</div>
+</body>
+</html>

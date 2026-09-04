@@ -1,0 +1,28 @@
+buildscript {
+    ext {
+        buildToolsVersion = "36.0.0"
+        minSdkVersion = 23
+        compileSdkVersion = 36
+        targetSdkVersion = 36
+        ndkVersion = "26.1.10909125"
+        // Bumped from 1.9.22: Billing 8.0.0's own artifact is compiled with Kotlin 2.1
+        // metadata, which a 1.9.x compiler can't read.
+        kotlinVersion = "2.1.20"
+        // react-native-iap 12.x's Kotlin source is patched (see patches/) to compile
+        // against Billing 8.0.0: enablePendingPurchases(PendingPurchasesParams),
+        // queryProductDetailsAsync's QueryProductDetailsResult wrapper, and
+        // queryPurchasesAsync replacing the removed queryPurchaseHistoryAsync.
+        playBillingSdkVersion = "8.0.0"
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.android.tools.build:gradle:8.13.2")
+        classpath("com.facebook.react:react-native-gradle-plugin")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+    }
+}
+
+apply plugin: "com.facebook.react.rootproject"
