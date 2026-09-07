@@ -2,14 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     
     <uses-permission android:name="android.permission.INTERNET" tools:ignore="Unused" />
-    <uses-permission android:name="android.permission.BLUETOOTH" tools:ignore="Unused" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" tools:ignore="Unused" />
-    
-    <!-- Permissions for Android 12 and above (if needed) -->
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" tools:ignore="Unused" />
-    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" tools:ignore="Unused" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" tools:ignore="Unused" />
-    
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

@@ -1,31 +1,24 @@
 /* eslint-disable prettier/prettier */
 import React, {useState, useEffect, useRef} from 'react';
-import {Alert, ActivityIndicator, TextInput, Platform, ScrollView} from 'react-native';
+import {Alert, TextInput, ScrollView} from 'react-native';
 import MIcon from 'react-native-vector-icons/MaterialIcons';
 import {StyledText, StyledPressable, Stack, theme} from 'fluent-styles';
 import {useBluetoothPrinterContext} from '../../../hooks/bluetoothPrinterProvider';
 import {useAppTheme} from '../../../theme';
 
-const CONNECTION_TYPES = Platform.OS === 'ios' ? ['wifi'] : ['wifi', 'bluetooth'];
-
 export default function PrinterOptions() {
-  const {devices, selectedPrinter, loading, enableBluetooth, connectDevice,
-         connectWifiPrinter, disconnectPrinter, testPrint} = useBluetoothPrinterContext();
+  const {selectedPrinter, loading, connectWifiPrinter, disconnectPrinter, testPrint} =
+    useBluetoothPrinterContext();
   const {t} = useAppTheme();
 
-  const [connectionType,    setConnectionType]    = useState('wifi');
-  const [scanning,          setScanning]          = useState(false);
-  const [availablePrinters, setAvailablePrinters] = useState([]);
-  const [wifiName,          setWifiName]          = useState('');
-  const [wifiHost,          setWifiHost]          = useState('');
-  const [wifiPort,          setWifiPort]          = useState('9100');
-  const [focusedInput,      setFocusedInput]      = useState(null);
+  const [wifiName,      setWifiName]      = useState('');
+  const [wifiHost,      setWifiHost]      = useState('');
+  const [wifiPort,      setWifiPort]      = useState('9100');
+  const [focusedInput,  setFocusedInput]  = useState(null);
 
   // Refs for smart input focus
   const hostInputRef = useRef(null);
   const portInputRef = useRef(null);
-
-  useEffect(() => { if (Platform.OS === 'ios') setConnectionType('wifi'); }, []);
 
   useEffect(() => {
     if (selectedPrinter?.type === 'wifi') {
@@ -34,25 +27,6 @@ export default function PrinterOptions() {
       setWifiPort(String(selectedPrinter.port || 9100));
     }
   }, [selectedPrinter]);
-
-  const handleScan = async () => {
-    if (Platform.OS === 'ios') { Alert.alert('Bluetooth not supported', 'Please use WiFi on iPad.'); return; }
-    if (connectionType !== 'bluetooth') return;
-    setScanning(true); setAvailablePrinters([]);
-    try {
-      const scannedDevices = await enableBluetooth();
-      setAvailablePrinters(Array.isArray(scannedDevices) ? scannedDevices : devices || []);
-    } catch (error) {
-      Alert.alert('Bluetooth Error', error?.message || 'Unable to scan devices');
-    } finally { setScanning(false); }
-  };
-
-  const handleBluetoothConnect = printer => {
-    Alert.alert('Connect Printer', `Connect to ${printer.name}?`, [
-      {text: 'Cancel', style: 'cancel'},
-      {text: 'Connect', onPress: () => { connectDevice(printer); setAvailablePrinters([]); }},
-    ]);
-  };
 
   // Validate IP format (basic)
   const isValidIP = (ip) => {
@@ -174,13 +148,11 @@ export default function PrinterOptions() {
           opacity={0.85}>
           <MIcon name="info" size={16} color={t.textSecondary} />
           <StyledText fontSize={12} color={t.textSecondary} flex={1}>
-            {Platform.OS === 'ios'
-              ? 'iPad supports WiFi/LAN printers only.'
-              : 'Connect via WiFi or Bluetooth for receipt printing.'}
+            Connect a receipt printer over WiFi/LAN.
           </StyledText>
         </Stack>
 
-        {/* ─── Connection Type Card ───────────────────────────────────────── */}
+        {/* ─── Printer Details Card ───────────────────────────────────────── */}
         {!selectedPrinter && (
           <>
             <Stack vertical gap={8}>
@@ -189,83 +161,21 @@ export default function PrinterOptions() {
                 color={t.textPrimary}
                 fontSize={14}
                 letterSpacing={0.5}>
-                CONNECTION TYPE
+                PRINTER DETAILS
               </StyledText>
               <StyledText fontSize={12} color={t.textSecondary}>
-                Choose how your printer connects to this device
+                Enter your printer network information
               </StyledText>
             </Stack>
-              
+
             <Stack
-              horizontal
-              gap={10}
-              style={{
-                backgroundColor: t.bgCard,
-                borderRadius: 14,
-                borderWidth: 1,
-                borderColor: t.borderDefault,
-                padding: 12,
-              }}>
-              {CONNECTION_TYPES.map(type => (
-                <StyledPressable
-                  key={type}
-                  flex={1}
-                  onPress={() => { setConnectionType(type); setAvailablePrinters([]); }}
-                  padding={14}
-                  borderRadius={12}
-                  alignItems="center"
-                  vertical
-                  gap={8}
-                  backgroundColor={connectionType === type ? `${t.brandPrimary}08` : 'transparent'}
-                  borderWidth={1}
-                  borderColor={connectionType === type ? t.brandPrimary : t.borderDefault}
-                  shadowColor={connectionType === type ? t.brandPrimary : 'transparent'}
-                  shadowOpacity={connectionType === type ? 0.15 : 0}
-                  shadowRadius={8}
-                  elevation={connectionType === type ? 2 : 0}>
-                  <MIcon
-                    name={type === 'wifi' ? 'wifi' : 'bluetooth-audio'}
-                    size={28}
-                    color={connectionType === type ? t.brandPrimary : t.textSecondary}
-                  />
-                  <StyledText
-                    fontSize={12}
-                    fontWeight={theme.fontWeight.medium}
-                    color={connectionType === type ? t.brandPrimary : t.textSecondary}>
-                    {type === 'wifi' ? 'WiFi/LAN' : 'Bluetooth'}
-                  </StyledText>
-                  {type === 'wifi' && (
-                    <StyledText fontSize={10} color={t.textMuted}>
-                      Recommended
-                    </StyledText>
-                  )}
-                </StyledPressable>
-              ))}
-            </Stack>
-
-            {/* ─── Printer Details Card ───────────────────────────────────── */}
-            {connectionType === 'wifi' && (
-              <Stack
-                vertical
-                gap={14}
-                backgroundColor={t.bgCard}
-                borderRadius={14}
-                borderWidth={1}
-                borderColor={t.borderDefault}
-                padding={16}>
-                <Stack vertical gap={8}>
-                  <StyledText
-                    fontWeight={theme.fontWeight.semiBold}
-                    color={t.textPrimary}
-                    fontSize={14}
-                    letterSpacing={0.5}>
-                    PRINTER DETAILS
-                  </StyledText>
-                  <StyledText fontSize={12} color={t.textSecondary}>
-                    Enter your printer network information
-                  </StyledText>
-                </Stack>
-
+              vertical
+              gap={14}
+              backgroundColor={t.bgCard}
+              borderRadius={14}
+              borderWidth={1}
+              borderColor={t.borderDefault}
+              padding={16}>
                 {/* Printer Name input */}
                 <Stack vertical gap={6}>
                   <StyledText fontSize={12} fontWeight={theme.fontWeight.medium} color={t.textSecondary}>
@@ -396,12 +306,10 @@ export default function PrinterOptions() {
                     />
                   </Stack>
                 </Stack>
-              </Stack>
-            )}
+            </Stack>
 
             {/* ─── Primary CTA ───────────────────────────────────────────── */}
-            {connectionType === 'wifi' && (
-              <Stack vertical gap={10}>
+            <Stack vertical gap={10}>
                 <StyledPressable
                   onPress={handleWifiConnect}
                   disabled={isConnectDisabled || loading}
@@ -429,59 +337,7 @@ export default function PrinterOptions() {
                     </StyledText>
                   </Stack>
                 </StyledPressable>
-              </Stack>
-            )}
-
-            {/* ─── Bluetooth scan section ─────────────────────────────────── */}
-            {Platform.OS === 'android' && connectionType === 'bluetooth' && (
-              <Stack vertical gap={14}>
-                <StyledPressable
-                  onPress={handleScan}
-                  disabled={scanning || loading}
-                  backgroundColor={t.brandPrimary}
-                  borderRadius={12}
-                  paddingVertical={14}
-                  alignItems="center"
-                  justifyContent="center">
-                  <StyledText color={t.textInverse} fontWeight={theme.fontWeight.semiBold}>
-                    {scanning ? 'Scanning…' : 'Scan for Bluetooth Printers'}
-                  </StyledText>
-                </StyledPressable>
-
-                {(scanning || loading) && (
-                  <Stack alignItems="center">
-                    <ActivityIndicator color={t.brandPrimary} />
-                  </Stack>
-                )}
-
-                {availablePrinters.length > 0 && (
-                  <Stack vertical gap={10}>
-                    <StyledText fontWeight={theme.fontWeight.semiBold} color={t.textPrimary}>
-                      Available Printers ({availablePrinters.length})
-                    </StyledText>
-                    {availablePrinters.map(printer => (
-                      <StyledPressable
-                        key={printer.address}
-                        onPress={() => handleBluetoothConnect(printer)}
-                        padding={14}
-                        backgroundColor={t.bgCard}
-                        borderRadius={12}
-                        borderWidth={1}
-                        borderColor={t.borderDefault}
-                        vertical
-                        gap={4}>
-                        <StyledText fontWeight={theme.fontWeight.semiBold} color={t.textPrimary}>
-                          {printer.name}
-                        </StyledText>
-                        <StyledText fontSize={12} color={t.textSecondary}>
-                          {printer.address}
-                        </StyledText>
-                      </StyledPressable>
-                    ))}
-                  </Stack>
-                )}
-              </Stack>
-            )}
+            </Stack>
           </>
         )}
       </Stack>
