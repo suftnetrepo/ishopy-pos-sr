@@ -101,10 +101,10 @@ android {
         }
 
           release {
-            storeFile file('irit.jks')
-            storePassword "Kcmkcm12345!"
+            storeFile file('irit-upload-key-2026.jks')
+            storePassword "2fOmo56ldC6kdSoI9UubQORn"
             keyAlias "key0"
-            keyPassword "Kcmkcm12345!"
+            keyPassword "2fOmo56ldC6kdSoI9UubQORn"
         }
     }
     buildTypes {
