@@ -1,10 +1,14 @@
 buildscript {
     ext {
         buildToolsVersion = "36.0.0"
-        minSdkVersion = 23
+        minSdkVersion = 24
         compileSdkVersion = 36
         targetSdkVersion = 36
-        ndkVersion = "26.1.10909125"
+        // Matches the RN 0.77.3 template exactly (the version Meta's own prebuilt
+        // Hermes/react-android AARs were verified against). Required for our own
+        // natively-compiled modules (Realm, react-native-screens, the bluetooth
+        // printer library) to get 16KB-page-aligned .so output.
+        ndkVersion = "27.1.12297006"
         // Bumped from 1.9.22: Billing 8.0.0's own artifact is compiled with Kotlin 2.1
         // metadata, which a 1.9.x compiler can't read.
         kotlinVersion = "2.1.20"

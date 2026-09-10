@@ -1,0 +1,36 @@
+diff --git a/node_modules/realm/binding/android/build.gradle b/node_modules/realm/binding/android/build.gradle
+index f26be70..6a55511 100644
+--- a/node_modules/realm/binding/android/build.gradle
++++ b/node_modules/realm/binding/android/build.gradle
+@@ -57,7 +57,10 @@ android {
+             cmake {
+                 arguments "-DANDROID_STL=c++_shared",
+                           "-DCMAKE_CXX_VISIBILITY_PRESET=hidden",
+-                          "-DREACT_NATIVE_ROOT_DIR=${REACT_NATIVE_ROOT_DIR}"
++                          "-DREACT_NATIVE_ROOT_DIR=${REACT_NATIVE_ROOT_DIR}",
++                          // NDK r27 doesn't 16KB-align by default (only r28+ does) -
++                          // explicit linker flags per Google's migration guidance.
++                          "-DCMAKE_SHARED_LINKER_FLAGS=-Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384"
+                 targets 'realm-js-android-binding'
+                 cppFlags '-O2 -std=c++20 -frtti -fexceptions -Wall -fstack-protector-all'
+                 abiFilters (*reactNativeArchitectures())
+diff --git a/node_modules/realm/binding/android/src/main/jniLibs/arm64-v8a/librealm.so b/node_modules/realm/binding/android/src/main/jniLibs/arm64-v8a/librealm.so
+new file mode 100755
+index 0000000..23aee0f
+Binary files /dev/null and b/node_modules/realm/binding/android/src/main/jniLibs/arm64-v8a/librealm.so differ
+diff --git a/node_modules/realm/binding/android/src/main/jniLibs/armeabi-v7a/librealm.so b/node_modules/realm/binding/android/src/main/jniLibs/armeabi-v7a/librealm.so
+new file mode 100755
+index 0000000..3291a93
+Binary files /dev/null and b/node_modules/realm/binding/android/src/main/jniLibs/armeabi-v7a/librealm.so differ
+diff --git a/node_modules/realm/binding/android/src/main/jniLibs/x86/librealm.so b/node_modules/realm/binding/android/src/main/jniLibs/x86/librealm.so
+new file mode 100755
+index 0000000..126f833
+Binary files /dev/null and b/node_modules/realm/binding/android/src/main/jniLibs/x86/librealm.so differ
+diff --git a/node_modules/realm/binding/android/src/main/jniLibs/x86_64/librealm.so b/node_modules/realm/binding/android/src/main/jniLibs/x86_64/librealm.so
+new file mode 100755
+index 0000000..4ac1269
+Binary files /dev/null and b/node_modules/realm/binding/android/src/main/jniLibs/x86_64/librealm.so differ
+diff --git a/node_modules/realm/prebuilds/node/realm.node b/node_modules/realm/prebuilds/node/realm.node
+deleted file mode 100755
+index 2da7274..0000000
+Binary files a/node_modules/realm/prebuilds/node/realm.node and /dev/null differ

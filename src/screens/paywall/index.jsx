@@ -120,6 +120,7 @@ const PaywallScreen = ({onDismiss}) => {
     isLoading,
     isActive,
     error,
+    product,
   } = useInAppPurchase();
 
   const dismiss = () => (onDismiss ? onDismiss() : navigation.goBack());
@@ -149,7 +150,10 @@ const PaywallScreen = ({onDismiss}) => {
     }
   }, [error]);
 
-  const price = '£19.99';
+  // Sourced live from the store (Play Billing / StoreKit) so what's shown here
+  // always matches what the payment sheet actually charges — a hardcoded price
+  // here would drift out of sync with the user's real, localized currency.
+  const price = product?.localizedPrice;
 
   return (
     <StyledPage hideStatusBarOnIOS backgroundColor={t.bgPage}>
@@ -274,13 +278,23 @@ const PaywallScreen = ({onDismiss}) => {
                     </Text>
                   </Stack>
 
-                  <Text
-                    variant="metric"
-                    fontSize={isCompact ? 40 : 48}
-                    lineHeight={isCompact ? 48 : 56}
-                    color={t.textPrimary}>
-                    {price}
-                  </Text>
+                  {price ? (
+                    <Text
+                      variant="metric"
+                      fontSize={isCompact ? 40 : 48}
+                      lineHeight={isCompact ? 48 : 56}
+                      color={t.textPrimary}>
+                      {price}
+                    </Text>
+                  ) : (
+                    <Text
+                      variant="body"
+                      fontSize={16}
+                      lineHeight={isCompact ? 48 : 56}
+                      color={t.textMuted}>
+                      Loading price…
+                    </Text>
+                  )}
 
                   <Stack
                     width={40}
@@ -368,9 +382,7 @@ const PaywallScreen = ({onDismiss}) => {
               color={t.textMuted}
               textAlign="center"
               lineHeight={18}>
-              {price} charged once. No subscriptions, ever.
-              {'\n'}
-              Managed in your App Store settings.
+              {price ? `${price} charged once.` : 'One-time purchase.'} No trial, no subscription, no recurring charges — ever.
             </Text>
           </Stack>
         </ScrollView>

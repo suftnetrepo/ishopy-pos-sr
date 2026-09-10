@@ -1,0 +1,27 @@
+diff --git a/node_modules/react-native-gesture-handler/android/src/main/java/com/swmansion/gesturehandler/react/RNGestureHandlerButtonViewManager.kt b/node_modules/react-native-gesture-handler/android/src/main/java/com/swmansion/gesturehandler/react/RNGestureHandlerButtonViewManager.kt
+index e4114c4..96be306 100644
+--- a/node_modules/react-native-gesture-handler/android/src/main/java/com/swmansion/gesturehandler/react/RNGestureHandlerButtonViewManager.kt
++++ b/node_modules/react-native-gesture-handler/android/src/main/java/com/swmansion/gesturehandler/react/RNGestureHandlerButtonViewManager.kt
+@@ -136,7 +136,7 @@ class RNGestureHandlerButtonViewManager :
+ 
+   @ReactProp(name = ViewProps.POINTER_EVENTS)
+   override fun setPointerEvents(view: ButtonViewGroup, pointerEvents: String?) {
+-    view.pointerEvents = when (pointerEvents) {
++    view.pointerEventsValue = when (pointerEvents) {
+       "none" -> PointerEvents.NONE
+       "box-none" -> PointerEvents.BOX_NONE
+       "box-only" -> PointerEvents.BOX_ONLY
+@@ -214,7 +214,12 @@ class RNGestureHandlerButtonViewManager :
+ 
+     var exclusive = true
+ 
+-    override var pointerEvents: PointerEvents = PointerEvents.AUTO
++    // ReactPointerEventsView.getPointerEvents() is a getter-only Java platform-type method
++    // (PointerEvents!). Under RN 0.77+'s stricter Kotlin/Java interop, `override var` no
++    // longer resolves as implementing it. Explicit backing property + method override fixes
++    // this without changing behavior.
++    var pointerEventsValue: PointerEvents = PointerEvents.AUTO
++    override fun getPointerEvents(): PointerEvents = pointerEventsValue
+ 
+     private var buttonBackgroundColor = Color.TRANSPARENT
+     private var needBackgroundUpdate = false

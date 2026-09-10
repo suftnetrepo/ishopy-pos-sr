@@ -1,0 +1,17 @@
+diff --git a/node_modules/react-native-svg/common/cpp/react/renderer/components/rnsvg/RNSVGLayoutableShadowNode.cpp b/node_modules/react-native-svg/common/cpp/react/renderer/components/rnsvg/RNSVGLayoutableShadowNode.cpp
+index e0341ec..4ed9378 100644
+--- a/node_modules/react-native-svg/common/cpp/react/renderer/components/rnsvg/RNSVGLayoutableShadowNode.cpp
++++ b/node_modules/react-native-svg/common/cpp/react/renderer/components/rnsvg/RNSVGLayoutableShadowNode.cpp
+@@ -28,8 +28,10 @@ void RNSVGLayoutableShadowNode::updatePosition() {
+   auto style = yogaNode_.style();
+   style.setPositionType(yoga::PositionType::Absolute);
+   style.setPosition(yoga::Edge::All, yoga::Style::Length::points(0));
+-  style.setDimension(yoga::Dimension::Width, yoga::StyleSizeLength::percent(100));
+-  style.setDimension(yoga::Dimension::Height, yoga::StyleSizeLength::percent(100));
++  // RN 0.77's bundled Yoga still names this StyleLength (later Yoga versions renamed it
++  // to StyleSizeLength, which this file was written against).
++  style.setDimension(yoga::Dimension::Width, yoga::StyleLength::percent(100));
++  style.setDimension(yoga::Dimension::Height, yoga::StyleLength::percent(100));
+   yogaNode_.setStyle(style);
+ }
+ 
